@@ -10,6 +10,7 @@ public class UsuarioBean {
 	private String usuario;
 	private String senha;
 	private Boolean ativo;
+	private FuncionarioBean funcionario;
 	private List<PerfilBean> perfis;
 
 	public UsuarioBean(UsuarioBean usuario) {
@@ -18,11 +19,11 @@ public class UsuarioBean {
 		this.usuario = usuario.getUsuario();
 		this.senha = usuario.getSenha();
 		this.ativo = usuario.getAtivo();
+		this.funcionario = usuario.getFuncionario();
 		this.perfis = usuario.getPerfis();
 	}
 
 	public UsuarioBean() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public Integer getId() {
@@ -55,6 +56,14 @@ public class UsuarioBean {
 
 	public void setAtivo(Boolean ativo) {
 		this.ativo = ativo;
+	}
+
+	public FuncionarioBean getFuncionario() {
+		return funcionario;
+	}
+
+	public void setFuncionario(FuncionarioBean funcionario) {
+		this.funcionario = funcionario;
 	}
 
 	public List<PerfilBean> getPerfis() {
