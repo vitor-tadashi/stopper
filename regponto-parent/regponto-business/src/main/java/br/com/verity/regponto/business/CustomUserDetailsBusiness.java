@@ -7,19 +7,21 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import br.com.prosperity.integration.SavIntegration;
 import br.com.verity.regponto.bean.CustomUserDetails;
 import br.com.verity.regponto.bean.UsuarioBean;
+import br.com.verity.regponto.integration.SavIntegration;
 
 @Service
 public class CustomUserDetailsBusiness implements UserDetailsService {
-
 	
 	@Transactional
 	@Override
-	public UserDetails loadUserByUsername(String usuario) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String usuario) throws UsernameNotFoundException{
 		SavIntegration sav = new SavIntegration();
 		UsuarioBean usuarioBean = sav.getUsuario(usuario);
+		if(usuarioBean.getId() == null){
+			throw new UsernameNotFoundException("Usuário não localizado");
+		}
 		return new CustomUserDetails(usuarioBean);
 	}
 }

@@ -10,7 +10,7 @@ public class UsuarioBean {
 	private String usuario;
 	private String senha;
 	private Boolean ativo;
-	private FuncionarioBean funcionario;
+	private FuncionarioIntegrationBean funcionario;
 	private List<PerfilBean> perfis;
 
 	public UsuarioBean(UsuarioBean usuario) {
@@ -58,11 +58,11 @@ public class UsuarioBean {
 		this.ativo = ativo;
 	}
 
-	public FuncionarioBean getFuncionario() {
+	public FuncionarioIntegrationBean getFuncionario() {
 		return funcionario;
 	}
 
-	public void setFuncionario(FuncionarioBean funcionario) {
+	public void setFuncionario(FuncionarioIntegrationBean funcionario) {
 		this.funcionario = funcionario;
 	}
 

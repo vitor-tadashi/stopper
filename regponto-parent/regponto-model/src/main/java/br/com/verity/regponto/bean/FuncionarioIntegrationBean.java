@@ -1,17 +1,15 @@
-
 package br.com.verity.regponto.bean;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 
 @Component
-public class FuncionarioBean implements Serializable {
+public class FuncionarioIntegrationBean implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private String matricula;
@@ -20,7 +18,7 @@ public class FuncionarioBean implements Serializable {
 	@NotEmpty(message = "O campo CPF deve ser preenchido")
 	private String cpf;
 	private String rg;
-	private Boolean ativo;
+	private Boolean ativo;	
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date dataInativo;
 	private String telefone;
@@ -34,7 +32,6 @@ public class FuncionarioBean implements Serializable {
 	private String empresa;
 	@NotEmpty(message = "É necessário inserir pelo menos um cargo")
 	private List<FuncionarioCargoBean> funcionarioCargo;
-	private List<HorasBean> horas;
 
 	public Integer getId() {
 		return id;
@@ -170,14 +167,6 @@ public class FuncionarioBean implements Serializable {
 
 	public void setEmpresa(String empresa) {
 		this.empresa = empresa;
-	}
-
-	public List<HorasBean> getHoras() {
-		return horas;
-	}
-
-	public void setHoras(List<HorasBean> horas) {
-		this.horas = horas;
 	}
 
 }

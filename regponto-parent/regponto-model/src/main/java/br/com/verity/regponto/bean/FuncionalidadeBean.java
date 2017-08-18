@@ -15,7 +15,7 @@ public class FuncionalidadeBean {
 	private Integer id;
 	private String nome;
 	private SistemaBean sistema;
-	private String url;
+	private String observacao;
 	private Boolean contem = false;
 
 	public Integer getId() {
@@ -50,11 +50,11 @@ public class FuncionalidadeBean {
 		this.contem = contem;
 	}
 
-	public String getUrl() {
-		return url;
+	public String getObservacao() {
+		return observacao;
 	}
 
-	public void setUrl(String url) {
-		this.url = url;
+	public void setObservacao(String observacao) {
+		this.observacao = observacao;
 	}
 }

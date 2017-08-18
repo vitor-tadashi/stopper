@@ -17,9 +17,9 @@
 		<intercept-url access="permitAll" pattern="/premium/**" />
 		<intercept-url access="permitAll" pattern="/plugins/**" />
 		<intercept-url access="permitAll" pattern="/login" />
-		<intercept-url access="isAuthenticated()" pattern="/**" />
+		<intercept-url access="isAuthenticated()" pattern="/**" requires-channel="any"/>
 		<!--Login customizado -->
-		<form-login login-page="/login" password-parameter="senha" username-parameter="usuario" />
+		<form-login login-page="/login" password-parameter="senha" username-parameter="user" />
 		<!--Acesso não permitido page -->
 		<!-- <access-denied-handler error-page="/Access_Denied" /> -->
 
@@ -35,6 +35,7 @@
 			    last_used TIMESTAMP NOT NULL,
 			    PRIMARY KEY (series)
 			); -->
+			
 	</http>
 	
 	<!--@PreAuthorize é adequado para verificar a autorização antes de entrar no método.
@@ -52,5 +53,7 @@
 		<authentication-provider user-service-ref="customUserDetailsBusiness">
 			<password-encoder ref="bcryptEncoder" />
 		</authentication-provider>
+		
 	</authentication-manager>
+	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
 </beans:beans>

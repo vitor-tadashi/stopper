@@ -1,53 +1,55 @@
-package br.com.prosperity.integration;
+package br.com.verity.regponto.integration;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 
+import br.com.verity.regponto.bean.FuncionarioBean;
+import br.com.verity.regponto.bean.FuncionarioIntegrationBean;
 import br.com.verity.regponto.bean.UsuarioBean;
+import br.com.verity.regponto.converter.FuncionarioIntegrationConverter;
 
+@Component
 public class SavIntegration {
+	
+	@Autowired
+	private FuncionarioIntegrationConverter funcionarioConverter;
 
-	// public List<ProjetoBean> getListProjetos() {
-	// List<ProjetoBean> projetos = new ArrayList<ProjetoBean>();
-	//
-	// Properties props = this.getProp();
-	// String endereco = props.getProperty("prop.integration.listprojeto");
-	// try {
-	// URL url = new URL(endereco);
-	// String response = genericGet(url);
-	//
-	// JSONArray objetos = new JSONArray(response);
-	//
-	// for (int i = 0; i < objetos.length(); i++) {
-	// ProjetoBean projeto = new ProjetoBean();
-	// JSONObject objeto = objetos.getJSONObject(i);
-	// projeto.setId(objeto.getInt("id"));
-	// projeto.setNome(objeto.getString("nome"));
-	// projetos.add(projeto);
-	// }
-	// } catch (MalformedURLException | JSONException e) {
-	// e.printStackTrace();
-	// }
-	//
-	// return projetos;
-	// }
-
-	public UsuarioBean getUsuario(String user) {
+	public List<FuncionarioBean> getFuncionarios(){
+		List<FuncionarioIntegrationBean> funcionarios = new ArrayList<FuncionarioIntegrationBean>();
+		ObjectMapper mapper = new ObjectMapper();
+		// Properties props = this.getProp();
+		String endereco = "http://localhost:9090/sav/listFuncionarios";
+		try {
+			URL url = new URL(endereco);
+			funcionarios = mapper.readValue(url,  new TypeReference<List<FuncionarioIntegrationBean>>(){});
+		} catch (IOException e ) {
+			e.printStackTrace();
+		}
+		
+		return funcionarioConverter.convertEntityToBean(funcionarios);
+	}
+	
+	public UsuarioBean getUsuario(String user){
 		UsuarioBean usuario = new UsuarioBean();
 		ObjectMapper mapper = new ObjectMapper();
 		// Properties props = this.getProp();
 		String endereco = "http://localhost:9090/sav/getUser/";
 		try {
-			URL url = new URL(endereco + user);
+			URL url = new URL(endereco + user + "/");
 			usuario = mapper.readValue(url, UsuarioBean.class);
-		} catch (IOException e) {
+		} catch (IOException e ) {
 			e.printStackTrace();
 		}
 

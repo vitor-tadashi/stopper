@@ -6,7 +6,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>SAV</title>
+	<title>ClockWork</title>
 
 	<!--STYLESHEET-->
     <!--=================================================-->
@@ -62,7 +62,7 @@
 								<div class="">
 									<div class="input-group">
 										<span class="input-group-addon"><i class="ion-person"></i></span>
-										<input type="text" class="form-control" id="#" name="usuario" placeholder="Insira nome de usuário" autofocus>
+										<input type="text" class="form-control" id="#" name="user" placeholder="Insira nome de usuário" autofocus>
 									</div>
 								</div>
 							</div>
