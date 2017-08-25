@@ -1,13 +1,30 @@
 package br.com.verity.pause.bean;
 
+import java.sql.Time;
+import java.util.Date;
+
 import org.springframework.stereotype.Component;
 
+/**
+ * @author guilherme.oliveira
+ *
+ */
 @Component
 public class HorasBean {
 
+	private Integer id;
 	private String pis;
-	private String dataImportacao;
-	private String hora;
+	private Date dataImportacao;
+	private Time hora;
+	private Boolean tipoApontamento = true;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
 	public String getPis() {
 		return pis;
@@ -17,20 +34,27 @@ public class HorasBean {
 		this.pis = pis;
 	}
 
-	public String getDataImportacao() {
+	public Date getDataImportacao() {
 		return dataImportacao;
 	}
 
-	public void setDataImportacao(String dataImportacao) {
+	public void setDataImportacao(Date dataImportacao) {
 		this.dataImportacao = dataImportacao;
 	}
 
-	public String getHora() {
+	public Time getHora() {
 		return hora;
 	}
 
-	public void setHora(String hora) {
+	public void setHora(Time hora) {
 		this.hora = hora;
 	}
 
+	public Boolean getTipoApontamento() {
+		return tipoApontamento;
+	}
+
+	public void setTipoApontamento(Boolean tipoApontamento) {
+		this.tipoApontamento = tipoApontamento;
+	}
 }

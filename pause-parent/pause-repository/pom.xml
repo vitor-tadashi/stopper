@@ -15,7 +15,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>br.com.verity</groupId>
-			<artifactId>pause-model</artifactId>
+			<artifactId>pause-entity</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.microsoft.sqlserver/sqljdbc4 -->

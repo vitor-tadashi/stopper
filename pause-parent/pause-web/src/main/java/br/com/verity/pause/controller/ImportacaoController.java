@@ -10,6 +10,10 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,9 +22,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import br.com.verity.pause.bean.EmpresaBean;
 import br.com.verity.pause.bean.FuncionarioBean;
-import br.com.verity.pause.business.EmpresaBusiness;
+import br.com.verity.pause.bean.HorasListWrapperBean;
 import br.com.verity.pause.business.ImportacaoBusiness;
 import br.com.verity.pause.exception.BusinessException;
 
@@ -30,13 +33,18 @@ public class ImportacaoController {
 
 	@Autowired
 	private ImportacaoBusiness importacaoBusiness;
+	
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+	    binder.setAutoGrowCollectionLimit(1024);
+	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public String acessar(Model model) {
-		FuncionarioBean funcionario = new FuncionarioBean();
-		model.addAttribute("funcionario", funcionario);
+	public String acessar(ModelMap model) {
 		
-		return "importacao/importacao";
+		model.addAttribute("horas", new HorasListWrapperBean());
+		
+		return "importacao/teste";
 	}
 
 	@ResponseBody
@@ -48,17 +56,19 @@ public class ImportacaoController {
 		try {
 			String caminho = this.salvarTxt(arquivo);
 			funcionario = importacaoBusiness.importarTxt(caminho, empresa);
-		} catch (BusinessException | IOException e) {
+		} catch (BusinessException e) {
 			return null;
+		}catch (IOException e) {
+			return funcionario;
 		}
 		return funcionario;
 	}
 	
 	@RequestMapping(value = "salvar", method = RequestMethod.POST)
 	@ResponseBody
-	public String salvar(@ModelAttribute FuncionarioBean funcionario) {
-		System.out.println("teste");
-		return null;
+	public String salvar(@ModelAttribute("horas") HorasListWrapperBean horas, BindingResult result) {
+		importacaoBusiness.salvarHoras(horas.getHoras());
+		return "/importacao/teste";
 	}
 
 	public String salvarTxt(List<MultipartFile> multipartFiles) throws IOException {

@@ -1,12 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
+<%@ taglib uri="http://kwonnam.pe.kr/jsp/template-inheritance" prefix="layout"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib prefix="sec"
-	uri="http://www.springframework.org/security/tags"%>
-<%@ taglib uri="http://kwonnam.pe.kr/jsp/template-inheritance"
-	prefix="layout"%>
 <layout:extends name="../shared/base.jsp">
 
 	<layout:put block="css">
@@ -86,9 +83,8 @@
   content: attr(data-title);
 }
 	</style>
-		
 	</layout:put>
-
+	
 	<layout:put block="contents">
 		<div id="page-title">
 			<h1 class="page-header text-overflow">Importação de apontamentos eletrônicos</h1>
@@ -96,7 +92,7 @@
 		<!--Page content-->
 		<div class="col-md-12">
 			<div class="panel">
-				<form:form id="formValidar" action="importacao/salvar" method="post">
+				<form:form id="formValidar" action="importacao/salvar" method="post" modelAttribute="horas">
 					<div id="textDiv" class=""></div>
 					<input type="hidden" id="token" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					<div class="panel-body">
@@ -216,8 +212,12 @@
 			
 			function importarArquivo() {
 				var div = document.getElementById("textDiv");
+				$("#textDiv").removeClass("alert alert-danger");
+				$("#textDiv").text("");
+				$(".rmvLinha").remove();
 				if ($("#upload-arquivo").val() && $("#empresa").val() != 0) {
 					var aux = 0;
+					var date;
 					var form = document.getElementById("formValidar");
 					var formData = new FormData(form);
 					$.ajax({
@@ -231,45 +231,42 @@
 						success : function(data) {
 							if(data != ''){
 								$(data).each(function(index, value) {
-									index = aux;
-									var campos = "<tr role='row' class='odd text-center'>"+
+									var campos = "<tr role='row' class='odd text-center rmvLinha'>"+
 									"<td id='pis"+index+"' class='pis'></td>" +
-									"<input id='pisFunc"+index+"' type='hidden' name='pis'>"+
+									"<input id='pisFunc"+index+"' type='hidden'>"+
 									"<td id='funcionario"+index+"'></td>" +
-									"<input id='nmFunc"+index+"' type='hidden' name='nome'>"+
+									"<input id='nmFunc"+index+"' type='hidden'>"+
 									"<td id='data"+index+"' class='data'></td>" +
 									"<td id='hora0"+index+"' class='hora'></td>" +
-									"<input id='pisHoras0"+index+"' type='hidden' name='horas[].pis'>"+
-									"<input id='horaHoras0"+index+"' type='hidden' name='horas[].hora'>"+
-									"<input id='dataHoras0"+index+"' type='hidden' name='horas[].dataImportacao'>"+
+									"<input id='pisHoras0"+index+"' type='hidden' name='horas["+aux+"].pis'>"+
+									"<input id='horaHoras0"+index+"' type='hidden' name='horas["+aux+"].hora'>"+
+									"<input id='dataHoras0"+index+"' type='hidden' name='horas["+aux+"].dataImportacao'>"+
 									"<td id='hora1"+index+"' class='hora'></td>" +
-									"<input id='pisHoras1"+index+"' type='hidden' name='horas[].pis'>"+
-									"<input id='horaHoras1"+index+"' type='hidden' name='horas[].hora'>"+
-									"<input id='dataHoras1"+index+"' type='hidden' name='horas[].dataImportacao'>"+
+									"<input id='pisHoras1"+index+"' type='hidden' name='horas["+(aux+1)+"].pis'>"+
+									"<input id='horaHoras1"+index+"' type='hidden' name='horas["+(aux+1)+"].hora'>"+
+									"<input id='dataHoras1"+index+"' type='hidden' name='horas["+(aux+1)+"].dataImportacao'>"+
 									"<td id='hora2"+index+"' class='hora'></td>" +
-									"<input id='pisHoras2"+index+"' type='hidden' name='horas[].pis'>"+
-									"<input id='horaHoras2"+index+"' type='hidden' name='horas[].hora'>"+
-									"<input id='dataHoras2"+index+"' type='hidden' name='horas[].dataImportacao'>"+
+									"<input id='pisHoras2"+index+"' type='hidden' name='horas["+(aux+2)+"].pis'>"+
+									"<input id='horaHoras2"+index+"' type='hidden' name='horas["+(aux+2)+"].hora'>"+
+									"<input id='dataHoras2"+index+"' type='hidden' name='horas["+(aux+2)+"].dataImportacao'>"+
 									"<td id='hora3"+index+"' class='hora'></td>" +
-									"<input id='pisHoras3"+index+"' type='hidden' name='horas[].pis'>"+
-									"<input id='horaHoras3"+index+"' type='hidden' name='horas[].hora'>"+
-									"<input id='dataHoras3"+index+"' type='hidden' name='horas[].dataImportacao'>"+
+									"<input id='pisHoras3"+index+"' type='hidden' name='horas["+(aux+3)+"].pis'>"+
+									"<input id='horaHoras3"+index+"' type='hidden' name='horas["+(aux+3)+"].hora'>"+
+									"<input id='dataHoras3"+index+"' type='hidden' name='horas["+(aux+3)+"].dataImportacao'>"+
 									"<td id='hora4"+index+"' class='hora'></td>" +
-									"<input id='pisHoras4"+index+"' type='hidden' name='horas[].pis'>"+
-									"<input id='horaHoras4"+index+"' type='hidden' name='horas[].hora'>"+
-									"<input id='dataHoras4"+index+"' type='hidden' name='horas[].dataImportacao'>"+
+									"<input id='pisHoras4"+index+"' type='hidden' name='horas["+(aux+4)+"].pis'>"+
+									"<input id='horaHoras4"+index+"' type='hidden' name='horas["+(aux+4)+"].hora'>"+
+									"<input id='dataHoras4"+index+"' type='hidden' name='horas["+(aux+4)+"].dataImportacao'>"+
 									"<td id='hora5"+index+"' class='hora'></td>" +
-									"<input id='pisHoras5"+index+"' type='hidden' name='horas[].pis'>"+
-									"<input id='horaHoras5"+index+"' type='hidden' name='horas[].hora'>"+
-									"<input id='dataHoras5"+index+"' type='hidden' name='horas[].dataImportacao'>"+
+									"<input id='pisHoras5"+index+"' type='hidden' name='horas["+(aux+5)+"].pis'>"+
+									"<input id='horaHoras5"+index+"' type='hidden' name='horas["+(aux+5)+"].hora'>"+
+									"<input id='dataHoras5"+index+"' type='hidden' name='horas["+(aux+5)+"].dataImportacao'>"+
 									"<td id='hora6"+index+"' class='hora'></td>" +
-									"<input id='pisHoras6"+index+"' type='hidden' name='horas[].pis'>"+
-									"<input id='horaHoras6"+index+"' type='hidden' name='horas[].hora'>"+
-									"<input id='dataHoras6"+index+"' type='hidden' name='horas[].dataImportacao'>"+
-									"<td id='hora7"+index+"' class='hora'></td>" +
-									"<input id='pisHoras7"+index+"' type='hidden' name='horas[].pis'>"+
-									"<input id='horaHoras7"+index+"' type='hidden' name='horas[].hora'>"+
-									"<input id='dataHoras7"+index+"' type='hidden' name='horas[].dataImportacao'>" +
+									"<input id='pisHoras6"+index+"' type='hidden' name='horas["+(aux+6)+"].pis'>"+
+									"<input id='horaHoras6"+index+"' type='hidden' name='horas["+(aux+6)+"].hora'>"+
+									"<input id='dataHoras6"+index+"' type='hidden' name='horas["+(aux+6)+"].dataImportacao'>"+
+									"<td id='hora7"+index+"' class='hora'>"+
+									"</td>" +
 									"</tr>";
 	
 									$("#list").append(campos);
@@ -278,18 +275,20 @@
 									$('#pis'+index).text(value.pis);
 									$('#funcionario'+index).text(value.nome);
 									$(value.horas).each(function(i, value) {
-										//pisHoras horaHoras dataHoras
 										$('#hora'+i+index).text(value.hora);
-										$('#pisHoras'+i+index).text(value.pis);
-										$('#horaHoras'+i+index).text(value.hora);
-										$('#dataHoras'+i+index).text(value.dataImportacao);
+										$('#pisHoras'+i+index).val(value.pis);
+										$('#horaHoras'+i+index).val(value.hora);
 										
+										date = new Date(value.dataImportacao);
+										
+										$('#dataHoras'+i+index).val(date.toLocaleDateString());
 									})
-									$('#data'+index).text(value.horas[0].dataImportacao);
+									date = new Date(value.horas[0].dataImportacao);
+									$('#data'+index).text(date.toLocaleDateString());
 									$('.pis').mask('999.9999.999-9');
 									$('.data').mask('99/99/9999');
 									$('.hora').mask('99:99');
-									aux += 7;
+									aux += 8;
 								});
 								$("#tbHoras").removeClass("hide");
 								$("#botoes").removeClass("hide");
