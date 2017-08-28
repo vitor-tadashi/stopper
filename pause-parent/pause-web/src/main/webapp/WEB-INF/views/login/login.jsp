@@ -38,8 +38,8 @@
 		<!--===================================================-->
 		<div class="cls-content">
 		    <div class="cls-content-sm panel">
-	            <div class="mar-ver pad-btm">
-	                <h3 class="h4 mar-no">LOGO</h3>
+	            <div class="pad-btm">
+	            	<img src='<c:url value="/img/logo.jpg"/>' alt="" class="">
 	            </div>
 	            <form action='<c:url value="/login"/>' method="post" id="bv-form">
 					<div class="panel">

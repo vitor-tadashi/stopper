@@ -12,7 +12,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import br.com.verity.pause.bean.HorasBean;
+import br.com.verity.pause.bean.ApontamentosBean;
 import br.com.verity.pause.exception.BusinessException;
 
 @Component
@@ -20,9 +20,9 @@ public class ImportarTxt {
 
 	private BufferedReader lerArquivo;
 
-	public List<HorasBean> importar(String caminho) throws BusinessException, ParseException {
-		List<HorasBean> horas = new ArrayList<HorasBean>();
-		HorasBean hora = new HorasBean();
+	public List<ApontamentosBean> importar(String caminho, String empresa) throws BusinessException, ParseException {
+		List<ApontamentosBean> apontamentos = new ArrayList<ApontamentosBean>();
+		ApontamentosBean apontamento = new ApontamentosBean();
 		String linha;
 		Date data;
 		Time hrs;
@@ -51,13 +51,14 @@ public class ImportarTxt {
 					hrs = new Time(dtTime.getTime());
 					
 					
-					hora = new HorasBean();
+					apontamento = new ApontamentosBean();
 					
-					hora.setPis(pis);
-					hora.setDataImportacao(data);
-					hora.setHora(hrs);
+					apontamento.setPis(pis);
+					apontamento.setData(data);
+					apontamento.setHora(hrs);
+					apontamento.setEmpresa(empresa);
 
-					horas.add(hora);
+					apontamentos.add(apontamento);
 				}else if(!dataImportacao.equals(data) && !codReg.contains("9999999")){
 					throw new BusinessException("Arquivo contém mais de uma data");
 				}
@@ -67,8 +68,8 @@ public class ImportarTxt {
 		} catch (IOException e) {
 			System.err.printf("Erro na abertura do arquivo: %s.\n", e.getMessage());
 		}
-		//horas.sort(Comparator.comparing(HorasBean::getPis));
+		//horas.sort(Comparator.comparing(ApontamentosBean::getPis));
 		
-		return horas;
+		return apontamentos;
 	}
 }

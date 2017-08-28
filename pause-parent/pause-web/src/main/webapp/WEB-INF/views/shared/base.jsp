@@ -8,7 +8,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Pause</title>
+	<title>PAUSE</title>
 	
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
     <link href='<c:url value="/css/bootstrap.min.css"/>' rel="stylesheet">
@@ -39,7 +39,7 @@
                     <a href='<c:url value="/"/>' class="navbar-brand">
                         <img src='<c:url value="/img/logo.png"/>' alt="Nifty Logo" class="brand-icon">
                         <div class="brand-title">
-                            <span class="brand-text">Pause</span>
+                            <span class="brand-text">PAUSE</span>
                         </div>
                     </a>
                 </div>

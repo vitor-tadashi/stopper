@@ -10,20 +10,19 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import br.com.verity.pause.bean.ApontamentosBean;
 import br.com.verity.pause.bean.FuncionarioBean;
-import br.com.verity.pause.bean.HorasListWrapperBean;
 import br.com.verity.pause.business.ImportacaoBusiness;
 import br.com.verity.pause.exception.BusinessException;
 
@@ -34,17 +33,17 @@ public class ImportacaoController {
 	@Autowired
 	private ImportacaoBusiness importacaoBusiness;
 	
+	@Autowired
+	private List<FuncionarioBean> funcionariosImportacao;
+	
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
-	    binder.setAutoGrowCollectionLimit(1024);
+	    binder.setAutoGrowCollectionLimit(2048);
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public String acessar(ModelMap model) {
-		
-		model.addAttribute("horas", new HorasListWrapperBean());
-		
-		return "importacao/teste";
+	public String acessar() {
+		return "importacao/importacao";
 	}
 
 	@ResponseBody
@@ -52,23 +51,35 @@ public class ImportacaoController {
 	public List<FuncionarioBean> importarArquivo(@PathVariable String empresa, MultipartHttpServletRequest request,
 			Model model) {
 		List<MultipartFile> arquivo = request.getFiles("file");
-		List<FuncionarioBean> funcionario = new ArrayList<FuncionarioBean>();
+		funcionariosImportacao = new ArrayList<FuncionarioBean>();
+		FuncionarioBean funcionario = new FuncionarioBean();
 		try {
 			String caminho = this.salvarTxt(arquivo);
-			funcionario = importacaoBusiness.importarTxt(caminho, empresa);
+			funcionariosImportacao = importacaoBusiness.importarTxt(caminho, empresa);
 		} catch (BusinessException e) {
-			return null;
+			funcionario.setMensagem("Arquivo contém mais de uma data.");
+			funcionariosImportacao.add(funcionario);
+			return funcionariosImportacao;
 		}catch (IOException e) {
-			return funcionario;
+			funcionario.setMensagem("Não foi possível abrir o arquivo.");
+			funcionariosImportacao.add(funcionario);
+			return funcionariosImportacao;
 		}
-		return funcionario;
+		return funcionariosImportacao;
 	}
 	
 	@RequestMapping(value = "salvar", method = RequestMethod.POST)
 	@ResponseBody
-	public String salvar(@ModelAttribute("horas") HorasListWrapperBean horas, BindingResult result) {
-		importacaoBusiness.salvarHoras(horas.getHoras());
-		return "/importacao/teste";
+	public String salvar(RedirectAttributes redirect) {
+		List<ApontamentosBean> apontamentos = new ArrayList<ApontamentosBean>();
+		
+		for (FuncionarioBean funcionarioBean : funcionariosImportacao) {
+			apontamentos.addAll(funcionarioBean.getApontamentos());
+		}
+		
+		importacaoBusiness.salvarApontamentos(apontamentos);
+		
+		return "redirect:/importacao";
 	}
 
 	public String salvarTxt(List<MultipartFile> multipartFiles) throws IOException {

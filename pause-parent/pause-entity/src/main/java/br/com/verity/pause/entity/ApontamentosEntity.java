@@ -5,14 +5,19 @@ import java.util.Date;
 
 import org.springframework.stereotype.Component;
 
+/**
+ * @author guilherme.oliveira
+ *
+ */
 @Component
-public class HorasEntity {
+public class ApontamentosEntity {
 
 	private Integer id;
 	private String pis;
-	private Date dtImportacao;
+	private Date data;
 	private Time hora;
 	private Boolean tpApontamento;
+	private String empresa;
 
 	public Integer getId() {
 		return id;
@@ -30,12 +35,12 @@ public class HorasEntity {
 		this.pis = pis;
 	}
 
-	public Date getDtImportacao() {
-		return dtImportacao;
+	public Date getData() {
+		return data;
 	}
 
-	public void setDtImportacao(Date dtImportacao) {
-		this.dtImportacao = dtImportacao;
+	public void setData(Date data) {
+		this.data = data;
 	}
 
 	public Time getHora() {
@@ -52,6 +57,14 @@ public class HorasEntity {
 
 	public void setTpApontamento(Boolean tpApontamento) {
 		this.tpApontamento = tpApontamento;
+	}
+
+	public String getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(String empresa) {
+		this.empresa = empresa;
 	}
 
 }

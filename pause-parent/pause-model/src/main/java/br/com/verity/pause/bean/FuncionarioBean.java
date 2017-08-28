@@ -29,7 +29,8 @@ public class FuncionarioBean implements Serializable {
 	private LocalDeTrabalhoBean localDeTrabalho;
 	private String empresa;
 	private List<FuncionarioCargoBean> funcionarioCargo;
-	private List<HorasBean> horas;
+	private List<ApontamentosBean> apontamentos;
+	private String mensagem;
 
 	public Integer getId() {
 		return id;
@@ -167,12 +168,20 @@ public class FuncionarioBean implements Serializable {
 		this.empresa = empresa;
 	}
 
-	public List<HorasBean> getHoras() {
-		return horas;
+	public List<ApontamentosBean> getApontamentos() {
+		return apontamentos;
 	}
 
-	public void setHoras(List<HorasBean> horas) {
-		this.horas = horas;
+	public void setApontamentos(List<ApontamentosBean> apontamentos) {
+		this.apontamentos = apontamentos;
+	}
+
+	public String getMensagem() {
+		return mensagem;
+	}
+
+	public void setMensagem(String mensagem) {
+		this.mensagem = mensagem;
 	}
 
 }

@@ -10,13 +10,14 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component
-public class HorasBean {
+public class ApontamentosBean {
 
 	private Integer id;
 	private String pis;
-	private Date dataImportacao;
+	private Date data;
 	private Time hora;
 	private Boolean tipoApontamento = true;
+	private String empresa;
 
 	public Integer getId() {
 		return id;
@@ -34,12 +35,12 @@ public class HorasBean {
 		this.pis = pis;
 	}
 
-	public Date getDataImportacao() {
-		return dataImportacao;
+	public Date getData() {
+		return data;
 	}
 
-	public void setDataImportacao(Date dataImportacao) {
-		this.dataImportacao = dataImportacao;
+	public void setData(Date data) {
+		this.data = data;
 	}
 
 	public Time getHora() {
@@ -57,4 +58,13 @@ public class HorasBean {
 	public void setTipoApontamento(Boolean tipoApontamento) {
 		this.tipoApontamento = tipoApontamento;
 	}
+
+	public String getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(String empresa) {
+		this.empresa = empresa;
+	}
+
 }
