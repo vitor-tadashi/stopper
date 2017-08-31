@@ -4,19 +4,20 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
 import br.com.verity.pause.connection.ConnectionFactory;
-import br.com.verity.pause.entity.ApontamentosEntity;
+import br.com.verity.pause.entity.ApontamentoEntity;
 
 @Repository
 public class ApontamentosDAO {
 
-	ConnectionFactory connection;
+	private ConnectionFactory connection;
 
-	public List<ApontamentosEntity> findAll() throws SQLException {
+	public List<ApontamentoEntity> findAll() throws SQLException {
 		connection = new ConnectionFactory();
 		Connection conn = connection.createConnection();
 		String sql = "SELECT * FROM PAUSEApontamentos";
@@ -36,16 +37,16 @@ public class ApontamentosDAO {
 		return null;
 	}
 
-	public Boolean findByData(ApontamentosEntity horas, String empresa) throws SQLException {
+	public Boolean findByData(ApontamentoEntity horas, int idEmpresa) throws SQLException {
 		connection = new ConnectionFactory();
 		Connection conn = connection.createConnection();
-		String sql = "SELECT * FROM PAUSEApontamentos WHERE data = ? AND empresa LIKE (?)";
+		String sql = "SELECT * FROM PAUSEApontamentos WHERE data = ? AND idEmpresa = ?";
 
 		PreparedStatement ps = conn.prepareStatement(sql);
 
 		java.sql.Date sqlDate = new java.sql.Date(horas.getData().getTime());
 		ps.setDate(1, sqlDate);
-		ps.setString(2, empresa);
+		ps.setInt(2, idEmpresa);
 
 		ResultSet rs = ps.executeQuery();
 		
@@ -59,7 +60,7 @@ public class ApontamentosDAO {
 		return false;
 	}
 
-	public void save(ApontamentosEntity horas) throws SQLException {
+	public void save(ApontamentoEntity horas) throws SQLException {
 		connection = new ConnectionFactory();
 		Connection conn = connection.createConnection();
 		String sql = "INSERT INTO PAUSEApontamentos VALUES (?,?,?,?)";
@@ -69,33 +70,47 @@ public class ApontamentosDAO {
 		ps.setString(1, horas.getPis());
 		java.sql.Date sqlDate = new java.sql.Date(horas.getData().getTime());
 		ps.setDate(2, sqlDate);
-		ps.setTime(3, horas.getHora());
-		ps.setBoolean(4, horas.getTpApontamento());
+		ps.setTime(3, horas.getHorario());
+		ps.setBoolean(4, horas.getTipoImportacao());
 
 		ps.execute();
 		ps.close();
 	}
 
-	public void saveAll(List<ApontamentosEntity> horas) throws SQLException {
+	public void saveAll(List<ApontamentoEntity> horas) throws SQLException {
 		connection = new ConnectionFactory();
 		Connection conn = connection.createConnection();
 		String sql = "INSERT INTO PAUSEApontamentos VALUES (?,?,?,?,?,?,?)";
 
 		PreparedStatement ps = conn.prepareStatement(sql);
 
-		for (ApontamentosEntity horasEntity : horas) {
-			if (horasEntity.getHora() != null) {
+		for (ApontamentoEntity horasEntity : horas) {
+			if (horasEntity.getHorario() != null) {
 				ps.setString(1, horasEntity.getPis());
 				java.sql.Date sqlDate = new java.sql.Date(horasEntity.getData().getTime());
 				ps.setDate(2, sqlDate);
-				ps.setTime(3, horasEntity.getHora());
-				ps.setString(4, horasEntity.getEmpresa());
-				ps.setBoolean(5, horasEntity.getTpApontamento());
+				ps.setTime(3, horasEntity.getHorario());
+				ps.setBoolean(4, horasEntity.getTipoImportacao());
+				ps.setString(5, null);
 				ps.setString(6, null);
-				ps.setString(7, null);
+				ps.setInt(7, horasEntity.getIdEmpresa());
 				ps.execute();
 			}
 		}
+		ps.close();
+	}
+
+	public void excludeAllDate(Date data) throws SQLException {
+		connection = new ConnectionFactory();
+		Connection conn = connection.createConnection();
+		String sql = "DELETE PAUSEApontamentos WHERE data = ?";
+
+		PreparedStatement ps = conn.prepareStatement(sql);
+		
+		java.sql.Date sqlDate = new java.sql.Date(data.getTime());
+		ps.setDate(1, sqlDate);
+		
+		ps.execute();
 		ps.close();
 	}
 }

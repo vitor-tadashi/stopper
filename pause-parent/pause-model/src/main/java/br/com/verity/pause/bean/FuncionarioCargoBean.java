@@ -13,6 +13,7 @@ public class FuncionarioCargoBean {
 	@DateTimeFormat(pattern="dd/MM/yyyy")
 	private Date dtInicio;
 	private Boolean ativo;
+	private String observacao;
 
 	public Integer getId() {
 		return id;
@@ -52,6 +53,14 @@ public class FuncionarioCargoBean {
 
 	public void setAtivo(Boolean ativo) {
 		this.ativo = ativo;
+	}
+
+	public String getObservacao() {
+		return observacao;
+	}
+
+	public void setObservacao(String observacao) {
+		this.observacao = observacao;
 	}
 
 }

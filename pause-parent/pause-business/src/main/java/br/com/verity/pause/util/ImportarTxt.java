@@ -12,7 +12,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import br.com.verity.pause.bean.ApontamentosBean;
+import br.com.verity.pause.bean.ApontamentoBean;
 import br.com.verity.pause.exception.BusinessException;
 
 @Component
@@ -20,9 +20,9 @@ public class ImportarTxt {
 
 	private BufferedReader lerArquivo;
 
-	public List<ApontamentosBean> importar(String caminho, String empresa) throws BusinessException, ParseException {
-		List<ApontamentosBean> apontamentos = new ArrayList<ApontamentosBean>();
-		ApontamentosBean apontamento = new ApontamentosBean();
+	public List<ApontamentoBean> importar(String caminho, int idEmpresa) throws BusinessException, IOException, ParseException {
+		List<ApontamentoBean> apontamentos = new ArrayList<ApontamentoBean>();
+		ApontamentoBean apontamento = new ApontamentoBean();
 		String linha;
 		Date data;
 		Time hrs;
@@ -51,12 +51,12 @@ public class ImportarTxt {
 					hrs = new Time(dtTime.getTime());
 					
 					
-					apontamento = new ApontamentosBean();
+					apontamento = new ApontamentoBean();
 					
 					apontamento.setPis(pis);
 					apontamento.setData(data);
-					apontamento.setHora(hrs);
-					apontamento.setEmpresa(empresa);
+					apontamento.setHorario(hrs);
+					apontamento.setIdEmpresa(idEmpresa);
 
 					apontamentos.add(apontamento);
 				}else if(!dataImportacao.equals(data) && !codReg.contains("9999999")){
@@ -68,7 +68,7 @@ public class ImportarTxt {
 		} catch (IOException e) {
 			System.err.printf("Erro na abertura do arquivo: %s.\n", e.getMessage());
 		}
-		//horas.sort(Comparator.comparing(ApontamentosBean::getPis));
+		//horas.sort(Comparator.comparing(ApontamentoBean::getPis));
 		
 		return apontamentos;
 	}
