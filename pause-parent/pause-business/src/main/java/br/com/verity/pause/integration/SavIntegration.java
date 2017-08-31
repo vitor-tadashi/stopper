@@ -26,11 +26,11 @@ public class SavIntegration {
 	@Autowired
 	private FuncionarioIntegrationConverter funcionarioConverter;
 
-	public List<FuncionarioBean> getFuncionarios(String empresa){
+	public List<FuncionarioBean> getFuncionarios(int idEmpresa){
 		List<FuncionarioIntegrationBean> funcionarios = new ArrayList<FuncionarioIntegrationBean>();
 		ObjectMapper mapper = new ObjectMapper();
 		// Properties props = this.getProp();
-		String endereco = "http://localhost:9090/sav/listFuncionariosDaEmpresa/"+empresa;
+		String endereco = "http://localhost:9090/sav/listFuncionariosDaEmpresa/"+idEmpresa;
 		try {
 			URL url = new URL(endereco);
 			funcionarios = mapper.readValue(url,  new TypeReference<List<FuncionarioIntegrationBean>>(){});
@@ -45,9 +45,9 @@ public class SavIntegration {
 		UsuarioBean usuario = new UsuarioBean();
 		ObjectMapper mapper = new ObjectMapper();
 		// Properties props = this.getProp();
-		String endereco = "http://localhost:9090/sav/getUser/";
+		String endereco = "http://localhost:9090/sav/getUsuarioSistema/";
 		try {
-			URL url = new URL(endereco + user + "/");
+			URL url = new URL(endereco + user + "/pause");
 			usuario = mapper.readValue(url, UsuarioBean.class);
 		} catch (IOException e ) {
 			e.printStackTrace();
@@ -98,5 +98,20 @@ public class SavIntegration {
 			e1.printStackTrace();
 		}
 		return null;
+	}
+
+	public FuncionarioBean getFuncionario(Integer idFuncionario) {
+		FuncionarioIntegrationBean funcionario = new FuncionarioIntegrationBean();
+		ObjectMapper mapper = new ObjectMapper();
+		// Properties props = this.getProp();
+		String endereco = "http://localhost:9090/sav/getFuncionario/"+idFuncionario;
+		try {
+			URL url = new URL(endereco);
+			funcionario = mapper.readValue(url,  new TypeReference<FuncionarioIntegrationBean>(){});
+		} catch (IOException e ) {
+			e.printStackTrace();
+		}
+		
+		return funcionarioConverter.convertEntityToBean(funcionario);
 	}
 }

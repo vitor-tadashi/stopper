@@ -19,6 +19,7 @@ public class FuncionarioIntegrationConverter implements Converter<FuncionarioInt
 		entity.setId(bean.getId());
 		entity.setNome(bean.getNome());
 		entity.setPis(bean.getPis());
+		entity.setMatricula(bean.getMatricula());
 		
 		return entity;
 	}
@@ -34,6 +35,7 @@ public class FuncionarioIntegrationConverter implements Converter<FuncionarioInt
 		bean.setId(entity.getId());
 		bean.setNome(entity.getNome());
 		bean.setPis(entity.getPis());
+		bean.setMatricula(entity.getMatricula());
 		
 		return bean;
 	}

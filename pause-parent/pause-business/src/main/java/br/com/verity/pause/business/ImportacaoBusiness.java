@@ -1,5 +1,6 @@
 package br.com.verity.pause.business;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -9,9 +10,9 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.verity.pause.bean.ApontamentoBean;
 import br.com.verity.pause.bean.FuncionarioBean;
-import br.com.verity.pause.bean.ApontamentosBean;
-import br.com.verity.pause.converter.ApontamentosConverter;
+import br.com.verity.pause.converter.ApontamentoConverter;
 import br.com.verity.pause.dao.ApontamentosDAO;
 import br.com.verity.pause.exception.BusinessException;
 import br.com.verity.pause.integration.SavIntegration;
@@ -27,26 +28,26 @@ public class ImportacaoBusiness {
 	private SavIntegration integration;
 
 	@Autowired
-	private ApontamentosDAO apontamentosDao;
+	private ApontamentosDAO apontamentoDao;
 
 	@Autowired
-	private ApontamentosConverter apontamentosConverter;
+	private ApontamentoConverter apontamentoConverter;
 
-	public List<FuncionarioBean> importarTxt(String caminho, String empresa) throws BusinessException {
+	public List<FuncionarioBean> importarTxt(String caminho, int idEmpresa) throws BusinessException, IOException, ParseException {
 		List<FuncionarioBean> funcionarios = new ArrayList<FuncionarioBean>();
 		List<FuncionarioBean> funcionariosComApontamentos = new ArrayList<FuncionarioBean>();
 		FuncionarioBean funcMensagem = new FuncionarioBean();
-		List<ApontamentosBean> apontamentos = new ArrayList<ApontamentosBean>();
+		List<ApontamentoBean> apontamento = new ArrayList<ApontamentoBean>();
 		Boolean verificarImportacao;
 
 		try {
-			apontamentos = importar.importar(caminho, empresa);
-		} catch (BusinessException | ParseException e) {
+			apontamento = importar.importar(caminho, idEmpresa);
+		} catch (BusinessException e) {
 			throw new BusinessException(e.getMessage());
 		}
 		
 		try {
-			verificarImportacao = apontamentosDao.findByData(apontamentosConverter.convertBeanToEntity(apontamentos.get(0)), empresa);
+			verificarImportacao = apontamentoDao.findByData(apontamentoConverter.convertBeanToEntity(apontamento.get(0)), 2);
 			
 			if(verificarImportacao){
 				funcMensagem.setMensagem("Já foi importado arquivo com está data.");
@@ -56,11 +57,11 @@ public class ImportacaoBusiness {
 			e.printStackTrace();
 		}
 		
-		funcionarios = integration.getFuncionarios(empresa);
+		funcionarios = integration.getFuncionarios(idEmpresa);
 
 		for (FuncionarioBean bean : funcionarios) {
 
-			bean.setApontamentos(apontamentos.stream().filter(hr -> hr.getPis().equals(bean.getPis())).collect(Collectors.toList()));
+			bean.setApontamentos(apontamento.stream().filter(hr -> hr.getPis().equals(bean.getPis())).collect(Collectors.toList()));
 
 			if (bean.getApontamentos() != null && bean.getApontamentos().size() > 0) {
 				funcionariosComApontamentos.add(bean);
@@ -70,9 +71,10 @@ public class ImportacaoBusiness {
 		return funcionariosComApontamentos;
 	}
 
-	public void salvarApontamentos(List<ApontamentosBean> apontamentos) {
+	public void salvarApontamentos(List<ApontamentoBean> apontamentos) {
 		try {
-			apontamentosDao.saveAll(apontamentosConverter.convertBeanToEntity(apontamentos));
+			apontamentoDao.excludeAllDate(apontamentos.get(0).getData());
+			apontamentoDao.saveAll(apontamentoConverter.convertBeanToEntity(apontamentos));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

@@ -27,9 +27,9 @@ public class FuncionarioBean implements Serializable {
 	private EnderecoBean endereco;
 	private GeneroBean genero;
 	private LocalDeTrabalhoBean localDeTrabalho;
-	private String empresa;
+	private EmpresaBean empresa;
 	private List<FuncionarioCargoBean> funcionarioCargo;
-	private List<ApontamentosBean> apontamentos;
+	private List<ApontamentoBean> apontamentos;
 	private String mensagem;
 
 	public Integer getId() {
@@ -160,19 +160,19 @@ public class FuncionarioBean implements Serializable {
 		this.funcionarioCargo = funcionarioCargo;
 	}
 
-	public String getEmpresa() {
+	public EmpresaBean getEmpresa() {
 		return empresa;
 	}
 
-	public void setEmpresa(String empresa) {
+	public void setEmpresa(EmpresaBean empresa) {
 		this.empresa = empresa;
 	}
 
-	public List<ApontamentosBean> getApontamentos() {
+	public List<ApontamentoBean> getApontamentos() {
 		return apontamentos;
 	}
 
-	public void setApontamentos(List<ApontamentosBean> apontamentos) {
+	public void setApontamentos(List<ApontamentoBean> apontamentos) {
 		this.apontamentos = apontamentos;
 	}
 

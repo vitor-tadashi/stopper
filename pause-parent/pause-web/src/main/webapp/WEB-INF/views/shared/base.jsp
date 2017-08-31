@@ -17,7 +17,12 @@
     <link href='<c:url value="/premium/icon-sets/icons/line-icons/premium-line-icons.min.css"/>' rel="stylesheet">
     <link href='<c:url value="/plugins/themify-icons/themify-icons.min.css"/>' rel="stylesheet">
     <link href='<c:url value="/plugins/font-awesome/css/font-awesome.min.css"/>' rel="stylesheet">
-    
+    <style>
+		.dataTables_filter{ display: none; }
+		@media (max-width: 600px){
+			.tabela-css {display: block !important;}
+		}
+	</style>
 	<!-- css serão carregados aqui -->
 	<layout:block name="css"> </layout:block>
 	

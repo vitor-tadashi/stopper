@@ -1,3 +1,4 @@
+
 package br.com.verity.pause.bean;
 
 import java.io.Serializable;
@@ -8,14 +9,14 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 
 @Component
-public class FuncionarioIntegrationBean implements Serializable{
+public class FuncionarioIntegrationBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private String matricula;
 	private String nome;
 	private String cpf;
 	private String rg;
-	private Boolean ativo;	
+	private Boolean ativo;
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date dataInativo;
 	private String telefone;
@@ -26,8 +27,10 @@ public class FuncionarioIntegrationBean implements Serializable{
 	private EnderecoBean endereco;
 	private GeneroBean genero;
 	private LocalDeTrabalhoBean localDeTrabalho;
-	private String empresa;
+	private EmpresaBean empresa;
 	private List<FuncionarioCargoBean> funcionarioCargo;
+	private List<ApontamentoBean> apontamentos;
+	private String mensagem;
 
 	public Integer getId() {
 		return id;
@@ -117,20 +120,20 @@ public class FuncionarioIntegrationBean implements Serializable{
 		this.emailPessoal = emailPessoal;
 	}
 
-	public EnderecoBean getEndereco() {
-		return endereco;
-	}
-
-	public void setEndereco(EnderecoBean endereco) {
-		this.endereco = endereco;
-	}
-
 	public String getEmailCorporativo() {
 		return emailCorporativo;
 	}
 
 	public void setEmailCorporativo(String emailCorporativo) {
 		this.emailCorporativo = emailCorporativo;
+	}
+
+	public EnderecoBean getEndereco() {
+		return endereco;
+	}
+
+	public void setEndereco(EnderecoBean endereco) {
+		this.endereco = endereco;
 	}
 
 	public GeneroBean getGenero() {
@@ -149,6 +152,14 @@ public class FuncionarioIntegrationBean implements Serializable{
 		this.localDeTrabalho = localDeTrabalho;
 	}
 
+	public EmpresaBean getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(EmpresaBean empresa) {
+		this.empresa = empresa;
+	}
+
 	public List<FuncionarioCargoBean> getFuncionarioCargo() {
 		return funcionarioCargo;
 	}
@@ -157,12 +168,20 @@ public class FuncionarioIntegrationBean implements Serializable{
 		this.funcionarioCargo = funcionarioCargo;
 	}
 
-	public String getEmpresa() {
-		return empresa;
+	public List<ApontamentoBean> getApontamentos() {
+		return apontamentos;
 	}
 
-	public void setEmpresa(String empresa) {
-		this.empresa = empresa;
+	public void setApontamentos(List<ApontamentoBean> apontamentos) {
+		this.apontamentos = apontamentos;
+	}
+
+	public String getMensagem() {
+		return mensagem;
+	}
+
+	public void setMensagem(String mensagem) {
+		this.mensagem = mensagem;
 	}
 
 }
