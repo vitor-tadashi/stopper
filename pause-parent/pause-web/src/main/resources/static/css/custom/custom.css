@@ -1,0 +1,11 @@
+@media (max-width: 850px){
+	.table-respon{
+		min-height: .01%;
+		overflow-x: auto;
+	}
+}
+.dataTables_filter{ display: none; }
+.left{
+	float:left;
+	margin-right:5px;
+}

@@ -8,22 +8,22 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="_csrf" content="${_csrf.token}"/>
+	<meta name="_csrf_header" content="${_csrf.headerName}"/>
+	
 	<title>PAUSE</title>
 	
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
     <link href='<c:url value="/css/bootstrap.min.css"/>' rel="stylesheet">
+    <link href='<c:url value="plugins/bootstrap-select/bootstrap-select.min.css"/>' rel="stylesheet">
     <link href='<c:url value="/css/nifty.min.css"/>' rel="stylesheet">
     <link href='<c:url value="/css/themes/type-a/theme-light.min.css"/>' rel="stylesheet">
     <link href='<c:url value="/premium/icon-sets/icons/line-icons/premium-line-icons.min.css"/>' rel="stylesheet">
-    <link href='<c:url value="/plugins/themify-icons/themify-icons.min.css"/>' rel="stylesheet">
+    <%-- <link href='<c:url value="/plugins/themify-icons/themify-icons.min.css"/>' rel="stylesheet"> --%>
     <link href='<c:url value="/plugins/font-awesome/css/font-awesome.min.css"/>' rel="stylesheet">
-    
+    <link href='<c:url value="css/custom/custom.css"/>' rel="stylesheet">
 	<!-- css serão carregados aqui -->
 	<layout:block name="css"> </layout:block>
-	
-	<meta name="_csrf" content="${_csrf.token}"/>
-	<meta name="_csrf_header" content="${_csrf.headerName}"/>
-
 </head>
 <body>
 	<sec:authentication property="principal" var="user"/>
@@ -33,11 +33,11 @@
         <!--===================================================-->
         <header id="navbar">
             <div id="navbar-container" class="boxed">
-                <!--Brand logo & name-->
+               	<!--Brand logo & name-->
                 <!--================================-->
                 <div class="navbar-header">
-                    <a href='<c:url value="/"/>' class="navbar-brand">
-                        <img src='<c:url value="/img/logo.png"/>' alt="Nifty Logo" class="brand-icon">
+                    <a class="navbar-brand" href='<c:url value="/"/>'>
+                        <img src='img/logo.png' alt="P" class="brand-icon">
                         <div class="brand-title">
                             <span class="brand-text">PAUSE</span>
                         </div>
@@ -101,7 +101,7 @@
                                         <div class="pad-btm">
                                             <img class="img-circle img-sm img-border" src='<c:url value="/img/profile-photos/1.png"/>' alt="Profile Picture">
                                         </div>
-                                        <a href="#profile-nav" class="box-block" data-toggle="collapse" aria-expanded="false">
+                                        <a  class="box-block" data-toggle="collapse" aria-expanded="false">
                                            <p class="mnp-name">${user.funcionario.nome}</p>
                                            <span class="mnp-desc">
                                            	<c:choose>
@@ -126,46 +126,48 @@
                                 <ul id="mainnav-menu" class="list-group" style="margin-top:-25px;">
                                 	<!--Category name-->
 						            <li class="list-header">Operações</li>
-                                	<li>
-						                <a href='<c:url value="/importacao"/>'>
-						                    <i class="pli-download"></i>
-						                    <span class="menu-title">
-												<strong>Importação</strong>
-											</span>
-						                </a>
+									<li>
+                                		<a href="#">
+                                            <i class="pli-data-clock"></i>
+                                            <span class="menu-title">
+                                            	Gerenciar horas
+                                            </span>
+                                            <i class="arrow"></i>
+                                        </a>
 						            </li>
 						            <li>
-						                <a href="#">
-						                    <i class="pli-magnifi-glass"></i>
-						                    <span class="menu-title">
-												<strong>Consultar</strong>
-											</span>
-						                </a>
+                                		<a href="#">
+                                            <i class="pli-magnifi-glass"></i>
+                                            <span class="menu-title">
+                                            	Consultar banco
+                                            </span>
+                                            <i class="arrow"></i>
+                                        </a>	
+						            </li>
+						            
+						            <li class="list-divider"></li>
+									
+									<!--Category name-->
+						            <li class="list-header">Mais</li>
+                                	<li>
+                                		<a href='<c:url value="/importacao"/>' data-original-title="" title="">
+                                            <i class="pli-download"></i>
+                                            <span class="menu-title">
+                                            	Importar
+                                            </span>
+                                            <i class="arrow"></i>
+                                        </a>
 						            </li>
 									<li>
-						                <a href="#">
-						                    <i class="pli-pen-5"></i>
-						                    <span class="menu-title">
-												<strong>Gerenciar horas</strong>
-											</span>
-						                </a>
+                                		<a href='<c:url value="/relatorio"/>'>
+                                            <i class="pli-bar-chart"></i>
+                                            <span class="menu-title">
+                                            	Relatório
+                                            </span>
+                                            <i class="arrow"></i>
+                                        </a>
 						            </li>
-									<li>
-						                <a href='<c:url value="/relatorio"/>'>
-						                    <i class="pli-bar-chart"></i>
-						                    <span class="menu-title">
-												<strong>Relatório</strong>
-											</span>
-						                </a>
-						            </li>
-									<li>
-										<a href="#" class="" data-target="#demo-sm-modal" data-toggle="modal">
-											<i class="pli-arrow-inside"></i>
-											<span class="menu-title">
-												<strong>Sair</strong>
-											</span>
-										</a>
-						            </li>
+								
 								</ul>
                             </div>
                         </div>
@@ -219,6 +221,7 @@
 
     <script src='<c:url value="/js/jquery.min.js"/>'></script>
     <script src='<c:url value="/js/bootstrap.min.js"/>'></script>
+    <script src='<c:url value="plugins/bootstrap-select/bootstrap-select.min.js"/>'></script>
     <script src='<c:url value="/js/nifty.min.js"/>'></script>
     
 	<!-- scripts serão carregados aqui -->
