@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -24,6 +25,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.com.verity.pause.bean.ApontamentoBean;
+import br.com.verity.pause.bean.ArquivoApontamentoBean;
 import br.com.verity.pause.bean.FuncionarioBean;
 import br.com.verity.pause.bean.UsuarioBean;
 import br.com.verity.pause.business.ImportacaoBusiness;
@@ -38,10 +40,13 @@ public class ImportacaoController {
 
 	@Autowired
 	private List<FuncionarioBean> funcionariosImportacao;
-	
+
+	@Autowired
+	private ArquivoApontamentoBean arquivoApontamento;
+
 	private Authentication auth;
 	private UsuarioBean usuarioLogado;
-	
+
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		binder.setAutoGrowCollectionLimit(2048);
@@ -61,10 +66,17 @@ public class ImportacaoController {
 		String caminho = "";
 		funcionariosImportacao = new ArrayList<FuncionarioBean>();
 		FuncionarioBean funcionario = new FuncionarioBean();
+		arquivoApontamento = new ArquivoApontamentoBean();
 		try {
 			caminho = this.salvarTxt(arquivo, usuarioLogado.getFuncionario().getEmpresa().getRazaoSocial());
+			arquivoApontamento.setCaminho(caminho);
+			arquivoApontamento.setDtInclusao(new Date());
+			arquivoApontamento.setIdUsuarioInclusao(usuarioLogado.getId());
+			arquivoApontamento.setIdEmpresa(usuarioLogado.getFuncionario().getEmpresa().getId());
 			funcionariosImportacao = importacaoBusiness.importarTxt(caminho,
 					usuarioLogado.getFuncionario().getEmpresa().getId());
+			arquivoApontamento.setData(
+					funcionariosImportacao.get(funcionariosImportacao.size() - 1).getApontamentos().get(0).getData());
 		} catch (BusinessException e) {
 			this.cancelar(caminho, model);
 			funcionario.setMensagem("Arquivo contém mais de uma data.");
@@ -100,7 +112,7 @@ public class ImportacaoController {
 			apontamentos.addAll(funcionarioBean.getApontamentos());
 		}
 
-		importacaoBusiness.salvarApontamentos(apontamentos);
+		importacaoBusiness.salvarApontamentos(apontamentos, arquivoApontamento);
 
 		redirect.addFlashAttribute("log", "Apontamentos salvos com sucesso.");
 

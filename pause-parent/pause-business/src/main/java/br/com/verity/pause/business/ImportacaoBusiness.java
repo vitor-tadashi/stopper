@@ -11,9 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.verity.pause.bean.ApontamentoBean;
+import br.com.verity.pause.bean.ArquivoApontamentoBean;
 import br.com.verity.pause.bean.FuncionarioBean;
 import br.com.verity.pause.converter.ApontamentoConverter;
-import br.com.verity.pause.dao.ApontamentosDAO;
+import br.com.verity.pause.converter.ArquivoApontamentoConverter;
+import br.com.verity.pause.dao.ApontamentoDAO;
+import br.com.verity.pause.dao.ArquivoApontamentoDAO;
 import br.com.verity.pause.exception.BusinessException;
 import br.com.verity.pause.integration.SavIntegration;
 import br.com.verity.pause.util.ImportarTxt;
@@ -28,10 +31,16 @@ public class ImportacaoBusiness {
 	private SavIntegration integration;
 
 	@Autowired
-	private ApontamentosDAO apontamentoDao;
+	private ApontamentoDAO apontamentoDao;
+	
+	@Autowired
+	private ArquivoApontamentoDAO arquivoApontamentoDao;
 
 	@Autowired
 	private ApontamentoConverter apontamentoConverter;
+	
+	@Autowired
+	private ArquivoApontamentoConverter arquivoApontamentoConverter;
 
 	public List<FuncionarioBean> importarTxt(String caminho, int idEmpresa) throws BusinessException, IOException, ParseException {
 		List<FuncionarioBean> funcionarios = new ArrayList<FuncionarioBean>();
@@ -71,10 +80,13 @@ public class ImportacaoBusiness {
 		return funcionariosComApontamentos;
 	}
 
-	public void salvarApontamentos(List<ApontamentoBean> apontamentos) {
+	public void salvarApontamentos(List<ApontamentoBean> apontamentos, ArquivoApontamentoBean arquivoApontamento) {
 		try {
 			apontamentoDao.excludeAllDate(apontamentos.get(0).getData());
-			apontamentoDao.saveAll(apontamentoConverter.convertBeanToEntity(apontamentos));
+			arquivoApontamentoDao.excludeDate(arquivoApontamentoConverter.convertBeanToEntity(arquivoApontamento));
+			arquivoApontamentoDao.save(arquivoApontamentoConverter.convertBeanToEntity(arquivoApontamento));
+			Integer idArquivo = arquivoApontamentoDao.findByDateAndEmpresa(arquivoApontamentoConverter.convertBeanToEntity(arquivoApontamento));
+			apontamentoDao.saveAll(apontamentoConverter.convertBeanToEntity(apontamentos), idArquivo);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

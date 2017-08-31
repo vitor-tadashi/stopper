@@ -45,7 +45,7 @@ BEGIN TRY
 		idApontamento int IDENTITY(1,1) NOT NULL,
 		pis varchar(13) NULL,
 		data date NULL,
-		horario time(6) NULL,
+		horario time(0) NULL,
 		tipoImportacao bit NULL,
 		dataInclusao date NULL,
 		observacao varchar(100) NULL,
@@ -103,8 +103,8 @@ BEGIN TRY
 
 	CREATE TABLE PAUSESobreAviso(
 		idSobreAviso int IDENTITY(1,1) NOT NULL,
-		horaInicio time(6) NULL,
-		horaFim time(6) NULL,
+		horaInicio time(0) NULL,
+		horaFim time(0) NULL,
 		dataInclusao date NULL,
 		idControleDiario int NULL,
 		idUsuarioInclusao int NULL,

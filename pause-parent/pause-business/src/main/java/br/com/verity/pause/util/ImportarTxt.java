@@ -10,9 +10,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import br.com.verity.pause.bean.ApontamentoBean;
+import br.com.verity.pause.bean.UsuarioBean;
 import br.com.verity.pause.exception.BusinessException;
 
 @Component
@@ -25,6 +28,7 @@ public class ImportarTxt {
 		ApontamentoBean apontamento = new ApontamentoBean();
 		String linha;
 		Date data;
+		Date dataInclusao = new Date();
 		Time hrs;
 		String codReg;
 		String pis;
@@ -32,6 +36,9 @@ public class ImportarTxt {
 		SimpleDateFormat formataData = new SimpleDateFormat("ddMMyyyy");
 		SimpleDateFormat formataHora = new SimpleDateFormat("HHmmSS");
 		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UsuarioBean usuarioLogado = (UsuarioBean) auth.getPrincipal();
+
 		try {
 			FileReader arquivo = new FileReader(caminho);
 			lerArquivo = new BufferedReader(arquivo);
@@ -50,13 +57,15 @@ public class ImportarTxt {
 					Date dtTime = formataHora.parse(linha.substring(18, 22)+00);
 					hrs = new Time(dtTime.getTime());
 					
-					
 					apontamento = new ApontamentoBean();
 					
 					apontamento.setPis(pis);
 					apontamento.setData(data);
 					apontamento.setHorario(hrs);
 					apontamento.setIdEmpresa(idEmpresa);
+					apontamento.setDataInclusao(dataInclusao);
+					apontamento.setTipoImportacao(true);
+					apontamento.setIdUsuarioInclusao(usuarioLogado.getId());
 
 					apontamentos.add(apontamento);
 				}else if(!dataImportacao.equals(data) && !codReg.contains("9999999")){
