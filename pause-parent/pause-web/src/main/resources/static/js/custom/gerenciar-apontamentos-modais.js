@@ -11,6 +11,8 @@ function inserirSA(){
 	var horaSAe = $('#hora-sa-e').val();
 	var horaSAs = $('#hora-sa-s').val();
 	
+	inserirSA_ajax(dataSA, horaSAe, horaSAs);
+	
 	$('#body-sa')
 		.append($('<tr>')
 			.append($('<td>').text(dataSA))
@@ -20,6 +22,24 @@ function inserirSA(){
 				.append($('<a>').text('Remover').addClass('text-danger').attr('href',"#").attr('onclick','removerTr(this)'))
 			)
 		);
+}
+function inserirSA_ajax(dataSA, horaSAe, horaSAs){
+	var sobreAviso={	
+			'data' : dataSA,
+			'entrada' : horaSAe,
+			'saida' : horaSAs
+		}
+	
+	$.ajax({
+		url: 'sobre-aviso/inserir-sa',
+		type : 'POST',
+		data: JSON.stringify(sobreAviso),
+		contentType : 'application/json;charset=UTF-8',
+		dataType: 'json',
+		success: function(data){
+			
+		}
+	})
 }
 function inserirAfastamento(){
 	var de = $('#afastamentoDe').val();

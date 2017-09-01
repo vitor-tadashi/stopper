@@ -30,7 +30,7 @@ public class SavIntegration {
 		List<FuncionarioIntegrationBean> funcionarios = new ArrayList<FuncionarioIntegrationBean>();
 		ObjectMapper mapper = new ObjectMapper();
 		// Properties props = this.getProp();
-		String endereco = "http://localhost:9090/sav/listFuncionariosDaEmpresa/"+idEmpresa;
+		String endereco = "http://192.168.3.17:9090/sav/listFuncionariosDaEmpresa/"+idEmpresa;
 		try {
 			URL url = new URL(endereco);
 			funcionarios = mapper.readValue(url,  new TypeReference<List<FuncionarioIntegrationBean>>(){});
@@ -45,7 +45,7 @@ public class SavIntegration {
 		UsuarioBean usuario = new UsuarioBean();
 		ObjectMapper mapper = new ObjectMapper();
 		// Properties props = this.getProp();
-		String endereco = "http://localhost:9090/sav/getUsuarioSistema/";
+		String endereco = "http://192.168.3.17:9090/sav/getUsuarioSistema/";
 		try {
 			URL url = new URL(endereco + user + "/pause");
 			usuario = mapper.readValue(url, UsuarioBean.class);
@@ -104,7 +104,7 @@ public class SavIntegration {
 		FuncionarioIntegrationBean funcionario = new FuncionarioIntegrationBean();
 		ObjectMapper mapper = new ObjectMapper();
 		// Properties props = this.getProp();
-		String endereco = "http://localhost:9090/sav/getFuncionario/"+idFuncionario;
+		String endereco = "http://192.168.3.17:9090/sav/getFuncionario/"+idFuncionario;
 		try {
 			URL url = new URL(endereco);
 			funcionario = mapper.readValue(url,  new TypeReference<FuncionarioIntegrationBean>(){});

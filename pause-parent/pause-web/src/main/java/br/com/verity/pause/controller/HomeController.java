@@ -11,8 +11,4 @@ public class HomeController {
     public String teste() {
         return "home/index";
     }
-	@RequestMapping(value= {"apontamento"}, method = RequestMethod.GET)
-    public String teste1() {
-        return "apontamento/consultar";
-    } 
 }
