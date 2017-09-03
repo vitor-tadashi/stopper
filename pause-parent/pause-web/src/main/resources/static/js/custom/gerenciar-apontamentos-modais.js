@@ -29,7 +29,6 @@ function inserirSA_ajax(dataSA, horaSAe, horaSAs){
 			'entrada' : horaSAe,
 			'saida' : horaSAs
 		}
-	
 	$.ajax({
 		url: 'sobre-aviso/inserir-sa',
 		type : 'POST',
@@ -39,7 +38,7 @@ function inserirSA_ajax(dataSA, horaSAe, horaSAs){
 		success: function(data){
 			
 		}
-	})
+	});
 }
 function inserirAfastamento(){
 	var de = $('#afastamentoDe').val();

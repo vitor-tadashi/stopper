@@ -38,6 +38,7 @@ public class SobreAvisoBean{
 		return entrada;
 	}
 	public void setEntrada(String entrada) {
+		entrada = entrada.length()== 4? "0"+entrada : entrada;
 		this.entrada = LocalTime.parse(entrada);
 	}
 	public void setEntrada(LocalTime entrada) {
@@ -47,6 +48,7 @@ public class SobreAvisoBean{
 		return saida;
 	}
 	public void setSaida(String saida) {
+		saida = saida.length()== 4? "0"+saida : saida;
 		this.saida = LocalTime.parse(saida);
 	}
 	public void setSaida(LocalTime saida) {

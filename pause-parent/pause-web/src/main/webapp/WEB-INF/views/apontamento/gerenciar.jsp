@@ -34,13 +34,13 @@
 				<!--Data Table-->
 				<!--===================================================-->
 				<div class="panel-body">
-					<form>
+					<form action="">
 						<div class="row">
 							<div class="col-sm-4">
 								<div class="form-group">
 									<label class="control-label">Nome do funcionário</label>
-									<select class="selectpicker" data-live-search="true" data-width="100%" id="#">
-										<option value="">Selecione</option>
+									<select class="selectpicker" data-live-search="true" data-width="100%" id="apontamento-funcionario">
+										<option value="0">Selecione</option>
 									</select>
 								</div>
 							</div>
@@ -53,7 +53,7 @@
 								</div>
 							</div>
 							<div class="col-sm-1" style="margin-top: 24px;">
-								<button class="btn btn-info" type="submit">Filtrar</button>
+								<button class="btn btn-info" type="button">Filtrar</button>
 							</div>
 						</div>
 					</form>
@@ -251,6 +251,16 @@
 						<div class="input-group date">
 							<input id="apontamento-time" type="text-center" class="form-control">
 							<span class="input-group-addon"><i class="pli-clock"></i></span>
+						</div>
+						<div class="form-group pad-top">
+							<label class="control-label">Justificativa</label>
+							<select class="selectpicker" data-live-search="true" data-width="100%" id="apontamento-jus">
+								<option value="0">Selecione</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<label class="control-label">Observações</label>
+							<textarea id="apontamento-obs" rows="2" maxlength="200" class="form-control"></textarea>
 						</div>
 						<!--===================================================-->
 					</div>

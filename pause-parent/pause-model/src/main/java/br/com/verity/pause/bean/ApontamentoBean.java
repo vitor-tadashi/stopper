@@ -1,10 +1,12 @@
 package br.com.verity.pause.bean;
 
-import java.sql.Time;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.Date;
 
 import org.springframework.stereotype.Component;
-
 /**
  * @author guilherme.oliveira
  *
@@ -15,7 +17,7 @@ public class ApontamentoBean {
 	private Integer id;
 	private String pis;
 	private Date data;
-	private Time horario;
+	private LocalTime horario;
 	private Boolean tipoImportacao = true;
 	private Date dataInclusao;
 	private String observacao;
@@ -40,23 +42,29 @@ public class ApontamentoBean {
 	public void setPis(String pis) {
 		this.pis = pis;
 	}
-
 	public Date getData() {
 		return data;
 	}
-
+	public void setDataJson(String dataJson) {
+		DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		try {
+			this.data = formatter.parse(dataJson);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+	}
 	public void setData(Date data) {
 		this.data = data;
 	}
-
-	public Time getHorario() {
+	public LocalTime getHorario() {
 		return horario;
 	}
-
-	public void setHorario(Time horario) {
+	public void setHorarioJson(String horarioJson) {
+		this.horario = LocalTime.parse(horarioJson);
+	}
+	public void setHorario(LocalTime horario) {
 		this.horario = horario;
 	}
-
 	public Boolean getTipoImportacao() {
 		return tipoImportacao;
 	}
@@ -92,11 +100,12 @@ public class ApontamentoBean {
 	public TipoJustificativaBean getTpJustificativa() {
 		return tpJustificativa;
 	}
-
 	public void setTpJustificativa(TipoJustificativaBean tpJustificativa) {
 		this.tpJustificativa = tpJustificativa;
 	}
-
+	public void setTpJustificativaJson(Integer id) {
+		this.tpJustificativa.setId(id);
+	}
 	public ControleDiarioBean getCntrDiario() {
 		return cntrDiario;
 	}

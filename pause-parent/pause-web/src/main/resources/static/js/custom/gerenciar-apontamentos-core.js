@@ -12,6 +12,10 @@ function dialogApontamentoHora(td) {
 function informarHorario() {
 	var id = $('#apontamento-id').val();
 	var horario = $('#apontamento-time').val();
+	var dtApontamento = $('#title-modal-apontamento').text().split(',');
+	
+	apontar(horario,dtApontamento[0]);
+	
 	var tr = $("#"+id).parent();
 	var horarios = [];
 	$("#"+id).text(horario);
@@ -54,7 +58,28 @@ function informarHorario() {
 	calcularTotal();
 	$('#demo-default-modal').modal("hide");
 }
-
+function apontar(hr,dt){
+	var apontamento = {
+		horarioJson : hr,
+		dataJson : dt,
+		observacao : $('#apontamento-obs').val(),
+		tpJustificativa : {
+			id : $('#apontamento-jus').val()
+		}
+	};
+	if($('#apontamento-funcionario').val())
+		apontamento['pis'] = $('#apontamento-funcionario').val();
+	$.ajax({
+		url: 'gerenciar-apontamento/apontar',
+		type : 'POST',
+		data: JSON.stringify(apontamento),
+		contentType : 'application/json;charset=UTF-8',
+		dataType: 'json',
+		success: function(data){
+			
+		}
+	});
+}
 function calcularTotal() {
 	
 	$("#dt-apontamentos").find('tr').each (function() {
