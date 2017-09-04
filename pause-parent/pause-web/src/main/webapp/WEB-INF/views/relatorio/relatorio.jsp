@@ -39,7 +39,7 @@
 									</c:forEach>
 								</select>
 							</div>
-							<div class="col-md-2">
+							<div class="col-sm-4">
 								<label class="control-label">Período:</label> 
 								<input id="dtDe" type="date" onBlur="permitirData()" class="form-control" style="padding: 5px 12px"/>
 							</div>
@@ -50,6 +50,8 @@
 							<div class="form-group col-md-2">
 								<label class="control-label">&nbsp;</label>
 								<button type="button" onclick="gerarRelatorio()" class="btn-primary form-control">Gerar extrato</button>
+							<div class="col-sm-2" style="margin-top: 23px;">
+								<button type="button" onclick="gerarRelatorio()" class="btn btn-primary pull-right">Gerar extrato</button>
 							</div>
 						</div>
 					</div>

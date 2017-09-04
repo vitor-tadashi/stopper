@@ -1,5 +1,7 @@
 package br.com.verity.pause.converter;
 
+import java.sql.Time;
+
 import org.springframework.stereotype.Component;
 
 import br.com.verity.pause.bean.ApontamentoBean;
@@ -18,11 +20,11 @@ public class ApontamentoConverter implements Converter<ApontamentoEntity, Aponta
 
 		entity.setId(bean.getId());
 		entity.setPis(bean.getPis());
-		entity.setHorario(bean.getHorario());
-		entity.setData(bean.getData());
+		entity.setHorario(Time.valueOf(bean.getHorario()));
+		entity.setData(new java.sql.Date(bean.getData().getTime()));
 		entity.setTipoImportacao(bean.getTipoImportacao());
 		entity.setIdEmpresa(bean.getIdEmpresa());
-		entity.setDataInclusao(bean.getDataInclusao());
+		entity.setDataInclusao(new java.sql.Date(bean.getDataInclusao().getTime()));
 		entity.setIdUsuarioInclusao(bean.getIdUsuarioInclusao());
 		entity.setObservacao(bean.getObservacao());
 
@@ -39,7 +41,7 @@ public class ApontamentoConverter implements Converter<ApontamentoEntity, Aponta
 
 		bean.setId(entity.getId());
 		bean.setData(entity.getData());
-		bean.setHorario(entity.getHorario());
+		bean.setHorario(entity.getHorario().toLocalTime());
 		bean.setPis(entity.getPis());
 		bean.setTipoImportacao(entity.getTipoImportacao());
 		bean.setIdEmpresa(entity.getIdEmpresa());

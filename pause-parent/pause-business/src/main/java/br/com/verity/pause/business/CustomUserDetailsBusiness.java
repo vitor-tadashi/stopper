@@ -1,5 +1,7 @@
 package br.com.verity.pause.business;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,5 +22,11 @@ public class CustomUserDetailsBusiness implements UserDetailsService {
 			throw new UsernameNotFoundException("Usuário não localizado");
 		}
 		return new CustomUserDetails(usuarioBean);
+	}
+	public UsuarioBean usuarioLogado(){
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UsuarioBean usuarioLogado = (UsuarioBean) auth.getPrincipal();
+		
+		return usuarioLogado;
 	}
 }

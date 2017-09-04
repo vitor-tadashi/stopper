@@ -61,7 +61,7 @@ public class ImportarTxt {
 					
 					apontamento.setPis(pis);
 					apontamento.setData(data);
-					apontamento.setHorario(hrs);
+					apontamento.setHorario(hrs.toLocalTime());
 					apontamento.setIdEmpresa(idEmpresa);
 					apontamento.setDataInclusao(dataInclusao);
 					apontamento.setTipoImportacao(true);
