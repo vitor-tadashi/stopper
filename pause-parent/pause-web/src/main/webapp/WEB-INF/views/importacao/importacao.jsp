@@ -19,6 +19,13 @@
             <div class="panel">
                 <form:form id="formValidar" action="importacao/salvar" method="post">
                     <div id="textDiv" class=""></div>
+                    <c:if test="${not empty log}">
+						<div id="msg-sucesso" class="alert alert-success msg-margin">
+							<a href="#" class="close" data-dismiss="alert"
+								aria-label="close">&times;</a>
+							<p>${log }</p>
+						</div>
+					</c:if>
                     <input type="hidden" id="token" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     <div class="panel-body">
                         <div class="row">
