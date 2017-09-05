@@ -26,4 +26,8 @@ public class FuncionarioBusiness {
 		
 		System.out.println("aqui");
 	}
+
+	public List<FuncionarioBean> listarFuncionariosPorEmpresaComPis() {
+		return integration.getFuncionarios(2);
+	}
 }

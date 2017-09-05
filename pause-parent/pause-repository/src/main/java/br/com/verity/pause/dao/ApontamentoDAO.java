@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -12,6 +13,9 @@ import org.springframework.stereotype.Repository;
 
 import br.com.verity.pause.connection.ConnectionFactory;
 import br.com.verity.pause.entity.ApontamentoEntity;
+import br.com.verity.pause.entity.ArquivoApontamentoEntity;
+import br.com.verity.pause.entity.ControleDiarioEntity;
+import br.com.verity.pause.entity.TipoJustificativaEntity;
 
 @Repository
 public class ApontamentoDAO {
@@ -61,10 +65,9 @@ public class ApontamentoDAO {
 		return false;
 	}
 	public void save(ApontamentoEntity horas) {
-		connection = new ConnectionFactory();
 		Connection conn;
 		try {
-			conn = connection.createConnection();
+			conn = ConnectionFactory.createConnection();
 
 			String sql = "INSERT INTO PAUSEApontamento VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 
@@ -77,10 +80,13 @@ public class ApontamentoDAO {
 			ps.setDate(5, horas.getDataInclusao()); // dataInclusao
 			ps.setString(6, horas.getObservacao()); // observacao
 			ps.setInt(7, horas.getTipoJustificativa().getId()); // idTpJustificativa
-			ps.setNull(8, Types.INTEGER); // idControleDiario
+			ps.setInt(8, horas.getControleDiario().getId()); // idControleDiario
 			ps.setInt(9, horas.getIdEmpresa()); // idEmpresa
 			ps.setInt(10, horas.getIdUsuarioInclusao()); // idUsuarioInclusao
-			ps.setInt(11, horas.getArquivoApontamento().getId()); // idArquivoApontamento
+			if(horas.getArquivoApontamento() != null)
+				ps.setInt(11, horas.getArquivoApontamento().getId()); // idArquivoApontamento
+			else 
+				ps.setNull(11, Types.INTEGER);
 
 			ps.execute();
 			ps.close();
@@ -137,5 +143,58 @@ public class ApontamentoDAO {
 
 		ps.execute();
 		ps.close();
+	}
+
+	public List<ApontamentoEntity> findByPisAndPeriodo(String pis, java.sql.Date[] periodoSQL) {
+		List<ApontamentoEntity> entities = new ArrayList<>();
+		
+		String sql = "SELECT * FROM PAUSEApontamento WHERE pis LIKE ? AND data BETWEEN ? AND ? ORDER BY data ASC";
+		
+		try {
+			Connection conn = ConnectionFactory.createConnection();
+			
+			PreparedStatement ps = conn.prepareStatement(sql);
+			
+			ps.setString(1, pis);
+			ps.setDate(2, periodoSQL[0]);
+			ps.setDate(3, periodoSQL[1]);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				ApontamentoEntity entity = new ApontamentoEntity();
+				TipoJustificativaEntity justificativa = new TipoJustificativaEntity();
+				ControleDiarioEntity controleDiario = new ControleDiarioEntity();
+				ArquivoApontamentoEntity arquivoApontamento = new ArquivoApontamentoEntity();
+				
+				entity.setId(rs.getInt(1));
+				entity.setPis(rs.getString(2));
+				entity.setData(rs.getDate(3));
+				entity.setHorario(rs.getTime(4));
+				entity.setTipoImportacao(rs.getBoolean(5));
+				entity.setDataInclusao(rs.getDate(6));
+				entity.setObservacao(rs.getString(7));
+				
+				justificativa.setId(rs.getInt(8));
+				entity.setTipoJustificativa(justificativa);
+				
+				controleDiario.setId(rs.getInt(9));
+				entity.setControleDiario(controleDiario);
+				
+				entity.setIdEmpresa(rs.getInt(10));
+				entity.setIdUsuarioInclusao(rs.getInt(11));
+				
+				arquivoApontamento.setId(rs.getInt(12));
+				entity.setArquivoApontamento(arquivoApontamento);
+				
+				entities.add(entity);
+			}
+			
+			ps.close();
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return entities;
 	}
 }

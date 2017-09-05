@@ -76,7 +76,9 @@ function apontar(hr,dt){
 		contentType : 'application/json;charset=UTF-8',
 		dataType: 'json',
 		success: function(data){
-			
+			$('#form-time')[0].reset();
+			$('#apontamento-jus').prop('selectedIndex',0);
+			$('#apontamento-jus').selectpicker('refresh');
 		}
 	});
 }
