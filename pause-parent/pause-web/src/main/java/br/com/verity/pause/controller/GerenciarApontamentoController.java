@@ -49,8 +49,8 @@ public class GerenciarApontamentoController {
 		List<TipoJustificativaBean>justificativas = justificativaBusiness.listar();
 		model.addAttribute("justificativas",justificativas);
 	}
-	private void apontamentos(Model model,String pis,String... periodo) {
+	/*private void apontamentos(Model model,String pis,String... periodo) {
 		List<ApontamentoBean> apontamentos = apontamentoBusiness.listarApontamentos(pis,periodo);
 		model.addAttribute("apontamentos",apontamentos);
-	}
+	}*/
 }
