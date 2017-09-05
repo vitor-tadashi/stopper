@@ -32,11 +32,11 @@ function inserirSA_ajax(dataSA, horaSAe, horaSAs){
 	$.ajax({
 		url: 'sobre-aviso/inserir-sa',
 		type : 'POST',
+		contentType : 'application/json',
 		data: JSON.stringify(sobreAviso),
-		contentType : 'application/json;charset=UTF-8',
-		dataType: 'json',
+		cache: false,
 		success: function(data){
-			
+			clearForm(1);
 		}
 	});
 }
@@ -70,4 +70,9 @@ function inserirAtestado(){
 }
 function removerTr(click){
 	$(click).parent().parent().remove();
+}
+function clearForm(i){
+	$('.clear-form')[i].reset();
+	$('.clear-select').prop('selectedIndex',0);
+	$('.clear-select').selectpicker('refresh');
 }

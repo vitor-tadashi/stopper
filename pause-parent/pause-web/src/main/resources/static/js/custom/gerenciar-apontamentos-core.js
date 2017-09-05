@@ -72,13 +72,11 @@ function apontar(hr,dt){
 	$.ajax({
 		url: 'gerenciar-apontamento/apontar',
 		type : 'POST',
+		contentType : 'application/json',
 		data: JSON.stringify(apontamento),
-		contentType : 'application/json;charset=UTF-8',
-		dataType: 'json',
+		cache: false,
 		success: function(data){
-			$('#form-time')[0].reset();
-			$('#apontamento-jus').prop('selectedIndex',0);
-			$('#apontamento-jus').selectpicker('refresh');
+			clearForm(0);
 		}
 	});
 }

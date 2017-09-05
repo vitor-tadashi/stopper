@@ -13,7 +13,7 @@ import br.com.verity.pause.business.SobreAvisoBusiness;
 
 @RestController
 @RequestMapping(value = "/sobre-aviso")
-public class GerenciarSobreAviso {
+public class GerenciarSobreAvisoController {
 	
 	@Autowired
 	private SobreAvisoBusiness sobreAvisoBusiness;

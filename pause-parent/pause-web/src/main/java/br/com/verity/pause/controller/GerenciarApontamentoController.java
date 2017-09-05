@@ -3,11 +3,14 @@ package br.com.verity.pause.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.verity.pause.bean.ApontamentoBean;
 import br.com.verity.pause.bean.FuncionarioBean;
@@ -38,8 +41,10 @@ public class GerenciarApontamentoController {
 		return "apontamento/gerenciar";
 	}
 	@RequestMapping(value = "/apontar", method = RequestMethod.POST)
-	public void apontar(@RequestBody ApontamentoBean apontamento){
+	@ResponseBody
+	public ResponseEntity<String> apontar(@RequestBody ApontamentoBean apontamento){
 		apontamentoBusiness.apontar(apontamento);
+		return new ResponseEntity<>("ok",HttpStatus.ACCEPTED);
 	}
 	private void funcionarios(Model model) {
 		List<FuncionarioBean>funcionarios = funcionarioBusiness.listarFuncionariosPorEmpresaComPis();
