@@ -45,6 +45,10 @@ function importarArquivo() {
 							textDiv.className = "alert alert-danger";
 							textDiv.textContent = "Arquivo contém mais de uma data, por favor selecione outro.";
 							var text = "[" + div.textContent + "]";
+						}else if(value.mensagem.includes("empresa") == true){
+							textDiv.className = "alert alert-danger";
+							textDiv.textContent = value.mensagem;
+							var text = "[" + div.textContent + "]";
 						}else{
 							exibir = false;
 							$('#modal-confirmacao').modal('show'); 
@@ -89,13 +93,13 @@ function preencherImportacao(value, index){
 	$('#pis'+index).text(value.pis);
 	$('#funcionario'+index).text(value.nome);
 	$(value.apontamentos).each(function(i, value) {
-		$('#hora'+i+index).text(value.horario);
+		var hora = value.horario.hour +":"+ value.horario.minute;
+		$('#hora'+i+index).text(hora);
 	})
 	date = new Date(value.apontamentos[0].data);
 	$('#data'+index).text(date.toLocaleDateString());
 	$('.pis').mask('999.9999.999-9');
 	$('.data').mask('99/99/9999');
-	$('.hora').mask('99:99');
 }
 $( document ).ready(function(){
 	window.setTimeout(function() {

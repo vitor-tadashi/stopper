@@ -4,16 +4,20 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
-import java.text.DateFormatSymbols;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
 
+import org.apache.poi.hssf.util.CellReference;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
 
-import br.com.verity.pause.bean.ApontamentoBean;
+import br.com.verity.pause.bean.ConsultaCompletaBean;
 import br.com.verity.pause.bean.FuncionarioBean;
 
 @Component
@@ -25,13 +29,12 @@ public class GerarRelatorioXlsx {
 	 *	WorkBook é um arquivo Excel, Sheet é para gerar um planilha, row gera/seleciona uma linha,
 	 *	Cell gera/seleciona uma celula da linha. WoorkBook.write(FileOutputStram) salva os dados na planilha 
 	 */
-	public void relatorioFuncionarioPeriodo(FuncionarioBean funcionario, String de, String ate) {
-		String caminho = "C:" + File.separator + funcionario.getNome() + ".xlsx";
+	public String relatorioFuncionarioPeriodo(List<ConsultaCompletaBean> consultaCompleta, FuncionarioBean funcionario, String de, String ate) {
 		String arquivo = "C:" + File.separator + "Pause" + File.separator + "Relatorios" + File.separator
 				+ funcionario.getNome() + ".xlsx";
+		DateTimeFormatter formatter = DateTimeFormatter.ISO_TIME;
 		int linha = 0;
-		File pasta = new File(caminho);
-		pasta.mkdirs();
+		int mesmoDia = 0;
 		try {
 			//Cria uma planilha .xlsx no diretorio escolhido
 			FileOutputStream out = new FileOutputStream(new File(arquivo));
@@ -89,42 +92,49 @@ public class GerarRelatorioXlsx {
 			row.createCell(25).setCellValue("Observação");
 			linha++;
 			
-			int mesmoDia = 0;
-			for(int i = 0; funcionario.getApontamentos().size() > i;){
+			for(ConsultaCompletaBean consulta : consultaCompleta){
 				row = sheet.createRow(linha);
 				
 				DateFormat formatDt = new SimpleDateFormat("dd/MM/yyyy");
-				String dtApontamento = formatDt.format(funcionario.getApontamentos().get(i).getData());
+				String dtApontamento = formatDt.format(consulta.getData());
 				row.createCell(0).setCellValue(dtApontamento);
 				row.createCell(1).setCellValue("Data");
-				for(int j = 0; funcionario.getApontamentos().size() > j; j++){
-					if(funcionario.getApontamentos().get(j).getData().compareTo(funcionario.getApontamentos().get(i).getData()) == 0){
-						row.createCell(2).setCellValue("SA");
-						DateFormat formatter = new SimpleDateFormat("HH:mm");
-						String hora = formatter.format(funcionario.getApontamentos().get(j).getHorario());
-						row.createCell(3+mesmoDia).setCellValue(hora);
-						row.createCell(4+mesmoDia).setCellValue((funcionario.getApontamentos().get(j).getTipoImportacao()==true)?"E":"M");
+				row.createCell(2).setCellValue("SA");
+				if(consulta.getApontamentoHorario() != null){
+					CellReference cellReference = new CellReference(linha-1,0);
+					row = sheet.getRow(cellReference.getRow());
+					Cell cell = row.getCell(cellReference.getCol());
+					Date dataLinha = null;
+					try {
+						dataLinha = formatDt.parse(cell.getStringCellValue());
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+					if(dataLinha.equals(consulta.getData())){
 						mesmoDia += 2;
-						i++;
 					}else{
 						mesmoDia = 0;
+						linha++;
 					}
+					String hora = formatter.format(consulta.getApontamentoHorario());
+					row.createCell(1+mesmoDia).setCellValue(hora);
+					row.createCell(2+mesmoDia).setCellValue((consulta.getApontamentoTpImportacao() == true)?"E":"M");
+					row.createCell(19).setCellValue("Atestado");
+					row.createCell(20).setCellValue(consulta.getControleDiarioHoraTotal());
+					row.createCell(21).setCellValue("Positivas");
+					row.createCell(22).setCellValue("Negativas");
+					row.createCell(23).setCellValue(consulta.getControleDiarioAdcNoturno());
+					row.createCell(24).setCellValue(consulta.getControleDiarioSA());
+					row.createCell(25).setCellValue("obs");
 				}
-				row.createCell(19).setCellValue("Atestado");
-				row.createCell(20).setCellValue("Horas");
-				row.createCell(21).setCellValue("Positivas");
-				row.createCell(22).setCellValue("Negativas");
-				row.createCell(23).setCellValue("Ad Not");
-				row.createCell(24).setCellValue("Horas SA");
-				row.createCell(25).setCellValue(funcionario.getApontamentos().get(0).getObservacao());
-				linha++;
 			}
 			
 			row = sheet.createRow(linha);
-			row.createCell(20).setCellValue("Soma hrs positivas");
-			row.createCell(21).setCellValue("Soma hrs negativas");
-			row.createCell(22).setCellValue("Soma hrs SA");
-			row.createCell(23).setCellValue("Soma hrs Ad Not");
+			row.createCell(20).setCellValue(consultaCompleta.get(0).getControleMensalHoraTotal());
+			row.createCell(21).setCellValue(consultaCompleta.get(0).getControleMensalBancoHora());
+			row.createCell(22).setCellValue(consultaCompleta.get(0).getControleMensalAdcNoturno());
+			row.createCell(23).setCellValue(consultaCompleta.get(0).getControleMensalSA());
+			row.createCell(24).setCellValue(consultaCompleta.get(0).getControleMensalST());
 			linha++;
 			
 			row = sheet.createRow(linha);
@@ -139,10 +149,10 @@ public class GerarRelatorioXlsx {
 			
 			row = sheet.createRow(linha);
 			row.createCell(0).setCellValue("Trimestre");
-			row.createCell(1).setCellValue("Ano");
-			row.createCell(2).setCellValue("Mês");
-			row.createCell(3).setCellValue("Banco");
-			row.createCell(4).setCellValue("Saldo");
+			row.createCell(1).setCellValue(consultaCompleta.get(0).getControleMensalAno());
+			row.createCell(2).setCellValue(consultaCompleta.get(0).getControleMensalMes());
+			row.createCell(3).setCellValue(consultaCompleta.get(0).getControleMensalBancoHora());
+			row.createCell(4).setCellValue(consultaCompleta.get(0).getControleMensalHoraTotal()+consultaCompleta.get(0).getControleMensalBancoHora());
 			linha++;
 			linha++;
 			
@@ -176,5 +186,7 @@ public class GerarRelatorioXlsx {
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
+		
+		return arquivo;
 	}
 }

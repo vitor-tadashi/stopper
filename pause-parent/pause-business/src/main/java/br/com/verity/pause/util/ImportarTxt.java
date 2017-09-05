@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import br.com.verity.pause.bean.ApontamentoBean;
+import br.com.verity.pause.bean.EmpresaBean;
 import br.com.verity.pause.bean.UsuarioBean;
 import br.com.verity.pause.exception.BusinessException;
 
@@ -23,7 +24,8 @@ public class ImportarTxt {
 
 	private BufferedReader lerArquivo;
 
-	public List<ApontamentoBean> importar(String caminho, int idEmpresa) throws BusinessException, IOException, ParseException {
+	public List<ApontamentoBean> importar(String caminho, EmpresaBean empresa)
+			throws BusinessException, IOException, ParseException {
 		List<ApontamentoBean> apontamentos = new ArrayList<ApontamentoBean>();
 		ApontamentoBean apontamento = new ApontamentoBean();
 		String linha;
@@ -32,10 +34,11 @@ public class ImportarTxt {
 		Time hrs;
 		String codReg;
 		String pis;
+		String cnpjArquivo;
 		Date dataImportacao;
 		SimpleDateFormat formataData = new SimpleDateFormat("ddMMyyyy");
 		SimpleDateFormat formataHora = new SimpleDateFormat("HHmmSS");
-		
+
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UsuarioBean usuarioLogado = (UsuarioBean) auth.getPrincipal();
 
@@ -44,41 +47,46 @@ public class ImportarTxt {
 			lerArquivo = new BufferedReader(arquivo);
 
 			linha = lerArquivo.readLine();
-			linha = lerArquivo.readLine(); // lê a próxima linha linha
-			
-			dataImportacao = formataData.parse(linha.substring(10, 18));
-			while (linha != null) {
-				codReg = linha.substring(0, 10);
-				
-				data = formataData.parse(linha.substring(10, 18));
-				if (!codReg.contains("9999999") && dataImportacao.equals(data)) {
-					pis = linha.substring(23, 34);
+			//cnpjArquivo = linha.substring(11, 25);
+			//if (empresa.getCnpj().equals(cnpjArquivo)) {
+				linha = lerArquivo.readLine(); // lê a próxima linha linha
 
-					Date dtTime = formataHora.parse(linha.substring(18, 22)+00);
-					hrs = new Time(dtTime.getTime());
-					
-					apontamento = new ApontamentoBean();
-					
-					apontamento.setPis(pis);
-					apontamento.setData(data);
-					apontamento.setHorario(hrs.toLocalTime());
-					apontamento.setIdEmpresa(idEmpresa);
-					apontamento.setDataInclusao(dataInclusao);
-					apontamento.setTipoImportacao(true);
-					apontamento.setIdUsuarioInclusao(usuarioLogado.getId());
+				dataImportacao = formataData.parse(linha.substring(10, 18));
+				while (linha != null) {
+					codReg = linha.substring(0, 10);
 
-					apontamentos.add(apontamento);
-				}else if(!dataImportacao.equals(data) && !codReg.contains("9999999")){
-					throw new BusinessException("Arquivo contém mais de uma data");
+					data = formataData.parse(linha.substring(10, 18));
+					if (!codReg.contains("9999999") && dataImportacao.equals(data)) {
+						pis = linha.substring(23, 34);
+
+						Date dtTime = formataHora.parse(linha.substring(18, 22) + 00);
+						hrs = new Time(dtTime.getTime());
+
+						apontamento = new ApontamentoBean();
+
+						apontamento.setPis(pis);
+						apontamento.setData(data);
+						apontamento.setHorario(hrs.toLocalTime());
+						apontamento.setIdEmpresa(empresa.getId());
+						apontamento.setDataInclusao(dataInclusao);
+						apontamento.setTipoImportacao(true);
+						apontamento.setIdUsuarioInclusao(usuarioLogado.getId());
+
+						apontamentos.add(apontamento);
+					} else if (!dataImportacao.equals(data) && !codReg.contains("9999999")) {
+						throw new BusinessException("Arquivo contém mais de uma data");
+					}
+					linha = lerArquivo.readLine();
 				}
-				linha = lerArquivo.readLine();
-			}
+			//} else {
+				//throw new BusinessException("Arquivo importado, não é da empresa: " + empresa.getNomeFantasia());
+			//}
 			arquivo.close();
 		} catch (IOException e) {
 			System.err.printf("Erro na abertura do arquivo: %s.\n", e.getMessage());
 		}
-		//horas.sort(Comparator.comparing(ApontamentoBean::getPis));
-		
+		// horas.sort(Comparator.comparing(ApontamentoBean::getPis));
+
 		return apontamentos;
 	}
 }

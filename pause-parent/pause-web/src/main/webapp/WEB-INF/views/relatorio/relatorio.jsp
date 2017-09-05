@@ -40,18 +40,17 @@
 								</select>
 							</div>
 							<div class="col-sm-4">
-								<label class="control-label">Período:</label> 
-								<input id="dtDe" type="date" onBlur="permitirData()" class="form-control" style="padding: 5px 12px"/>
-							</div>
-							<div class="col-md-2">
-								<label class="control-label">&nbsp;</label> 
-								<input id="dtAte" type="date" onBlur="permitirData()" class="form-control" style="padding: 5px 12px"/>
+								<label class="control-label">Período</label>
+								<div class="input-daterange input-group" id="datepicker">
+									<input type="date" class="form-control" id="dtDe" onBlur="permitirData()" placeholder="dd/mm/yyyy" />
+									<span class="input-group-addon">até</span>
+									<input type="date" class="form-control" id="dtAte" onBlur="permitirData()" placeholder="dd/mm/yyyy"/>
+								</div>
 							</div>
 							<div class="form-group col-md-2">
 								<label class="control-label">&nbsp;</label>
 								<button type="button" onclick="gerarRelatorio()" class="btn-primary form-control">Gerar extrato</button>
-							<div class="col-sm-2" style="margin-top: 23px;">
-								<button type="button" onclick="gerarRelatorio()" class="btn btn-primary pull-right">Gerar extrato</button>
+		                        <a href="${url }" target="_blank" id="download" class="hide"></a>
 							</div>
 						</div>
 					</div>
@@ -65,7 +64,6 @@
 		<script src='<c:url value="/js/custom/send-ajax.js"/>'></script>
 		<script>
 		function permitirData(){
-			debugger;
 			var deAno = $("#dtDe").val().substring(0, 4);
 			var deMes = $("#dtDe").val().substring(5, 7);
 			var deDia = $("#dtDe").val().substring(8, 10);
@@ -97,14 +95,16 @@
 			
 			var de = deDia+"-"+deMes+"-"+deAno;
 			var ate = ateDia+"-"+ateMes+"-"+ateAno;
-			debugger;
 			$.ajax({
 				url: "relatorio/gerar-relatorio",
 				type : 'POST',
 				data : {'idFuncionario': $("#idFunc").val(),
 						'ate' : ate,
 						'de' : de},
-				sucess: function(){
+				DataType: "text",
+				success: function(data){
+					$("#download").attr("href", "/pause/relatorio/download?caminho="+data);
+					window.open($("#download").attr("href"),'_blank');
 				}
 			})
 		}

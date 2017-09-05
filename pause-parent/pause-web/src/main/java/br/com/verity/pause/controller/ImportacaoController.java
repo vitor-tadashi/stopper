@@ -68,18 +68,18 @@ public class ImportacaoController {
 		FuncionarioBean funcionario = new FuncionarioBean();
 		arquivoApontamento = new ArquivoApontamentoBean();
 		try {
-			caminho = this.salvarTxt(arquivo, usuarioLogado.getFuncionario().getEmpresa().getRazaoSocial());
+			caminho = this.salvarTxt(arquivo, "QA360");
 			arquivoApontamento.setCaminho(caminho);
 			arquivoApontamento.setDtInclusao(new Date());
 			arquivoApontamento.setIdUsuarioInclusao(usuarioLogado.getId());
 			arquivoApontamento.setIdEmpresa(usuarioLogado.getFuncionario().getEmpresa().getId());
 			funcionariosImportacao = importacaoBusiness.importarTxt(caminho,
-					usuarioLogado.getFuncionario().getEmpresa().getId());
+					65);
 			arquivoApontamento.setData(
 					funcionariosImportacao.get(funcionariosImportacao.size() - 1).getApontamentos().get(0).getData());
 		} catch (BusinessException e) {
 			this.cancelar(caminho, model);
-			funcionario.setMensagem("Arquivo contém mais de uma data.");
+			funcionario.setMensagem(e.getMessage());
 			funcionariosImportacao.add(funcionario);
 			return funcionariosImportacao;
 		} catch (ParseException | IOException e) {

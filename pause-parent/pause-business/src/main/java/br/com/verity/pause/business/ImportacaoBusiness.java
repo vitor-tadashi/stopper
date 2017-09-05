@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.verity.pause.bean.ApontamentoBean;
 import br.com.verity.pause.bean.ArquivoApontamentoBean;
+import br.com.verity.pause.bean.EmpresaBean;
 import br.com.verity.pause.bean.FuncionarioBean;
 import br.com.verity.pause.converter.ApontamentoConverter;
 import br.com.verity.pause.converter.ArquivoApontamentoConverter;
@@ -48,9 +49,11 @@ public class ImportacaoBusiness {
 		FuncionarioBean funcMensagem = new FuncionarioBean();
 		List<ApontamentoBean> apontamento = new ArrayList<ApontamentoBean>();
 		Boolean verificarImportacao;
+		EmpresaBean empresaBean = new EmpresaBean();
 
 		try {
-			apontamento = importar.importar(caminho, idEmpresa);
+			empresaBean = integration.getEmpresa(idEmpresa);
+			apontamento = importar.importar(caminho, empresaBean);
 		} catch (BusinessException e) {
 			throw new BusinessException(e.getMessage());
 		}

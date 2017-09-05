@@ -4,8 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import br.com.verity.pause.connection.ConnectionFactory;
 import br.com.verity.pause.entity.ApontamentoEntity;
+import br.com.verity.pause.entity.ConsultaCompletaEntity;
 
 @Repository
 public class ApontamentoDAO {
@@ -140,42 +141,4 @@ public class ApontamentoDAO {
 		ps.close();
 	}
 
-	public List<ApontamentoEntity> findByPisAndPeriodo(String pis, Date de, Date ate) {
-		List<ApontamentoEntity> entities = new ArrayList<ApontamentoEntity>();
-		ApontamentoEntity entity = new ApontamentoEntity();
-		try {
-			connection = new ConnectionFactory();
-			Connection conn = connection.createConnection();
-			String sql = "SELECT * FROM PAUSEApontamento WHERE pis like (?) AND data >= ? AND data <= ?";
-
-			PreparedStatement ps = conn.prepareStatement(sql);
-
-			ps.setString(1, pis);
-			java.sql.Date dtDe = new java.sql.Date(de.getTime());
-			ps.setDate(2, dtDe);
-			java.sql.Date dtAte = new java.sql.Date(ate.getTime());
-			ps.setDate(3, dtAte);
-
-			ResultSet rs = ps.executeQuery();
-
-			while (rs.next()) {
-				entity = new ApontamentoEntity();
-				entity.setId(rs.getInt("idApontamento"));
-				entity.setPis(rs.getString("pis"));
-				entity.setHorario(rs.getTime("horario"));
-				entity.setData(rs.getDate("data"));
-				entity.setTipoImportacao(rs.getBoolean("tipoImportacao"));
-				entity.setIdEmpresa(rs.getInt("idEmpresa"));
-				entity.setDataInclusao(rs.getDate("dataInclusao"));
-				entity.setIdUsuarioInclusao(rs.getInt("idUsuarioInclusao"));
-				entity.setObservacao(rs.getString("observacao"));
-				
-				entities.add(entity);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return entities;
-	}
 }

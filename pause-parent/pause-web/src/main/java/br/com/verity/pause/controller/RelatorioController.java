@@ -1,6 +1,12 @@
 package br.com.verity.pause.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,9 +32,29 @@ public class RelatorioController {
 		return "relatorio/relatorio";
 	}
 	
-	@ResponseBody
 	@RequestMapping(value = "gerar-relatorio", method = RequestMethod.POST)
-	public void gerarRelatorio(Integer idFuncionario, String de, String ate) {
-		funcionarioBusiness.gerarRelatorio(idFuncionario, de, ate);
+	@ResponseBody
+	public String gerarRelatorio(Integer idFuncionario, String de, String ate, HttpServletResponse response) {
+		String caminho;
+		caminho = funcionarioBusiness.gerarRelatorio(idFuncionario, de, ate);
+		return caminho;
+	}
+	
+	@RequestMapping(value = "download", method = RequestMethod.GET)
+	public void download(String caminho, HttpServletResponse response) {
+		String[] nome = caminho.split("\\\\");
+		int tamanho = nome.length - 1;
+		try {
+			File file = new File(caminho);
+			response.addHeader("Content-Disposition", "attachment; filename=" + nome[tamanho]);
+			InputStream is = new FileInputStream(file);
+			org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
+			response.flushBuffer();
+
+			is.close();
+			file.delete();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

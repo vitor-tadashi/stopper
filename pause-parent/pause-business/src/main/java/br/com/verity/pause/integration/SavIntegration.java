@@ -1,3 +1,4 @@
+
 package br.com.verity.pause.integration;
 
 import java.io.IOException;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 
+import br.com.verity.pause.bean.EmpresaBean;
 import br.com.verity.pause.bean.FuncionarioBean;
 import br.com.verity.pause.bean.FuncionarioIntegrationBean;
 import br.com.verity.pause.bean.UsuarioBean;
@@ -113,5 +115,20 @@ public class SavIntegration {
 		}
 		
 		return funcionarioConverter.convertEntityToBean(funcionario);
+	}
+	
+	public EmpresaBean getEmpresa(Integer idEmpresa) {
+		EmpresaBean empresa = new EmpresaBean();
+		ObjectMapper mapper = new ObjectMapper();
+		// Properties props = this.getProp();
+		String endereco = "http://192.168.3.17:9090/sav/getEmpresa/"+idEmpresa;
+		try {
+			URL url = new URL(endereco);
+			empresa = mapper.readValue(url,  new TypeReference<EmpresaBean>(){});
+		} catch (IOException e ) {
+			e.printStackTrace();
+		}
+		
+		return empresa;
 	}
 }

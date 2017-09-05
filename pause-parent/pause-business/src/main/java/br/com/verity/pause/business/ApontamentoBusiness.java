@@ -10,9 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.verity.pause.bean.ApontamentoBean;
+import br.com.verity.pause.bean.ConsultaCompletaBean;
 import br.com.verity.pause.bean.UsuarioBean;
 import br.com.verity.pause.converter.ApontamentoConverter;
+import br.com.verity.pause.converter.ConsultaCompletaConverter;
 import br.com.verity.pause.dao.ApontamentoDAO;
+import br.com.verity.pause.dao.ConsultaCompletaDAO;
 import br.com.verity.pause.entity.ApontamentoEntity;
 
 @Service
@@ -23,6 +26,12 @@ public class ApontamentoBusiness {
 	
 	@Autowired
 	private ApontamentoConverter apontamentoConverter;
+	
+	@Autowired
+	private ConsultaCompletaConverter consultaCompletaConverter;
+	
+	@Autowired
+	private ConsultaCompletaDAO consultaCompletaDAO;
 	
 	@Autowired
 	private CustomUserDetailsBusiness userBusiness;
@@ -43,9 +52,9 @@ public class ApontamentoBusiness {
 		apontamentoDAO.save(entity);
 	}
 	
-	public List<ApontamentoBean> obterApontamentosPeriodoPorPisFuncionario(String pis, String de,
+	public List<ConsultaCompletaBean> obterApontamentosPeriodoPorIdFuncionario(Integer id, String de,
 			String ate) {
-		List<ApontamentoBean> apontamentosBean = new ArrayList<ApontamentoBean>();
+		List<ConsultaCompletaBean> consultaCompleta = new ArrayList<ConsultaCompletaBean>();
 		SimpleDateFormat formataData = new SimpleDateFormat("dd-MM-yyyy");
 		Date dtDe = null;
 		Date dtAte = null;
@@ -55,9 +64,9 @@ public class ApontamentoBusiness {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		apontamentosBean = apontamentoConverter.convertEntityToBean(apontamentoDAO.findByPisAndPeriodo(pis,dtDe,dtAte));
+		consultaCompleta = consultaCompletaConverter.convertEntityToBean(consultaCompletaDAO.findByIdAndPeriodo(id,dtDe,dtAte));
 		
-		return apontamentosBean;
+		return consultaCompleta;
 	}
 
 }
