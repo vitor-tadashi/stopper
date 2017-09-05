@@ -30,6 +30,5 @@ public class RelatorioController {
 	@RequestMapping(value = "gerar-relatorio", method = RequestMethod.POST)
 	public void gerarRelatorio(Integer idFuncionario, String de, String ate) {
 		funcionarioBusiness.gerarRelatorio(idFuncionario, de, ate);
-		System.out.println(idFuncionario +""+ de +""+ ate);
 	}
 }

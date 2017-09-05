@@ -1,11 +1,9 @@
 package br.com.verity.pause.business;
 
-import static java.time.DayOfWeek.SATURDAY;
-import static java.time.DayOfWeek.SUNDAY;
-import static java.time.temporal.TemporalAdjusters.nextOrSame;
-import static java.time.temporal.TemporalAdjusters.previousOrSame;
 
-import java.time.LocalDate;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -70,6 +68,23 @@ public class ApontamentoBusiness {
 		entity.setControleDiario(controleDiarioConverter.convertBeanToEntity(controleDiario));
 		
 		apontamentoDAO.save(entity);
+	}
+	
+	public List<ApontamentoBean> obterApontamentosPeriodoPorPisFuncionario(String pis, String de,
+			String ate) {
+		List<ApontamentoBean> apontamentosBean = new ArrayList<ApontamentoBean>();
+		SimpleDateFormat formataData = new SimpleDateFormat("dd-MM-yyyy");
+		java.sql.Date dtDe = null;
+		java.sql.Date dtAte = null;
+		try {
+			dtDe = new java.sql.Date(formataData.parse(de).getTime());
+			dtAte = new java.sql.Date(formataData.parse(ate).getTime());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		apontamentosBean = apontamentoConverter.convertEntityToBean(apontamentoDAO.findByPisAndPeriodo(pis,dtDe,dtAte));
+		
+		return apontamentosBean;
 	}
 
 	/*public List<ApontamentoBean> listarApontamentos(String pis, String[] periodo) {

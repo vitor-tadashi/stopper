@@ -41,12 +41,15 @@
 							</div>
 							<div class="col-sm-4">
 								<label class="control-label">Período:</label> 
-								<div class="input-daterange input-group">
-									<input id="de" type="date" onBlur="permitirData()" class="form-control" style="padding: 5px 12px"/>
-									<span class="input-group-addon">até</span>
-									<input id="ate" type="date" onBlur="permitirData()" class="form-control" style="padding: 5px 12px"/>
-								</div>
+								<input id="dtDe" type="date" onBlur="permitirData()" class="form-control" style="padding: 5px 12px"/>
 							</div>
+							<div class="col-md-2">
+								<label class="control-label">&nbsp;</label> 
+								<input id="dtAte" type="date" onBlur="permitirData()" class="form-control" style="padding: 5px 12px"/>
+							</div>
+							<div class="form-group col-md-2">
+								<label class="control-label">&nbsp;</label>
+								<button type="button" onclick="gerarRelatorio()" class="btn-primary form-control">Gerar extrato</button>
 							<div class="col-sm-2" style="margin-top: 23px;">
 								<button type="button" onclick="gerarRelatorio()" class="btn btn-primary pull-right">Gerar extrato</button>
 							</div>
@@ -62,22 +65,62 @@
 		<script src='<c:url value="/js/custom/send-ajax.js"/>'></script>
 		<script>
 		function permitirData(){
-			$("#ate").attr("min", $("#de").val());
-			$("#de").attr("max", $("#ate").val());
+			debugger;
+			var deAno = $("#dtDe").val().substring(0, 4);
+			var deMes = $("#dtDe").val().substring(5, 7);
+			var deDia = $("#dtDe").val().substring(8, 10);
+			
+			var ateAno = $("#dtAte").val().substring(0, 4);
+			var ateMes = $("#dtAte").val().substring(5, 7);
+			var ateDia = $("#dtAte").val().substring(8, 10);
+			if($("#dtAte").val() != ""){
+				if(deAno > ateAno || (deAno == ateAno && deMes > ateMes) || (deAno == ateAno && deMes == ateMes && deDia > ateDia)){
+					$("#dtDe").val("");
+					$("#dtAte").val("");
+				}else{
+					$("#dtAte").attr("min", $("#dtDe").val());
+					$("#dtDe").attr("max", $("#dtAte").val());
+				}
+			}else{
+				$("#dtAte").attr("min", $("#dtDe").val());
+			}
 		}
 		
 		function gerarRelatorio(){
+			var deAno = $("#dtDe").val().substring(0, 4);
+			var deMes = $("#dtDe").val().substring(5, 7);
+			var deDia = $("#dtDe").val().substring(8, 10);
+			
+			var ateAno = $("#dtAte").val().substring(0, 4);
+			var ateMes = $("#dtAte").val().substring(5, 7);
+			var ateDia = $("#dtAte").val().substring(8, 10);
+			
+			var de = deDia+"-"+deMes+"-"+deAno;
+			var ate = ateDia+"-"+ateMes+"-"+ateAno;
+			debugger;
 			$.ajax({
 				url: "relatorio/gerar-relatorio",
 				type : 'POST',
 				data : {'idFuncionario': $("#idFunc").val(),
-						'ate' : $("#de").val(),
-						'de' : $("#ate").val()},
+						'ate' : ate,
+						'de' : de},
 				sucess: function(){
-					alert("foi");
 				}
 			})
 		}
+		
+		$(document).ready(function(){
+			var date = new Date();
+			date = date.toLocaleDateString();
+			var dia = date.substring(0, 2);
+			var mes = date.substring(3, 5);
+			var ano = date.substring(6, 10);
+			
+			$("#dtDe").attr("max", ano+"-"+mes+"-"+dia);
+			$("#dtAte").attr("max", ano+"-"+mes+"-"+dia);
+			$("#dtAte").attr("min", ano+"-"+mes+"-"+dia);
+
+		})
 		</script>
 	</layout:put>
 

@@ -144,8 +144,7 @@ public class ApontamentoDAO {
 		ps.execute();
 		ps.close();
 	}
-
-	public List<ApontamentoEntity> findByPisAndPeriodo(String pis, java.sql.Date[] periodoSQL) {
+	public List<ApontamentoEntity> findByPisAndPeriodo(String pis, java.sql.Date de, java.sql.Date ate) {
 		List<ApontamentoEntity> entities = new ArrayList<>();
 		
 		String sql = "SELECT * FROM PAUSEApontamento WHERE pis LIKE ? AND data BETWEEN ? AND ? ORDER BY data ASC";
@@ -156,8 +155,8 @@ public class ApontamentoDAO {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			
 			ps.setString(1, pis);
-			ps.setDate(2, periodoSQL[0]);
-			ps.setDate(3, periodoSQL[1]);
+			ps.setDate(2, de);
+			ps.setDate(3, ate);
 			
 			ResultSet rs = ps.executeQuery();
 			
@@ -195,6 +194,44 @@ public class ApontamentoDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+/*
+	public List<ApontamentoEntity> findByPisAndPeriodo(String pis, Date de, Date ate) {
+		List<ApontamentoEntity> entities = new ArrayList<ApontamentoEntity>();
+		ApontamentoEntity entity = new ApontamentoEntity();
+		try {
+			connection = new ConnectionFactory();
+			Connection conn = connection.createConnection();
+			String sql = "SELECT * FROM PAUSEApontamento WHERE pis like (?) AND data >= ? AND data <= ?";
+
+			PreparedStatement ps = conn.prepareStatement(sql);
+
+			ps.setString(1, pis);
+			java.sql.Date dtDe = new java.sql.Date(de.getTime());
+			ps.setDate(2, dtDe);
+			java.sql.Date dtAte = new java.sql.Date(ate.getTime());
+			ps.setDate(3, dtAte);
+
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				entity = new ApontamentoEntity();
+				entity.setId(rs.getInt("idApontamento"));
+				entity.setPis(rs.getString("pis"));
+				entity.setHorario(rs.getTime("horario"));
+				entity.setData(rs.getDate("data"));
+				entity.setTipoImportacao(rs.getBoolean("tipoImportacao"));
+				entity.setIdEmpresa(rs.getInt("idEmpresa"));
+				entity.setDataInclusao(rs.getDate("dataInclusao"));
+				entity.setIdUsuarioInclusao(rs.getInt("idUsuarioInclusao"));
+				entity.setObservacao(rs.getString("observacao"));
+				
+				entities.add(entity);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+*/
 		return entities;
 	}
 }
