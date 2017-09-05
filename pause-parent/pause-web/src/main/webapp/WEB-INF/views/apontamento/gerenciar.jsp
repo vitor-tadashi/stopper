@@ -40,7 +40,10 @@
 								<div class="form-group">
 									<label class="control-label">Nome do funcionário</label>
 									<select class="selectpicker" data-live-search="true" data-width="100%" id="apontamento-funcionario">
-										<option value="0">Selecione</option>
+										<option value="">Selecione</option>
+										<c:forEach items="${funcionarios }" var="funcionario">
+											<option value="${funcionario.pis }">${funcionario.nome }</option>
+										</c:forEach>
 									</select>
 								</div>
 							</div>
@@ -245,24 +248,29 @@
 					<!--Modal body-->
 					<div class="modal-body">
 						<p class="text-semibold text-main">Informe o horário:</p>
-						<input type="hidden" id="apontamento-id" />
-						<!--Bootstrap Timepicker : Component-->
-						<!--===================================================-->
-						<div class="input-group date">
-							<input id="apontamento-time" type="text-center" class="form-control">
-							<span class="input-group-addon"><i class="pli-clock"></i></span>
-						</div>
-						<div class="form-group pad-top">
-							<label class="control-label">Justificativa</label>
-							<select class="selectpicker" data-live-search="true" data-width="100%" id="apontamento-jus">
-								<option value="0">Selecione</option>
-							</select>
-						</div>
-						<div class="form-group">
-							<label class="control-label">Observações</label>
-							<textarea id="apontamento-obs" rows="2" maxlength="200" class="form-control"></textarea>
-						</div>
-						<!--===================================================-->
+						<form action="" id="form-time" class="clear-form">
+							<input type="hidden" id="apontamento-id" />
+							<!--Bootstrap Timepicker : Component-->
+							<!--===================================================-->
+							<div class="input-group date">
+								<input id="apontamento-time" type="text-center" class="form-control clock" placeholder="--:--">
+								<span class="input-group-addon"><i class="pli-clock"></i></span>
+							</div>
+							<div class="form-group pad-top">
+								<label class="control-label">Justificativa</label>
+								<select class="selectpicker clear-select" data-live-search="true" data-width="100%" id="apontamento-jus">
+									<option value="0">Selecione</option>
+									<c:forEach items="${justificativas }" var="jus">
+										<option value="${jus.id }">${jus.descricao }</option>
+									</c:forEach>
+								</select>
+							</div>
+							<div class="form-group">
+								<label class="control-label">Observações</label>
+								<textarea id="apontamento-obs" rows="2" maxlength="200" class="form-control"></textarea>
+							</div>
+							<!--===================================================-->
+						</form>
 					</div>
 		
 					<!--Modal footer-->
@@ -289,7 +297,7 @@
 		
 					<!--Modal body-->
 					<div class="modal-body">
-						<form action="" id="form-sa">
+						<form action="" id="form-sa" class="clear-form">
 							<div class="row">
 								<div class="col-sm-4">
 									<div class="form-group">
@@ -353,7 +361,7 @@
 		
 					<!--Modal body-->
 					<div class="modal-body">
-						<form action="">
+						<form action="" class="clear-form">
 							<div class="row pad-btm">
 								<div class="col-sm-7">
 									<label class="control-label">Período</label>
@@ -368,7 +376,7 @@
 								<div class="col-sm-8">
 									<div class="form-group">
 										<label class="control-label">Justificativa</label>
-										<select class="selectpicker" data-live-search="true" data-width="100%" id="afastamentoJus">
+										<select class="selectpicker clear-select" data-live-search="true" data-width="100%" id="afastamentoJus">
 											<option value="">Selecione</option>
 										</select>
 									</div>
@@ -418,7 +426,7 @@
 		
 					<!--Modal body-->
 					<div class="modal-body">
-						<form action="">
+						<form action="" class="clear-form">
 							<div class="row pad-btm">
 								<div class="col-sm-3">
 									<label class="control-label">Quantidade de horas</label>
@@ -427,7 +435,7 @@
 								<div class="col-sm-7">
 									<div class="form-group">
 										<label class="control-label">Justificativa</label>
-										<select class="selectpicker" data-live-search="true" data-width="100%" id="atestadoJus">
+										<select class="selectpicker clear-select" data-live-search="true" data-width="100%" id="atestadoJus">
 											<option value="">Selecione</option>
 										</select>
 									</div>
@@ -468,8 +476,8 @@
 		<script src='<c:url value="plugins/datatables/media/js/dataTables.bootstrap.js"/>'></script>
 		<script src='<c:url value="js/custom/datatable-custom.js"/>'></script>
 		<script src='<c:url value="js/custom/masks.js"/>'></script>
-		<script src='<c:url value="js/custom/gerenciar-apontamentos-core.js"/>'></script>
 		<script src='<c:url value="/js/custom/send-ajax.js"/>'></script>
 		<script src='<c:url value="js/custom/gerenciar-apontamentos-modais.js"/>'></script>
+		<script src='<c:url value="js/custom/gerenciar-apontamentos-core.js"/>'></script>
 	</layout:put>
 </layout:extends>

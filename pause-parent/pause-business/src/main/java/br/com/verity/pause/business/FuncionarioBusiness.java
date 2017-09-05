@@ -38,4 +38,8 @@ public class FuncionarioBusiness {
 		
 		return caminho;
 	}
+
+	public List<FuncionarioBean> listarFuncionariosPorEmpresaComPis() {
+		return integration.getFuncionarios(2);
+	}
 }

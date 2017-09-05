@@ -12,13 +12,23 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class SobreAvisoBean{
+	private Integer id;
 	@DateTimeFormat(pattern="dd/MM/yyyy")
 	private Date data;
 	@DateTimeFormat(iso = ISO.TIME)
 	private LocalTime entrada;
 	@DateTimeFormat(iso = ISO.TIME)
 	private LocalTime saida;
+	private Date dataInclusao;
+	private ControleDiarioBean controleDiario;
+	private Integer idUsuarioInclusao;
 	
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
 	public Date getData() {
 		return data;
 	}
@@ -53,5 +63,23 @@ public class SobreAvisoBean{
 	}
 	public void setSaida(LocalTime saida) {
 		this.saida = saida;
+	}
+	public Date getDataInclusao() {
+		return dataInclusao;
+	}
+	public void setDataInclusao(Date dataInclusao) {
+		this.dataInclusao = dataInclusao;
+	}
+	public ControleDiarioBean getControleDiario() {
+		return controleDiario;
+	}
+	public void setControleDiario(ControleDiarioBean controleDiario) {
+		this.controleDiario = controleDiario;
+	}
+	public Integer getIdUsuarioInclusao() {
+		return idUsuarioInclusao;
+	}
+	public void setIdUsuarioInclusao(Integer idUsuarioInclusao) {
+		this.idUsuarioInclusao = idUsuarioInclusao;
 	}
 }

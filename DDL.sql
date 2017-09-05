@@ -108,6 +108,7 @@ BEGIN TRY
 		dataInclusao date NULL,
 		idControleDiario int NULL,
 		idUsuarioInclusao int NULL,
+		data date NULL,
 	 CONSTRAINT PK_PAUSESobreAviso PRIMARY KEY CLUSTERED 
 	(
 		idSobreAviso ASC

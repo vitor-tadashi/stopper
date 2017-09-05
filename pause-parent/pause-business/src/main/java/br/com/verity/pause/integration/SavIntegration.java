@@ -131,4 +131,21 @@ public class SavIntegration {
 		
 		return empresa;
 	}
+	
+	public FuncionarioBean getFuncionarioPorPis(String pis) {
+		FuncionarioIntegrationBean funcionario = new FuncionarioIntegrationBean();
+		ObjectMapper mapper = new ObjectMapper();
+		
+		String endereco = "http://localhost:9090/sav/getFuncionarioPorPis/"+pis;
+		try {
+			URL url = new URL(endereco);
+			funcionario = mapper.readValue(url,  new TypeReference<FuncionarioIntegrationBean>(){});
+		} catch (IOException e ) {
+			e.printStackTrace();
+		}
+		FuncionarioBean funcionarioBean = funcionarioConverter.convertEntityToBean(funcionario);
+		funcionarioBean.setEmpresa(funcionario.getEmpresa());
+		
+		return funcionarioBean;
+	}
 }

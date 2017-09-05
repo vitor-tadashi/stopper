@@ -101,7 +101,7 @@ public class GerarRelatorioXlsx {
 				row.createCell(1).setCellValue("Data");
 				row.createCell(2).setCellValue("SA");
 				if(consulta.getApontamentoHorario() != null){
-					CellReference cellReference = new CellReference(linha-1,0);
+					CellReference cellReference = new CellReference(linha,0);
 					row = sheet.getRow(cellReference.getRow());
 					Cell cell = row.getCell(cellReference.getCol());
 					Date dataLinha = null;

@@ -66,6 +66,7 @@ public class ApontamentoBean {
 	}
 
 	public void setHorarioJson(String horarioJson) {
+		horarioJson = horarioJson.length()== 4? "0"+horarioJson : horarioJson;
 		this.horario = LocalTime.parse(horarioJson);
 	}
 

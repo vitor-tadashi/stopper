@@ -72,11 +72,11 @@ function apontar(hr,dt){
 	$.ajax({
 		url: 'gerenciar-apontamento/apontar',
 		type : 'POST',
+		contentType : 'application/json',
 		data: JSON.stringify(apontamento),
-		contentType : 'application/json;charset=UTF-8',
-		dataType: 'json',
+		cache: false,
 		success: function(data){
-			
+			clearForm(0);
 		}
 	});
 }

@@ -2,9 +2,7 @@ package br.com.verity.pause.converter;
 
 import org.springframework.stereotype.Component;
 
-import br.com.verity.pause.bean.ApontamentoBean;
 import br.com.verity.pause.bean.ArquivoApontamentoBean;
-import br.com.verity.pause.entity.ApontamentoEntity;
 import br.com.verity.pause.entity.ArquivoApontamentoEntity;
 
 @Component
