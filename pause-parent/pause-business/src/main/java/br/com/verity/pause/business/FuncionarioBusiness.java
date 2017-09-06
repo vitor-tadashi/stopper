@@ -17,9 +17,6 @@ import br.com.verity.pause.util.GerarRelatorioXlsx;
 public class FuncionarioBusiness {
 	
 	@Autowired
-	private SavIntegration integration;
-	
-	@Autowired
 	private GerarRelatorioXlsx gerarRelatorio;
 	
 	@Autowired
@@ -34,12 +31,16 @@ public class FuncionarioBusiness {
 	@Autowired
 	private SavIntegration sav;
 	
+	@Autowired
+	private CustomUserDetailsBusiness customUser;
+	
 	public List<FuncionarioBean> obterTodos(){
-		return integration.getFuncionarios(65);
+		UsuarioBean usuarioLogado = customUser.usuarioLogado();
+		return sav.getFuncionarios(usuarioLogado.getIdEmpresaSessao());
 	}
 
 	public String gerarRelatorio(Integer idFuncionario, String de, String ate) {
-		FuncionarioBean funcionario = integration.getFuncionario(idFuncionario);
+		FuncionarioBean funcionario = sav.getFuncionario(idFuncionario);
 		List<ConsultaCompletaBean> consultaCompleta = new ArrayList<ConsultaCompletaBean>();
 		String caminho;
 		
@@ -51,7 +52,8 @@ public class FuncionarioBusiness {
 	}
 
 	public List<FuncionarioBean> listarFuncionariosPorEmpresaComPis() {
-		return integration.getFuncionarios(2);
+		UsuarioBean usuarioLogado = customUser.usuarioLogado();
+		return sav.getFuncionarios(usuarioLogado.getIdEmpresaSessao());
 	}
 
 	public FuncionarioBean obterPorPIS(String pis) {

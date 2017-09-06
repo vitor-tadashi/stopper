@@ -47,8 +47,8 @@ public class ImportarTxt {
 			lerArquivo = new BufferedReader(arquivo);
 
 			linha = lerArquivo.readLine();
-			//cnpjArquivo = linha.substring(11, 25);
-			//if (empresa.getCnpj().equals(cnpjArquivo)) {
+			cnpjArquivo = linha.substring(11, 25);
+			if (empresa.getCnpj().equals(cnpjArquivo)) {
 				linha = lerArquivo.readLine(); // lê a próxima linha linha
 
 				dataImportacao = formataData.parse(linha.substring(10, 18));
@@ -78,9 +78,9 @@ public class ImportarTxt {
 					}
 					linha = lerArquivo.readLine();
 				}
-			//} else {
-				//throw new BusinessException("Arquivo importado, não é da empresa: " + empresa.getNomeFantasia());
-			//}
+			} else {
+				throw new BusinessException("Arquivo importado, não é da empresa: " + empresa.getNomeFantasia());
+			}
 			arquivo.close();
 		} catch (IOException e) {
 			System.err.printf("Erro na abertura do arquivo: %s.\n", e.getMessage());

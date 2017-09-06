@@ -26,7 +26,6 @@ public class CustomUserDetailsBusiness implements UserDetailsService {
 	public UsuarioBean usuarioLogado(){
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UsuarioBean usuarioLogado = (UsuarioBean) auth.getPrincipal();
-		
 		return usuarioLogado;
 	}
 }

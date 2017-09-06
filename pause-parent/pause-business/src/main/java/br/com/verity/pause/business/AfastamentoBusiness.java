@@ -10,7 +10,6 @@ import br.com.verity.pause.bean.TipoAfastamentoBean;
 public class AfastamentoBusiness {
 
 	public List<TipoAfastamentoBean> listarTipoAfastamento() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
