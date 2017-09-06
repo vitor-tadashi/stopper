@@ -20,24 +20,24 @@ public class ControleDiarioBusiness {
 
 	@Autowired
 	private ControleDiarioDAO controleDiarioDAO;
-	
+
 	@Autowired
 	private ControleDiarioConverter controleDiarioConverter;
-	
+
 	@Autowired
 	private ApontamentoBusiness apontamentoBusiness;
-	
+
 	@Autowired
 	private FuncionarioBusiness funcionarioBusiness;
 
 	public ControleDiarioBean obterPorData(Date data) {
 		ControleDiarioBean bean = new ControleDiarioBean();
-		
+
 		ControleDiarioEntity entity = controleDiarioDAO.findByData(new java.sql.Date(data.getTime()));
-		if(entity != null) {
+		if (entity != null) {
 			bean = controleDiarioConverter.convertEntityToBean(entity);
 			return bean;
-		}else {
+		} else {
 			bean.setData(data);
 			inserir(bean);
 		}
@@ -46,62 +46,51 @@ public class ControleDiarioBusiness {
 
 	public void inserir(ControleDiarioBean bean) {
 		ControleDiarioEntity entity = controleDiarioConverter.convertBeanToEntity(bean);
-		
+
 		controleDiarioDAO.save(entity);
 	}
 
 	public List<ControleDiarioBean> listarApontamentos(String pis, String[] periodo) {
+		FuncionarioBean funcionario = funcionarioBusiness.obterPorPIS(pis);
+
+		List<ConsultaCompletaBean> dadosGerais = apontamentoBusiness
+				.obterApontamentosPeriodoPorIdFuncionario(funcionario.getId(), "01-08-2017", "07-08-2017");
+
+		List<ControleDiarioBean> controleDiarios = separarDia(dadosGerais);
+		
+		return controleDiarios;
+	}
+
+	private List<ControleDiarioBean> separarDia(List<ConsultaCompletaBean> dadosGerais) {
 		List<ControleDiarioBean> controleDiarios = new ArrayList<>();
 		List<ApontamentoBean> apontamentos = null;
-		
-		FuncionarioBean funcionario = funcionarioBusiness.obterPorPIS(pis);
-		
-		 List<ConsultaCompletaBean> dadosGerais = apontamentoBusiness.obterApontamentosPeriodoPorIdFuncionario(funcionario.getId(), "01-08-2017", "07-08-2017");
-		 
-		 Date verifica = null;
-		 
-		 for(ConsultaCompletaBean cc : dadosGerais) {
-			 if(verifica == null) {
-				 ControleDiarioBean cd = new ControleDiarioBean();
-				 cd.setData(cc.getData());
-				 cd.setHoraTotal(cc.getControleDiarioHoraTotal());
-				 cd.setBancoHora(cc.getControleDiarioBancoHora());
-				 cd.setAdicNoturno(cc.getControleDiarioAdcNoturno());
-				 cd.setSobreAviso(cc.getControleDiarioSA());
-				 
-				 cd.setApontamentos(apontamentos = new ArrayList<>());
-				 
-				 controleDiarios.add(cd);
-				 
-				 verifica = cc.getData();
-			 }
-			 else if(verifica.compareTo(cc.getData()) != 0) {
-				 ControleDiarioBean cd = new ControleDiarioBean();
-				 cd.setData(cc.getData());
-				 cd.setHoraTotal(cc.getControleDiarioHoraTotal());
-				 cd.setBancoHora(cc.getControleDiarioBancoHora());
-				 cd.setAdicNoturno(cc.getControleDiarioAdcNoturno());
-				 cd.setSobreAviso(cc.getControleDiarioSA());
-				 
-				 cd.setApontamentos(apontamentos = new ArrayList<>());
-				 
-				 controleDiarios.add(cd);
-				 
-				 verifica = cc.getData();
-			 }
-			 
-			 ApontamentoBean apontamento = new ApontamentoBean();
-			 
-			 apontamento.setData(cc.getData());
-			 apontamento.setHorario(cc.getApontamentoHorario());
-			 apontamento.setTipoImportacao(cc.getApontamentoTpImportacao());
-			 apontamento.setObservacao(cc.getApontamentoObs());
-			 
-			 apontamentos.add(apontamento);
-			 
-			 
-		 }
+		Date dia = null;
+
+		for (ConsultaCompletaBean cc : dadosGerais) {
+			if (dia == null || dia.compareTo(cc.getData()) != 0) {
+				ControleDiarioBean cd = obterControleDiarioDeConsultaCompleta(cc);
+				apontamentos = cd.getApontamentos();
+				controleDiarios.add(cd);
+				
+				dia = cc.getData();
+			}
+			apontamentos.add(apontamentoBusiness.obterApontamentoDeConsultaCompleta(cc));
+		}
 		return controleDiarios;
+	}
+
+	private ControleDiarioBean obterControleDiarioDeConsultaCompleta(ConsultaCompletaBean cc) {
+		ControleDiarioBean cd = new ControleDiarioBean();
+		List<ApontamentoBean> apontamentos = new ArrayList<>();
+
+		cd.setData(cc.getData());
+		cd.setHoraTotal(cc.getControleDiarioHoraTotal());
+		cd.setBancoHora(cc.getControleDiarioBancoHora());
+		cd.setAdicNoturno(cc.getControleDiarioAdcNoturno());
+		cd.setSobreAviso(cc.getControleDiarioSA());
+		cd.setApontamentos(apontamentos);
+
+		return cd;
 	}
 
 }

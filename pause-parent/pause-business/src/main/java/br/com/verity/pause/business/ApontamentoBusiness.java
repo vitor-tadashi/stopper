@@ -96,6 +96,17 @@ public class ApontamentoBusiness {
 		return consultaCompleta;
 	}
 
+	public ApontamentoBean obterApontamentoDeConsultaCompleta(ConsultaCompletaBean cc) {
+		ApontamentoBean apontamento = new ApontamentoBean();
+
+		apontamento.setData(cc.getData());
+		apontamento.setHorario(cc.getApontamentoHorario());
+		apontamento.setTipoImportacao(cc.getApontamentoTpImportacao());
+		apontamento.setObservacao(cc.getApontamentoObs());
+		
+		return apontamento;
+	}
+
 	/*public List<ApontamentoBean> listarApontamentos(String pis, String[] periodo) {
 		UsuarioBean usuarioLogado = userBusiness.usuarioLogado();
 		java.sql.Date[] periodoSQL = new java.sql.Date[2];
