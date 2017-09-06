@@ -1,5 +1,6 @@
+var erro = false;
+
 function permitirData(){
-	debugger;
 	var deAno = $("#dtDe").val().substring(0, 4);
 	var deMes = $("#dtDe").val().substring(5, 7);
 	var deDia = $("#dtDe").val().substring(8, 10);
@@ -8,15 +9,19 @@ function permitirData(){
 	var ateMes = $("#dtAte").val().substring(5, 7);
 	var ateDia = $("#dtAte").val().substring(8, 10);
 	if($("#dtAte").val() != ""){
-		if(!deAno.equals(ateAno) || (deAno.equals(ateAno) && !deMes.equals(ateMes)) || (deAno.equals(ateAno) && deMes.equals(ateMes) && deDia > ateDia)){
+		if(deAno != ateAno || (deAno == ateAno && deMes != ateMes)){
 			$("#dtDe").val("");
 			$("#dtAte").val("");
 			textDiv.className = "alert alert-danger";
 			textDiv.textContent = "Por favor, selecione um período dentro de um único mês.";
 			var text = "[" + div.textContent + "]";
+			$("#textDiv").removeClass("hide");
+			erro = true;
 		}else{
 			$("#dtAte").attr("min", $("#dtDe").val());
 			$("#dtDe").attr("max", $("#dtAte").val());
+			$("#textDiv").addClass("hide");
+			erro = false;
 		}
 	}else{
 		$("#dtAte").attr("min", $("#dtDe").val());
@@ -24,7 +29,8 @@ function permitirData(){
 }
 
 function gerarRelatorio(){
-	if($("#dtDe").val() != "" && $("#dtAte").val() != "" && $("#idFunc").val() != ""){
+	if($("#dtDe").val() != "" && $("#dtAte").val() != "" && $("#idFunc").val() != "" && erro == false){
+		$("#textDiv").addClass("hide");
 		var deAno = $("#dtDe").val().substring(0, 4);
 		var deMes = $("#dtDe").val().substring(5, 7);
 		var deDia = $("#dtDe").val().substring(8, 10);

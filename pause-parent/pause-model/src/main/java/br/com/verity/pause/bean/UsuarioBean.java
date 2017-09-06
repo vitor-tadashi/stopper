@@ -13,6 +13,8 @@ public class UsuarioBean {
 	private FuncionarioIntegrationBean funcionario;
 	private List<PerfilBean> perfis;
 
+	private Integer idEmpresaSessao;
+
 	public UsuarioBean(UsuarioBean usuario) {
 		super();
 		this.id = usuario.getId();
@@ -74,4 +76,11 @@ public class UsuarioBean {
 		this.perfis = perfis;
 	}
 
+	public Integer getIdEmpresaSessao() {
+		return idEmpresaSessao;
+	}
+
+	public void setIdEmpresaSessao(Integer idEmpresaSessao) {
+		this.idEmpresaSessao = idEmpresaSessao;
+	}
 }

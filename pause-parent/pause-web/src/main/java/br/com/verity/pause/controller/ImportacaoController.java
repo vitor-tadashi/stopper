@@ -10,8 +10,6 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
@@ -28,6 +26,7 @@ import br.com.verity.pause.bean.ApontamentoBean;
 import br.com.verity.pause.bean.ArquivoApontamentoBean;
 import br.com.verity.pause.bean.FuncionarioBean;
 import br.com.verity.pause.bean.UsuarioBean;
+import br.com.verity.pause.business.CustomUserDetailsBusiness;
 import br.com.verity.pause.business.ImportacaoBusiness;
 import br.com.verity.pause.exception.BusinessException;
 
@@ -43,9 +42,9 @@ public class ImportacaoController {
 
 	@Autowired
 	private ArquivoApontamentoBean arquivoApontamento;
-
-	private Authentication auth;
-	private UsuarioBean usuarioLogado;
+	
+	@Autowired
+	private CustomUserDetailsBusiness customUser;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -54,27 +53,26 @@ public class ImportacaoController {
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public String acessar() {
-		auth = SecurityContextHolder.getContext().getAuthentication();
-		usuarioLogado = (UsuarioBean) auth.getPrincipal();
 		return "importacao/importacao";
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "importar-arquivo", method = RequestMethod.POST)
 	public List<FuncionarioBean> importarArquivo(MultipartHttpServletRequest request, Model model) {
+		UsuarioBean usuarioLogado = customUser.usuarioLogado();
 		List<MultipartFile> arquivo = request.getFiles("file");
 		String caminho = "";
 		funcionariosImportacao = new ArrayList<FuncionarioBean>();
 		FuncionarioBean funcionario = new FuncionarioBean();
 		arquivoApontamento = new ArquivoApontamentoBean();
 		try {
-			caminho = this.salvarTxt(arquivo, "QA360");
+			caminho = this.salvarTxt(arquivo, usuarioLogado.getIdEmpresaSessao());
 			arquivoApontamento.setCaminho(caminho);
 			arquivoApontamento.setDtInclusao(new Date());
 			arquivoApontamento.setIdUsuarioInclusao(usuarioLogado.getId());
 			arquivoApontamento.setIdEmpresa(usuarioLogado.getFuncionario().getEmpresa().getId());
 			funcionariosImportacao = importacaoBusiness.importarTxt(caminho,
-					65);
+					usuarioLogado.getIdEmpresaSessao());
 			arquivoApontamento.setData(
 					funcionariosImportacao.get(funcionariosImportacao.size() - 1).getApontamentos().get(0).getData());
 		} catch (BusinessException e) {
@@ -94,6 +92,7 @@ public class ImportacaoController {
 	@ResponseBody
 	@RequestMapping(value = "cancelar/{arquivo}/", method = RequestMethod.POST)
 	public void cancelar(@PathVariable String arquivo, Model model) {
+		UsuarioBean usuarioLogado = customUser.usuarioLogado();
 		String directory = "C:" + File.separator + "Pause" + File.separator + "importacao" + File.separator
 				+ usuarioLogado.getFuncionario().getEmpresa().getRazaoSocial() + File.separator + arquivo;
 		File file = new File(directory);
@@ -119,9 +118,9 @@ public class ImportacaoController {
 		return "redirect:/importacao";
 	}
 
-	public String salvarTxt(List<MultipartFile> multipartFiles, String nome) throws IOException {
+	public String salvarTxt(List<MultipartFile> multipartFiles, Integer idEmpresa) throws IOException {
 		String arquivo = null;
-		String directory = "C:" + File.separator + "Pause" + File.separator + "importacao" + File.separator + nome
+		String directory = "C:" + File.separator + "Pause" + File.separator + "importacao" + File.separator + idEmpresa
 				+ File.separator;
 		File file = new File(directory);
 		file.mkdirs();
