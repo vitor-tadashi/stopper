@@ -26,6 +26,9 @@ public class ConsultaCompletaBean {
 	private LocalTime apontamentoHorario;
 	private Boolean apontamentoTpImportacao;
 	private String apontamentoObs;
+	private Integer apontamentoIdTipoJustificativa;
+	private Double atestadoQuantidadeHora;
+	private Integer SobreAvisoId;
 
 	public Date getData() {
 		return data;
@@ -177,6 +180,30 @@ public class ConsultaCompletaBean {
 
 	public void setApontamentoObs(String apontamentoObs) {
 		this.apontamentoObs = apontamentoObs;
+	}
+
+	public Double getAtestadoQuantidadeHora() {
+		return atestadoQuantidadeHora;
+	}
+
+	public void setAtestadoQuantidadeHora(Double atestadoQuantidadeHora) {
+		this.atestadoQuantidadeHora = atestadoQuantidadeHora;
+	}
+
+	public Integer getApontamentoIdTipoJustificativa() {
+		return apontamentoIdTipoJustificativa;
+	}
+
+	public void setApontamentoIdTipoJustificativa(Integer apontamentoIdTipoJustificativa) {
+		this.apontamentoIdTipoJustificativa = apontamentoIdTipoJustificativa;
+	}
+
+	public Integer getSobreAvisoId() {
+		return SobreAvisoId;
+	}
+
+	public void setSobreAvisoId(Integer sobreAvisoId) {
+		SobreAvisoId = sobreAvisoId;
 	}
 
 }

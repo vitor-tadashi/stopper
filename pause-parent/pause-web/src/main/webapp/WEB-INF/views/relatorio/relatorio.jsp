@@ -28,6 +28,7 @@
 					</div>
 				</div>
 				<form>
+					<div id="textDiv" class=""></div>
 					<div class="panel-body">
 						<div class="row">
 							<div class="col-sm-3">
@@ -62,66 +63,7 @@
 	<layout:put block="scripts" type="REPLACE">
 		<script src='<c:url value="/plugins/bootstrap-select/bootstrap-select.min.js"/>'></script>
 		<script src='<c:url value="/js/custom/send-ajax.js"/>'></script>
-		<script>
-		function permitirData(){
-			var deAno = $("#dtDe").val().substring(0, 4);
-			var deMes = $("#dtDe").val().substring(5, 7);
-			var deDia = $("#dtDe").val().substring(8, 10);
-			
-			var ateAno = $("#dtAte").val().substring(0, 4);
-			var ateMes = $("#dtAte").val().substring(5, 7);
-			var ateDia = $("#dtAte").val().substring(8, 10);
-			if($("#dtAte").val() != ""){
-				if(deAno > ateAno || (deAno == ateAno && deMes > ateMes) || (deAno == ateAno && deMes == ateMes && deDia > ateDia)){
-					$("#dtDe").val("");
-					$("#dtAte").val("");
-				}else{
-					$("#dtAte").attr("min", $("#dtDe").val());
-					$("#dtDe").attr("max", $("#dtAte").val());
-				}
-			}else{
-				$("#dtAte").attr("min", $("#dtDe").val());
-			}
-		}
-		
-		function gerarRelatorio(){
-			var deAno = $("#dtDe").val().substring(0, 4);
-			var deMes = $("#dtDe").val().substring(5, 7);
-			var deDia = $("#dtDe").val().substring(8, 10);
-			
-			var ateAno = $("#dtAte").val().substring(0, 4);
-			var ateMes = $("#dtAte").val().substring(5, 7);
-			var ateDia = $("#dtAte").val().substring(8, 10);
-			
-			var de = deDia+"-"+deMes+"-"+deAno;
-			var ate = ateDia+"-"+ateMes+"-"+ateAno;
-			$.ajax({
-				url: "relatorio/gerar-relatorio",
-				type : 'POST',
-				data : {'idFuncionario': $("#idFunc").val(),
-						'ate' : ate,
-						'de' : de},
-				DataType: "text",
-				success: function(data){
-					$("#download").attr("href", "/pause/relatorio/download?caminho="+data);
-					window.open($("#download").attr("href"),'_blank');
-				}
-			})
-		}
-		
-		$(document).ready(function(){
-			var date = new Date();
-			date = date.toLocaleDateString();
-			var dia = date.substring(0, 2);
-			var mes = date.substring(3, 5);
-			var ano = date.substring(6, 10);
-			
-			$("#dtDe").attr("max", ano+"-"+mes+"-"+dia);
-			$("#dtAte").attr("max", ano+"-"+mes+"-"+dia);
-			$("#dtAte").attr("min", ano+"-"+mes+"-"+dia);
-
-		})
-		</script>
+		<script src='<c:url value="/js/custom/relatorio.js"/>'></script>
 	</layout:put>
 
 </layout:extends>

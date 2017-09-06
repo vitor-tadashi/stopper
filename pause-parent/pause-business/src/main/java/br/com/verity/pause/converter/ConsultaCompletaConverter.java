@@ -35,6 +35,9 @@ public class ConsultaCompletaConverter implements Converter<ConsultaCompletaEnti
 		entity.setApHorario(bean.getApontamentoHorario());
 		entity.setApTpImportacao(bean.getApontamentoTpImportacao());
 		entity.setApObs(bean.getApontamentoObs());
+		entity.setApIdTpJustificativa(bean.getApontamentoIdTipoJustificativa());
+		entity.setAtQtdHora(bean.getAtestadoQuantidadeHora());
+		entity.setSbId(bean.getSobreAvisoId());
 		
 		return entity;
 	}
@@ -66,6 +69,9 @@ public class ConsultaCompletaConverter implements Converter<ConsultaCompletaEnti
 		bean.setApontamentoHorario(entity.getApHorario());
 		bean.setApontamentoTpImportacao(entity.getApTpImportacao());
 		bean.setApontamentoObs(entity.getApObs());
+		bean.setApontamentoIdTipoJustificativa(entity.getApIdTpJustificativa());
+		bean.setAtestadoQuantidadeHora(entity.getAtQtdHora());
+		bean.setSobreAvisoId(entity.getSbId());
 		
 		return bean;
 	}
