@@ -1,6 +1,7 @@
 package br.com.verity.pause.business;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -75,6 +76,12 @@ public class ControleDiarioBusiness {
 				dia = cc.getData();
 			}
 			apontamentos.add(apontamentoBusiness.obterApontamentoDeConsultaCompleta(cc));
+			apontamentos.sort(new Comparator<ApontamentoBean>() {
+				@Override
+				public int compare(ApontamentoBean o1, ApontamentoBean o2) {
+					return o1.getHorario().compareTo(o2.getHorario());
+				}
+			});
 		}
 		return controleDiarios;
 	}

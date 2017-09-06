@@ -95,132 +95,35 @@
 								</tr>
 							</thead>
 							<tbody class="text-center">
-								<tr>
-									<input type="hidden" id="infoDia" value="01/08/2017, terça-feira"/>
-									<td>01/08/2017</td>
-									<td class="text-left">Terça-feira</td>
-									<td id="apontamento01" class="text-muted pli-clock">09:00E</td>
-									<td id="apontamento02" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">12:00</td>
-									<td id="apontamento03" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">13:00</td>
-									<td id="apontamento04" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">19:51</td>
-									<td id="apontamento05" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento06" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento07" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento08" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="#">0</td>
-									<td id="total-hora01">0</td>
-									<td id="#">0</td>
-									<td id="#">0</td>
-									<td id="#">0</td>
-								</tr>
-								<tr>
-									<input type="hidden" id="infoDia" value="02/08/2017, quarta-feira"/>
-									<td>02/08/2017</td>
-									<td class="text-left">Quarta-feira</td>
-									<td id="apontamento09" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">07:00</td>
-									<td id="apontamento10" class="text-muted pli-clock">12:00E</td>
-									<td id="apontamento11" class="text-muted pli-clock">13:40E</td>
-									<td id="apontamento12" class="text-muted pli-clock">18:17E</td>
-									<td id="apontamento13" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento14" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento15" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento16" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="#">0</td>
-									<td id="total-hora02">0</td>
-									<td id="#">0</td>
-									<td id="#">0</td>
-									<td id="#">0</td>
-								</tr>
-								<tr>
-									<input type="hidden" id="infoDia" value="03/08/2017, quinta-feira"/>
-									<td>03/08/2017</td>
-									<td class="text-left">Quinta-feira</td>
-									<td id="apontamento17" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">09:22</td>
-									<td id="apontamento18" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">12:10</td>
-									<td id="apontamento19" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">13:36</td>
-									<td id="apontamento20" class="text-muted pli-clock">19:07E</td>
-									<td id="apontamento21" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento22" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento23" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento24" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="#">0</td>
-									<td id="total-hora03">0</td>
-									<td id="#">0</td>
-									<td id="#">0</td>
-									<td id="#">0</td>
-								</tr>
-								<tr>
-									<input type="hidden" id="infoDia" value="04/08/2017, sexta-feira"/>
-									<td>04/08/2017</td>
-									<td class="text-left">Sexta-feira</td>
-									<td id="apontamento25" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">08:50</td>
-									<td id="apontamento26" class="text-muted pli-clock">11:58E</td>
-									<td id="apontamento27" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">13:31</td>
-									<td id="apontamento28" class="text-muted pli-clock">18:16E</td>
-									<td id="apontamento29" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento30" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento31" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento32" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="#">0</td>
-									<td id="total-hora04">0</td>
-									<td id="#">0</td>
-									<td id="#">0</td>
-									<td id="#">0</td>
-								</tr>
-								<tr>
-									<input type="hidden" id="infoDia" value="05/08/2017, sábado"/>
-									<td>05/08/2017</td>
-									<td class="text-left">Sábado</td>
-									<td id="apontamento33" class="text-muted pli-clock">09:21E</td>
-									<td id="apontamento34" class="text-muted pli-clock">12:10E</td>
-									<td id="apontamento36" class="text-muted pli-clock">18:03E</td>
-									<td id="apontamento37" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento37" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento38" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento39" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento40" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="#">0</td>
-									<td id="total-hora05">0</td>
-									<td id="#">0</td>
-									<td id="#">0</td>
-									<td id="#">0</td>
-								</tr>
-								<tr>
-									<input type="hidden" id="infoDia" value="06/08/2017, domingo"/>
-									<td>06/08/2017</td>
-									<td class="text-left">Domingo</td>
-									<td id="apontamento41" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">09:10</td>
-									<td id="apontamento42" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">12:00</td>
-									<td id="apontamento43" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">13:00</td>
-									<td id="apontamento44" class="text-muted pli-clock">18:00E</td>
-									<td id="apontamento45" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento46" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento47" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento48" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="#">0</td>
-									<td id="total-hora06">0</td>
-									<td id="#">0</td>
-									<td id="#">0</td>
-									<td id="#">0</td>
-								</tr>
-								<tr>
-									<input type="hidden" id="infoDia" value="07/08/2017, segunda-feira"/>
-									<td>07/08/2017</td>
-									<td class="text-left">Segunda-feira</td>
-									<td id="apontamento49" class="text-muted pli-clock">09:00E</td>
-									<td id="apontamento50" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">12:00</td>
-									<td id="apontamento27" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">13:31</td>
-									<td id="apontamento53" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento54" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento55" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento56" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento56" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="#">0</td>
-									<td id="total-hora07">0</td>
-									<td id="#">0</td>
-									<td id="#">0</td>
-									<td id="#">0</td>
-								</tr>
+								<c:forEach items="${dias }" var="dia" varStatus="i">
+									<tr>
+										<fmt:formatDate value="${dia.data }" pattern="dd/MM/yyyy" var="data"/>
+									
+										<input type="hidden" id="infoDia" value="${data }, ${dia.diaDaSemana}"/>
+										<td>${data }</td>
+										<td class="text-left">${dia.diaDaSemana }</td>
+										<c:forEach begin="0" end="7" varStatus="cont">
+											<c:if test="${not empty dia.apontamentos[cont.index]}">
+												<c:choose>
+													<c:when test="${dia.apontamentos[cont.index].tipoImportacao }">
+														<td id="apontamento${cont.count + 8 * (i.count - 1)}" class="text-muted pli-clock">${dia.apontamentos[cont.index].horario }E</td>
+													</c:when>
+													<c:otherwise>
+														<td id="apontamento${cont.count + 8 * (i.count - 1)}" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">${dia.apontamentos[cont.index].horario }</td>
+													</c:otherwise>
+												</c:choose>
+											</c:if>
+											<c:if test="${empty dia.apontamentos[cont.index]}">
+												<td id="apontamento${cont.count + 8 * (i.count - 1)}" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
+											</c:if>
+										</c:forEach>
+										<td id="#">0</td>
+										<td id="total-hora${i.count }">${dia.horaTotal }</td>
+										<td id="#">${dia.bancoHora }</td>
+										<td id="#">${dia.adicNoturno }</td>
+										<td id="#">${dia.sobreAviso }</td>
+									</tr>
+								</c:forEach>
 							</tbody>
 						</table>
 					</div>
