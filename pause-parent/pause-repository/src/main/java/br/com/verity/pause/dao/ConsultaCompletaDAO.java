@@ -15,7 +15,7 @@ import br.com.verity.pause.entity.ConsultaCompletaEntity;
 
 @Repository
 public class ConsultaCompletaDAO {
-	
+
 	public List<ConsultaCompletaEntity> findByIdAndPeriodo(Integer id, Date de, Date ate) {
 		List<ConsultaCompletaEntity> entities = new ArrayList<ConsultaCompletaEntity>();
 		ConsultaCompletaEntity entity = new ConsultaCompletaEntity();
@@ -35,10 +35,13 @@ public class ConsultaCompletaDAO {
 						"cm.sobreAviso as cmSA, cm.sobreAvisoTrabalhado as cmST, "+
 						"cd.data as cdData, cd.horaTotal as cdHora, cd.bancoHora as cdBanco, cd.adcNoturno as cdAdcNot, "+
 						"cd.sobreAviso as cdSA, cd.sobreAvisoTrabalhado as cdST, "+
-						"a.data as apData, a.horario as apHorario, a.tipoImportacao as apTpImport, a.observacao as apObs FROM amonth am "+
+						"a.data as apData, a.horario as apHorario, a.tipoImportacao as apTpImport, a.observacao as apObs, a.idTipoJustificativa as apIdTpJustificativa, "+
+						"at.quantidadeHora as atQtdHora, sb.idSobreAviso as sbId FROM amonth am "+
 						"LEFT JOIN PAUSEControleDiario cd ON am.day = cd.data "+
 						"LEFT JOIN PAUSEControleMensal cm ON cm.idControleMensal = cd.idControleMensal "+
 						"LEFT JOIN PAUSEApontamento a ON cd.idControleDiario = a.idControleDiario "+
+						"LEFT JOIN PAUSEAtestado at ON at.idControleDiario = cd.idControleDiario "+
+						"LEFT JOIN PAUSESobreAviso sb ON sb.idControleDiario = cd.idControleDiario "+
 						"WHERE cm.idFuncionario = ? OR cm.idFuncionario is null ";
 
 			PreparedStatement ps = conn.prepareStatement(sql);
@@ -72,6 +75,9 @@ public class ConsultaCompletaDAO {
 					entity.setApHorario(rs.getTime("apHorario"));
 					entity.setApTpImportacao(rs.getBoolean("apTpImport"));
 					entity.setApObs(rs.getString("apObs"));
+					entity.setApIdTpJustificativa(rs.getInt("apIdTpJustificativa"));
+					entity.setAtQtdHora(rs.getDouble("atQtdHora"));
+					entity.setSbId(rs.getInt("sbId"));
 				}
 				entities.add(entity);
 			}
