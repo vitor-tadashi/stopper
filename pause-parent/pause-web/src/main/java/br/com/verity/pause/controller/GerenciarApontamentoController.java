@@ -43,8 +43,8 @@ public class GerenciarApontamentoController {
 	private ControleDiarioBusiness controleDiarioBusiness;
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public String consultar(Model model) {
-		apontamentos(model,null);
+	public String consultar(Model model,String pis, String...periodo) {
+		apontamentos(model,pis,periodo);
 		funcionarios(model);
 		justificativas(model);
 		afastamentos(model);

@@ -34,12 +34,13 @@
 				<!--Data Table-->
 				<!--===================================================-->
 				<div class="panel-body">
-					<form action="">
+					<c:url value="/gerenciar-apontamento" var="url"/>
+					<form action="${url }" method="get">
 						<div class="row">
 							<div class="col-sm-4">
 								<div class="form-group">
 									<label class="control-label">Nome do funcionário</label>
-									<select class="selectpicker" data-live-search="true" data-width="100%" id="apontamento-funcionario">
+									<select class="selectpicker" data-live-search="true" data-width="100%" id="apontamento-funcionario" name="pis">
 										<option value="">Selecione</option>
 										<c:forEach items="${funcionarios }" var="funcionario">
 											<option value="${funcionario.pis }">${funcionario.nome }</option>
@@ -50,13 +51,13 @@
 							<div class="col-sm-4">
 								<label class="control-label">Período</label>
 								<div class="input-daterange input-group" id="datepicker">
-									<input type="text" pattern="\d{1,2}/\d{1,2}/\d{4}" class="form-control data" name="start" placeholder="dd/mm/yyyy"/>
+									<input type="text" pattern="\d{1,2}/\d{1,2}/\d{4}" class="form-control data" name="periodo" placeholder="dd/mm/yyyy"/>
 									<span class="input-group-addon">até</span>
-									<input type="text" pattern="\d{1,2}/\d{1,2}/\d{4}" class="form-control data" name="end" placeholder="dd/mm/yyyy"/>
+									<input type="text" pattern="\d{1,2}/\d{1,2}/\d{4}" class="form-control data" name="periodo" placeholder="dd/mm/yyyy"/>
 								</div>
 							</div>
 							<div class="col-sm-1" style="margin-top: 24px;">
-								<button class="btn btn-info" type="button">Filtrar</button>
+								<button class="btn btn-info" type="submit">Filtrar</button>
 							</div>
 						</div>
 					</form>
@@ -103,7 +104,7 @@
 										<td>${data }</td>
 										<td class="text-left">${dia.diaDaSemana }</td>
 										<c:forEach begin="0" end="7" varStatus="cont">
-											<c:if test="${not empty dia.apontamentos[cont.index]}">
+											<c:if test="${not empty dia.apontamentos[cont.index] && not empty dia.apontamentos[cont.index].horario}">
 												<c:choose>
 													<c:when test="${dia.apontamentos[cont.index].tipoImportacao }">
 														<td id="apontamento${cont.count + 8 * (i.count - 1)}" class="text-muted pli-clock">${dia.apontamentos[cont.index].horario }E</td>
@@ -113,7 +114,7 @@
 													</c:otherwise>
 												</c:choose>
 											</c:if>
-											<c:if test="${empty dia.apontamentos[cont.index]}">
+											<c:if test="${empty dia.apontamentos[cont.index] || empty dia.apontamentos[cont.index].horario}">
 												<td id="apontamento${cont.count + 8 * (i.count - 1)}" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
 											</c:if>
 										</c:forEach>

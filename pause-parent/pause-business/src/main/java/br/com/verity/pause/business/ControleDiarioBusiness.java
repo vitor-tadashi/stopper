@@ -1,5 +1,8 @@
 package br.com.verity.pause.business;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -54,9 +57,24 @@ public class ControleDiarioBusiness {
 
 	public List<ControleDiarioBean> listarApontamentos(String pis, String[] periodo) {
 		FuncionarioBean funcionario = funcionarioBusiness.obterPorPIS(pis);
+		SimpleDateFormat fmt = new SimpleDateFormat("dd-MM-yyyy");
+		SimpleDateFormat fmt2 = new SimpleDateFormat("dd/MM/yyyy");
 
+		if(periodo == null) {
+			periodo = new String[2];
+			periodo[0] = fmt.format(java.sql.Date.valueOf((LocalDate.now().minusDays(7))));
+			periodo[1] = fmt.format(java.sql.Date.valueOf((LocalDate.now())));
+		}else {
+			try {
+				periodo[0] = fmt.format(fmt2.parse(periodo[0]));
+				periodo[1] = fmt.format(fmt2.parse(periodo[1]));
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+		
 		List<ConsultaCompletaBean> dadosGerais = apontamentoBusiness
-				.obterApontamentosPeriodoPorIdFuncionario(funcionario.getId(), "01-08-2017", "07-08-2017");
+				.obterApontamentosPeriodoPorIdFuncionario(funcionario.getId(), periodo[0], periodo[1]);
 
 		List<ControleDiarioBean> controleDiarios = separarDia(dadosGerais);
 		
