@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import br.com.verity.pause.bean.ConsultaCompletaBean;
 import br.com.verity.pause.bean.FuncionarioBean;
+import br.com.verity.pause.bean.UsuarioBean;
+import br.com.verity.pause.converter.FuncionarioIntegrationConverter;
 import br.com.verity.pause.integration.SavIntegration;
 import br.com.verity.pause.util.GerarRelatorioXlsx;
 
@@ -22,6 +24,15 @@ public class FuncionarioBusiness {
 	
 	@Autowired
 	private ApontamentoBusiness apontamentoBusiness;
+	
+	@Autowired
+	private CustomUserDetailsBusiness userBusiness;
+	
+	@Autowired
+	private FuncionarioIntegrationConverter funcionarioConverter;
+	
+	@Autowired
+	private SavIntegration sav;
 	
 	public List<FuncionarioBean> obterTodos(){
 		return integration.getFuncionarios(65);
@@ -41,5 +52,14 @@ public class FuncionarioBusiness {
 
 	public List<FuncionarioBean> listarFuncionariosPorEmpresaComPis() {
 		return integration.getFuncionarios(2);
+	}
+
+	public FuncionarioBean obterPorPIS(String pis) {
+		if(pis == null) {
+			UsuarioBean usuarioLogado = userBusiness.usuarioLogado();
+			return funcionarioConverter.convertEntityToBean(usuarioLogado.getFuncionario());
+		}else {
+			return sav.getFuncionarioPorPis(pis);
+		}
 	}
 }

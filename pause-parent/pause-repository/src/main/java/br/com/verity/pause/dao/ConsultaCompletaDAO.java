@@ -1,11 +1,11 @@
 package br.com.verity.pause.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -46,10 +46,8 @@ public class ConsultaCompletaDAO {
 
 			PreparedStatement ps = conn.prepareStatement(sql);
 
-			java.sql.Date dtDe = new java.sql.Date(de.getTime());
-			ps.setDate(1, dtDe);
-			java.sql.Date dtAte = new java.sql.Date(ate.getTime());
-			ps.setDate(2, dtAte);
+			ps.setDate(1, de);
+			ps.setDate(2, ate);
 			ps.setInt(3, id);
 			
 			ResultSet rs = ps.executeQuery();
