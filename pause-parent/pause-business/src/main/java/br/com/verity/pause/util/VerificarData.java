@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class VerificarData {
 
-	public String qualDia(Integer dia){
+	public  static String qualDia(Integer dia){
 		if(dia == 0){
 			return "Domingo";
 		}else if(dia == 1){

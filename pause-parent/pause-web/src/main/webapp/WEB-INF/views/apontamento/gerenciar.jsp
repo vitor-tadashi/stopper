@@ -117,7 +117,7 @@
 												<td id="apontamento${cont.count + 8 * (i.count - 1)}" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
 											</c:if>
 										</c:forEach>
-										<td id="#">0</td>
+										<td id="#">${dia.qtdAtestadoHoras }</td>
 										<td id="total-hora${i.count }">${dia.horaTotal }</td>
 										<td id="#">${dia.bancoHora }</td>
 										<td id="#">${dia.adicNoturno }</td>

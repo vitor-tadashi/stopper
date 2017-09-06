@@ -15,6 +15,7 @@ import br.com.verity.pause.bean.FuncionarioBean;
 import br.com.verity.pause.converter.ControleDiarioConverter;
 import br.com.verity.pause.dao.ControleDiarioDAO;
 import br.com.verity.pause.entity.ControleDiarioEntity;
+import br.com.verity.pause.util.VerificarData;
 
 @Service
 public class ControleDiarioBusiness {
@@ -86,15 +87,18 @@ public class ControleDiarioBusiness {
 		return controleDiarios;
 	}
 
+	@SuppressWarnings("deprecation")
 	private ControleDiarioBean obterControleDiarioDeConsultaCompleta(ConsultaCompletaBean cc) {
 		ControleDiarioBean cd = new ControleDiarioBean();
 		List<ApontamentoBean> apontamentos = new ArrayList<>();
 
 		cd.setData(cc.getData());
+		cd.setDiaDaSemana(VerificarData.qualDia(cc.getData().getDay()));
 		cd.setHoraTotal(cc.getControleDiarioHoraTotal());
 		cd.setBancoHora(cc.getControleDiarioBancoHora());
 		cd.setAdicNoturno(cc.getControleDiarioAdcNoturno());
 		cd.setSobreAviso(cc.getControleDiarioSA());
+		cd.setQtdAtestadoHoras(cc.getAtestadoQuantidadeHora());
 		cd.setApontamentos(apontamentos);
 
 		return cd;

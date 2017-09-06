@@ -15,6 +15,7 @@ public class ControleDiarioBean {
 	private Double bancoHora;
 	private Double adicNoturno;
 	private Double sobreAviso;
+	private Double qtdAtestadoHoras;
 
 	public Integer getId() {
 		return id;
@@ -78,5 +79,13 @@ public class ControleDiarioBean {
 
 	public void setSobreAviso(Double sobreAviso) {
 		this.sobreAviso = sobreAviso;
+	}
+
+	public Double getQtdAtestadoHoras() {
+		return qtdAtestadoHoras;
+	}
+
+	public void setQtdAtestadoHoras(Double qtdAtestadoHoras) {
+		this.qtdAtestadoHoras = qtdAtestadoHoras;
 	}
 }
