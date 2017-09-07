@@ -127,7 +127,7 @@
                                 	<!--Category name-->
 						            <li class="list-header">Operações</li>
 									<li>
-                                		<a href="#">
+                                		<a href='<c:url value="/gerenciar-apontamento"/>'>
                                             <i class="pli-data-clock"></i>
                                             <span class="menu-title">
                                             	Gerenciar horas
@@ -136,7 +136,7 @@
                                         </a>
 						            </li>
 						            <li>
-                                		<a href="#">
+                                		<a href='<c:url value="/consultar-apontamento"/>'>
                                             <i class="pli-magnifi-glass"></i>
                                             <span class="menu-title">
                                             	Consultar banco

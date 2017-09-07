@@ -70,7 +70,7 @@ public class GerenciarApontamentoController {
 		model.addAttribute("afastamentos",afastamentos);
 	}
 	private void apontamentos(Model model,String pis,String... periodo) {
-		List<ControleDiarioBean> dias = controleDiarioBusiness.listarApontamentos(pis,periodo);
+		List<ControleDiarioBean> dias = controleDiarioBusiness.listarControleDiario(pis,periodo);
 		model.addAttribute("dias",dias);
 	}
 }

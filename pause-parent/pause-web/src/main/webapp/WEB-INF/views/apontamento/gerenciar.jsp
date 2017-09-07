@@ -35,7 +35,7 @@
 				<!--===================================================-->
 				<div class="panel-body">
 					<c:url value="/gerenciar-apontamento" var="url"/>
-					<form action="${url }" method="get">
+					<form action="${url }" method="get" id="bv-form">
 						<div class="row">
 							<div class="col-sm-4">
 								<div class="form-group">
@@ -48,12 +48,12 @@
 									</select>
 								</div>
 							</div>
-							<div class="col-sm-4">
+							<div class="col-sm-5">
 								<label class="control-label">Período</label>
 								<div class="input-daterange input-group" id="datepicker">
-									<input type="text" pattern="\d{1,2}/\d{1,2}/\d{4}" class="form-control data" name="periodo" placeholder="dd/mm/yyyy"/>
+									<input type="date" id="periodoDe" class="form-control periodo" name="periodo" placeholder="dd/mm/aaaa" min="2010-03-01" max=""/>
 									<span class="input-group-addon">até</span>
-									<input type="text" pattern="\d{1,2}/\d{1,2}/\d{4}" class="form-control data" name="periodo" placeholder="dd/mm/yyyy"/>
+									<input type="date" id="periodoAte" class="form-control periodo" name="periodo" placeholder="dd/mm/aaaa" min="2010-03-01" max=""/>
 								</div>
 							</div>
 							<div class="col-sm-1" style="margin-top: 24px;">
@@ -375,13 +375,41 @@
 		<!--End atestado Modal-->	
 	
 		<script src='<c:url value="plugins/bootstrap-timepicker/bootstrap-timepicker.min.js"/>'></script>
-		<script src='<c:url value="plugins/masked-input/jquery.mask.js"/>'></script>
 		<script src='<c:url value="plugins/datatables/media/js/jquery.dataTables.js"/>'></script>
 		<script src='<c:url value="plugins/datatables/media/js/dataTables.bootstrap.js"/>'></script>
 		<script src='<c:url value="js/custom/datatable-custom.js"/>'></script>
+		<script src='<c:url value="/plugins/bootstrap-validator/bootstrapValidator.min.js"/>'></script>
+		<script src='<c:url value="/js/custom/bootstrap-validator-data-periodo.js"/>'></script>
 		<script src='<c:url value="js/custom/masks.js"/>'></script>
 		<script src='<c:url value="/js/custom/send-ajax.js"/>'></script>
 		<script src='<c:url value="js/custom/gerenciar-apontamentos-modais.js"/>'></script>
 		<script src='<c:url value="js/custom/gerenciar-apontamentos-core.js"/>'></script>
+		<script>
+		$(document).ready(function() {
+			$('.periodo').prop('max',function(){
+		        return new Date().toJSON().split('T')[0];
+		    });
+			
+			$('#bv-form').bootstrapValidator({
+				excluded : [ ':disabled' ],
+				fields : {
+					periodo : {
+						validators : {
+							range : {
+								message : 'A segunda data deve ser superior ou igual à primeira.'
+							}
+						}
+					},
+					pis : {
+						validators : {
+							notEmpty : {
+								message : 'O campo é obrigatório.'
+							}
+						}
+					}
+				}
+			});
+		});
+		</script>
 	</layout:put>
 </layout:extends>

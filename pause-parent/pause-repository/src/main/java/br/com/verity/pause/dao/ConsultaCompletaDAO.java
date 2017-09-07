@@ -42,7 +42,7 @@ public class ConsultaCompletaDAO {
 						"LEFT JOIN PAUSEApontamento a ON cd.idControleDiario = a.idControleDiario "+
 						"LEFT JOIN PAUSEAtestado at ON at.idControleDiario = cd.idControleDiario "+
 						"LEFT JOIN PAUSESobreAviso sb ON sb.idControleDiario = cd.idControleDiario "+
-						"WHERE cm.idFuncionario = ? OR cm.idFuncionario is null ";
+						"WHERE cm.idFuncionario = ? OR cm.idFuncionario is null option (maxrecursion 0) ";
 
 			PreparedStatement ps = conn.prepareStatement(sql);
 

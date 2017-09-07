@@ -55,29 +55,34 @@ public class ControleDiarioBusiness {
 		controleDiarioDAO.save(entity);
 	}
 
-	public List<ControleDiarioBean> listarApontamentos(String pis, String[] periodo) {
+	public List<ControleDiarioBean> listarControleDiario(String pis, String[] periodo) {
 		FuncionarioBean funcionario = funcionarioBusiness.obterPorPIS(pis);
 		SimpleDateFormat fmt = new SimpleDateFormat("dd-MM-yyyy");
-		SimpleDateFormat fmt2 = new SimpleDateFormat("dd/MM/yyyy");
-
-		if(periodo == null) {
-			periodo = new String[2];
-			periodo[0] = fmt.format(java.sql.Date.valueOf((LocalDate.now().minusDays(7))));
-			periodo[1] = fmt.format(java.sql.Date.valueOf((LocalDate.now())));
-		}else {
-			try {
-				periodo[0] = fmt.format(fmt2.parse(periodo[0]));
+		SimpleDateFormat fmt2 = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			if (periodo == null || (periodo[0].isEmpty() && periodo[1].isEmpty())) {
+				periodo = new String[2];
+				periodo[0] = fmt.format(java.sql.Date.valueOf((LocalDate.now().minusDays(7))));
+				periodo[1] = fmt.format(java.sql.Date.valueOf((LocalDate.now())));
+			} else if (periodo[0].isEmpty()) {
+				periodo[0] = "01-03-2010";
 				periodo[1] = fmt.format(fmt2.parse(periodo[1]));
-			} catch (ParseException e) {
-				e.printStackTrace();
+			} else if (periodo[1].isEmpty()) {
+				periodo[1] = fmt.format(java.sql.Date.valueOf((LocalDate.now())));
+				periodo[0] = fmt.format(fmt2.parse(periodo[0]));
+			} else {
+				periodo[1] = fmt.format(fmt2.parse(periodo[1]));
+				periodo[0] = fmt.format(fmt2.parse(periodo[0]));
 			}
+		} catch (ParseException e) {
+			e.printStackTrace();
 		}
-		
+
 		List<ConsultaCompletaBean> dadosGerais = apontamentoBusiness
 				.obterApontamentosPeriodoPorIdFuncionario(funcionario.getId(), periodo[0], periodo[1]);
 
 		List<ControleDiarioBean> controleDiarios = separarDia(dadosGerais);
-		
+
 		return controleDiarios;
 	}
 
@@ -91,7 +96,7 @@ public class ControleDiarioBusiness {
 				ControleDiarioBean cd = obterControleDiarioDeConsultaCompleta(cc);
 				apontamentos = cd.getApontamentos();
 				controleDiarios.add(cd);
-				
+
 				dia = cc.getData();
 			}
 			apontamentos.add(apontamentoBusiness.obterApontamentoDeConsultaCompleta(cc));
