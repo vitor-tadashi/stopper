@@ -8,7 +8,6 @@
 			var endDate = document.getElementById("periodoAte").value;
 
 			if ((Date.parse(endDate) < Date.parse(startDate))) {
-				document.getElementById("periodoAte").value = "";
 				return false
 			}
 			$('#bv-form').data('bootstrapValidator').isValid();

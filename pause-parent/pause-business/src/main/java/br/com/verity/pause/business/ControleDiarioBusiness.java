@@ -59,27 +59,27 @@ public class ControleDiarioBusiness {
 		FuncionarioBean funcionario = funcionarioBusiness.obterPorPIS(pis);
 		SimpleDateFormat fmt = new SimpleDateFormat("dd-MM-yyyy");
 		SimpleDateFormat fmt2 = new SimpleDateFormat("yyyy-MM-dd");
+		String periodos[] = new String[2];
 		try {
 			if (periodo == null || (periodo[0].isEmpty() && periodo[1].isEmpty())) {
-				periodo = new String[2];
-				periodo[0] = fmt.format(java.sql.Date.valueOf((LocalDate.now().minusDays(7))));
-				periodo[1] = fmt.format(java.sql.Date.valueOf((LocalDate.now())));
+				periodos[0] = fmt.format(java.sql.Date.valueOf((LocalDate.now().minusDays(7))));
+				periodos[1] = fmt.format(java.sql.Date.valueOf((LocalDate.now())));
 			} else if (periodo[0].isEmpty()) {
-				periodo[0] = "01-03-2010";
-				periodo[1] = fmt.format(fmt2.parse(periodo[1]));
+				periodos[0] = "01-03-2010";
+				periodos[1] = fmt.format(fmt2.parse(periodo[1]));
 			} else if (periodo[1].isEmpty()) {
-				periodo[1] = fmt.format(java.sql.Date.valueOf((LocalDate.now())));
-				periodo[0] = fmt.format(fmt2.parse(periodo[0]));
+				periodos[1] = fmt.format(java.sql.Date.valueOf((LocalDate.now())));
+				periodos[0] = fmt.format(fmt2.parse(periodo[0]));
 			} else {
-				periodo[1] = fmt.format(fmt2.parse(periodo[1]));
-				periodo[0] = fmt.format(fmt2.parse(periodo[0]));
+				periodos[1] = fmt.format(fmt2.parse(periodo[1]));
+				periodos[0] = fmt.format(fmt2.parse(periodo[0]));
 			}
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 
 		List<ConsultaCompletaBean> dadosGerais = apontamentoBusiness
-				.obterApontamentosPeriodoPorIdFuncionario(funcionario.getId(), periodo[0], periodo[1]);
+				.obterApontamentosPeriodoPorIdFuncionario(funcionario.getId(), periodos[0], periodos[1]);
 
 		List<ControleDiarioBean> controleDiarios = separarDia(dadosGerais);
 

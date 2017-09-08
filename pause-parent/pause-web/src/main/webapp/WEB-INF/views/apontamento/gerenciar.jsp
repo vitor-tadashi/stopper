@@ -43,7 +43,7 @@
 									<select class="selectpicker" data-live-search="true" data-width="100%" id="apontamento-funcionario" name="pis">
 										<option value="">Selecione</option>
 										<c:forEach items="${funcionarios }" var="funcionario">
-											<option value="${funcionario.pis }">${funcionario.nome }</option>
+											<option value="${funcionario.pis }" ${funcionario.pis eq pis? 'selected="true"' : ''}>${funcionario.nome }</option>
 										</c:forEach>
 									</select>
 								</div>
@@ -51,9 +51,9 @@
 							<div class="col-sm-5">
 								<label class="control-label">Período</label>
 								<div class="input-daterange input-group" id="datepicker">
-									<input type="date" id="periodoDe" class="form-control periodo" name="periodo" placeholder="dd/mm/aaaa" min="2010-03-01" max=""/>
+									<input type="date" id="periodoDe" class="form-control periodo" name="periodo" placeholder="dd/mm/aaaa" value="${periodo[0] }" min="2010-03-01" max=""/>
 									<span class="input-group-addon">até</span>
-									<input type="date" id="periodoAte" class="form-control periodo" name="periodo" placeholder="dd/mm/aaaa" min="2010-03-01" max=""/>
+									<input type="date" id="periodoAte" class="form-control periodo" name="periodo" placeholder="dd/mm/aaaa" value="${periodo[1] }" min="2010-03-01" max=""/>
 								</div>
 							</div>
 							<div class="col-sm-1" style="margin-top: 24px;">
@@ -380,7 +380,7 @@
 		<script src='<c:url value="js/custom/datatable-custom.js"/>'></script>
 		<script src='<c:url value="/plugins/bootstrap-validator/bootstrapValidator.min.js"/>'></script>
 		<script src='<c:url value="/js/custom/bootstrap-validator-data-periodo.js"/>'></script>
-		<script src='<c:url value="js/custom/masks.js"/>'></script>
+		<script src='<c:url value="/plugins/masked-input/jquery.mask.js"/>'></script>
 		<script src='<c:url value="/js/custom/send-ajax.js"/>'></script>
 		<script src='<c:url value="js/custom/gerenciar-apontamentos-modais.js"/>'></script>
 		<script src='<c:url value="js/custom/gerenciar-apontamentos-core.js"/>'></script>
@@ -397,6 +397,11 @@
 						validators : {
 							range : {
 								message : 'A segunda data deve ser superior ou igual à primeira.'
+							},
+							date: {
+								min: $("#periodoAte").prop('min'),
+								max: $("#periodoAte").prop('max'),
+								message:'Data inválida.'
 							}
 						}
 					},
