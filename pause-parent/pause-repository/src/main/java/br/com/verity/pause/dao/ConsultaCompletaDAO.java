@@ -35,7 +35,7 @@ public class ConsultaCompletaDAO {
 						"cm.sobreAviso as cmSA, cm.sobreAvisoTrabalhado as cmST, "+
 						"cd.data as cdData, cd.horaTotal as cdHora, cd.bancoHora as cdBanco, cd.adcNoturno as cdAdcNot, "+
 						"cd.sobreAviso as cdSA, cd.sobreAvisoTrabalhado as cdST, "+
-						"a.data as apData, a.horario as apHorario, a.tipoImportacao as apTpImport, a.observacao as apObs, a.idTipoJustificativa as apIdTpJustificativa, "+
+						"a.data as apData,a.idApontamento as apIdApontamento ,a.horario as apHorario, a.tipoImportacao as apTpImport, a.observacao as apObs, a.idTipoJustificativa as apIdTpJustificativa, "+
 						"at.quantidadeHora as atQtdHora, sb.idSobreAviso as sbId FROM amonth am "+
 						"LEFT JOIN PAUSEControleDiario cd ON am.day = cd.data "+
 						"LEFT JOIN PAUSEControleMensal cm ON cm.idControleMensal = cd.idControleMensal "+
@@ -72,6 +72,7 @@ public class ConsultaCompletaDAO {
 					entity.setCdSA(rs.getDouble("cdSA"));
 					entity.setCdST(rs.getDouble("cdST"));
 					entity.setApData(rs.getDate("apData"));
+					entity.setApIdApontamento(rs.getInt("apIdApontamento"));
 					entity.setApHorario(rs.getTime("apHorario"));
 					entity.setApTpImportacao(rs.getBoolean("apTpImport"));
 					entity.setApObs(rs.getString("apObs"));

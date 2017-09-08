@@ -110,7 +110,7 @@
 														<td id="apontamento${cont.count + 8 * (i.count - 1)}" class="text-muted pli-clock">${dia.apontamentos[cont.index].horario }E</td>
 													</c:when>
 													<c:otherwise>
-														<td id="apontamento${cont.count + 8 * (i.count - 1)}" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">${dia.apontamentos[cont.index].horario }</td>
+														<td id="apontamento${cont.count + 8 * (i.count - 1)}" style="cursor:pointer;" onclick="dialogApontamentoHora(this, ${dia.apontamentos[cont.index].id });">${dia.apontamentos[cont.index].horario }</td>
 													</c:otherwise>
 												</c:choose>
 											</c:if>
@@ -154,6 +154,7 @@
 						<p class="text-semibold text-main">Informe o horário:</p>
 						<form action="" id="form-time" class="clear-form">
 							<input type="hidden" id="apontamento-id" />
+							<input type="hidden" id="idApontamento" />
 							<!--Bootstrap Timepicker : Component-->
 							<!--===================================================-->
 							<div class="input-group date">

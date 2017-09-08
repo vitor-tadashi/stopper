@@ -33,6 +33,7 @@ public class ConsultaCompletaEntity {
 	private Double cdSA;
 	private Double cdST;
 	private Date apData;
+	private Integer apIdApontamento;
 	private LocalTime apHorario;
 	private Boolean apTpImportacao;
 	private String apObs;
@@ -166,6 +167,14 @@ public class ConsultaCompletaEntity {
 
 	public void setApData(Date apData) {
 		this.apData = apData;
+	}
+
+	public Integer getApIdApontamento() {
+		return apIdApontamento;
+	}
+
+	public void setApIdApontamento(Integer apIdApontamento) {
+		this.apIdApontamento = apIdApontamento;
 	}
 
 	public LocalTime getApHorario() {

@@ -5,11 +5,9 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.verity.pause.bean.ControleDiarioBean;
 import br.com.verity.pause.bean.ControleMensalBean;
 import br.com.verity.pause.converter.ControleMensalConverter;
 import br.com.verity.pause.dao.ControleMensalDAO;
-import br.com.verity.pause.entity.ControleDiarioEntity;
 import br.com.verity.pause.entity.ControleMensalEntity;
 
 @Service

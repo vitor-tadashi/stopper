@@ -18,7 +18,6 @@ import br.com.verity.pause.bean.UsuarioBean;
 import br.com.verity.pause.converter.ApontamentoConverter;
 import br.com.verity.pause.converter.ConsultaCompletaConverter;
 import br.com.verity.pause.converter.ControleDiarioConverter;
-import br.com.verity.pause.converter.ControleMensalConverter;
 import br.com.verity.pause.converter.JustificativaConverter;
 import br.com.verity.pause.dao.ApontamentoDAO;
 import br.com.verity.pause.dao.ConsultaCompletaDAO;
@@ -55,9 +54,6 @@ public class ApontamentoBusiness {
 	@Autowired
 	private ControleDiarioConverter controleDiarioConverter;
 	
-	@Autowired
-	private ControleMensalConverter controleMensalConverter;
-	
 	public void apontar(ApontamentoBean apontamento) {
 		UsuarioBean usuarioLogado = userBusiness.usuarioLogado();
 		Integer idFuncionario;
@@ -83,7 +79,12 @@ public class ApontamentoBusiness {
 		ControleDiarioBean controleDiario = controleDiarioBusiness.obterPorDataIdFuncionario(apontamento.getData(),idFuncionario);
 		entity.setControleDiario(controleDiarioConverter.convertBeanToEntity(controleDiario));
 		
-		apontamentoDAO.save(entity);
+		if(apontamento.getId() == null || apontamento.getId().equals(0)) {
+			apontamentoDAO.save(entity);
+		}else {
+			apontamentoDAO.update(entity);
+		}
+		
 	}
 	
 	public List<ConsultaCompletaBean> obterApontamentosPeriodoPorIdFuncionario(Integer id, String de,
@@ -106,12 +107,22 @@ public class ApontamentoBusiness {
 	public ApontamentoBean obterApontamentoDeConsultaCompleta(ConsultaCompletaBean cc) {
 		ApontamentoBean apontamento = new ApontamentoBean();
 
+		apontamento.setId(cc.getApontamentoId());
 		apontamento.setData(cc.getData());
 		apontamento.setHorario(cc.getApontamentoHorario());
 		apontamento.setTipoImportacao(cc.getApontamentoTpImportacao());
 		apontamento.setObservacao(cc.getApontamentoObs());
 		
 		return apontamento;
+	}
+
+	public ApontamentoBean obterPorId(Integer id) {
+		ApontamentoEntity entity = apontamentoDAO.findById(id);
+		
+		ApontamentoBean bean = apontamentoConverter.convertEntityToBean(entity);
+		bean.setTpJustificativa(justificativaConverter.convertEntityToBean(entity.getTipoJustificativa()));
+		
+		return bean;
 	}
 
 	/*public List<ApontamentoBean> listarApontamentos(String pis, String[] periodo) {
