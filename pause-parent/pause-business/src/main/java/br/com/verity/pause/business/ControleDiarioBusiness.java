@@ -14,10 +14,13 @@ import org.springframework.stereotype.Service;
 import br.com.verity.pause.bean.ApontamentoBean;
 import br.com.verity.pause.bean.ConsultaCompletaBean;
 import br.com.verity.pause.bean.ControleDiarioBean;
+import br.com.verity.pause.bean.ControleMensalBean;
 import br.com.verity.pause.bean.FuncionarioBean;
 import br.com.verity.pause.converter.ControleDiarioConverter;
+import br.com.verity.pause.converter.ControleMensalConverter;
 import br.com.verity.pause.dao.ControleDiarioDAO;
 import br.com.verity.pause.entity.ControleDiarioEntity;
+import br.com.verity.pause.entity.ControleMensalEntity;
 import br.com.verity.pause.util.VerificarData;
 
 @Service
@@ -34,23 +37,35 @@ public class ControleDiarioBusiness {
 
 	@Autowired
 	private FuncionarioBusiness funcionarioBusiness;
+	
+	@Autowired
+	private ControleMensalBusiness controleMensalBusiness; 
+	
+	@Autowired
+	private ControleMensalConverter controleMensalConverter;
 
-	public ControleDiarioBean obterPorData(Date data) {
+	public ControleDiarioBean obterPorDataIdFuncionario(Date data,int idFuncionario) {
 		ControleDiarioBean bean = new ControleDiarioBean();
 
-		ControleDiarioEntity entity = controleDiarioDAO.findByData(new java.sql.Date(data.getTime()));
+		ControleDiarioEntity entity = controleDiarioDAO.findByDataIdFuncionario(new java.sql.Date(data.getTime()),idFuncionario);
 		if (entity != null) {
 			bean = controleDiarioConverter.convertEntityToBean(entity);
 			return bean;
 		} else {
 			bean.setData(data);
+			bean.setIdFuncionario(idFuncionario);
 			inserir(bean);
 		}
-		return obterPorData(data);
+		return obterPorDataIdFuncionario(data, idFuncionario);
 	}
 
 	public void inserir(ControleDiarioBean bean) {
+		ControleMensalBean controleMensal = controleMensalBusiness.obterPorMesAnoIdFuncionario(bean.getData(), bean.getIdFuncionario());
+		
 		ControleDiarioEntity entity = controleDiarioConverter.convertBeanToEntity(bean);
+		ControleMensalEntity controleMensalEntity = controleMensalConverter.convertBeanToEntity(controleMensal);
+		
+		entity.setControleMensal(controleMensalEntity);
 
 		controleDiarioDAO.save(entity);
 	}

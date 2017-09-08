@@ -18,6 +18,7 @@ import br.com.verity.pause.bean.UsuarioBean;
 import br.com.verity.pause.converter.ApontamentoConverter;
 import br.com.verity.pause.converter.ConsultaCompletaConverter;
 import br.com.verity.pause.converter.ControleDiarioConverter;
+import br.com.verity.pause.converter.ControleMensalConverter;
 import br.com.verity.pause.converter.JustificativaConverter;
 import br.com.verity.pause.dao.ApontamentoDAO;
 import br.com.verity.pause.dao.ConsultaCompletaDAO;
@@ -54,26 +55,32 @@ public class ApontamentoBusiness {
 	@Autowired
 	private ControleDiarioConverter controleDiarioConverter;
 	
+	@Autowired
+	private ControleMensalConverter controleMensalConverter;
+	
 	public void apontar(ApontamentoBean apontamento) {
 		UsuarioBean usuarioLogado = userBusiness.usuarioLogado();
+		Integer idFuncionario;
 		
 		apontamento.setDataInclusao(new Date());
 		apontamento.setIdUsuarioInclusao(usuarioLogado.getId());
 		apontamento.setTipoImportacao(false);
 		
-		if(apontamento.getPis() == null){
+		if(apontamento.getPis() == null || apontamento.getPis().isEmpty()){
 			apontamento.setPis(usuarioLogado.getFuncionario().getPis());
 			apontamento.setIdEmpresa(usuarioLogado.getFuncionario().getEmpresa().getId());
+			idFuncionario = usuarioLogado.getFuncionario().getId();
 		}else{
 			FuncionarioBean funcionario = sav.getFuncionarioPorPis(apontamento.getPis());
 			
 			apontamento.setIdEmpresa(funcionario.getEmpresa().getId());
+			idFuncionario = funcionario.getId();
 		}
 		
 		ApontamentoEntity entity = apontamentoConverter.convertBeanToEntity(apontamento);
 		entity.setTipoJustificativa(justificativaConverter.convertBeanToEntity(apontamento.getTpJustificativa()));
 		
-		ControleDiarioBean controleDiario = controleDiarioBusiness.obterPorData(apontamento.getData());
+		ControleDiarioBean controleDiario = controleDiarioBusiness.obterPorDataIdFuncionario(apontamento.getData(),idFuncionario);
 		entity.setControleDiario(controleDiarioConverter.convertBeanToEntity(controleDiario));
 		
 		apontamentoDAO.save(entity);

@@ -26,7 +26,7 @@
 		</ol>
 		<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 		<!--End breadcrumb-->
-		
+		<input type="hidden" id="apontamento-funcionario" value="" >
 		<!--Page content-->
 		<!--===================================================-->
 		<div id="page-content">
@@ -40,7 +40,7 @@
 							<div class="col-sm-4">
 								<div class="form-group">
 									<label class="control-label">Nome do funcionário</label>
-									<select class="selectpicker" data-live-search="true" data-width="100%" id="apontamento-funcionario" name="pis">
+									<select class="selectpicker" data-live-search="true" data-width="100%" id="select-funcionario" name="pis">
 										<option value="">Selecione</option>
 										<c:forEach items="${funcionarios }" var="funcionario">
 											<option value="${funcionario.pis }" ${funcionario.pis eq pis? 'selected="true"' : ''}>${funcionario.nome }</option>
