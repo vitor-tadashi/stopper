@@ -1,5 +1,6 @@
 package br.com.verity.pause.business;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,5 +45,17 @@ public class ControleMensalBusiness {
 		controleMensalDAO.save(entity);
 		
 	}
+	@SuppressWarnings("deprecation")
+	Boolean verificarMesFechado(Date data) {
+		LocalDate hoje = LocalDate.now();
 
+		if (hoje.getDayOfMonth() > 9) {
+			if (data.getMonth() + 1 < hoje.getMonthValue()) {
+				return true;
+			}
+		} else if(data.getMonth() + 1 < hoje.getMonthValue() - 1){
+			return true;
+		}
+		return false;
+	}
 }

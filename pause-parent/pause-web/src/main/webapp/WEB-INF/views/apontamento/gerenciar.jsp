@@ -106,8 +106,8 @@
 										<c:forEach begin="0" end="7" varStatus="cont">
 											<c:if test="${not empty dia.apontamentos[cont.index] && not empty dia.apontamentos[cont.index].horario}">
 												<c:choose>
-													<c:when test="${dia.apontamentos[cont.index].tipoImportacao }">
-														<td id="apontamento${cont.count + 8 * (i.count - 1)}" class="text-muted pli-clock">${dia.apontamentos[cont.index].horario }E</td>
+													<c:when test="${dia.apontamentos[cont.index].tipoImportacao || dia.mesFechado}">
+														<td id="apontamento${cont.count + 8 * (i.count - 1)}" class="text-muted pli-clock">${dia.apontamentos[cont.index].horario }${!dia.mesFechado? 'E':''}</td>
 													</c:when>
 													<c:otherwise>
 														<td id="apontamento${cont.count + 8 * (i.count - 1)}" style="cursor:pointer;" onclick="dialogApontamentoHora(this, ${dia.apontamentos[cont.index].id });">${dia.apontamentos[cont.index].horario }</td>
@@ -115,7 +115,7 @@
 												</c:choose>
 											</c:if>
 											<c:if test="${empty dia.apontamentos[cont.index] || empty dia.apontamentos[cont.index].horario}">
-												<td id="apontamento${cont.count + 8 * (i.count - 1)}" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
+												<td id="apontamento${cont.count + 8 * (i.count - 1)}" ${!dia.mesFechado? 'style="cursor:pointer;" onclick="dialogApontamentoHora(this);"':''}>--:--</td>
 											</c:if>
 										</c:forEach>
 										<td id="#">${dia.qtdAtestadoHoras }</td>

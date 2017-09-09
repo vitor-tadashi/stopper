@@ -37,17 +37,18 @@ public class ControleDiarioBusiness {
 
 	@Autowired
 	private FuncionarioBusiness funcionarioBusiness;
-	
+
 	@Autowired
-	private ControleMensalBusiness controleMensalBusiness; 
-	
+	private ControleMensalBusiness controleMensalBusiness;
+
 	@Autowired
 	private ControleMensalConverter controleMensalConverter;
 
-	public ControleDiarioBean obterPorDataIdFuncionario(Date data,int idFuncionario) {
+	public ControleDiarioBean obterPorDataIdFuncionario(Date data, int idFuncionario) {
 		ControleDiarioBean bean = new ControleDiarioBean();
 
-		ControleDiarioEntity entity = controleDiarioDAO.findByDataIdFuncionario(new java.sql.Date(data.getTime()),idFuncionario);
+		ControleDiarioEntity entity = controleDiarioDAO.findByDataIdFuncionario(new java.sql.Date(data.getTime()),
+				idFuncionario);
 		if (entity != null) {
 			bean = controleDiarioConverter.convertEntityToBean(entity);
 			return bean;
@@ -60,11 +61,12 @@ public class ControleDiarioBusiness {
 	}
 
 	public void inserir(ControleDiarioBean bean) {
-		ControleMensalBean controleMensal = controleMensalBusiness.obterPorMesAnoIdFuncionario(bean.getData(), bean.getIdFuncionario());
-		
+		ControleMensalBean controleMensal = controleMensalBusiness.obterPorMesAnoIdFuncionario(bean.getData(),
+				bean.getIdFuncionario());
+
 		ControleDiarioEntity entity = controleDiarioConverter.convertBeanToEntity(bean);
 		ControleMensalEntity controleMensalEntity = controleMensalConverter.convertBeanToEntity(controleMensal);
-		
+
 		entity.setControleMensal(controleMensalEntity);
 
 		controleDiarioDAO.save(entity);
@@ -77,7 +79,7 @@ public class ControleDiarioBusiness {
 		String periodos[] = new String[2];
 		try {
 			if (periodo == null || (periodo[0].isEmpty() && periodo[1].isEmpty())) {
-				periodos[0] = fmt.format(java.sql.Date.valueOf((LocalDate.now().minusDays(7))));
+				periodos[0] = fmt.format(java.sql.Date.valueOf((LocalDate.now().minusDays(6))));
 				periodos[1] = fmt.format(java.sql.Date.valueOf((LocalDate.now())));
 			} else if (periodo[0].isEmpty()) {
 				periodos[0] = "01-03-2010";
@@ -137,9 +139,9 @@ public class ControleDiarioBusiness {
 		cd.setAdicNoturno(cc.getControleDiarioAdcNoturno());
 		cd.setSobreAviso(cc.getControleDiarioSA());
 		cd.setQtdAtestadoHoras(cc.getAtestadoQuantidadeHora());
+		cd.setMesFechado(controleMensalBusiness.verificarMesFechado(cd.getData()));
 		cd.setApontamentos(apontamentos);
 
 		return cd;
 	}
-
 }
