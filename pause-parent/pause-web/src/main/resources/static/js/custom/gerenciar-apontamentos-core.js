@@ -1,9 +1,16 @@
 $(document).ready(function() {
 	calcularTotal();
 });
-function dialogApontamentoHora(td) {
+function dialogApontamentoHora(td, idApontamento) {
+	clearForm(0);
+	
 	var id = $(td).attr('id');
 	var infoDia = $(td).parent().find('input[id^="infoDia"]');
+	
+	if (typeof(idApontamento) !="undefined"){
+		modalEditarApontamento(idApontamento);
+	}
+		
 	$('#title-modal-apontamento').text(infoDia.val());
 	$('#apontamento-id').val(id)
 	$('#demo-default-modal').modal();
@@ -69,6 +76,9 @@ function apontar(hr,dt){
 	};
 	if($('#apontamento-funcionario').val())
 		apontamento['pis'] = $('#apontamento-funcionario').val();
+	if($('#idApontamento').val())
+		apontamento['id'] = $('#idApontamento').val();
+	
 	$.ajax({
 		url: 'gerenciar-apontamento/apontar',
 		type : 'POST',
@@ -105,4 +115,20 @@ function calcularTotal() {
 		$(this).find('td[id^="total-hora"]').text(Math.round(horaTotal*100)/100);
 		horaTotal = 0;
 	});	
+}
+function modalEditarApontamento(id){
+	$.ajax({
+		url: 'gerenciar-apontamento/obter',
+		type : 'GET',
+		contentType : 'application/json',
+		data: {'id' :id},
+		cache: false,
+		success: function(data){
+			$('#idApontamento').val(data.id);
+			$('#apontamento-obs').val(data.observacao);
+			$('#apontamento-time').timepicker('setTime', data.horario.substring(0,5));
+			$('#apontamento-jus').prop('selectedIndex',data.tpJustificativa.id);
+			$('#apontamento-jus').selectpicker('refresh');
+		}
+	});
 }

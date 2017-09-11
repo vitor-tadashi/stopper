@@ -56,27 +56,35 @@ public class ApontamentoBusiness {
 	
 	public void apontar(ApontamentoBean apontamento) {
 		UsuarioBean usuarioLogado = userBusiness.usuarioLogado();
+		Integer idFuncionario;
 		
 		apontamento.setDataInclusao(new Date());
 		apontamento.setIdUsuarioInclusao(usuarioLogado.getId());
 		apontamento.setTipoImportacao(false);
 		
-		if(apontamento.getPis() == null){
+		if(apontamento.getPis() == null || apontamento.getPis().isEmpty()){
 			apontamento.setPis(usuarioLogado.getFuncionario().getPis());
 			apontamento.setIdEmpresa(usuarioLogado.getFuncionario().getEmpresa().getId());
+			idFuncionario = usuarioLogado.getFuncionario().getId();
 		}else{
 			FuncionarioBean funcionario = sav.getFuncionarioPorPis(apontamento.getPis());
 			
 			apontamento.setIdEmpresa(funcionario.getEmpresa().getId());
+			idFuncionario = funcionario.getId();
 		}
 		
 		ApontamentoEntity entity = apontamentoConverter.convertBeanToEntity(apontamento);
 		entity.setTipoJustificativa(justificativaConverter.convertBeanToEntity(apontamento.getTpJustificativa()));
 		
-		ControleDiarioBean controleDiario = controleDiarioBusiness.obterPorData(apontamento.getData());
+		ControleDiarioBean controleDiario = controleDiarioBusiness.obterPorDataIdFuncionario(apontamento.getData(),idFuncionario);
 		entity.setControleDiario(controleDiarioConverter.convertBeanToEntity(controleDiario));
 		
-		apontamentoDAO.save(entity);
+		if(apontamento.getId() == null || apontamento.getId().equals(0)) {
+			apontamentoDAO.save(entity);
+		}else {
+			apontamentoDAO.update(entity);
+		}
+		
 	}
 	
 	public List<ConsultaCompletaBean> obterApontamentosPeriodoPorIdFuncionario(Integer id, String de,
@@ -99,12 +107,22 @@ public class ApontamentoBusiness {
 	public ApontamentoBean obterApontamentoDeConsultaCompleta(ConsultaCompletaBean cc) {
 		ApontamentoBean apontamento = new ApontamentoBean();
 
+		apontamento.setId(cc.getApontamentoId());
 		apontamento.setData(cc.getData());
 		apontamento.setHorario(cc.getApontamentoHorario());
 		apontamento.setTipoImportacao(cc.getApontamentoTpImportacao());
 		apontamento.setObservacao(cc.getApontamentoObs());
 		
 		return apontamento;
+	}
+
+	public ApontamentoBean obterPorId(Integer id) {
+		ApontamentoEntity entity = apontamentoDAO.findById(id);
+		
+		ApontamentoBean bean = apontamentoConverter.convertEntityToBean(entity);
+		bean.setTpJustificativa(justificativaConverter.convertEntityToBean(entity.getTipoJustificativa()));
+		
+		return bean;
 	}
 
 	/*public List<ApontamentoBean> listarApontamentos(String pis, String[] periodo) {

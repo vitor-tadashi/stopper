@@ -17,6 +17,7 @@ public class ControleDiarioConverter implements Converter<ControleDiarioEntity, 
 		
 		entity.setId(bean.getId());
 		entity.setData(new java.sql.Date(bean.getData().getTime()));
+		entity.setIdFuncionario(bean.getIdFuncionario());
 		
 		return entity;
 	}
@@ -31,6 +32,7 @@ public class ControleDiarioConverter implements Converter<ControleDiarioEntity, 
 		
 		bean.setId(entity.getId());
 		bean.setData(entity.getData());
+		bean.setIdFuncionario(entity.getIdFuncionario());
 		
 		return bean;
 	}

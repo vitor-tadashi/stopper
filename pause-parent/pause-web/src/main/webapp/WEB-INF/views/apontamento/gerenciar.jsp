@@ -26,7 +26,7 @@
 		</ol>
 		<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 		<!--End breadcrumb-->
-		
+		<input type="hidden" id="apontamento-funcionario" value="" >
 		<!--Page content-->
 		<!--===================================================-->
 		<div id="page-content">
@@ -40,7 +40,7 @@
 							<div class="col-sm-4">
 								<div class="form-group">
 									<label class="control-label">Nome do funcionário</label>
-									<select class="selectpicker" data-live-search="true" data-width="100%" id="apontamento-funcionario" name="pis">
+									<select class="selectpicker" data-live-search="true" data-width="100%" id="select-funcionario" name="pis">
 										<option value="">Selecione</option>
 										<c:forEach items="${funcionarios }" var="funcionario">
 											<option value="${funcionario.pis }" ${funcionario.pis eq pis? 'selected="true"' : ''}>${funcionario.nome }</option>
@@ -106,16 +106,16 @@
 										<c:forEach begin="0" end="7" varStatus="cont">
 											<c:if test="${not empty dia.apontamentos[cont.index] && not empty dia.apontamentos[cont.index].horario}">
 												<c:choose>
-													<c:when test="${dia.apontamentos[cont.index].tipoImportacao }">
-														<td id="apontamento${cont.count + 8 * (i.count - 1)}" class="text-muted pli-clock">${dia.apontamentos[cont.index].horario }E</td>
+													<c:when test="${dia.apontamentos[cont.index].tipoImportacao || dia.mesFechado}">
+														<td id="apontamento${cont.count + 8 * (i.count - 1)}" class="text-muted pli-clock">${dia.apontamentos[cont.index].horario }${!dia.mesFechado? 'E':''}</td>
 													</c:when>
 													<c:otherwise>
-														<td id="apontamento${cont.count + 8 * (i.count - 1)}" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">${dia.apontamentos[cont.index].horario }</td>
+														<td id="apontamento${cont.count + 8 * (i.count - 1)}" style="cursor:pointer;" onclick="dialogApontamentoHora(this, ${dia.apontamentos[cont.index].id });">${dia.apontamentos[cont.index].horario }</td>
 													</c:otherwise>
 												</c:choose>
 											</c:if>
 											<c:if test="${empty dia.apontamentos[cont.index] || empty dia.apontamentos[cont.index].horario}">
-												<td id="apontamento${cont.count + 8 * (i.count - 1)}" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
+												<td id="apontamento${cont.count + 8 * (i.count - 1)}" ${!dia.mesFechado? 'style="cursor:pointer;" onclick="dialogApontamentoHora(this);"':''}>--:--</td>
 											</c:if>
 										</c:forEach>
 										<td id="#">${dia.qtdAtestadoHoras }</td>
@@ -154,6 +154,7 @@
 						<p class="text-semibold text-main">Informe o horário:</p>
 						<form action="" id="form-time" class="clear-form">
 							<input type="hidden" id="apontamento-id" />
+							<input type="hidden" id="idApontamento" />
 							<!--Bootstrap Timepicker : Component-->
 							<!--===================================================-->
 							<div class="input-group date">

@@ -23,6 +23,7 @@ public class ConsultaCompletaBean {
 	private Double controleDiarioSA;
 	private Double controleDiarioST;
 	private Date apontamentoData;
+	private Integer apontamentoId;
 	private LocalTime apontamentoHorario;
 	private Boolean apontamentoTpImportacao;
 	private String apontamentoObs;
@@ -156,6 +157,14 @@ public class ConsultaCompletaBean {
 
 	public void setApontamentoData(Date apontamentoData) {
 		this.apontamentoData = apontamentoData;
+	}
+
+	public Integer getApontamentoId() {
+		return apontamentoId;
+	}
+
+	public void setApontamentoId(Integer apontamentoId) {
+		this.apontamentoId = apontamentoId;
 	}
 
 	public LocalTime getApontamentoHorario() {

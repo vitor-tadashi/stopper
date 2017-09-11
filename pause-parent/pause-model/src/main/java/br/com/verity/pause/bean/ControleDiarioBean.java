@@ -16,6 +16,9 @@ public class ControleDiarioBean {
 	private Double adicNoturno;
 	private Double sobreAviso;
 	private Double qtdAtestadoHoras;
+	private Integer idFuncionario;
+	private Boolean mesFechado;
+	private ControleMensalBean controleMensal;
 
 	public Integer getId() {
 		return id;
@@ -87,5 +90,29 @@ public class ControleDiarioBean {
 
 	public void setQtdAtestadoHoras(Double qtdAtestadoHoras) {
 		this.qtdAtestadoHoras = qtdAtestadoHoras;
+	}
+
+	public Integer getIdFuncionario() {
+		return idFuncionario;
+	}
+
+	public void setIdFuncionario(Integer idFuncionario) {
+		this.idFuncionario = idFuncionario;
+	}
+
+	public Boolean getMesFechado() {
+		return mesFechado;
+	}
+
+	public void setMesFechado(Boolean mesFechado) {
+		this.mesFechado = mesFechado;
+	}
+
+	public ControleMensalBean getControleMensal() {
+		return controleMensal;
+	}
+
+	public void setControleMensal(ControleMensalBean controleMensal) {
+		this.controleMensal = controleMensal;
 	}
 }

@@ -23,25 +23,24 @@ public class ConsultaCompletaDAO {
 			Connection conn = ConnectionFactory.createConnection();
 			String sql = "CREATE TABLE ##Apontamento (idFuncionario int, ano int, mes int, cmHora float, cmBanco float, cmAdcNot float, "+
 								"cmSA float, cmST float, cdData date, cdHora float, cdBanco float, cdAdcNot float, "+
-								"cdSA float, cdST float, aData date, aHorario TIME, aTpImport bit, aObs varchar(100), aIdTpJustificativa int, "+
+								"cdSA float, cdST float, aData date, aHorario TIME, aTpImport bit, aObs varchar(100), aIdTpJustificativa int, aIdApontamento int, "+
 								"atQtdHora int, sbId int) "+
 		
 							"INSERT INTO ##Apontamento (idFuncionario, ano, mes, cmHora, cmBanco, cmAdcNot, "+
 													   "cmSA, cmST, cdData, cdHora, cdBanco, cdAdcNot, "+
-												       "cdSA, cdST, aData, aHorario, aTpImport, aObs, aIdTpJustificativa, "+
+												       "cdSA, cdST, aData, aHorario, aTpImport, aObs, aIdTpJustificativa, aIdApontamento, "+
 													   "atQtdHora, sbId) "+
 							"SELECT cm.idFuncionario, cm.ano, cm.mes, cm.horaTotal as cmHora, cm.bancoHora as cmBanco, cm.adcNoturno as cmAdcNot, "+
 								   "cm.sobreAviso as cmSA, cm.sobreAvisoTrabalhado as cmST, "+
 								   "cd.data as cdData, cd.horaTotal as cdHora, cd.bancoHora as cdBanco, cd.adcNoturno as cdAdcNot, "+
 								   "cd.sobreAviso as cdSA, cd.sobreAvisoTrabalhado as cdST, "+
 								   "a.data as aData, a.horario as aHorario, a.tipoImportacao as aTpImport, a.observacao as aObs, a.idTipoJustificativa as aIdTpJustificativa, "+
-								   "at.quantidadeHora as atQtdHora, sb.idSobreAviso as sbId "+
+								   "a.idApontamento as aIdApontamento, at.quantidadeHora as atQtdHora, sb.idSobreAviso as sbId "+
 							  "FROM PAUSEControleMensal cm "+
 								   "LEFT JOIN PAUSEControleDiario cd ON cm.idControleMensal = cd.idControleMensal and cm.idFuncionario = ? AND cd.data >= ? AND cd.data <= ? "+
 								   "LEFT JOIN PAUSEApontamento a ON cd.idControleDiario = a.idControleDiario "+
 								   "LEFT JOIN PAUSEAtestado at ON at.idControleDiario = cd.idControleDiario "+
 								   "LEFT JOIN PAUSESobreAviso sb ON sb.idControleDiario = cd.idControleDiario ";
-								   
 
 			PreparedStatement ps = conn.prepareStatement(sql);
 
@@ -94,6 +93,7 @@ public class ConsultaCompletaDAO {
 					entity.setApData(rs.getDate("aData"));
 					entity.setApHorario(rs.getTime("aHorario"));
 					entity.setApTpImportacao(rs.getBoolean("aTpImport"));
+					entity.setApIdApontamento(rs.getInt("aIdApontamento"));
 					entity.setApObs(rs.getString("aObs"));
 					entity.setApIdTpJustificativa(rs.getInt("aIdTpJustificativa"));
 					entity.setAtQtdHora(rs.getDouble("atQtdHora"));
