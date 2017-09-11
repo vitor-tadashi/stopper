@@ -65,7 +65,7 @@ public class ApontamentoDAO {
 		return false;
 	}
 
-	public void save(ApontamentoEntity horas) {
+	public ApontamentoEntity save(ApontamentoEntity horas) {
 		Connection conn;
 		try {
 			conn = ConnectionFactory.createConnection();
@@ -92,9 +92,12 @@ public class ApontamentoDAO {
 			ps.execute();
 			ps.close();
 			conn.close();
+			
+			return findByPISMaxIdApontamento(horas.getPis());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
 
 	public void saveAll(List<ApontamentoEntity> horas, Integer idArquivo) throws SQLException {
@@ -196,35 +199,6 @@ public class ApontamentoDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		/*
-		 * public List<ApontamentoEntity> findByPisAndPeriodo(String pis, Date de, Date
-		 * ate) { List<ApontamentoEntity> entities = new ArrayList<ApontamentoEntity>();
-		 * ApontamentoEntity entity = new ApontamentoEntity(); try { connection = new
-		 * ConnectionFactory(); Connection conn = connection.createConnection(); String
-		 * sql =
-		 * "SELECT * FROM PAUSEApontamento WHERE pis like (?) AND data >= ? AND data <= ?"
-		 * ;
-		 * 
-		 * PreparedStatement ps = conn.prepareStatement(sql);
-		 * 
-		 * ps.setString(1, pis); java.sql.Date dtDe = new java.sql.Date(de.getTime());
-		 * ps.setDate(2, dtDe); java.sql.Date dtAte = new java.sql.Date(ate.getTime());
-		 * ps.setDate(3, dtAte);
-		 * 
-		 * ResultSet rs = ps.executeQuery();
-		 * 
-		 * while (rs.next()) { entity = new ApontamentoEntity();
-		 * entity.setId(rs.getInt("idApontamento")); entity.setPis(rs.getString("pis"));
-		 * entity.setHorario(rs.getTime("horario")); entity.setData(rs.getDate("data"));
-		 * entity.setTipoImportacao(rs.getBoolean("tipoImportacao"));
-		 * entity.setIdEmpresa(rs.getInt("idEmpresa"));
-		 * entity.setDataInclusao(rs.getDate("dataInclusao"));
-		 * entity.setIdUsuarioInclusao(rs.getInt("idUsuarioInclusao"));
-		 * entity.setObservacao(rs.getString("observacao"));
-		 * 
-		 * entities.add(entity); } } catch (SQLException e) { e.printStackTrace(); }
-		 * 
-		 */
 		return entities;
 	}
 
@@ -295,6 +269,51 @@ public class ApontamentoDAO {
 			ps.execute();
 			ps.close();
 			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	public ApontamentoEntity findByPISMaxIdApontamento(String pis) {
+		ApontamentoEntity entity = new ApontamentoEntity();
+
+		String sql = "SELECT MAX(idApontamento) FROM PAUSEApontamento WHERE pis LIKE ?";
+
+		try {
+			Connection conn = ConnectionFactory.createConnection();
+
+			PreparedStatement ps = conn.prepareStatement(sql);
+
+			ps.setString(1, pis);
+
+			ResultSet rs = ps.executeQuery();
+
+			if (rs.next()) {
+
+				entity.setId(rs.getInt(1));
+			}
+
+			ps.close();
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return entity;
+	}
+	public void deleteById(Integer id) {
+		Connection conn;
+		try {
+			conn = ConnectionFactory.createConnection();
+
+			String sql = "DELETE FROM PAUSEApontamento WHERE idApontamento = ?";
+
+			PreparedStatement ps = conn.prepareStatement(sql);
+
+			ps.setInt(1, id); 
+
+			ps.execute();
+			ps.close();
+			conn.close();
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

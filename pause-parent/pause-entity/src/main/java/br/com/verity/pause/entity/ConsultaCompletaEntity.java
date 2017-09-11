@@ -186,7 +186,7 @@ public class ConsultaCompletaEntity {
 	}
 
 	public void setApHorario(Time apHorario) {
-		this.apHorario = apHorario.toLocalTime();
+		this.apHorario = apHorario!=null? apHorario.toLocalTime() : null;
 	}
 
 	public Boolean getApTpImportacao() {

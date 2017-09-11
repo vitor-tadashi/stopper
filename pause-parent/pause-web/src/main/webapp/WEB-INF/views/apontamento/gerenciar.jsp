@@ -107,7 +107,7 @@
 											<c:if test="${not empty dia.apontamentos[cont.index] && not empty dia.apontamentos[cont.index].horario}">
 												<c:choose>
 													<c:when test="${dia.apontamentos[cont.index].tipoImportacao || dia.mesFechado}">
-														<td id="apontamento${cont.count + 8 * (i.count - 1)}" class="text-muted pli-clock">${dia.apontamentos[cont.index].horario }${!dia.mesFechado? 'E':''}</td>
+														<td id="apontamento${cont.count + 8 * (i.count - 1)}" class="text-muted pli-clock">${dia.apontamentos[cont.index].horario }${dia.apontamentos[cont.index].tipoImportacao? 'E':''}</td>
 													</c:when>
 													<c:otherwise>
 														<td id="apontamento${cont.count + 8 * (i.count - 1)}" style="cursor:pointer;" onclick="dialogApontamentoHora(this, ${dia.apontamentos[cont.index].id });">${dia.apontamentos[cont.index].horario }</td>
@@ -180,7 +180,7 @@
 		
 					<!--Modal footer-->
 					<div class="modal-footer">
-						<button data-dismiss="modal" class="btn btn-default" type="button">Cancelar</button>
+						<button data-dismiss="modal" class="btn btn-danger" type="button" onclick="confirmarRemover()" id="btn-cancelar-apontamento">Cancelar</button>
 						<button class="btn btn-primary" onclick="informarHorario();">Salvar</button>
 					</div>
 				</div>
@@ -373,7 +373,51 @@
 			</div>
 		</div>
 		<!--===================================================-->
-		<!--End atestado Modal-->	
+		<!--End atestado Modal-->
+		
+	<!--erro Modal-->
+    <!--===================================================-->
+    <div id="erro-sm-modal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
+                    <h4 class="modal-title text-center">Atenção!</h4>
+                </div>
+                <div class="content">
+                    <h4 class="text-center" id="erro-label"></h4>
+                </div>
+                <div class="modal-footer">
+                    <div class="pull-right">
+						<button data-dismiss="modal" class="btn btn-primary" type="button">OK</button>
+					</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--===================================================-->
+    <!--remover Modal-->
+    <!--===================================================-->
+    <div id="remover-sm-modal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
+                    <h4 class="modal-title text-center">Atenção!</h4>
+                </div>
+                <div class="content">
+                    <h4 class="text-center">Deseja remover este apontamento?</h4>
+                </div>
+                <div class="modal-footer">
+                    <div class="pull-right">
+						<button data-dismiss="modal" class="btn btn-danger" type="button">Não</button>
+						<button class="btn btn-success" type="button" id="btn-remover-apontamento" onclick="removerApontamento()">Sim</button>
+					</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--===================================================-->	
 	
 		<script src='<c:url value="plugins/bootstrap-timepicker/bootstrap-timepicker.min.js"/>'></script>
 		<script src='<c:url value="plugins/datatables/media/js/jquery.dataTables.js"/>'></script>

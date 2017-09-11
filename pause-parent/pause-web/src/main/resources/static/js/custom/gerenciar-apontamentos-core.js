@@ -10,7 +10,8 @@ function dialogApontamentoHora(td, idApontamento) {
 	if (typeof(idApontamento) !="undefined"){
 		modalEditarApontamento(idApontamento);
 	}
-		
+	$('#btn-cancelar-apontamento').text('Cancelar');
+	$('#btn-cancelar-apontamento').attr('onclick',"");
 	$('#title-modal-apontamento').text(infoDia.val());
 	$('#apontamento-id').val(id)
 	$('#demo-default-modal').modal();
@@ -21,7 +22,7 @@ function informarHorario() {
 	var horario = $('#apontamento-time').val();
 	var dtApontamento = $('#title-modal-apontamento').text().split(',');
 	
-	apontar(horario,dtApontamento[0]);
+	apontar(horario,dtApontamento[0],id);
 	
 	var tr = $("#"+id).parent();
 	var horarios = [];
@@ -58,14 +59,13 @@ function informarHorario() {
 			else {
 				$(this).attr("class", "");
 				$(this).attr("style", "cursor:pointer;");
-				$(this).attr("onclick", "dialogApontamentoHora(this);");
 			}                
 		}
 	});
 	calcularTotal();
 	$('#demo-default-modal').modal("hide");
 }
-function apontar(hr,dt){
+function apontar(hr,dt,idTd){
 	var apontamento = {
 		horarioJson : hr,
 		dataJson : dt,
@@ -86,7 +86,11 @@ function apontar(hr,dt){
 		data: JSON.stringify(apontamento),
 		cache: false,
 		success: function(data){
-			clearForm(0);
+			$("#"+idTd).attr('onclick',"dialogApontamentoHora(this,"+ data.id +")");
+		},
+		error: function(erro){
+			$('#erro-label').text(erro.responseText);
+			$('#erro-sm-modal').modal();
 		}
 	});
 }
@@ -124,11 +128,37 @@ function modalEditarApontamento(id){
 		data: {'id' :id},
 		cache: false,
 		success: function(data){
+			$('#btn-cancelar-apontamento').text('Remover');
+			$('#btn-cancelar-apontamento').attr('onclick',"confirmarRemover()");
+			$('#btn-remover-apontamento').attr('onclick',"removerApontamento("+ data.id +")");
 			$('#idApontamento').val(data.id);
 			$('#apontamento-obs').val(data.observacao);
 			$('#apontamento-time').timepicker('setTime', data.horario.substring(0,5));
 			$('#apontamento-jus').prop('selectedIndex',data.tpJustificativa.id);
 			$('#apontamento-jus').selectpicker('refresh');
+		}
+	});
+}
+function confirmarRemover(){
+	$('#remover-sm-modal').modal();
+}
+function removerApontamento(id){
+	$.ajax({
+		url: 'gerenciar-apontamento/remover',
+		type : 'GET',
+		contentType : 'application/json',
+		data: {'id' : id},
+		cache: true,
+		success: function(data){
+			tdRemove = $('#apontamento-id').val();
+			$("#"+tdRemove).attr('onclick',"dialogApontamentoHora(this)");
+			$("#"+tdRemove).text('--:--')
+			$('#remover-sm-modal').modal('hide');
+		},
+		error: function(erro){
+			$('#remover-sm-modal').modal('hide');
+			$('#erro-label').text(erro.responseText);
+			$('#erro-sm-modal').modal();
 		}
 	});
 }
