@@ -19,7 +19,8 @@
 		<intercept-url access="permitAll" pattern="/login" />
 		<intercept-url access="isAuthenticated()" pattern="/**" requires-channel="any"/>
 		<!--Login customizado -->
-		<form-login login-page="/login" password-parameter="senha" username-parameter="user" />
+		<form-login login-page="/login" password-parameter="senha" username-parameter="user" 
+		authentication-success-handler-ref="myAuthenticationSuccessHandler"/>
 		<!--Acesso não permitido page -->
 		<!-- <access-denied-handler error-page="/Access_Denied" /> -->
 
@@ -46,6 +47,9 @@
 	<beans:bean
 		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"
 		id="bcryptEncoder" />
+		
+		<beans:bean id="myAuthenticationSuccessHandler"
+        class="br.com.verity.pause.MySimpleUrlAuthenticationSuccessHandler" />
 
 	<beans:bean id="customUserDetailsBusiness"
 		class="br.com.verity.pause.business.CustomUserDetailsBusiness" />
