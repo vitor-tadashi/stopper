@@ -24,6 +24,7 @@ import br.com.verity.pause.business.ApontamentoBusiness;
 import br.com.verity.pause.business.ControleDiarioBusiness;
 import br.com.verity.pause.business.FuncionarioBusiness;
 import br.com.verity.pause.business.JustificativaBusiness;
+import br.com.verity.pause.exception.BusinessException;
 
 @Controller
 @RequestMapping(value = "/gerenciar-apontamento")
@@ -55,15 +56,30 @@ public class GerenciarApontamentoController {
 	}
 	@RequestMapping(value = "/apontar", method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<String> apontar(@RequestBody ApontamentoBean apontamento){
-		apontamentoBusiness.apontar(apontamento);
-		return new ResponseEntity<>("ok",HttpStatus.ACCEPTED);
+	public ResponseEntity<?> apontar(@RequestBody ApontamentoBean apontamento){
+		ApontamentoBean apontamentoCriado = null;
+		try {
+			apontamentoCriado = apontamentoBusiness.apontar(apontamento);
+		} catch (BusinessException e) {
+			return new ResponseEntity<String>(e.getMessage(),HttpStatus.BAD_REQUEST);
+		}
+		return ResponseEntity.ok(apontamentoCriado);
 	}
 	@GetMapping(value = "/obter")
 	@ResponseBody
 	public ResponseEntity<ApontamentoBean> obter(@RequestParam Integer id){
 		ApontamentoBean apontamento = apontamentoBusiness.obterPorId(id);
-		return new ResponseEntity<>(apontamento,HttpStatus.ACCEPTED);
+		return new ResponseEntity<>(apontamento,HttpStatus.OK);
+	}
+	@GetMapping(value = "/remover")
+	@ResponseBody
+	public ResponseEntity<String> remover(@RequestParam Integer id){
+		try {
+			apontamentoBusiness.remover(id);
+		} catch (BusinessException e) {
+			return new ResponseEntity<String>(e.getMessage(),HttpStatus.BAD_REQUEST);
+		}
+		return ResponseEntity.ok("Apontamento removido");
 	}
 	private void funcionarios(Model model) {
 		List<FuncionarioBean>funcionarios = funcionarioBusiness.listarFuncionariosPorEmpresaComPis();

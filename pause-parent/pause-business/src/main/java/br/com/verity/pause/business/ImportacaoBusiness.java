@@ -85,7 +85,7 @@ public class ImportacaoBusiness {
 
 	public void salvarApontamentos(List<ApontamentoBean> apontamentos, ArquivoApontamentoBean arquivoApontamento) {
 		try {
-			apontamentoDao.excludeAllDate(apontamentos.get(0).getData());
+			apontamentoDao.excludeAllDate(new java.sql.Date(apontamentos.get(0).getData().getTime()));
 			arquivoApontamentoDao.excludeDate(arquivoApontamentoConverter.convertBeanToEntity(arquivoApontamento));
 			arquivoApontamentoDao.save(arquivoApontamentoConverter.convertBeanToEntity(arquivoApontamento));
 			Integer idArquivo = arquivoApontamentoDao.findByDateAndEmpresa(arquivoApontamentoConverter.convertBeanToEntity(arquivoApontamento));
