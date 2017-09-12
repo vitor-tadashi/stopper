@@ -4,7 +4,6 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +11,8 @@ import org.springframework.stereotype.Service;
 import br.com.verity.pause.dao.AfastamentoDAO;
 import br.com.verity.pause.dao.ApontamentoDAO;
 import br.com.verity.pause.dao.AtestadoDAO;
+import br.com.verity.pause.dao.ControleDiarioDAO;
+import br.com.verity.pause.dao.ControleMensalDAO;
 import br.com.verity.pause.dao.SobreAvisoDAO;
 import br.com.verity.pause.entity.AfastamentoEntity;
 import br.com.verity.pause.entity.ApontamentoPivotEntity;
@@ -38,6 +39,12 @@ public class CalculoBusiness {
 	@Autowired
 	private AtestadoDAO atestadoDAO;
 	
+	@Autowired
+	private ControleDiarioDAO controleDiarioDAO;
+	
+	@Autowired
+	private ControleMensalDAO controleMensalDAO;
+	
 	private static final int SECOND = 1000;
 	private static final int MINUTE = 60 * SECOND;
 	private static final int HOUR = 60 * MINUTE;
@@ -45,6 +52,34 @@ public class CalculoBusiness {
 	private Time adNotFim1 = new Time(6,0,0);
 	private Time adNotInicio2 = new Time(22,0,0);
 	private Time adNotFim2 = new Time(23,59,59);
+
+	/**
+	 * Realiza os calculos de horas totais, extras, sobre aviso e adicional noturno.
+	 * Salva os dados calculados.
+	 * @param idFuncionario Id do funcionário
+	 * @param data
+	 */
+	public ApontamentoPivotEntity calcularApontamento(int idFuncionario, java.util.Date data) {
+		ApontamentoPivotEntity apontamento = null;
+		
+		apontamento = calcularApontamentoDiario(idFuncionario, new Date(data.getTime()));
+		salvarApontamento(apontamento);
+		
+		return apontamento;
+	}
+	
+	/**
+	 * Atualiza as horas calculadas do apontamento do respectivo funcionario
+	 * @param apontamento 
+	 */
+	@SuppressWarnings("deprecation")
+	private void salvarApontamento(ApontamentoPivotEntity apontamento) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(apontamento.getDataApontamento());
+		  
+		controleDiarioDAO.saveCalculation(apontamento);
+		controleMensalDAO.saveCalculation(apontamento.getIdFuncionario(), calendar.get(Calendar.MONTH) + 1);
+	}
 
 	/**
 	 * Método que calcula o apontamento diário do funcionário. 
@@ -59,7 +94,7 @@ public class CalculoBusiness {
 	 * @param data
 	 *            Data do qual deseja realizar o cálculo
 	 */
-	public ApontamentoPivotEntity calcularApontamentoDiario(int idFuncionario, Date data) {
+	private ApontamentoPivotEntity calcularApontamentoDiario(int idFuncionario, Date data) {
 		ApontamentoPivotEntity apontamento = null;
 		Double totalHoras = 0d;
 		Double totalHorasDiarias = 0d;
@@ -73,7 +108,7 @@ public class CalculoBusiness {
 		apontamento = obterApontamentoFuncionario(idFuncionario, data);
 		sobreAviso = obterSobreAvisoFuncionario(idFuncionario, data);
 		
-		if (apontamento != null) {
+		if (apontamento != null && apontamento.getEntrada1() != null && apontamento.getSaida1() != null) {
 			totalHoras = calcularHoraTotal(apontamento);
 			totalHoras = calcularHoraTotalAtestado(totalHoras, idFuncionario, data);
 			totalHorasDiarias = obterQuantidadeHorasDiarias(idFuncionario, data);
@@ -87,6 +122,7 @@ public class CalculoBusiness {
 		}
 		else {
 			apontamento = new ApontamentoPivotEntity();
+			apontamento.setDataApontamento(data);
 		}
 
 		tratarHorasCalculadas(apontamento, totalHoras, totalHorasDiarias, horasExtras, totalSobreAvisoTrabalhado,
@@ -94,6 +130,7 @@ public class CalculoBusiness {
 		
 		return apontamento;
 	}
+
 
 	/**
 	 * Tratar todas as horas calculadas e coloca no objeto de Apontamento
@@ -140,7 +177,7 @@ public class CalculoBusiness {
 	 * Calcula as horas totais do período de apontamento do funcionário
 	 * @param apontamento Apontamento diário do funcionário
 	 */
-	public Double calcularHoraTotal(ApontamentoPivotEntity apontamento) {
+	private Double calcularHoraTotal(ApontamentoPivotEntity apontamento) {
 		Double total1 = null;
 		Double total2 = null;
 		Double total3 = null;
@@ -161,7 +198,7 @@ public class CalculoBusiness {
 	 * Calcula as horas de adicional noturno
 	 * @param apontamento Apontamento diário do funcionário
 	 */
-	public Double calcularAdicionalNoturno(ApontamentoPivotEntity apontamento) {
+	private Double calcularAdicionalNoturno(ApontamentoPivotEntity apontamento) {
 		Double adicionalNoturno1 = null;
 		Double adicionalNoturno2 = null;
 		Double adicionalNoturno3 = null;
@@ -183,7 +220,7 @@ public class CalculoBusiness {
 	 * @param apontamento Apontamento diário do funcionário
 	 * @param sobreAviso Período sobre aviso do funcionário
 	 */
-	public Double calcularSobreAvisoTrabalhadas(ApontamentoPivotEntity apontamento, SobreAvisoEntity sobreAviso) {
+	private Double calcularSobreAvisoTrabalhadas(ApontamentoPivotEntity apontamento, SobreAvisoEntity sobreAviso) {
 		Double sobreAvisoTrabalhada1 = null;
 		Double sobreAvisoTrabalhada2 = null;
 		Double sobreAvisoTrabalhada3 = null;
@@ -206,7 +243,7 @@ public class CalculoBusiness {
 	 * @param totalSobreAvisoTrabalhado Total de horas sobre aviso trabalhados
 	 * @return Retorna o total de horas sobre aviso
 	 */
-	public Double calcularSobreAviso(SobreAvisoEntity sobreAviso, Double totalSobreAvisoTrabalhado) {
+	private Double calcularSobreAviso(SobreAvisoEntity sobreAviso, Double totalSobreAvisoTrabalhado) {
 		Double totalSobreAviso = 0d;
 		
 		totalSobreAviso = ((double) sobreAviso.getHoraFim().getTime() - sobreAviso.getHoraInicio().getTime()) / HOUR;
@@ -350,10 +387,10 @@ public class CalculoBusiness {
 	/**
      * Verifica se data á sábado ou domingo.
      *
-     * @param   data Um objeto Calendar
-     * @return  Calendar
+     * @param   data Data a ser verificada
+     * @return  Retorna se é final de semana
      */
-    public Boolean verificarFinalSemana(Date data)
+	private Boolean verificarFinalSemana(Date data)
     {
     	Boolean response = null;
     	Calendar cal = Calendar.getInstance();
@@ -369,10 +406,10 @@ public class CalculoBusiness {
     /**
      * Verifica se data é um domingo.
      *
-     * @param   data Um objeto Calendar
-     * @return  Calendar
+     * @param   data Data a ser verificada
+     * @return  Retorna se é domingo
      */
-    public Boolean verificarDomingo(Date data)
+	private Boolean verificarDomingo(Date data)
     {
     	Boolean response = null;
     	Calendar cal = Calendar.getInstance();
@@ -390,7 +427,7 @@ public class CalculoBusiness {
      * @param   data Um objeto Calendar
      * @return  Calendar
      */
-    public Boolean verificarFeriado(Date data)
+	private Boolean verificarFeriado(Date data)
     {
     	Boolean response = null;
     	

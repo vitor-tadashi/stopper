@@ -358,7 +358,7 @@ public class ApontamentoDAO {
 		sql.append("  SELECT cm.idFuncionario, cd.data, ROW_NUMBER() OVER(ORDER BY a.horario ASC) as ordem, a.horario");
 		sql.append("    FROM PAUSEControleMensal cm");
 		sql.append("         INNER JOIN PAUSEControleDiario cd on cm.idControleMensal = cd.idControleMensal");
-		sql.append("         INNER JOIN PAUSEApontamento a on cd.idControleDiario = a.idControleDiario");
+		sql.append("         LEFT JOIN PAUSEApontamento a on cd.idControleDiario = a.idControleDiario");
 		sql.append("   WHERE cm.idFuncionario = (?) and");
 		sql.append("         cd.data = (?) ");
 		sql.append(") apontamento ");
@@ -393,5 +393,4 @@ public class ApontamentoDAO {
 
 		return response;
 	}
-
 }
