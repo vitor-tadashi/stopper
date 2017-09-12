@@ -14,7 +14,7 @@ public class ConnectionFactory {
 			e.printStackTrace();
 		}
 		/* Configura os parâmetros da conexão */
-		String url = "jdbc:sqlserver://localhost:1433;databaseName=Pause";
+		String url = "jdbc:sqlserver://192.168.3.5:1433;databaseName=Pause";
 		String user = "sa";
 		String password = "1234";
 		

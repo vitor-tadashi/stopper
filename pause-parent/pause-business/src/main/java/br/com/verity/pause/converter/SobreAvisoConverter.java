@@ -20,8 +20,8 @@ public class SobreAvisoConverter implements Converter<SobreAvisoEntity, SobreAvi
 		entity.setId(bean.getId());
 		entity.setData(new java.sql.Date(bean.getData().getTime()));
 		entity.setDataInclusao(new java.sql.Date(bean.getDataInclusao().getTime()));
-		entity.setEntrada(Time.valueOf(bean.getEntrada()));
-		entity.setSaida(Time.valueOf(bean.getSaida()));
+		entity.setHoraInicio(Time.valueOf(bean.getEntrada()));
+		entity.setHoraFim(Time.valueOf(bean.getSaida()));
 		entity.setIdUsuarioInclusao(bean.getIdUsuarioInclusao());
 		
 		return entity;
@@ -37,8 +37,8 @@ public class SobreAvisoConverter implements Converter<SobreAvisoEntity, SobreAvi
 		bean.setId(entity.getId());
 		bean.setData(entity.getData());
 		bean.setDataInclusao(entity.getDataInclusao());
-		bean.setEntrada(entity.getEntrada().toLocalTime());
-		bean.setSaida(entity.getSaida().toLocalTime());
+		bean.setEntrada(entity.getHoraInicio().toLocalTime());
+		bean.setSaida(entity.getHoraFim().toLocalTime());
 		bean.setIdUsuarioInclusao(entity.getIdUsuarioInclusao());
 		
 		return bean;
