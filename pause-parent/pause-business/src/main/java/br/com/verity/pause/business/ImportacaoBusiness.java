@@ -59,10 +59,10 @@ public class ImportacaoBusiness {
 		}
 		
 		try {
-			verificarImportacao = apontamentoDao.findByData(apontamentoConverter.convertBeanToEntity(apontamento.get(0)), 2);
+			verificarImportacao = apontamentoDao.findByData(apontamentoConverter.convertBeanToEntity(apontamento.get(0)), idEmpresa);
 			
 			if(verificarImportacao){
-				funcMensagem.setMensagem("Já foi importado arquivo com está data.");
+				funcMensagem.setMensagem("Este arquivo já foi importado. Deseja substituí-lo?");
 				funcionariosComApontamentos.add(funcMensagem);
 			}
 		} catch (SQLException e) {

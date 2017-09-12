@@ -10,6 +10,13 @@ function cancelar(){
 	})
 }
 
+$( document ).ready(function(){
+	window.setTimeout(function() {
+		$("#msg-sucesso").hide();
+		$(".mensagem").hide();
+	}, 5000);
+})
+
 function importarArquivo() {
 	var div = document.getElementById("textDiv");
 	$("#textDiv").removeClass("alert alert-danger");
@@ -36,19 +43,11 @@ function importarArquivo() {
 							$("#upload-arquivo").attr("disabled", true);
 							$("#empresa").attr("disabled", true);
 							exibirImportacao(exibir);
-						}else if(value.mensagem.includes("abrir o arquivo") == true){
-							textDiv.className = "alert alert-danger";
-							textDiv.textContent = "Arquivo com formato incorreto, por favor selecione outro.";
-							var text = "[" + div.textContent + "]";
-						
-						}else if(value.mensagem.includes("Arquivo contém mais de uma data.") == true){
-							textDiv.className = "alert alert-danger";
-							textDiv.textContent = "Arquivo contém mais de uma data, por favor selecione outro.";
-							var text = "[" + div.textContent + "]";
-						}else if(value.mensagem.includes("empresa") == true){
+						}else if(value.mensagem.includes("Arquivo") == true){
 							textDiv.className = "alert alert-danger";
 							textDiv.textContent = value.mensagem;
 							var text = "[" + div.textContent + "]";
+						
 						}else{
 							exibir = false;
 							$('#modal-confirmacao').modal('show'); 
@@ -63,7 +62,7 @@ function importarArquivo() {
 		});
 	}
 };
-
+	
 function exibirImportacao(bool){
 	if(bool == true){
 		$('#modal-confirmacao').modal('hide'); 
@@ -71,7 +70,7 @@ function exibirImportacao(bool){
 		$("#botoes").removeClass("hide");
 	}
 }
-
+	
 function preencherImportacao(value, index){
 	var campos = "<tr role='row' class='odd text-center rmvLinha'>"+
 	"<td id='pis"+index+"' class='pis'></td>" +
@@ -86,24 +85,17 @@ function preencherImportacao(value, index){
 	"<td id='hora6"+index+"' class='hora'></td>" +
 	"<td id='hora7"+index+"' class='hora'></td>"+
 	"</tr>";
-
+	
 	$("#list").append(campos);
-
-
+	
+	
 	$('#pis'+index).text(value.pis);
 	$('#funcionario'+index).text(value.nome);
 	$(value.apontamentos).each(function(i, value) {
-		var hora = value.horario.hour +":"+ value.horario.minute;
-		$('#hora'+i+index).text(hora);
+		$('#hora'+i+index).text(value.horario);
 	})
 	date = new Date(value.apontamentos[0].data);
 	$('#data'+index).text(date.toLocaleDateString());
 	$('.pis').mask('999.9999.999-9');
 	$('.data').mask('99/99/9999');
 }
-$( document ).ready(function(){
-	window.setTimeout(function() {
-		$("#msg-sucesso").hide();
-		$(".mensagem").hide();
-	}, 5000);
-})
