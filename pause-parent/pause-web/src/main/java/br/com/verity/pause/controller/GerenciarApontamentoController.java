@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import br.com.verity.pause.bean.ApontamentoBean;
 import br.com.verity.pause.bean.ControleDiarioBean;
 import br.com.verity.pause.bean.FuncionarioBean;
+import br.com.verity.pause.bean.SobreAvisoBean;
 import br.com.verity.pause.bean.TipoAfastamentoBean;
 import br.com.verity.pause.bean.TipoJustificativaBean;
 import br.com.verity.pause.business.AfastamentoBusiness;
@@ -24,6 +25,7 @@ import br.com.verity.pause.business.ApontamentoBusiness;
 import br.com.verity.pause.business.ControleDiarioBusiness;
 import br.com.verity.pause.business.FuncionarioBusiness;
 import br.com.verity.pause.business.JustificativaBusiness;
+import br.com.verity.pause.business.SobreAvisoBusiness;
 import br.com.verity.pause.exception.BusinessException;
 
 @Controller
@@ -45,12 +47,16 @@ public class GerenciarApontamentoController {
 	@Autowired
 	private ControleDiarioBusiness controleDiarioBusiness;
 	
+	@Autowired
+	private SobreAvisoBusiness sobreAvisoBusiness;
+	
 	@RequestMapping(method = RequestMethod.GET)
 	public String consultar(Model model,Integer idFuncionario, String...periodo) {
 		apontamentos(model,idFuncionario,periodo);
 		funcionarios(model);
 		justificativas(model);
 		afastamentos(model);
+		sobreAvisos(model,idFuncionario,periodo);
 		
 		return "apontamento/gerenciar";
 	}
@@ -98,5 +104,9 @@ public class GerenciarApontamentoController {
 		model.addAttribute("periodo",periodo);
 		model.addAttribute("dias",dias);
 		model.addAttribute("idFuncionario",idFuncionario);
+	}
+	private void sobreAvisos(Model model,Integer idFuncionario,String... periodo) {
+		List<SobreAvisoBean> sobreAvisos = sobreAvisoBusiness.listarPorIdFuncionarioEPeriodo(idFuncionario,periodo);
+		model.addAttribute("sobreAvisos",sobreAvisos);
 	}
 }

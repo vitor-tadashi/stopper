@@ -22,6 +22,7 @@ public class SobreAvisoBean{
 	private Date dataInclusao;
 	private ControleDiarioBean controleDiario;
 	private Integer idUsuarioInclusao;
+	private Integer idFuncionario;
 	
 	public Integer getId() {
 		return id;
@@ -81,5 +82,11 @@ public class SobreAvisoBean{
 	}
 	public void setIdUsuarioInclusao(Integer idUsuarioInclusao) {
 		this.idUsuarioInclusao = idUsuarioInclusao;
+	}
+	public Integer getIdFuncionario() {
+		return idFuncionario;
+	}
+	public void setIdFuncionario(Integer idFuncionario) {
+		this.idFuncionario = idFuncionario;
 	}
 }

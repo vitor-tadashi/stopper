@@ -94,7 +94,7 @@ public class ApontamentoDAO {
 			ps.close();
 			conn.close();
 
-			return findByPISMaxIdApontamento(horas.getPis());
+			return findByControleDiarioMaxIdApontamento(horas.getControleDiario().getId());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -274,20 +274,20 @@ public class ApontamentoDAO {
 
 	}
 
-	public ApontamentoEntity findByPISMaxIdApontamento(String pis) {
+	public ApontamentoEntity findByControleDiarioMaxIdApontamento(int id) {
 		ApontamentoEntity entity = new ApontamentoEntity();
 		Connection conn = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		String sql = null;
 
-		sql = "SELECT MAX(idApontamento) FROM PAUSEApontamento WHERE pis LIKE ?";
+		sql = "SELECT MAX(idApontamento) FROM PAUSEApontamento WHERE idControleDiario = ?";
 
 		try {
 			conn = ConnectionFactory.createConnection();
 			ps = conn.prepareStatement(sql);
 
-			ps.setString(1, pis); 
+			ps.setInt(1, id); 
 	        rs = ps.executeQuery();
 
 			if (rs.next()) {

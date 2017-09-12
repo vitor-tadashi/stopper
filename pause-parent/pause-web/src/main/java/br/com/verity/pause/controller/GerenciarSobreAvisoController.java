@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.verity.pause.bean.SobreAvisoBean;
 import br.com.verity.pause.business.SobreAvisoBusiness;
+import br.com.verity.pause.exception.BusinessException;
 
 @RestController
 @RequestMapping(value = "/sobre-aviso")
@@ -19,10 +20,14 @@ public class GerenciarSobreAvisoController {
 	private SobreAvisoBusiness sobreAvisoBusiness;
 	
 	@RequestMapping(value = "/inserir-sa", method = RequestMethod.POST)
-	public ResponseEntity<String> salvar(@RequestBody SobreAvisoBean sobreAviso){
-		sobreAvisoBusiness.salvar(sobreAviso);
-		
-		return new ResponseEntity<String>("ok", HttpStatus.OK) ;
+	public ResponseEntity<?> salvar(@RequestBody SobreAvisoBean sobreAviso){
+		SobreAvisoBean sobreAvisoCriado = null;
+		try {
+			sobreAvisoCriado = sobreAvisoBusiness.salvar(sobreAviso);
+		} catch (BusinessException e) {
+			return new ResponseEntity<String>(e.getMessage(),HttpStatus.BAD_REQUEST);
+		}
+		return ResponseEntity.ok(sobreAvisoCriado);
 	}
 	@RequestMapping(value = "/remover-sa", method = RequestMethod.DELETE)
 	public ResponseEntity<String> remover(Integer id){
