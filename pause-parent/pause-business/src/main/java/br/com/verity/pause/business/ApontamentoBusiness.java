@@ -65,12 +65,11 @@ public class ApontamentoBusiness {
 		UsuarioBean usuarioLogado = userBusiness.usuarioLogado();
 		Integer idFuncionario;
 
-		if (apontamento.getPis() == null || apontamento.getPis().isEmpty()) {
-			apontamento.setPis(usuarioLogado.getFuncionario().getPis());
+		if (apontamento.getIdFuncionario() == null || apontamento.getIdFuncionario().equals(0)) {
 			apontamento.setIdEmpresa(usuarioLogado.getFuncionario().getEmpresa().getId());
 			idFuncionario = usuarioLogado.getFuncionario().getId();
 		} else {
-			FuncionarioBean funcionario = sav.getFuncionarioPorPis(apontamento.getPis());
+			FuncionarioBean funcionario = sav.getFuncionario(apontamento.getIdFuncionario());
 
 			apontamento.setIdEmpresa(funcionario.getEmpresa().getId());
 			idFuncionario = funcionario.getId();

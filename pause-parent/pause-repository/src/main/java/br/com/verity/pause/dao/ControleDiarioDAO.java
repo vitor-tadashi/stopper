@@ -18,7 +18,8 @@ import br.com.verity.pause.entity.ControleMensalEntity;
 public class ControleDiarioDAO {
 
 	public ControleDiarioEntity findByDataIdFuncionario(Date data, int idFuncionario) {
-		String sql = "SELECT * FROM PAUSEControleDiario WHERE data = ? AND idFuncionario = ?";
+		String sql = "SELECT cd.idControleMensal, cd.idControleDiario, cm.idFuncionario, cd.data FROM PAUSEControleDiario cd RIGHT JOIN PAUSEControleMensal cm ON cm.idControleMensal = cd.idControleMensal\r\n" + 
+				"  WHERE cm.idFuncionario = ? And cd.data = ?";
 
 		Connection conn;
 		ControleDiarioEntity entity = null;
@@ -26,21 +27,22 @@ public class ControleDiarioDAO {
 			conn = ConnectionFactory.createConnection();
 
 			PreparedStatement ps = conn.prepareStatement(sql);
-			ps.setDate(1, data);
-			ps.setInt(2, idFuncionario);
+
+			ps.setInt(1, idFuncionario);
+			ps.setDate(2, data);
 			
 			ResultSet rs = ps.executeQuery();
 			
 			if(rs.next()) {
 				entity = new ControleDiarioEntity();
-				entity.setId(rs.getInt(1));
-				entity.setData(rs.getDate(7));
-				
 				ControleMensalEntity controleMensal = new ControleMensalEntity();
-				controleMensal.setId(rs.getInt(8));
 				
+				controleMensal.setId(rs.getInt(1));
+				entity.setId(rs.getInt(2));
+				controleMensal.setIdFuncionario(3);
+				entity.setData(rs.getDate(4));
+
 				entity.setControleMensal(controleMensal);
-				entity.setIdFuncionario(rs.getInt(9));
 				
 			}
 		} catch (SQLException e) {
@@ -50,7 +52,7 @@ public class ControleDiarioDAO {
 	}
 
 	public void save(ControleDiarioEntity entity) {
-		String sql = "INSERT INTO PAUSEControleDiario (data, idControleMensal ,idFuncionario) VALUES (?, ?, ?)";
+		String sql = "INSERT INTO PAUSEControleDiario (data, idControleMensal) VALUES (?, ?)";
 
 		Connection conn;
 		try {
@@ -59,7 +61,6 @@ public class ControleDiarioDAO {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setDate(1, entity.getData());
 			ps.setInt(2, entity.getControleMensal().getId());
-			ps.setInt(3, entity.getIdFuncionario());
 			
 			ps.execute();
 			ps.close();

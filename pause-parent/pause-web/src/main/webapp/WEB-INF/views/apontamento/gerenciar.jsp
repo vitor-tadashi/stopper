@@ -40,10 +40,10 @@
 							<div class="col-sm-4">
 								<div class="form-group">
 									<label class="control-label">Nome do funcionário</label>
-									<select class="selectpicker" data-live-search="true" data-width="100%" id="select-funcionario" name="pis">
+									<select class="selectpicker" data-live-search="true" data-width="100%" id="select-funcionario" name="idFuncionario">
 										<option value="">Selecione</option>
 										<c:forEach items="${funcionarios }" var="funcionario">
-											<option value="${funcionario.pis }" ${funcionario.pis eq pis? 'selected="true"' : ''}>${funcionario.nome }</option>
+											<option value="${funcionario.id }" ${funcionario.id eq idFuncionario? 'selected="true"' : ''}>${funcionario.nome }</option>
 										</c:forEach>
 									</select>
 								</div>
@@ -207,7 +207,7 @@
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label class="control-label">Data</label>
-										<input type="text" name="data" pattern="\d{1,2}/\d{1,2}/\d{4}" class="form-control data" id="dt-sa" placeholder="dd/mm/yyyy"/>
+										<input type="date" name="data" class="form-control data" id="dt-sa" placeholder="dd/mm/aaaa"/>
 									</div>
 								</div>
 								<div class="col-sm-6">
@@ -237,12 +237,15 @@
 									</tr>
 								</thead>
 								<tbody class="text-center" id="body-sa">
-									<tr>
-										<td>13/03/2017</td>
-										<td>10:00</td>
-										<td>17:00</td>
-										<td><a class="text-danger" href="#">Remover</a></td>
-									</tr>
+									<c:forEach items="${sobreAvisos }" var="sa">
+										<fmt:formatDate value="${sa.data }" pattern="dd/MM/yyyy" var="data"/>
+										<tr>
+											<td>${data }</td>
+											<td>${sa.entrada }</td>
+											<td>${sa.saida }</td>
+											<td><a class="text-danger" onclick="removerTr(this, ${sa.id})" href="#">Remover</a></td>
+										</tr>
+									</c:forEach>
 								</tbody>
 							</table>
 						</div>

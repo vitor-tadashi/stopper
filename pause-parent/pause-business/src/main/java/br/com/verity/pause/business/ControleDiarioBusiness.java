@@ -21,7 +21,7 @@ import br.com.verity.pause.converter.ControleMensalConverter;
 import br.com.verity.pause.dao.ControleDiarioDAO;
 import br.com.verity.pause.entity.ControleDiarioEntity;
 import br.com.verity.pause.entity.ControleMensalEntity;
-import br.com.verity.pause.util.VerificarData;
+import br.com.verity.pause.enumeration.DiaSemanaEnum;
 
 @Service
 public class ControleDiarioBusiness {
@@ -72,8 +72,8 @@ public class ControleDiarioBusiness {
 		controleDiarioDAO.save(entity);
 	}
 
-	public List<ControleDiarioBean> listarControleDiario(String pis, String[] periodo) {
-		FuncionarioBean funcionario = funcionarioBusiness.obterPorPIS(pis);
+	public List<ControleDiarioBean> listarControleDiario(Integer idFuncionario, String[] periodo) {
+		FuncionarioBean funcionario = funcionarioBusiness.obterPorId(idFuncionario);
 		SimpleDateFormat fmt = new SimpleDateFormat("dd-MM-yyyy");
 		SimpleDateFormat fmt2 = new SimpleDateFormat("yyyy-MM-dd");
 		String periodos[] = new String[2];
@@ -133,7 +133,7 @@ public class ControleDiarioBusiness {
 		List<ApontamentoBean> apontamentos = new ArrayList<>();
 
 		cd.setData(cc.getData());
-		cd.setDiaDaSemana(VerificarData.qualDia(cc.getData().getDay()));
+		cd.setDiaDaSemana(DiaSemanaEnum.valueOf(cc.getData().getDay()).getDiaCompleto());
 		cd.setHoraTotal(cc.getControleDiarioHoraTotal());
 		cd.setBancoHora(cc.getControleDiarioBancoHora());
 		cd.setAdicNoturno(cc.getControleDiarioAdcNoturno());

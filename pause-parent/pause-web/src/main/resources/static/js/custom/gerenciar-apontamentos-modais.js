@@ -9,27 +9,19 @@ $(document).ready(function(){
 	$('#apontamento-funcionario').val($( "#select-funcionario option:selected" ).val());
 });
 function inserirSA(){
-	var dataSA = $('#dt-sa').val();
+	var dataSA = formatardataHtml($('#dt-sa').val());
 	var horaSAe = $('#hora-sa-e').val();
 	var horaSAs = $('#hora-sa-s').val();
 	
 	inserirSA_ajax(dataSA, horaSAe, horaSAs);
 	
-	$('#body-sa')
-		.append($('<tr>')
-			.append($('<td>').text(dataSA))
-			.append($('<td>').text(horaSAe))
-			.append($('<td>').text(horaSAs))
-			.append($('<td>')
-				.append($('<a>').text('Remover').addClass('text-danger').attr('href',"#").attr('onclick','removerTr(this)'))
-			)
-		);
 }
 function inserirSA_ajax(dataSA, horaSAe, horaSAs){
 	var sobreAviso={	
 			'data' : dataSA,
 			'entrada' : horaSAe,
-			'saida' : horaSAs
+			'saida' : horaSAs,
+			'idFuncionario' : $('#apontamento-funcionario').val()
 		}
 	$.ajax({
 		url: 'sobre-aviso/inserir-sa',
@@ -38,7 +30,20 @@ function inserirSA_ajax(dataSA, horaSAe, horaSAs){
 		data: JSON.stringify(sobreAviso),
 		cache: false,
 		success: function(data){
+			$('#body-sa')
+			.append($('<tr>')
+				.append($('<td>').text(dataSA))
+				.append($('<td>').text(horaSAe))
+				.append($('<td>').text(horaSAs))
+				.append($('<td>')
+					.append($('<a>').text('Remover').addClass('text-danger').attr('href',"#").attr('onclick','removerTr(this ,'+ data.id +')'))
+				)
+			);
 			clearForm(1);
+		},
+		error: function(erro){
+			$('#erro-label').text(erro.responseText);
+			$('#erro-sm-modal').modal();
 		}
 	});
 }
@@ -70,7 +75,7 @@ function inserirAtestado(){
 			)
 		);
 }
-function removerTr(click){
+function removerTr(click, id){
 	$(click).parent().parent().remove();
 }
 function clearForm(i){

@@ -74,19 +74,18 @@ public class ImportarTxt {
 
 						apontamentos.add(apontamento);
 					} else if (!dataImportacao.equals(data) && !codReg.contains("9999999")) {
-						throw new BusinessException("Arquivo contém mais de uma data");
+						throw new BusinessException("Arquivo importado inválido.");
 					}
 					linha = lerArquivo.readLine();
 				}
 			} else {
-				throw new BusinessException("Arquivo importado, não é da empresa: " + empresa.getNomeFantasia());
+				throw new BusinessException("Arquivo importado inválido.");
 			}
 			arquivo.close();
 		} catch (IOException e) {
 			System.err.printf("Erro na abertura do arquivo: %s.\n", e.getMessage());
+			throw new BusinessException("Arquivo importado inválido.");
 		}
-		// horas.sort(Comparator.comparing(ApontamentoBean::getPis));
-
 		return apontamentos;
 	}
 }
