@@ -113,8 +113,10 @@ public class SavIntegration {
 		} catch (IOException e ) {
 			e.printStackTrace();
 		}
+		FuncionarioBean funcionarioBean = funcionarioConverter.convertEntityToBean(funcionario);
+		funcionarioBean.setEmpresa(funcionario.getEmpresa());
 		
-		return funcionarioConverter.convertEntityToBean(funcionario);
+		return funcionarioBean;
 	}
 	
 	public EmpresaBean getEmpresa(Integer idEmpresa) {

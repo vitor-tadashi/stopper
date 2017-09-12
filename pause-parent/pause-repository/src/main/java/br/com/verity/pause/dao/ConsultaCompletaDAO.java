@@ -101,6 +101,9 @@ public class ConsultaCompletaDAO {
 				}
 				entities.add(entity);
 			}
+			ps.close();
+			rs.close();
+			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

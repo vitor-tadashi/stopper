@@ -72,8 +72,8 @@ public class ControleDiarioBusiness {
 		controleDiarioDAO.save(entity);
 	}
 
-	public List<ControleDiarioBean> listarControleDiario(String pis, String[] periodo) {
-		FuncionarioBean funcionario = funcionarioBusiness.obterPorPIS(pis);
+	public List<ControleDiarioBean> listarControleDiario(Integer idFuncionario, String[] periodo) {
+		FuncionarioBean funcionario = funcionarioBusiness.obterPorId(idFuncionario);
 		SimpleDateFormat fmt = new SimpleDateFormat("dd-MM-yyyy");
 		SimpleDateFormat fmt2 = new SimpleDateFormat("yyyy-MM-dd");
 		String periodos[] = new String[2];

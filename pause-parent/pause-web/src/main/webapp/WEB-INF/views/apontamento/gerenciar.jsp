@@ -40,10 +40,10 @@
 							<div class="col-sm-4">
 								<div class="form-group">
 									<label class="control-label">Nome do funcionário</label>
-									<select class="selectpicker" data-live-search="true" data-width="100%" id="select-funcionario" name="pis">
+									<select class="selectpicker" data-live-search="true" data-width="100%" id="select-funcionario" name="idFuncionario">
 										<option value="">Selecione</option>
 										<c:forEach items="${funcionarios }" var="funcionario">
-											<option value="${funcionario.pis }" ${funcionario.pis eq pis? 'selected="true"' : ''}>${funcionario.nome }</option>
+											<option value="${funcionario.id }" ${funcionario.id eq idFuncionario? 'selected="true"' : ''}>${funcionario.nome }</option>
 										</c:forEach>
 									</select>
 								</div>

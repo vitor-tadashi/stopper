@@ -46,8 +46,8 @@ public class GerenciarApontamentoController {
 	private ControleDiarioBusiness controleDiarioBusiness;
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public String consultar(Model model,String pis, String...periodo) {
-		apontamentos(model,pis,periodo);
+	public String consultar(Model model,Integer idFuncionario, String...periodo) {
+		apontamentos(model,idFuncionario,periodo);
 		funcionarios(model);
 		justificativas(model);
 		afastamentos(model);
@@ -93,10 +93,10 @@ public class GerenciarApontamentoController {
 		List<TipoAfastamentoBean>afastamentos = afastamentoBusiness.listarTipoAfastamento();
 		model.addAttribute("afastamentos",afastamentos);
 	}
-	private void apontamentos(Model model,String pis,String... periodo) {
-		List<ControleDiarioBean> dias = controleDiarioBusiness.listarControleDiario(pis,periodo);
+	private void apontamentos(Model model,Integer idFuncionario,String... periodo) {
+		List<ControleDiarioBean> dias = controleDiarioBusiness.listarControleDiario(idFuncionario,periodo);
 		model.addAttribute("periodo",periodo);
 		model.addAttribute("dias",dias);
-		model.addAttribute("pis",pis);
+		model.addAttribute("idFuncionario",idFuncionario);
 	}
 }

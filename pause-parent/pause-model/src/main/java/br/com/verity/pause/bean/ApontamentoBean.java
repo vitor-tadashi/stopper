@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 public class ApontamentoBean {
 
 	private Integer id;
+	private Integer idFuncionario;
 	private String pis;
 	private Date data;
 	private LocalTime horario;
@@ -34,6 +35,14 @@ public class ApontamentoBean {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Integer getIdFuncionario() {
+		return idFuncionario;
+	}
+
+	public void setIdFuncionario(Integer idFuncionario) {
+		this.idFuncionario = idFuncionario;
 	}
 
 	public String getPis() {

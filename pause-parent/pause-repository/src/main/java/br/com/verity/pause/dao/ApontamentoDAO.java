@@ -71,24 +71,24 @@ public class ApontamentoDAO {
 		try {
 			conn = ConnectionFactory.createConnection();
 
-			String sql = "INSERT INTO PAUSEApontamento VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+			String sql = "INSERT INTO PAUSEApontamento VALUES (?,?,?,?,?,?,?,?,?,?)";
 
 			PreparedStatement ps = conn.prepareStatement(sql);
 
-			ps.setString(1, horas.getPis()); // pis
-			ps.setDate(2, horas.getData()); // data
-			ps.setTime(3, horas.getHorario()); // horario
-			ps.setBoolean(4, horas.getTipoImportacao()); // tipoImportacao
-			ps.setDate(5, horas.getDataInclusao()); // dataInclusao
-			ps.setString(6, horas.getObservacao()); // observacao
-			ps.setInt(7, horas.getTipoJustificativa().getId()); // idTpJustificativa
-			ps.setInt(8, horas.getControleDiario().getId()); // idControleDiario
-			ps.setInt(9, horas.getIdEmpresa()); // idEmpresa
-			ps.setInt(10, horas.getIdUsuarioInclusao()); // idUsuarioInclusao
+			//ps.setString(1, horas.getPis()); // pis
+			ps.setDate(1, horas.getData()); // data
+			ps.setTime(2, horas.getHorario()); // horario
+			ps.setBoolean(3, horas.getTipoImportacao()); // tipoImportacao
+			ps.setDate(4, horas.getDataInclusao()); // dataInclusao
+			ps.setString(5, horas.getObservacao()); // observacao
+			ps.setInt(6, horas.getTipoJustificativa().getId()); // idTpJustificativa
+			ps.setInt(7, horas.getControleDiario().getId()); // idControleDiario
+			ps.setInt(8, horas.getIdEmpresa()); // idEmpresa
+			ps.setInt(9, horas.getIdUsuarioInclusao()); // idUsuarioInclusao
 			if (horas.getArquivoApontamento() != null)
-				ps.setInt(11, horas.getArquivoApontamento().getId()); // idArquivoApontamento
+				ps.setInt(10, horas.getArquivoApontamento().getId()); // idArquivoApontamento
 			else
-				ps.setNull(11, Types.INTEGER);
+				ps.setNull(10, Types.INTEGER);
 
 			ps.execute();
 			ps.close();
@@ -222,23 +222,22 @@ public class ApontamentoDAO {
 				ArquivoApontamentoEntity arquivoApontamento = new ArquivoApontamentoEntity();
 
 				entity.setId(rs.getInt(1));
-				entity.setPis(rs.getString(2));
-				entity.setData(rs.getDate(3));
-				entity.setHorario(rs.getTime(4));
-				entity.setTipoImportacao(rs.getBoolean(5));
-				entity.setDataInclusao(rs.getDate(6));
-				entity.setObservacao(rs.getString(7));
+				entity.setData(rs.getDate(2));
+				entity.setHorario(rs.getTime(3));
+				entity.setTipoImportacao(rs.getBoolean(4));
+				entity.setDataInclusao(rs.getDate(5));
+				entity.setObservacao(rs.getString(6));
 
-				justificativa.setId(rs.getInt(8));
+				justificativa.setId(rs.getInt(7));
 				entity.setTipoJustificativa(justificativa);
 
-				controleDiario.setId(rs.getInt(9));
+				controleDiario.setId(rs.getInt(8));
 				entity.setControleDiario(controleDiario);
 
-				entity.setIdEmpresa(rs.getInt(10));
-				entity.setIdUsuarioInclusao(rs.getInt(11));
+				entity.setIdEmpresa(rs.getInt(9));
+				entity.setIdUsuarioInclusao(rs.getInt(10));
 
-				arquivoApontamento.setId(rs.getInt(12));
+				arquivoApontamento.setId(rs.getInt(11));
 				entity.setArquivoApontamento(arquivoApontamento);
 			}
 

@@ -67,17 +67,15 @@ function informarHorario() {
 }
 function apontar(hr,dt,idTd){
 	var apontamento = {
+		id : $('#idApontamento').val(),
 		horarioJson : hr,
 		dataJson : dt,
 		observacao : $('#apontamento-obs').val(),
+		idFuncionario : $('#apontamento-funcionario').val(),
 		tpJustificativa : {
 			id : $('#apontamento-jus').val()
 		}
 	};
-	if($('#apontamento-funcionario').val())
-		apontamento['pis'] = $('#apontamento-funcionario').val();
-	if($('#idApontamento').val())
-		apontamento['id'] = $('#idApontamento').val();
 	
 	$.ajax({
 		url: 'gerenciar-apontamento/apontar',
@@ -126,7 +124,7 @@ function modalEditarApontamento(id){
 		type : 'GET',
 		contentType : 'application/json',
 		data: {'id' :id},
-		cache: false,
+		cache: true,
 		success: function(data){
 			$('#btn-cancelar-apontamento').text('Remover');
 			$('#btn-cancelar-apontamento').attr('onclick',"confirmarRemover()");
