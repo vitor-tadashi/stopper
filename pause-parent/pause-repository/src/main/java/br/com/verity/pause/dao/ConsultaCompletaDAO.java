@@ -101,12 +101,17 @@ public class ConsultaCompletaDAO {
 				}
 				entities.add(entity);
 			}
+			sql = "DROP TABLE ##Apontamento";
+			ps = conn.prepareStatement(sql);
+			ps.execute();
+			
 			ps.close();
 			rs.close();
 			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
 		return entities;
 	}
 }

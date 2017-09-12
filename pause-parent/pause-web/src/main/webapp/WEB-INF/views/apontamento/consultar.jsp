@@ -34,21 +34,23 @@
 				<div class="panel-body">
 					<form>
 						<div class="row">
-							<div class="col-sm-4">
+							<div class="col-sm-3">
 								<div class="form-group">
-									<label class="control-label">Nome do funcionário</label> <select
-										class="selectpicker" data-live-search="true" data-width="100%"
-										id="#">
+									<label class="control-label">Nome do funcionário</label>
+									<select class="selectpicker" data-live-search="true" data-width="100%" id="idFunc">
 										<option value="">Selecione</option>
+										<c:forEach items="${funcionarios}" var="funcionario">
+											<option value="${funcionario.id}">${funcionario.nome}</option>
+										</c:forEach>
 									</select>
 								</div>
 							</div>
-							<div class="col-sm-4">
+							<div class="col-sm-5">
 								<label class="control-label">Período</label>
 								<div class="input-daterange input-group" id="datepicker">
-									<input type="text" pattern="\d{1,2}/\d{1,2}/\d{4}" class="form-control data" name="start" placeholder="dd/mm/yyyy" />
+									<input type="date"class="form-control" name="start" />
 									<span class="input-group-addon">até</span>
-									<input type="text" pattern="\d{1,2}/\d{1,2}/\d{4}" class="form-control data" name="end" placeholder="dd/mm/yyyy" />
+									<input type="date" class="form-control" name="end"/>
 								</div>
 							</div>
 							<div class="col-sm-1" style="margin-top: 23px;">
@@ -65,8 +67,7 @@
 								<tr>
 									<th class="text-center">Funcionário</th>
 									<th class="text-center">Total de horas</th>
-									<th class="text-center">Positivas</th>
-									<th class="text-center">Negativas</th>
+									<th class="text-center">Banco de horas</th>
 									<th class="text-center">Adicional noturno</th>
 									<th class="text-center">Horas SA</th>
 									<th class="text-center">Horas ST</th>
@@ -77,43 +78,6 @@
 									<td>Steve N. Horton</td>
 									<td>9,00</td>
 									<td>1,00</td>
-									<td>0</td>
-									<td>0</td>
-									<td>0</td>
-									<td>0</td>
-								</tr>
-								<tr>
-									<td>Steve N. Horton</td>
-									<td>9,00</td>
-									<td>1,00</td>
-									<td>0</td>
-									<td>0</td>
-									<td>0</td>
-									<td>0</td>
-								</tr>
-								<tr>
-									<td>Igor N. Horton</td>
-									<td>9,00</td>
-									<td>1,00</td>
-									<td>0</td>
-									<td>0</td>
-									<td>0</td>
-									<td>0</td>
-								</tr>
-								<tr>
-									<td>Steve N. Horton</td>
-									<td>9,00</td>
-									<td>1,00</td>
-									<td>0</td>
-									<td>0</td>
-									<td>0</td>
-									<td>0</td>
-								</tr>
-								<tr>
-									<td>Steve N. Horton</td>
-									<td>9,00</td>
-									<td>1,00</td>
-									<td>0</td>
 									<td>0</td>
 									<td>0</td>
 									<td>0</td>

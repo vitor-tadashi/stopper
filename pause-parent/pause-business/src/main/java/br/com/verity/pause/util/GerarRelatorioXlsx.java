@@ -12,17 +12,15 @@ import java.util.List;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.verity.pause.bean.ConsultaCompletaBean;
 import br.com.verity.pause.bean.FuncionarioBean;
+import br.com.verity.pause.enumeration.DiaSemanaEnum;
+import br.com.verity.pause.enumeration.MesEnum;
 
 @Component
 public class GerarRelatorioXlsx {
-
-	@Autowired
-	private VerificarData verificarData;
 
 	/**
 	 * @author guilherme.oliveira XSSF gera um arquivo .xlsx e HSSF gera um
@@ -54,7 +52,7 @@ public class GerarRelatorioXlsx {
 			XSSFRow row = sheet.createRow(linha);
 			sheet.setColumnWidth(0, 11 * 256);
 			sheet.setColumnWidth(1, 7 * 256);
-			sheet.setColumnWidth(2, 4 * 256);
+			sheet.setColumnWidth(2, 5 * 256);
 			sheet.setColumnWidth(3, 9 * 256);
 			sheet.setColumnWidth(4, 3 * 256);
 			sheet.setColumnWidth(5, 9 * 256);
@@ -71,8 +69,8 @@ public class GerarRelatorioXlsx {
 			sheet.setColumnWidth(16, 3 * 256);
 			sheet.setColumnWidth(17, 9 * 256);
 			sheet.setColumnWidth(18, 3 * 256);
-			row.createCell(0).setCellValue("Verity");
-			row.createCell(2).setCellValue("Extrato Horas - Banco de Horas");
+			row.createCell(0).setCellValue(funcionario.getEmpresa().getNomeFantasia());
+			row.createCell(4).setCellValue("Extrato Horas - Banco de Horas");
 			linha++;
 
 			row = sheet.createRow(linha);
@@ -135,7 +133,7 @@ public class GerarRelatorioXlsx {
 				}
 				String dtApontamento = formatDt.format(consulta.getData());
 				row.createCell(0).setCellValue(dtApontamento);
-				row.createCell(1).setCellValue(verificarData.qualDiaSimples(consulta.getData().getDay()));
+				row.createCell(1).setCellValue(DiaSemanaEnum.valueOf(consulta.getData().getDay()).getDiaSimples());
 				row.createCell(2).setCellValue(
 						(consulta.getSobreAvisoId() != null && consulta.getSobreAvisoId() != 0) ? "S" : "");
 				if (consulta.getApontamentoHorario() != null) {
@@ -190,12 +188,12 @@ public class GerarRelatorioXlsx {
 
 			row = sheet.createRow(linha);
 			row.createCell(0)
-					.setCellValue(verificarData.qualSemestre((consultaCompleta.get(0).getControleMensalMes() != null)
-							? consultaCompleta.get(0).getControleMensalMes() : Integer.parseInt(de.substring(3, 5))));
+					.setCellValue(MesEnum.valueOf(((consultaCompleta.get(0).getControleMensalMes() != null)
+							? consultaCompleta.get(0).getControleMensalMes() : Integer.parseInt(de.substring(3, 5)))).getSemestre());
 			row.createCell(1).setCellValue((consultaCompleta.get(0).getControleMensalAno() != null)
 					? consultaCompleta.get(0).getControleMensalAno() : Integer.parseInt(de.substring(6, 10)));
-			row.createCell(2).setCellValue((consultaCompleta.get(0).getControleMensalMes() != null)
-					? consultaCompleta.get(0).getControleMensalMes() : Integer.parseInt(de.substring(3, 5)));
+			row.createCell(2).setCellValue(MesEnum.valueOf((consultaCompleta.get(0).getControleMensalMes() != null)
+					? consultaCompleta.get(0).getControleMensalMes() : Integer.parseInt(de.substring(3, 5))).getMes());
 			if (consultaCompleta.get(0).getControleMensalHoraTotal() != null) {
 				row.createCell(3).setCellValue(consultaCompleta.get(0).getControleMensalBancoHora());
 				row.createCell(4).setCellValue(consultaCompleta.get(0).getControleMensalHoraTotal()

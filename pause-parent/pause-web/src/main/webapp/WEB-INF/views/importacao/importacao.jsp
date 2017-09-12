@@ -83,14 +83,12 @@
                     </div>
                     <div class="modal-body">
                         <div class="text-center">
-                            <span>Arquivo para está data já foi importado, se você continuar irá substituir o mesmo!</span>
+                            <span>Este arquivo já foi importado. Deseja substituí-lo?</span>
                             <br><br>
-                            <span>Deseja continuar?</span>
                         </div>
                         <div class="text-right">
-                        <br><br>
-                            <button onClick="exibirImportacao(true)" type="button" class="btn btn-primary">Sim</button>
                             <button onClick="cancelar()" class="btn btn-danger" type="button">Não</button>
+                            <button onClick="exibirImportacao(true)" type="button" class="btn btn-success">Sim</button>
                         </div>
                     </div>
                 </div>

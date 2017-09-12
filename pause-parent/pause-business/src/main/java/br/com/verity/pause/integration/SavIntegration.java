@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 
 import br.com.verity.pause.bean.EmpresaBean;
+import br.com.verity.pause.bean.FeriadoBean;
 import br.com.verity.pause.bean.FuncionarioBean;
 import br.com.verity.pause.bean.FuncionarioIntegrationBean;
 import br.com.verity.pause.bean.UsuarioBean;
@@ -163,5 +164,19 @@ public class SavIntegration {
 			e.printStackTrace();
 		}
 		return empresas;
+	}
+	
+	public List<FeriadoBean> listFeriados() {
+		List<FeriadoBean> feriados = new ArrayList<FeriadoBean>();
+		ObjectMapper mapper = new ObjectMapper();
+		// Properties props = this.getProp();
+		String endereco = "http://localhost:9090/sav/listFeriados";
+		try {
+			URL url = new URL(endereco);
+			feriados = mapper.readValue(url,  new TypeReference<ArrayList<FeriadoBean>>(){});
+		} catch (IOException e ) {
+			e.printStackTrace();
+		}
+		return feriados;
 	}
 }

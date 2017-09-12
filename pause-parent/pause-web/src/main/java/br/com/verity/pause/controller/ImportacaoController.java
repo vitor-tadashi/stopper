@@ -75,14 +75,9 @@ public class ImportacaoController {
 					usuarioLogado.getIdEmpresaSessao());
 			arquivoApontamento.setData(
 					funcionariosImportacao.get(funcionariosImportacao.size() - 1).getApontamentos().get(0).getData());
-		} catch (BusinessException e) {
+		} catch (BusinessException | ParseException | IOException e) {
 			this.cancelar(caminho, model);
 			funcionario.setMensagem(e.getMessage());
-			funcionariosImportacao.add(funcionario);
-			return funcionariosImportacao;
-		} catch (ParseException | IOException e) {
-			this.cancelar(caminho, model);
-			funcionario.setMensagem("Não foi possível abrir o arquivo.");
 			funcionariosImportacao.add(funcionario);
 			return funcionariosImportacao;
 		}
