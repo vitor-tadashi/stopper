@@ -33,9 +33,13 @@ public class ConsultaCompletaEntity {
 	private Double cdSA;
 	private Double cdST;
 	private Date apData;
+	private Integer apIdApontamento;
 	private LocalTime apHorario;
 	private Boolean apTpImportacao;
 	private String apObs;
+	private Integer apIdTpJustificativa;
+	private Double atQtdHora;
+	private Integer sbId;
 
 	public Date getData() {
 		return data;
@@ -165,6 +169,14 @@ public class ConsultaCompletaEntity {
 		this.apData = apData;
 	}
 
+	public Integer getApIdApontamento() {
+		return apIdApontamento;
+	}
+
+	public void setApIdApontamento(Integer apIdApontamento) {
+		this.apIdApontamento = apIdApontamento;
+	}
+
 	public LocalTime getApHorario() {
 		return apHorario;
 	}
@@ -172,9 +184,9 @@ public class ConsultaCompletaEntity {
 	public void setApHorario(LocalTime apHorario) {
 		this.apHorario = apHorario;
 	}
-	
+
 	public void setApHorario(Time apHorario) {
-		this.apHorario = apHorario.toLocalTime();
+		this.apHorario = apHorario!=null? apHorario.toLocalTime() : null;
 	}
 
 	public Boolean getApTpImportacao() {
@@ -191,6 +203,30 @@ public class ConsultaCompletaEntity {
 
 	public void setApObs(String apObs) {
 		this.apObs = apObs;
+	}
+
+	public Double getAtQtdHora() {
+		return atQtdHora;
+	}
+
+	public void setAtQtdHora(Double atQtdHora) {
+		this.atQtdHora = atQtdHora;
+	}
+
+	public Integer getApIdTpJustificativa() {
+		return apIdTpJustificativa;
+	}
+
+	public void setApIdTpJustificativa(Integer apIdTpJustificativa) {
+		this.apIdTpJustificativa = apIdTpJustificativa;
+	}
+
+	public Integer getSbId() {
+		return sbId;
+	}
+
+	public void setSbId(Integer sbId) {
+		this.sbId = sbId;
 	}
 
 }

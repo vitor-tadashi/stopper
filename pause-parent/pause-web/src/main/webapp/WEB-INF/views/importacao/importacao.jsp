@@ -87,10 +87,10 @@
                             <br><br>
                             <span>Deseja continuar?</span>
                         </div>
-                        <div class="text-center">
+                        <div class="text-right">
                         <br><br>
-                            <button onClick="exibirImportacao(true)" type="button" class="btn btn-danger">Sim</button>
-                            <button onClick="cancelar()" class="btn btn-primary" type="button">Não</button>
+                            <button onClick="exibirImportacao(true)" type="button" class="btn btn-primary">Sim</button>
+                            <button onClick="cancelar()" class="btn btn-danger" type="button">Não</button>
                         </div>
                     </div>
                 </div>

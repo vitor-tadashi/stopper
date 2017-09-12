@@ -19,7 +19,6 @@
     <link href='<c:url value="/css/nifty.min.css"/>' rel="stylesheet">
     <link href='<c:url value="/css/themes/type-a/theme-light.min.css"/>' rel="stylesheet">
     <link href='<c:url value="/premium/icon-sets/icons/line-icons/premium-line-icons.min.css"/>' rel="stylesheet">
-    <%-- <link href='<c:url value="/plugins/themify-icons/themify-icons.min.css"/>' rel="stylesheet"> --%>
     <link href='<c:url value="/plugins/font-awesome/css/font-awesome.min.css"/>' rel="stylesheet">
     <link href='<c:url value="css/custom/custom.css"/>' rel="stylesheet">
 	<!-- css serão carregados aqui -->
@@ -62,6 +61,9 @@
                     <ul class="nav navbar-top-links pull-right">
                         <!--User-->
                         <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+                        <li>
+                            <div class="username text-right"><a href="/pause/selecionaMultiEmpresa">Trocar empresa</a></div>
+                        </li>
                         <li>
                             <div class="username text-right">${user.funcionario.nome }</div>
                         </li>
@@ -127,7 +129,7 @@
                                 	<!--Category name-->
 						            <li class="list-header">Operações</li>
 									<li>
-                                		<a href="#">
+                                		<a href='<c:url value="/gerenciar-apontamento"/>'>
                                             <i class="pli-data-clock"></i>
                                             <span class="menu-title">
                                             	Gerenciar horas
@@ -136,7 +138,7 @@
                                         </a>
 						            </li>
 						            <li>
-                                		<a href="#">
+                                		<a href='<c:url value="/consultar-apontamento"/>'>
                                             <i class="pli-magnifi-glass"></i>
                                             <span class="menu-title">
                                             	Consultar banco

@@ -26,7 +26,7 @@
 		</ol>
 		<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 		<!--End breadcrumb-->
-		
+		<input type="hidden" id="apontamento-funcionario" value="" >
 		<!--Page content-->
 		<!--===================================================-->
 		<div id="page-content">
@@ -34,29 +34,30 @@
 				<!--Data Table-->
 				<!--===================================================-->
 				<div class="panel-body">
-					<form action="">
+					<c:url value="/gerenciar-apontamento" var="url"/>
+					<form action="${url }" method="get" id="bv-form">
 						<div class="row">
 							<div class="col-sm-4">
 								<div class="form-group">
 									<label class="control-label">Nome do funcionário</label>
-									<select class="selectpicker" data-live-search="true" data-width="100%" id="apontamento-funcionario">
+									<select class="selectpicker" data-live-search="true" data-width="100%" id="select-funcionario" name="pis">
 										<option value="">Selecione</option>
 										<c:forEach items="${funcionarios }" var="funcionario">
-											<option value="${funcionario.pis }">${funcionario.nome }</option>
+											<option value="${funcionario.pis }" ${funcionario.pis eq pis? 'selected="true"' : ''}>${funcionario.nome }</option>
 										</c:forEach>
 									</select>
 								</div>
 							</div>
-							<div class="col-sm-4">
+							<div class="col-sm-5">
 								<label class="control-label">Período</label>
 								<div class="input-daterange input-group" id="datepicker">
-									<input type="text" pattern="\d{1,2}/\d{1,2}/\d{4}" class="form-control data" name="start" placeholder="dd/mm/yyyy"/>
+									<input type="date" id="periodoDe" class="form-control periodo" name="periodo" placeholder="dd/mm/aaaa" value="${periodo[0] }" min="2010-03-01" max=""/>
 									<span class="input-group-addon">até</span>
-									<input type="text" pattern="\d{1,2}/\d{1,2}/\d{4}" class="form-control data" name="end" placeholder="dd/mm/yyyy"/>
+									<input type="date" id="periodoAte" class="form-control periodo" name="periodo" placeholder="dd/mm/aaaa" value="${periodo[1] }" min="2010-03-01" max=""/>
 								</div>
 							</div>
 							<div class="col-sm-1" style="margin-top: 24px;">
-								<button class="btn btn-info" type="button">Filtrar</button>
+								<button class="btn btn-info" type="submit">Filtrar</button>
 							</div>
 						</div>
 					</form>
@@ -95,132 +96,35 @@
 								</tr>
 							</thead>
 							<tbody class="text-center">
-								<tr>
-									<input type="hidden" id="infoDia" value="01/08/2017, terça-feira"/>
-									<td>01/08/2017</td>
-									<td class="text-left">Terça-feira</td>
-									<td id="apontamento01" class="text-muted pli-clock">09:00E</td>
-									<td id="apontamento02" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">12:00</td>
-									<td id="apontamento03" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">13:00</td>
-									<td id="apontamento04" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">19:51</td>
-									<td id="apontamento05" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento06" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento07" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento08" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="#">0</td>
-									<td id="total-hora01">0</td>
-									<td id="#">0</td>
-									<td id="#">0</td>
-									<td id="#">0</td>
-								</tr>
-								<tr>
-									<input type="hidden" id="infoDia" value="02/08/2017, quarta-feira"/>
-									<td>02/08/2017</td>
-									<td class="text-left">Quarta-feira</td>
-									<td id="apontamento09" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">07:00</td>
-									<td id="apontamento10" class="text-muted pli-clock">12:00E</td>
-									<td id="apontamento11" class="text-muted pli-clock">13:40E</td>
-									<td id="apontamento12" class="text-muted pli-clock">18:17E</td>
-									<td id="apontamento13" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento14" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento15" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento16" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="#">0</td>
-									<td id="total-hora02">0</td>
-									<td id="#">0</td>
-									<td id="#">0</td>
-									<td id="#">0</td>
-								</tr>
-								<tr>
-									<input type="hidden" id="infoDia" value="03/08/2017, quinta-feira"/>
-									<td>03/08/2017</td>
-									<td class="text-left">Quinta-feira</td>
-									<td id="apontamento17" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">09:22</td>
-									<td id="apontamento18" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">12:10</td>
-									<td id="apontamento19" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">13:36</td>
-									<td id="apontamento20" class="text-muted pli-clock">19:07E</td>
-									<td id="apontamento21" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento22" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento23" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento24" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="#">0</td>
-									<td id="total-hora03">0</td>
-									<td id="#">0</td>
-									<td id="#">0</td>
-									<td id="#">0</td>
-								</tr>
-								<tr>
-									<input type="hidden" id="infoDia" value="04/08/2017, sexta-feira"/>
-									<td>04/08/2017</td>
-									<td class="text-left">Sexta-feira</td>
-									<td id="apontamento25" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">08:50</td>
-									<td id="apontamento26" class="text-muted pli-clock">11:58E</td>
-									<td id="apontamento27" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">13:31</td>
-									<td id="apontamento28" class="text-muted pli-clock">18:16E</td>
-									<td id="apontamento29" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento30" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento31" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento32" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="#">0</td>
-									<td id="total-hora04">0</td>
-									<td id="#">0</td>
-									<td id="#">0</td>
-									<td id="#">0</td>
-								</tr>
-								<tr>
-									<input type="hidden" id="infoDia" value="05/08/2017, sábado"/>
-									<td>05/08/2017</td>
-									<td class="text-left">Sábado</td>
-									<td id="apontamento33" class="text-muted pli-clock">09:21E</td>
-									<td id="apontamento34" class="text-muted pli-clock">12:10E</td>
-									<td id="apontamento36" class="text-muted pli-clock">18:03E</td>
-									<td id="apontamento37" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento37" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento38" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento39" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento40" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="#">0</td>
-									<td id="total-hora05">0</td>
-									<td id="#">0</td>
-									<td id="#">0</td>
-									<td id="#">0</td>
-								</tr>
-								<tr>
-									<input type="hidden" id="infoDia" value="06/08/2017, domingo"/>
-									<td>06/08/2017</td>
-									<td class="text-left">Domingo</td>
-									<td id="apontamento41" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">09:10</td>
-									<td id="apontamento42" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">12:00</td>
-									<td id="apontamento43" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">13:00</td>
-									<td id="apontamento44" class="text-muted pli-clock">18:00E</td>
-									<td id="apontamento45" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento46" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento47" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento48" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="#">0</td>
-									<td id="total-hora06">0</td>
-									<td id="#">0</td>
-									<td id="#">0</td>
-									<td id="#">0</td>
-								</tr>
-								<tr>
-									<input type="hidden" id="infoDia" value="07/08/2017, segunda-feira"/>
-									<td>07/08/2017</td>
-									<td class="text-left">Segunda-feira</td>
-									<td id="apontamento49" class="text-muted pli-clock">09:00E</td>
-									<td id="apontamento50" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">12:00</td>
-									<td id="apontamento27" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">13:31</td>
-									<td id="apontamento53" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento54" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento55" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento56" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="apontamento56" style="cursor:pointer;" onclick="dialogApontamentoHora(this);">--:--</td>
-									<td id="#">0</td>
-									<td id="total-hora07">0</td>
-									<td id="#">0</td>
-									<td id="#">0</td>
-									<td id="#">0</td>
-								</tr>
+								<c:forEach items="${dias }" var="dia" varStatus="i">
+									<tr>
+										<fmt:formatDate value="${dia.data }" pattern="dd/MM/yyyy" var="data"/>
+									
+										<input type="hidden" id="infoDia" value="${data }, ${dia.diaDaSemana}"/>
+										<td>${data }</td>
+										<td class="text-left">${dia.diaDaSemana }</td>
+										<c:forEach begin="0" end="7" varStatus="cont">
+											<c:if test="${not empty dia.apontamentos[cont.index] && not empty dia.apontamentos[cont.index].horario}">
+												<c:choose>
+													<c:when test="${dia.apontamentos[cont.index].tipoImportacao || dia.mesFechado}">
+														<td id="apontamento${cont.count + 8 * (i.count - 1)}" class="text-muted pli-clock">${dia.apontamentos[cont.index].horario }${dia.apontamentos[cont.index].tipoImportacao? 'E':''}</td>
+													</c:when>
+													<c:otherwise>
+														<td id="apontamento${cont.count + 8 * (i.count - 1)}" style="cursor:pointer;" onclick="dialogApontamentoHora(this, ${dia.apontamentos[cont.index].id });">${dia.apontamentos[cont.index].horario }</td>
+													</c:otherwise>
+												</c:choose>
+											</c:if>
+											<c:if test="${empty dia.apontamentos[cont.index] || empty dia.apontamentos[cont.index].horario}">
+												<td id="apontamento${cont.count + 8 * (i.count - 1)}" ${!dia.mesFechado? 'style="cursor:pointer;" onclick="dialogApontamentoHora(this);"':''}>--:--</td>
+											</c:if>
+										</c:forEach>
+										<td id="#">${dia.qtdAtestadoHoras }</td>
+										<td id="total-hora${i.count }">${dia.horaTotal }</td>
+										<td id="#">${dia.bancoHora }</td>
+										<td id="#">${dia.adicNoturno }</td>
+										<td id="#">${dia.sobreAviso }</td>
+									</tr>
+								</c:forEach>
 							</tbody>
 						</table>
 					</div>
@@ -250,6 +154,7 @@
 						<p class="text-semibold text-main">Informe o horário:</p>
 						<form action="" id="form-time" class="clear-form">
 							<input type="hidden" id="apontamento-id" />
+							<input type="hidden" id="idApontamento" />
 							<!--Bootstrap Timepicker : Component-->
 							<!--===================================================-->
 							<div class="input-group date">
@@ -275,7 +180,7 @@
 		
 					<!--Modal footer-->
 					<div class="modal-footer">
-						<button data-dismiss="modal" class="btn btn-default" type="button">Cancelar</button>
+						<button data-dismiss="modal" class="btn btn-danger" type="button" onclick="confirmarRemover()" id="btn-cancelar-apontamento">Cancelar</button>
 						<button class="btn btn-primary" onclick="informarHorario();">Salvar</button>
 					</div>
 				</div>
@@ -468,16 +373,93 @@
 			</div>
 		</div>
 		<!--===================================================-->
-		<!--End atestado Modal-->	
+		<!--End atestado Modal-->
+		
+	<!--erro Modal-->
+    <!--===================================================-->
+    <div id="erro-sm-modal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
+                    <h4 class="modal-title text-center">Atenção!</h4>
+                </div>
+                <div class="content">
+                    <h4 class="text-center" id="erro-label"></h4>
+                </div>
+                <div class="modal-footer">
+                    <div class="pull-right">
+						<button data-dismiss="modal" class="btn btn-primary" type="button">OK</button>
+					</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--===================================================-->
+    <!--remover Modal-->
+    <!--===================================================-->
+    <div id="remover-sm-modal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
+                    <h4 class="modal-title text-center">Atenção!</h4>
+                </div>
+                <div class="content">
+                    <h4 class="text-center">Deseja remover este apontamento?</h4>
+                </div>
+                <div class="modal-footer">
+                    <div class="pull-right">
+						<button data-dismiss="modal" class="btn btn-danger" type="button">Não</button>
+						<button class="btn btn-success" type="button" id="btn-remover-apontamento" onclick="removerApontamento()">Sim</button>
+					</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--===================================================-->	
 	
 		<script src='<c:url value="plugins/bootstrap-timepicker/bootstrap-timepicker.min.js"/>'></script>
-		<script src='<c:url value="plugins/masked-input/jquery.mask.js"/>'></script>
 		<script src='<c:url value="plugins/datatables/media/js/jquery.dataTables.js"/>'></script>
 		<script src='<c:url value="plugins/datatables/media/js/dataTables.bootstrap.js"/>'></script>
 		<script src='<c:url value="js/custom/datatable-custom.js"/>'></script>
-		<script src='<c:url value="js/custom/masks.js"/>'></script>
+		<script src='<c:url value="/plugins/bootstrap-validator/bootstrapValidator.min.js"/>'></script>
+		<script src='<c:url value="/js/custom/bootstrap-validator-data-periodo.js"/>'></script>
+		<script src='<c:url value="/plugins/masked-input/jquery.mask.js"/>'></script>
 		<script src='<c:url value="/js/custom/send-ajax.js"/>'></script>
 		<script src='<c:url value="js/custom/gerenciar-apontamentos-modais.js"/>'></script>
 		<script src='<c:url value="js/custom/gerenciar-apontamentos-core.js"/>'></script>
+		<script>
+		$(document).ready(function() {
+			$('.periodo').prop('max',function(){
+		        return new Date().toJSON().split('T')[0];
+		    });
+			
+			$('#bv-form').bootstrapValidator({
+				excluded : [ ':disabled' ],
+				fields : {
+					periodo : {
+						validators : {
+							range : {
+								message : 'A segunda data deve ser superior ou igual à primeira.'
+							},
+							date: {
+								min: $("#periodoAte").prop('min'),
+								max: $("#periodoAte").prop('max'),
+								message:'Data inválida.'
+							}
+						}
+					},
+					pis : {
+						validators : {
+							notEmpty : {
+								message : 'O campo é obrigatório.'
+							}
+						}
+					}
+				}
+			});
+		});
+		</script>
 	</layout:put>
 </layout:extends>

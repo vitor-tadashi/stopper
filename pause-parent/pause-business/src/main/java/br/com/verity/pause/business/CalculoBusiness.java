@@ -18,6 +18,11 @@ import br.com.verity.pause.entity.ApontamentoPivotEntity;
 import br.com.verity.pause.entity.AtestadoEntity;
 import br.com.verity.pause.entity.SobreAvisoEntity;
 
+/**
+ * Classe que possui todos os cálculos relacionados ao controle de horas
+ * @author vitor.tadashi
+ *
+ */
 @Service
 public class CalculoBusiness {
 

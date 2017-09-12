@@ -49,7 +49,7 @@ public class SavIntegration {
 		// Properties props = this.getProp();
 		String endereco = "http://localhost:9090/sav/getUsuarioSistema/";
 		try {
-			URL url = new URL(endereco + user + "/SAV");
+			URL url = new URL(endereco + user + "/PAUSE");
 			usuario = mapper.readValue(url, UsuarioBean.class);
 		} catch (IOException e ) {
 			e.printStackTrace();
@@ -106,7 +106,7 @@ public class SavIntegration {
 		FuncionarioIntegrationBean funcionario = new FuncionarioIntegrationBean();
 		ObjectMapper mapper = new ObjectMapper();
 		// Properties props = this.getProp();
-		String endereco = "http://192.168.3.17:9090/sav/getFuncionario/"+idFuncionario;
+		String endereco = "http://localhost:9090/sav/getFuncionario/"+idFuncionario;
 		try {
 			URL url = new URL(endereco);
 			funcionario = mapper.readValue(url,  new TypeReference<FuncionarioIntegrationBean>(){});
@@ -121,7 +121,7 @@ public class SavIntegration {
 		EmpresaBean empresa = new EmpresaBean();
 		ObjectMapper mapper = new ObjectMapper();
 		// Properties props = this.getProp();
-		String endereco = "http://192.168.3.17:9090/sav/getEmpresa/"+idEmpresa;
+		String endereco = "http://localhost:9090/sav/getEmpresa/"+idEmpresa;
 		try {
 			URL url = new URL(endereco);
 			empresa = mapper.readValue(url,  new TypeReference<EmpresaBean>(){});
@@ -147,5 +147,19 @@ public class SavIntegration {
 		funcionarioBean.setEmpresa(funcionario.getEmpresa());
 		
 		return funcionarioBean;
+	}
+
+	public List<EmpresaBean> getEmpresas() {
+		List<EmpresaBean> empresas = new ArrayList<EmpresaBean>();
+		ObjectMapper mapper = new ObjectMapper();
+		// Properties props = this.getProp();
+		String endereco = "http://localhost:9090/sav/listEmpresasGrupoVerity";
+		try {
+			URL url = new URL(endereco);
+			empresas = mapper.readValue(url,  new TypeReference<ArrayList<EmpresaBean>>(){});
+		} catch (IOException e ) {
+			e.printStackTrace();
+		}
+		return empresas;
 	}
 }

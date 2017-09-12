@@ -39,7 +39,7 @@ public class SobreAvisoBusiness {
 		
 		SobreAvisoEntity entity = sobreAvisoConverter.convertBeanToEntity(sobreAviso);
 		
-		ControleDiarioBean controleDiario = controleDiarioBusiness.obterPorData(sobreAviso.getData());
+		ControleDiarioBean controleDiario = controleDiarioBusiness.obterPorDataIdFuncionario(sobreAviso.getData(), usuarioLogado.getFuncionario().getId());
 		entity.setControleDiario(controleDiarioConverter.convertBeanToEntity(controleDiario));
 		
 		sobreAvisoDAO.save(entity);

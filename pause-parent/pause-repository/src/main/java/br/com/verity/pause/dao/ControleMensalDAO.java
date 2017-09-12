@@ -13,32 +13,25 @@ import br.com.verity.pause.entity.ControleDiarioEntity;
 import br.com.verity.pause.entity.ControleMensalEntity;
 
 @Repository
-public class ControleDiarioDAO {
-
-	public ControleDiarioEntity findByDataIdFuncionario(Date data, int idFuncionario) {
-		String sql = "SELECT * FROM PAUSEControleDiario WHERE data = ? AND idFuncionario = ?";
+public class ControleMensalDAO {
+	public ControleMensalEntity findByMesAnoIdFuncionario(int mes, int ano, int idFuncionario) {
+		String sql = "SELECT * FROM PAUSEControleMensal WHERE mes = ? AND ano = ? AND idFuncionario = ?";
 
 		Connection conn;
-		ControleDiarioEntity entity = null;
+		ControleMensalEntity entity = null;
 		try {
 			conn = ConnectionFactory.createConnection();
 
 			PreparedStatement ps = conn.prepareStatement(sql);
-			ps.setDate(1, data);
-			ps.setInt(2, idFuncionario);
+			ps.setInt(1, mes);
+			ps.setInt(2, ano);
+			ps.setInt(3, idFuncionario);
 			
 			ResultSet rs = ps.executeQuery();
 			
 			if(rs.next()) {
-				entity = new ControleDiarioEntity();
+				entity = new ControleMensalEntity();
 				entity.setId(rs.getInt(1));
-				entity.setData(rs.getDate(7));
-				
-				ControleMensalEntity controleMensal = new ControleMensalEntity();
-				controleMensal.setId(rs.getInt(8));
-				
-				entity.setControleMensal(controleMensal);
-				entity.setIdFuncionario(rs.getInt(9));
 				
 			}
 		} catch (SQLException e) {
@@ -47,16 +40,16 @@ public class ControleDiarioDAO {
 		return entity;
 	}
 
-	public void save(ControleDiarioEntity entity) {
-		String sql = "INSERT INTO PAUSEControleDiario (data, idControleMensal ,idFuncionario) VALUES (?, ?, ?)";
+	public void save(ControleMensalEntity entity) {
+		String sql = "INSERT INTO PAUSEControleMensal (mes, ano, idFuncionario) VALUES (?,?,?)";
 
 		Connection conn;
 		try {
 			conn = ConnectionFactory.createConnection();
 
 			PreparedStatement ps = conn.prepareStatement(sql);
-			ps.setDate(1, entity.getData());
-			ps.setInt(2, entity.getControleMensal().getId());
+			ps.setInt(1, entity.getMes());
+			ps.setInt(2, entity.getAno());
 			ps.setInt(3, entity.getIdFuncionario());
 			
 			ps.execute();
@@ -66,5 +59,4 @@ public class ControleDiarioDAO {
 			e.printStackTrace();
 		}
 	}
-
 }

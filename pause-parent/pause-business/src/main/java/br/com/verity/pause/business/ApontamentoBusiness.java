@@ -1,6 +1,5 @@
 package br.com.verity.pause.business;
 
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,6 +21,7 @@ import br.com.verity.pause.converter.JustificativaConverter;
 import br.com.verity.pause.dao.ApontamentoDAO;
 import br.com.verity.pause.dao.ConsultaCompletaDAO;
 import br.com.verity.pause.entity.ApontamentoEntity;
+import br.com.verity.pause.exception.BusinessException;
 import br.com.verity.pause.integration.SavIntegration;
 
 @Service
@@ -29,58 +29,77 @@ public class ApontamentoBusiness {
 
 	@Autowired
 	private ApontamentoDAO apontamentoDAO;
-	
+
 	@Autowired
 	private ApontamentoConverter apontamentoConverter;
-	
+
 	@Autowired
 	private ConsultaCompletaConverter consultaCompletaConverter;
-	
+
 	@Autowired
 	private ConsultaCompletaDAO consultaCompletaDAO;
-	
+
 	@Autowired
 	private CustomUserDetailsBusiness userBusiness;
-	
+
 	@Autowired
 	private SavIntegration sav;
-	
+
 	@Autowired
 	private JustificativaConverter justificativaConverter;
-	
+
 	@Autowired
 	private ControleDiarioBusiness controleDiarioBusiness;
-	
+
 	@Autowired
 	private ControleDiarioConverter controleDiarioConverter;
-	
-	public void apontar(ApontamentoBean apontamento) {
+
+	@Autowired
+	private ControleMensalBusiness controleMensalBusiness;
+
+	public ApontamentoBean apontar(ApontamentoBean apontamento) throws BusinessException {
+
+		if (controleMensalBusiness.verificarMesFechado(apontamento.getData())) {
+			throw new BusinessException("Não foi possível realizar a ação, pois o mês está fechado.");
+		}
 		UsuarioBean usuarioLogado = userBusiness.usuarioLogado();
-		
+		Integer idFuncionario;
+
+		if (apontamento.getPis() == null || apontamento.getPis().isEmpty()) {
+			apontamento.setPis(usuarioLogado.getFuncionario().getPis());
+			apontamento.setIdEmpresa(usuarioLogado.getFuncionario().getEmpresa().getId());
+			idFuncionario = usuarioLogado.getFuncionario().getId();
+		} else {
+			FuncionarioBean funcionario = sav.getFuncionarioPorPis(apontamento.getPis());
+
+			apontamento.setIdEmpresa(funcionario.getEmpresa().getId());
+			idFuncionario = funcionario.getId();
+		}
 		apontamento.setDataInclusao(new Date());
 		apontamento.setIdUsuarioInclusao(usuarioLogado.getId());
 		apontamento.setTipoImportacao(false);
-		
-		if(apontamento.getPis() == null){
-			apontamento.setPis(usuarioLogado.getFuncionario().getPis());
-			apontamento.setIdEmpresa(usuarioLogado.getFuncionario().getEmpresa().getId());
-		}else{
-			FuncionarioBean funcionario = sav.getFuncionarioPorPis(apontamento.getPis());
-			
-			apontamento.setIdEmpresa(funcionario.getEmpresa().getId());
-		}
-		
+
 		ApontamentoEntity entity = apontamentoConverter.convertBeanToEntity(apontamento);
 		entity.setTipoJustificativa(justificativaConverter.convertBeanToEntity(apontamento.getTpJustificativa()));
-		
-		ControleDiarioBean controleDiario = controleDiarioBusiness.obterPorData(apontamento.getData());
+
+		ControleDiarioBean controleDiario = controleDiarioBusiness.obterPorDataIdFuncionario(apontamento.getData(),
+				idFuncionario);
 		entity.setControleDiario(controleDiarioConverter.convertBeanToEntity(controleDiario));
-		
-		apontamentoDAO.save(entity);
+
+		if (apontamento.getId() == null || apontamento.getId().equals(0)) {
+			apontamento.setId(apontamentoDAO.save(entity).getId());
+			return apontamento;
+		} else {
+			ApontamentoEntity apontamentoAtual = apontamentoDAO.findById(apontamento.getId());
+			if(apontamentoAtual.getTipoImportacao()) {
+				throw new BusinessException("Não foi possível realizar a ação, pois o apontamento é eletrônico.");
+			}
+			apontamentoDAO.update(entity);
+		}
+		return apontamento;
 	}
-	
-	public List<ConsultaCompletaBean> obterApontamentosPeriodoPorIdFuncionario(Integer id, String de,
-			String ate) {
+
+	public List<ConsultaCompletaBean> obterApontamentosPeriodoPorIdFuncionario(Integer id, String de, String ate) {
 		List<ConsultaCompletaBean> consultaCompleta = new ArrayList<ConsultaCompletaBean>();
 		SimpleDateFormat formataData = new SimpleDateFormat("dd-MM-yyyy");
 		java.sql.Date dtDe = null;
@@ -91,34 +110,43 @@ public class ApontamentoBusiness {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		consultaCompleta = consultaCompletaConverter.convertEntityToBean(consultaCompletaDAO.findByIdAndPeriodo(id,dtDe,dtAte));
-		
+		consultaCompleta = consultaCompletaConverter
+				.convertEntityToBean(consultaCompletaDAO.findByIdAndPeriodo(id, dtDe, dtAte));
+
 		return consultaCompleta;
 	}
 
-	/*public List<ApontamentoBean> listarApontamentos(String pis, String[] periodo) {
-		UsuarioBean usuarioLogado = userBusiness.usuarioLogado();
-		java.sql.Date[] periodoSQL = new java.sql.Date[2];
-		
-		if(pis == null) {
-			pis = usuarioLogado.getFuncionario().getPis();
-		}
-		
-		if(periodo.length <= 0) {
-			LocalDate hoje = LocalDate.now();
-			LocalDate domingo = hoje.with(previousOrSame(SUNDAY));
-			LocalDate sabado = hoje.with(nextOrSame(SATURDAY));
-			
-			periodoSQL[0] = java.sql.Date.valueOf(domingo);
-			periodoSQL[1] = java.sql.Date.valueOf(sabado);
-		}
-		List<ApontamentoEntity>entities = apontamentoDAO.findByPisAndPeriodo(pis,periodoSQL);
-		List<ApontamentoBean> beans = apontamentoConverter.convertEntityToBean(entities);
-		for(int i = 0; beans.size() > i; i++) {
-			beans.get(i).setTpJustificativa(justificativaConverter.convertEntityToBean(entities.get(i).getTipoJustificativa()));
-		}
-		
-		return beans;
-	}*/
+	public ApontamentoBean obterApontamentoDeConsultaCompleta(ConsultaCompletaBean cc) {
+		ApontamentoBean apontamento = new ApontamentoBean();
 
+		apontamento.setId(cc.getApontamentoId());
+		apontamento.setData(cc.getData());
+		apontamento.setHorario(cc.getApontamentoHorario());
+		apontamento.setTipoImportacao(cc.getApontamentoTpImportacao());
+		apontamento.setObservacao(cc.getApontamentoObs());
+
+		return apontamento;
+	}
+
+	public ApontamentoBean obterPorId(Integer id) {
+		ApontamentoEntity entity = apontamentoDAO.findById(id);
+
+		ApontamentoBean bean = apontamentoConverter.convertEntityToBean(entity);
+		bean.setTpJustificativa(justificativaConverter.convertEntityToBean(entity.getTipoJustificativa()));
+
+		return bean;
+	}
+	public void remover(Integer idApontamento) throws BusinessException {
+		if(idApontamento == null || idApontamento.equals(0)) {
+			throw new BusinessException("Apontamento não encontrado em nossa base.");
+		}
+		ApontamentoEntity apontamento = apontamentoDAO.findById(idApontamento);
+		
+		if(controleMensalBusiness.verificarMesFechado(apontamento.getData()))
+			throw new BusinessException("Não foi possível realizar a ação, pois o mês está fechado.");
+		else if(apontamento.getTipoImportacao())
+			throw new BusinessException("Não foi possível realizar a ação, pois o apontamento é eletrônico.");
+		
+		apontamentoDAO.deleteById(idApontamento);
+	}
 }

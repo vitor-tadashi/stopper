@@ -1,11 +1,19 @@
-@media (max-width: 850px){
-	.table-respon{
+@media ( max-width : 850px) {
+	.table-respon {
 		min-height: .01%;
 		overflow-x: auto;
 	}
 }
-.dataTables_filter{ display: none; }
-.left{
-	float:left;
-	margin-right:5px;
+
+.dataTables_filter {
+	display: none;
+}
+
+.left {
+	float: left;
+	margin-right: 5px;
+}
+
+input[type=date].form-control {
+	line-height: 10px !important;;
 }

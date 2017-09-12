@@ -5,6 +5,8 @@ $(document).ready(function(){
 		template: false
     });
 	$(".clock").mask("99:99")
+	
+	$('#apontamento-funcionario').val($( "#select-funcionario option:selected" ).val());
 });
 function inserirSA(){
 	var dataSA = $('#dt-sa').val();

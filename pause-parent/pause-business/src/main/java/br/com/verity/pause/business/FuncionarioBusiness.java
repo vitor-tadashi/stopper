@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import br.com.verity.pause.bean.ConsultaCompletaBean;
 import br.com.verity.pause.bean.FuncionarioBean;
+import br.com.verity.pause.bean.UsuarioBean;
+import br.com.verity.pause.converter.FuncionarioIntegrationConverter;
 import br.com.verity.pause.integration.SavIntegration;
 import br.com.verity.pause.util.GerarRelatorioXlsx;
 
@@ -15,20 +17,30 @@ import br.com.verity.pause.util.GerarRelatorioXlsx;
 public class FuncionarioBusiness {
 	
 	@Autowired
-	private SavIntegration integration;
-	
-	@Autowired
 	private GerarRelatorioXlsx gerarRelatorio;
 	
 	@Autowired
 	private ApontamentoBusiness apontamentoBusiness;
 	
+	@Autowired
+	private CustomUserDetailsBusiness userBusiness;
+	
+	@Autowired
+	private FuncionarioIntegrationConverter funcionarioConverter;
+	
+	@Autowired
+	private SavIntegration sav;
+	
+	@Autowired
+	private CustomUserDetailsBusiness customUser;
+	
 	public List<FuncionarioBean> obterTodos(){
-		return integration.getFuncionarios(65);
+		UsuarioBean usuarioLogado = customUser.usuarioLogado();
+		return sav.getFuncionarios(usuarioLogado.getIdEmpresaSessao());
 	}
 
 	public String gerarRelatorio(Integer idFuncionario, String de, String ate) {
-		FuncionarioBean funcionario = integration.getFuncionario(idFuncionario);
+		FuncionarioBean funcionario = sav.getFuncionario(idFuncionario);
 		List<ConsultaCompletaBean> consultaCompleta = new ArrayList<ConsultaCompletaBean>();
 		String caminho;
 		
@@ -40,6 +52,16 @@ public class FuncionarioBusiness {
 	}
 
 	public List<FuncionarioBean> listarFuncionariosPorEmpresaComPis() {
-		return integration.getFuncionarios(2);
+		UsuarioBean usuarioLogado = customUser.usuarioLogado();
+		return sav.getFuncionarios(usuarioLogado.getIdEmpresaSessao());
+	}
+
+	public FuncionarioBean obterPorPIS(String pis) {
+		if(pis == null) {
+			UsuarioBean usuarioLogado = userBusiness.usuarioLogado();
+			return funcionarioConverter.convertEntityToBean(usuarioLogado.getFuncionario());
+		}else {
+			return sav.getFuncionarioPorPis(pis);
+		}
 	}
 }
