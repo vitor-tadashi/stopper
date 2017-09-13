@@ -11,11 +11,9 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import br.com.verity.pause.connection.ConnectionFactory;
-import br.com.verity.pause.entity.ApontamentoEntity;
-import br.com.verity.pause.entity.ArquivoApontamentoEntity;
 import br.com.verity.pause.entity.ControleDiarioEntity;
+import br.com.verity.pause.entity.ControleMensalEntity;
 import br.com.verity.pause.entity.SobreAvisoEntity;
-import br.com.verity.pause.entity.TipoJustificativaEntity;
 
 @Repository
 public class SobreAvisoDAO {
@@ -171,5 +169,60 @@ public class SobreAvisoDAO {
 			e.printStackTrace();
 		}
 		return entities;
+	}
+
+	public SobreAvisoEntity findById(Integer id) {
+		SobreAvisoEntity entity = null;
+		String sql = " SELECT sa.idSobreAviso, sa.data, sa.idControleDiario, cd.idControleMensal, cm.idFuncionario FROM PAUSESobreAviso sa" + 
+				"  INNER JOIN PAUSEControleDiario cd ON cd.idControleDiario = sa.idControleDiario" + 
+				"  INNER JOIN PAUSEControleMensal cm ON cm.idControleMensal = cd.idControleMensal" + 
+				"  WHERE sa.idSobreAviso = ?";
+		
+		try {
+			Connection conn = ConnectionFactory.createConnection();
+			PreparedStatement ps = conn.prepareStatement(sql);
+
+			ps.setInt(1, id);
+			
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				entity = new SobreAvisoEntity();
+				ControleDiarioEntity diarioEntity = new ControleDiarioEntity();
+				ControleMensalEntity mensalEntity = new ControleMensalEntity();
+				
+				entity.setId(rs.getInt(1));
+				entity.setData(rs.getDate(2));
+				diarioEntity.setId(rs.getInt(3));
+				mensalEntity.setId(rs.getInt(4));
+				mensalEntity.setIdFuncionario(rs.getInt(5));
+				
+				diarioEntity.setControleMensal(mensalEntity);
+				entity.setControleDiario(diarioEntity);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return entity;
+	}
+	public void deleteById(Integer id) {
+		Connection conn;
+		try {
+			conn = ConnectionFactory.createConnection();
+
+			String sql = "DELETE FROM PAUSESobreAviso WHERE idSobreAviso = ?";
+
+			PreparedStatement ps = conn.prepareStatement(sql);
+
+			ps.setInt(1, id); 
+
+			ps.execute();
+			ps.close();
+			conn.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -56,6 +56,9 @@ public class ApontamentoBusiness {
 
 	@Autowired
 	private ControleMensalBusiness controleMensalBusiness;
+	
+	@Autowired
+	private CalculoBusiness calculoBusiness;
 
 	public ApontamentoBean apontar(ApontamentoBean apontamento) throws BusinessException {
 
@@ -87,7 +90,6 @@ public class ApontamentoBusiness {
 
 		if (apontamento.getId() == null || apontamento.getId().equals(0)) {
 			apontamento.setId(apontamentoDAO.save(entity).getId());
-			return apontamento;
 		} else {
 			ApontamentoEntity apontamentoAtual = apontamentoDAO.findById(apontamento.getId());
 			if(apontamentoAtual.getTipoImportacao()) {
@@ -95,6 +97,8 @@ public class ApontamentoBusiness {
 			}
 			apontamentoDAO.update(entity);
 		}
+		calculoBusiness.calcularApontamento(idFuncionario, apontamento.getData());
+	
 		return apontamento;
 	}
 
@@ -147,5 +151,8 @@ public class ApontamentoBusiness {
 			throw new BusinessException("Não foi possível realizar a ação, pois o apontamento é eletrônico.");
 		
 		apontamentoDAO.deleteById(idApontamento);
+		
+		int idFuncionario = apontamento.getControleDiario().getControleMensal().getIdFuncionario();
+		calculoBusiness.calcularApontamento(idFuncionario, apontamento.getData());
 	}
 }

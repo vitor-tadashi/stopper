@@ -243,7 +243,7 @@
 											<td>${data }</td>
 											<td>${sa.entrada }</td>
 											<td>${sa.saida }</td>
-											<td><a class="text-danger" onclick="removerTr(this, ${sa.id})" href="#">Remover</a></td>
+											<td><a class="text-danger" onclick="removerSA(this, ${sa.id})" href="#">Remover</a></td>
 										</tr>
 									</c:forEach>
 								</tbody>

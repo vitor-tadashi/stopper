@@ -16,6 +16,7 @@ import br.com.verity.pause.entity.ApontamentoEntity;
 import br.com.verity.pause.entity.ApontamentoPivotEntity;
 import br.com.verity.pause.entity.ArquivoApontamentoEntity;
 import br.com.verity.pause.entity.ControleDiarioEntity;
+import br.com.verity.pause.entity.ControleMensalEntity;
 import br.com.verity.pause.entity.TipoJustificativaEntity;
 
 @Repository
@@ -205,7 +206,10 @@ public class ApontamentoDAO {
 	public ApontamentoEntity findById(Integer id) {
 		ApontamentoEntity entity = new ApontamentoEntity();
 
-		String sql = "SELECT * FROM PAUSEApontamento WHERE idApontamento = ?";
+		String sql = "SELECT ap.*,cd.idControleMensal, cm.idFuncionario FROM PAUSEApontamento ap"+
+				" inner join PAUSEControleDiario cd on cd.idControleDiario = ap.idControleDiario" + 
+				" inner join PAUSEControleMensal cm on cm.idControleMensal = cd.idControleMensal" + 
+				" where ap.idApontamento = ?";
 
 		try {
 			Connection conn = ConnectionFactory.createConnection();
@@ -220,6 +224,7 @@ public class ApontamentoDAO {
 				TipoJustificativaEntity justificativa = new TipoJustificativaEntity();
 				ControleDiarioEntity controleDiario = new ControleDiarioEntity();
 				ArquivoApontamentoEntity arquivoApontamento = new ArquivoApontamentoEntity();
+				ControleMensalEntity controleMensalEntity = new ControleMensalEntity();
 
 				entity.setId(rs.getInt(1));
 				entity.setData(rs.getDate(2));
@@ -232,13 +237,17 @@ public class ApontamentoDAO {
 				entity.setTipoJustificativa(justificativa);
 
 				controleDiario.setId(rs.getInt(8));
-				entity.setControleDiario(controleDiario);
 
 				entity.setIdEmpresa(rs.getInt(9));
 				entity.setIdUsuarioInclusao(rs.getInt(10));
 
 				arquivoApontamento.setId(rs.getInt(11));
 				entity.setArquivoApontamento(arquivoApontamento);
+				
+				controleMensalEntity.setId(rs.getInt(12));
+				controleMensalEntity.setIdFuncionario(rs.getInt(13));
+				controleDiario.setControleMensal(controleMensalEntity);
+				entity.setControleDiario(controleDiario);
 			}
 
 			ps.close();
@@ -324,7 +333,6 @@ public class ApontamentoDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	/**
