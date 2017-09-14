@@ -33,7 +33,6 @@ public class GerenciarSobreAvisoController {
 		return ResponseEntity.ok(sobreAvisoCriado);
 	}
 	@GetMapping(value = "/remover")
-	@ResponseBody
 	public ResponseEntity<String> remover(@RequestParam Integer id){
 		try {
 			sobreAvisoBusiness.remover(id);

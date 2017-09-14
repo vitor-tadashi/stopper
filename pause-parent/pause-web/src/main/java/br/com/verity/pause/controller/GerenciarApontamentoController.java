@@ -14,14 +14,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import br.com.verity.pause.bean.AfastamentoBean;
 import br.com.verity.pause.bean.ApontamentoBean;
+import br.com.verity.pause.bean.AtestadoBean;
 import br.com.verity.pause.bean.ControleDiarioBean;
 import br.com.verity.pause.bean.FuncionarioBean;
 import br.com.verity.pause.bean.SobreAvisoBean;
 import br.com.verity.pause.bean.TipoAfastamentoBean;
+import br.com.verity.pause.bean.TipoAtestadoBean;
 import br.com.verity.pause.bean.TipoJustificativaBean;
 import br.com.verity.pause.business.AfastamentoBusiness;
 import br.com.verity.pause.business.ApontamentoBusiness;
+import br.com.verity.pause.business.AtestadoBusiness;
 import br.com.verity.pause.business.ControleDiarioBusiness;
 import br.com.verity.pause.business.FuncionarioBusiness;
 import br.com.verity.pause.business.JustificativaBusiness;
@@ -50,13 +54,19 @@ public class GerenciarApontamentoController {
 	@Autowired
 	private SobreAvisoBusiness sobreAvisoBusiness;
 	
+	@Autowired
+	private AtestadoBusiness atestadoBusiness;
+	
 	@RequestMapping(method = RequestMethod.GET)
 	public String consultar(Model model,Integer idFuncionario, String...periodo) {
 		apontamentos(model,idFuncionario,periodo);
 		funcionarios(model);
 		justificativas(model);
-		afastamentos(model);
+		tipoAfastamentos(model);
+		tipoAtestado(model);
 		sobreAvisos(model,idFuncionario,periodo);
+		afastamentos(model,idFuncionario,periodo);
+		atestados(model,idFuncionario,periodo);
 		
 		return "apontamento/gerenciar";
 	}
@@ -95,9 +105,13 @@ public class GerenciarApontamentoController {
 		List<TipoJustificativaBean>justificativas = justificativaBusiness.listar();
 		model.addAttribute("justificativas",justificativas);
 	}
-	private void afastamentos(Model model) {
+	private void tipoAfastamentos(Model model) {
 		List<TipoAfastamentoBean>afastamentos = afastamentoBusiness.listarTipoAfastamento();
-		model.addAttribute("afastamentos",afastamentos);
+		model.addAttribute("tipoAfastamentos",afastamentos);
+	}
+	private void tipoAtestado(Model model) {
+		List<TipoAtestadoBean>atestados = atestadoBusiness.listarTipoAtestado();
+		model.addAttribute("tipoAtestado",atestados);
 	}
 	private void apontamentos(Model model,Integer idFuncionario,String... periodo) {
 		List<ControleDiarioBean> dias = controleDiarioBusiness.listarControleDiario(idFuncionario,periodo);
@@ -108,5 +122,13 @@ public class GerenciarApontamentoController {
 	private void sobreAvisos(Model model,Integer idFuncionario,String... periodo) {
 		List<SobreAvisoBean> sobreAvisos = sobreAvisoBusiness.listarPorIdFuncionarioEPeriodo(idFuncionario,periodo);
 		model.addAttribute("sobreAvisos",sobreAvisos);
+	}
+	private void afastamentos(Model model,Integer idFuncionario,String... periodo) {
+		List<AfastamentoBean> afastamentos = afastamentoBusiness.listarPorIdFuncionarioEPeriodo(idFuncionario,periodo);
+		model.addAttribute("afastamentos",afastamentos);
+	}
+	private void atestados(Model model,Integer idFuncionario,String... periodo) {
+		List<AtestadoBean> atestados = atestadoBusiness.listarPorIdFuncionarioEPeriodo(idFuncionario,periodo);
+		model.addAttribute("atestados",atestados);
 	}
 }

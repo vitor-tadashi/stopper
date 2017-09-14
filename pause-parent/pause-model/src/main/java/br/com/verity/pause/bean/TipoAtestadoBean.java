@@ -3,7 +3,7 @@ package br.com.verity.pause.bean;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TipoAfastamentoBean {
+public class TipoAtestadoBean {
 	private Integer id;
 	private String descricao;
 	public Integer getId() {

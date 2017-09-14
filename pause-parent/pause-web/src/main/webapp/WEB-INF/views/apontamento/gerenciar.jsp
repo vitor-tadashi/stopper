@@ -274,9 +274,9 @@
 								<div class="col-sm-7">
 									<label class="control-label">Período</label>
 									<div class="input-daterange input-group" id="datepicker">
-										<input type="text" pattern="\d{1,2}/\d{1,2}/\d{4}" id="afastamentoDe" class="form-control data" name="start" placeholder="dd/mm/yyyy"/>
+										<input type="date" id="afastamentoDe" class="form-control data" name="start" placeholder="dd/mm/aaaa"/>
 										<span class="input-group-addon">até</span>
-										<input type="text" pattern="\d{1,2}/\d{1,2}/\d{4}" id="afastamentoAte" class="form-control data" name="end" placeholder="dd/mm/yyyy"/>
+										<input type="date" id="afastamentoAte" class="form-control data" name="end" placeholder="dd/mm/aaaa"/>
 									</div>
 								</div>
 							</div>
@@ -286,6 +286,9 @@
 										<label class="control-label">Justificativa</label>
 										<select class="selectpicker clear-select" data-live-search="true" data-width="100%" id="afastamentoJus">
 											<option value="">Selecione</option>
+											<c:forEach items="${tipoAfastamentos}" var="tp">
+												<option value="${tp.id }">${tp.descricao }</option>
+											</c:forEach>
 										</select>
 									</div>
 								</div>
@@ -305,12 +308,16 @@
 									</tr>
 								</thead>
 								<tbody class="text-center" id="body-afastamento">
-									<tr>
-										<td>13/03/2017</td>
-										<td>13/03/2017</td>
-										<td>Férias</td>
-										<td><a class="text-danger" href="#">Remover</a></td>
-									</tr>
+									<c:forEach items="${afastamentos }" var="af">
+										<fmt:formatDate value="${af.dataInicio }" pattern="dd/MM/yyyy" var="inicio"/>
+										<fmt:formatDate value="${af.dataFim }" pattern="dd/MM/yyyy" var="fim"/>
+										<tr>
+											<td>${inicio }</td>
+											<td>${fim }</td>
+											<td>${af.tipoAfastamento.descricao }</td>
+											<td><a class="text-danger" onclick="removerAfastamento(this, ${af.id})" href="#">Remover</a></td>
+										</tr>
+									</c:forEach>
 								</tbody>
 							</table>
 						</div>
@@ -335,16 +342,25 @@
 					<!--Modal body-->
 					<div class="modal-body">
 						<form action="" class="clear-form">
-							<div class="row pad-btm">
+							<div class="row mar-btm">
+								<div class="col-sm-4">
+									<label class="control-label">Data</label>
+									<input type="date" id="data-atestado" class="form-control" placeholder="dd/mm/aaaa"/>
+								</div>
 								<div class="col-sm-3">
 									<label class="control-label">Quantidade de horas</label>
-									<input id="qtd-hr-atestado" type="text" class="form-control clock" placeholder="--:--">
+									<input id="qtd-hr-atestado" type="number" step="0.5" class="form-control" placeholder="00,00">
 								</div>
+							</div>
+							<div class="row">
 								<div class="col-sm-7">
 									<div class="form-group">
 										<label class="control-label">Justificativa</label>
 										<select class="selectpicker clear-select" data-live-search="true" data-width="100%" id="atestadoJus">
 											<option value="">Selecione</option>
+											<c:forEach items="${tipoAtestado}" var="tp">
+												<option value="${tp.id }">${tp.descricao }</option>
+											</c:forEach>
 										</select>
 									</div>
 								</div>
@@ -357,17 +373,22 @@
 							<table class="table table-striped table-bordered">
 								<thead>
 									<tr class="">
+										<th class="text-center">Data</th>
 										<th class="text-center">Qtd de horas</th>
 										<th class="text-center">Justificativa</th>
 										<th class="text-center">Ação</th>
 									</tr>
 								</thead>
 								<tbody class="text-center" id="body-atestado">
-									<tr>
-										<td>3:30</td>
-										<td>Férias</td>
-										<td><a class="text-danger" href="#">Remover</a></td>
-									</tr>
+									<c:forEach items="${atestados }" var="at">
+										<fmt:formatDate value="${at.controleDiario.data }" pattern="dd/MM/yyyy" var="data"/>
+										<tr>
+											<td>${data }</td>
+											<td>${at.quantidadeHora }</td>
+											<td>${at.tipoAtestado.descricao }</td>
+											<td><a class="text-danger" onclick="removerAfastamento(this, ${at.id})" href="#">Remover</a></td>
+										</tr>
+									</c:forEach>
 								</tbody>
 							</table>
 						</div>

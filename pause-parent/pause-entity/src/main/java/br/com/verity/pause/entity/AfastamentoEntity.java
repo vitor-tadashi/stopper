@@ -9,7 +9,7 @@ import br.com.verity.pause.entity.enumerator.TipoAfastamento;
 @Component
 public class AfastamentoEntity {
 
-	private int idAfastamento;
+	private Integer idAfastamento;
 
 	private Date dataInicio;
 
@@ -17,17 +17,17 @@ public class AfastamentoEntity {
 
 	private Date dataInclusao;
 
-	private int idFuncionario;
+	private Integer idFuncionario;
 
 	private TipoAfastamento tipoAfastamento;
 
-	private int idUsuarioInclusao;
+	private Integer idUsuarioInclusao;
 
-	public int getIdAfastamento() {
+	public Integer getIdAfastamento() {
 		return idAfastamento;
 	}
 
-	public void setIdAfastamento(int idAfastamento) {
+	public void setIdAfastamento(Integer idAfastamento) {
 		this.idAfastamento = idAfastamento;
 	}
 
@@ -55,11 +55,11 @@ public class AfastamentoEntity {
 		this.dataInclusao = dataInclusao;
 	}
 
-	public int getIdFuncionario() {
+	public Integer getIdFuncionario() {
 		return idFuncionario;
 	}
 
-	public void setIdFuncionario(int idFuncionario) {
+	public void setIdFuncionario(Integer idFuncionario) {
 		this.idFuncionario = idFuncionario;
 	}
 
@@ -71,11 +71,11 @@ public class AfastamentoEntity {
 		this.tipoAfastamento = tipoAfastamento;
 	}
 
-	public int getIdUsuarioInclusao() {
+	public Integer getIdUsuarioInclusao() {
 		return idUsuarioInclusao;
 	}
 
-	public void setIdUsuarioInclusao(int idUsuarioInclusao) {
+	public void setIdUsuarioInclusao(Integer idUsuarioInclusao) {
 		this.idUsuarioInclusao = idUsuarioInclusao;
 	}
 }
