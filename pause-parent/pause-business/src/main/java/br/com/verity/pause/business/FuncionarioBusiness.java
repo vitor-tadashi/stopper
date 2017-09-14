@@ -56,12 +56,12 @@ public class FuncionarioBusiness {
 		return sav.getFuncionarios(usuarioLogado.getIdEmpresaSessao());
 	}
 
-	public FuncionarioBean obterPorPIS(String pis) {
-		if(pis == null) {
+	public FuncionarioBean obterPorId(Integer id) {
+		if(id == null) {
 			UsuarioBean usuarioLogado = userBusiness.usuarioLogado();
 			return funcionarioConverter.convertEntityToBean(usuarioLogado.getFuncionario());
 		}else {
-			return sav.getFuncionarioPorPis(pis);
+			return sav.getFuncionario(id);
 		}
 	}
 	

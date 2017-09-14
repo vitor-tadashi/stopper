@@ -5,10 +5,14 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
 import br.com.verity.pause.connection.ConnectionFactory;
+import br.com.verity.pause.entity.ControleDiarioEntity;
+import br.com.verity.pause.entity.ControleMensalEntity;
 import br.com.verity.pause.entity.SobreAvisoEntity;
 
 @Repository
@@ -16,7 +20,7 @@ public class SobreAvisoDAO {
 
 	private Connection conn;
 
-	public void save(SobreAvisoEntity entity) {
+	public SobreAvisoEntity save(SobreAvisoEntity entity) {
 		String sql = "INSERT INTO PAUSESobreAviso VALUES (?,?,?,?,?,?)";
 
 		try {
@@ -34,9 +38,43 @@ public class SobreAvisoDAO {
 			ps.execute();
 			ps.close();
 			conn.close();
+			
+			return findByControleDiarioMaxIdSobreAviso(entity.getControleDiario().getId());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return null;
+	}
+
+	private SobreAvisoEntity findByControleDiarioMaxIdSobreAviso(Integer id) {
+		SobreAvisoEntity entity = new SobreAvisoEntity();
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String sql = null;
+
+		sql = "SELECT MAX(idSobreAviso) FROM PAUSESobreAviso WHERE idControleDiario = ?";
+
+		try {
+			conn = ConnectionFactory.createConnection();
+			ps = conn.prepareStatement(sql);
+
+			ps.setInt(1, id); 
+	        rs = ps.executeQuery();
+
+			if (rs.next()) {
+                entity.setId(rs.getInt(1));
+            }
+
+			ps.execute();
+			ps.close();
+			conn.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return entity;
 	}
 
 	/**
@@ -89,5 +127,102 @@ public class SobreAvisoDAO {
 		ps.close();
 
 		return response;
+	}
+
+	public List<SobreAvisoEntity> findByPeriodoAndIdFuncionario(Integer id, Date de, Date ate) {
+		String sql = "SELECT sa.idSobreAviso, sa.data, sa.horaInicio, sa.horaFim, sa.idControleDiario FROM PAUSESobreAviso sa" + 
+				"  RIGHT JOIN PAUSEControleDiario cd ON cd.idControleDiario = sa.idControleDiario" + 
+				"  RIGHT JOIN PAUSEControleMensal cm ON cm.idControleMensal = cd.idControleMensal" + 
+				"  WHERE cm.idFuncionario = ? AND sa.data BETWEEN ? AND ?";
+		
+		List<SobreAvisoEntity> entities = new ArrayList<>();
+
+		try {
+			Connection conn = ConnectionFactory.createConnection();
+
+			PreparedStatement ps = conn.prepareStatement(sql);
+
+			ps.setInt(1, id);
+			ps.setDate(2, de);
+			ps.setDate(3, ate);
+
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				SobreAvisoEntity entity = new SobreAvisoEntity();
+				ControleDiarioEntity controleDiario = new ControleDiarioEntity();
+
+				entity.setId(rs.getInt(1));
+				entity.setData(rs.getDate(2));
+				entity.setHoraInicio(rs.getTime(3));
+				entity.setHoraFim(rs.getTime(4));
+
+				controleDiario.setId(rs.getInt(5));
+				entity.setControleDiario(controleDiario);
+
+				entities.add(entity);
+			}
+
+			ps.close();
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return entities;
+	}
+
+	public SobreAvisoEntity findById(Integer id) {
+		SobreAvisoEntity entity = null;
+		String sql = " SELECT sa.idSobreAviso, sa.data, sa.idControleDiario, cd.idControleMensal, cm.idFuncionario FROM PAUSESobreAviso sa" + 
+				"  INNER JOIN PAUSEControleDiario cd ON cd.idControleDiario = sa.idControleDiario" + 
+				"  INNER JOIN PAUSEControleMensal cm ON cm.idControleMensal = cd.idControleMensal" + 
+				"  WHERE sa.idSobreAviso = ?";
+		
+		try {
+			Connection conn = ConnectionFactory.createConnection();
+			PreparedStatement ps = conn.prepareStatement(sql);
+
+			ps.setInt(1, id);
+			
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				entity = new SobreAvisoEntity();
+				ControleDiarioEntity diarioEntity = new ControleDiarioEntity();
+				ControleMensalEntity mensalEntity = new ControleMensalEntity();
+				
+				entity.setId(rs.getInt(1));
+				entity.setData(rs.getDate(2));
+				diarioEntity.setId(rs.getInt(3));
+				mensalEntity.setId(rs.getInt(4));
+				mensalEntity.setIdFuncionario(rs.getInt(5));
+				
+				diarioEntity.setControleMensal(mensalEntity);
+				entity.setControleDiario(diarioEntity);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return entity;
+	}
+	public void deleteById(Integer id) {
+		Connection conn;
+		try {
+			conn = ConnectionFactory.createConnection();
+
+			String sql = "DELETE FROM PAUSESobreAviso WHERE idSobreAviso = ?";
+
+			PreparedStatement ps = conn.prepareStatement(sql);
+
+			ps.setInt(1, id); 
+
+			ps.execute();
+			ps.close();
+			conn.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }

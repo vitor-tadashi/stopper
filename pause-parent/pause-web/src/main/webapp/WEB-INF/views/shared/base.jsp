@@ -225,7 +225,16 @@
     <script src='<c:url value="/js/bootstrap.min.js"/>'></script>
     <script src='<c:url value="plugins/bootstrap-select/bootstrap-select.min.js"/>'></script>
     <script src='<c:url value="/js/nifty.min.js"/>'></script>
-    
+    <script type="text/javascript">
+    	function formatardataHtml(s){
+		    if (s) { 
+			    s = s.replace(/(\d{4})-(\d{1,2})-(\d{1,2})/, function(match,y,m,d) { 
+			        return d + '/' + m + '/' + y;  
+			    });
+			}
+		    return s;
+    	}
+    </script>
 	<!-- scripts serão carregados aqui -->
 	<layout:block name="scripts"> </layout:block>
 </body>

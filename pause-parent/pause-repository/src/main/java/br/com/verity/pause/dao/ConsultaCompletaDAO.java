@@ -104,6 +104,7 @@ public class ConsultaCompletaDAO {
 			sql = "DROP TABLE ##Apontamento";
 			ps = conn.prepareStatement(sql);
 			ps.execute();
+			
 			ps.close();
 			rs.close();
 			conn.close();
