@@ -44,6 +44,21 @@ public class SavIntegration {
 		return funcionarioConverter.convertEntityToBean(funcionarios);
 	}
 	
+	public List<FuncionarioBean> getListFuncionarios(){
+		List<FuncionarioIntegrationBean> funcionarios = new ArrayList<FuncionarioIntegrationBean>();
+		ObjectMapper mapper = new ObjectMapper();
+		// Properties props = this.getProp();
+		String endereco = "http://localhost:9090/sav/listFuncionariosComPis";
+		try {
+			URL url = new URL(endereco);
+			funcionarios = mapper.readValue(url,  new TypeReference<List<FuncionarioIntegrationBean>>(){});
+		} catch (IOException e ) {
+			e.printStackTrace();
+		}
+		
+		return funcionarioConverter.convertEntityToBean(funcionarios);
+	}
+	
 	public UsuarioBean getUsuario(String user){
 		UsuarioBean usuario = new UsuarioBean();
 		ObjectMapper mapper = new ObjectMapper();
