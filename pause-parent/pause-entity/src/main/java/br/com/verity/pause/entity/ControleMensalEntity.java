@@ -1,5 +1,7 @@
 package br.com.verity.pause.entity;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 @Component
@@ -13,6 +15,7 @@ public class ControleMensalEntity {
 	private Integer mes;
 	private Integer ano;
 	private Integer idFuncionario;
+	private List<ControleDiarioEntity> controleDiario;
 
 	public Integer getId() {
 		return id;
@@ -84,6 +87,14 @@ public class ControleMensalEntity {
 
 	public void setSobreAvisoTrabalhado(Double sobreAvisoTrabalhado) {
 		this.sobreAvisoTrabalhado = sobreAvisoTrabalhado;
+	}
+
+	public List<ControleDiarioEntity> getControleDiario() {
+		return controleDiario;
+	}
+
+	public void setControleDiario(List<ControleDiarioEntity> controleDiario) {
+		this.controleDiario = controleDiario;
 	}
 
 }
