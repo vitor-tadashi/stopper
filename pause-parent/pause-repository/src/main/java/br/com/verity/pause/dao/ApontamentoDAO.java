@@ -120,14 +120,13 @@ public class ApontamentoDAO {
 				if (horasEntity.getTipoImportacao()) {
 					ps.setString(5, null); // observacao
 					ps.setNull(6, java.sql.Types.INTEGER); // idTpJustificativa
-					ps.setNull(7, java.sql.Types.INTEGER); // idControleDiario
 					ps.setInt(10, idArquivo); // idArquivoApontamento
 				} else {
 					ps.setString(5, horasEntity.getObservacao()); // observacao
 					ps.setInt(6, horasEntity.getTipoJustificativa().getId()); // idTpJustificativa
-					ps.setInt(7, horasEntity.getControleDiario().getId()); // idControleDiario
 					ps.setNull(10, java.sql.Types.INTEGER); // idArquivoApontamento
 				}
+				ps.setInt(7, horasEntity.getControleDiario().getId()); // idControleDiario
 				ps.setInt(8, horasEntity.getIdEmpresa()); // idEmpresa
 				ps.setInt(9, horasEntity.getIdUsuarioInclusao()); // idUsuarioInclusao
 				ps.execute();
