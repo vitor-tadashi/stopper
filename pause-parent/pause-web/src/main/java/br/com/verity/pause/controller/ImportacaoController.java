@@ -26,6 +26,8 @@ import br.com.verity.pause.bean.ApontamentoBean;
 import br.com.verity.pause.bean.ArquivoApontamentoBean;
 import br.com.verity.pause.bean.FuncionarioBean;
 import br.com.verity.pause.bean.UsuarioBean;
+import br.com.verity.pause.business.ControleDiarioBusiness;
+import br.com.verity.pause.business.ControleMensalBusiness;
 import br.com.verity.pause.business.CustomUserDetailsBusiness;
 import br.com.verity.pause.business.ImportacaoBusiness;
 import br.com.verity.pause.exception.BusinessException;
@@ -42,9 +44,15 @@ public class ImportacaoController {
 
 	@Autowired
 	private ArquivoApontamentoBean arquivoApontamento;
-	
+
 	@Autowired
 	private CustomUserDetailsBusiness customUser;
+
+	@Autowired
+	private ControleDiarioBusiness controleDiarioBusiness;
+	
+	@Autowired
+	private ControleMensalBusiness controleMensalBusiness;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -71,8 +79,7 @@ public class ImportacaoController {
 			arquivoApontamento.setDtInclusao(new Date());
 			arquivoApontamento.setIdUsuarioInclusao(usuarioLogado.getId());
 			arquivoApontamento.setIdEmpresa(usuarioLogado.getFuncionario().getEmpresa().getId());
-			funcionariosImportacao = importacaoBusiness.importarTxt(caminho,
-					usuarioLogado.getIdEmpresaSessao());
+			funcionariosImportacao = importacaoBusiness.importarTxt(caminho, usuarioLogado.getIdEmpresaSessao());
 			arquivoApontamento.setData(
 					funcionariosImportacao.get(funcionariosImportacao.size() - 1).getApontamentos().get(0).getData());
 		} catch (BusinessException | ParseException | IOException e) {
@@ -103,10 +110,15 @@ public class ImportacaoController {
 		}
 
 		for (FuncionarioBean funcionarioBean : funcionariosImportacao) {
+			funcionarioBean.getApontamentos().get(0).setCntrDiario(controleDiarioBusiness.obterPorDataIdFuncionario(
+					funcionarioBean.getApontamentos().get(funcionarioBean.getApontamentos().size() - 1).getData(),
+					funcionarioBean.getId()));
 			apontamentos.addAll(funcionarioBean.getApontamentos());
 		}
 
 		importacaoBusiness.salvarApontamentos(apontamentos, arquivoApontamento);
+
+		importacaoBusiness.acionarCalculos(funcionariosImportacao);
 
 		redirect.addFlashAttribute("log", "Apontamentos salvos com sucesso.");
 

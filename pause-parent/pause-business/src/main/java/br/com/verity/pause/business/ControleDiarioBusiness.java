@@ -144,4 +144,8 @@ public class ControleDiarioBusiness {
 
 		return cd;
 	}
+
+	public List<ControleDiarioBean> listSomaControleDiario() {
+		return controleDiarioConverter.convertEntityToBean(controleDiarioDAO.findByDataSum());
+	}
 }

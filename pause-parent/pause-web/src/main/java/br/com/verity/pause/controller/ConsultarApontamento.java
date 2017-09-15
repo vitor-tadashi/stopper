@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import br.com.verity.pause.bean.ControleDiarioBean;
 import br.com.verity.pause.bean.FuncionarioBean;
 import br.com.verity.pause.bean.UsuarioBean;
 import br.com.verity.pause.business.ControleDiarioBusiness;
@@ -33,6 +34,7 @@ public class ConsultarApontamento {
 		model.addAttribute("funcionarios", funcionarios);
 		
 		UsuarioBean logado = customUser.usuarioLogado();
+		List<ControleDiarioBean> controleDiario = controleDiarioBusiness.listSomaControleDiario();
 		
 		return "apontamento/consultar";
 	}

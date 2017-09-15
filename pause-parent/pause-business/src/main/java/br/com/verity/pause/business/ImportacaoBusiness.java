@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,8 +17,12 @@ import br.com.verity.pause.bean.EmpresaBean;
 import br.com.verity.pause.bean.FuncionarioBean;
 import br.com.verity.pause.converter.ApontamentoConverter;
 import br.com.verity.pause.converter.ArquivoApontamentoConverter;
+import br.com.verity.pause.converter.ControleDiarioConverter;
 import br.com.verity.pause.dao.ApontamentoDAO;
 import br.com.verity.pause.dao.ArquivoApontamentoDAO;
+import br.com.verity.pause.entity.ApontamentoEntity;
+import br.com.verity.pause.entity.ArquivoApontamentoEntity;
+import br.com.verity.pause.entity.ControleDiarioEntity;
 import br.com.verity.pause.exception.BusinessException;
 import br.com.verity.pause.integration.SavIntegration;
 import br.com.verity.pause.util.ImportarTxt;
@@ -42,6 +47,15 @@ public class ImportacaoBusiness {
 	
 	@Autowired
 	private ArquivoApontamentoConverter arquivoApontamentoConverter;
+	
+	@Autowired
+	private CalculoBusiness calculoBusiness;
+	
+	@Autowired
+	private ControleDiarioBusiness controleDiarioBusiness;
+	
+	@Autowired
+	private ControleDiarioConverter controleDiarioConverter;
 
 	public List<FuncionarioBean> importarTxt(String caminho, int idEmpresa) throws BusinessException, IOException, ParseException {
 		List<FuncionarioBean> funcionarios = new ArrayList<FuncionarioBean>();
@@ -84,14 +98,45 @@ public class ImportacaoBusiness {
 	}
 
 	public void salvarApontamentos(List<ApontamentoBean> apontamentos, ArquivoApontamentoBean arquivoApontamento) {
+		ArquivoApontamentoEntity arquivoApontamentoEntity = arquivoApontamentoConverter.convertBeanToEntity(arquivoApontamento);
+		List<ApontamentoEntity> apontamentoEntity = this.setControleDiarioBeanToEntity(apontamentos);
+		Integer idArquivo = null;
 		try {
-			apontamentoDao.excludeAllDate(new java.sql.Date(apontamentos.get(0).getData().getTime()));
-			arquivoApontamentoDao.excludeDate(arquivoApontamentoConverter.convertBeanToEntity(arquivoApontamento));
-			arquivoApontamentoDao.save(arquivoApontamentoConverter.convertBeanToEntity(arquivoApontamento));
-			Integer idArquivo = arquivoApontamentoDao.findByDateAndEmpresa(arquivoApontamentoConverter.convertBeanToEntity(arquivoApontamento));
-			apontamentoDao.saveAll(apontamentoConverter.convertBeanToEntity(apontamentos), idArquivo);
+			apontamentoDao.excludeAllDate(new java.sql.Date(arquivoApontamentoEntity.getData().getTime()));
+			arquivoApontamentoDao.excludeDate(arquivoApontamentoEntity);
+			arquivoApontamentoDao.save(arquivoApontamentoEntity);
+			idArquivo = arquivoApontamentoDao.findByDateAndEmpresa(arquivoApontamentoEntity);
+			apontamentoDao.saveAll(apontamentoEntity, idArquivo);
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+	}
+
+	private List<ApontamentoEntity> setControleDiarioBeanToEntity(List<ApontamentoBean> apontamentosBean) {
+		List<ApontamentoEntity> apontamentos = new ArrayList<ApontamentoEntity>();
+		ApontamentoEntity apontamento = null;
+		ControleDiarioEntity controleDiario = null;
+		
+		for (ApontamentoBean bean : apontamentosBean) {
+			apontamento = new ApontamentoEntity();
+			apontamento = apontamentoConverter.convertBeanToEntity(bean);
+			if(bean.getCntrDiario() != null && bean.getCntrDiario().getId() != null){
+				controleDiario = new ControleDiarioEntity();
+				controleDiario = controleDiarioConverter.convertBeanToEntity(bean.getCntrDiario());
+			}
+			apontamento.setControleDiario(controleDiario);
+			apontamentos.add(apontamento);
+		}
+		
+		return apontamentos;
+	}
+
+	public void acionarCalculos(List<FuncionarioBean> funcionariosImportacao) {
+		Date data = null;
+		for (FuncionarioBean funcionarioBean : funcionariosImportacao) {
+			data = funcionarioBean.getApontamentos().get(0).getData();
+			controleDiarioBusiness.obterPorDataIdFuncionario(data, funcionarioBean.getId());
+			calculoBusiness.calcularApontamento(funcionarioBean.getId(), data);
 		}
 	}
 }
