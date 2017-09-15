@@ -105,32 +105,31 @@ public class ApontamentoDAO {
 	public void saveAll(List<ApontamentoEntity> horas, Integer idArquivo) throws SQLException {
 		connection = new ConnectionFactory();
 		Connection conn = connection.createConnection();
-		String sql = "INSERT INTO PAUSEApontamento VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+		String sql = "INSERT INTO PAUSEApontamento VALUES (?,?,?,?,?,?,?,?,?,?)";
 
 		PreparedStatement ps = conn.prepareStatement(sql);
 
 		for (ApontamentoEntity horasEntity : horas) {
 			if (horasEntity.getHorario() != null) {
-				ps.setString(1, horasEntity.getPis()); // pis
 				java.sql.Date data = new java.sql.Date(horasEntity.getData().getTime());
-				ps.setDate(2, data); // data
-				ps.setTime(3, horasEntity.getHorario()); // horario
-				ps.setBoolean(4, horasEntity.getTipoImportacao()); // tipoImportacao
+				ps.setDate(1, data); // data
+				ps.setTime(2, horasEntity.getHorario()); // horario
+				ps.setBoolean(3, horasEntity.getTipoImportacao()); // tipoImportacao
 				java.sql.Date dataInclusao = new java.sql.Date(horasEntity.getDataInclusao().getTime());
-				ps.setDate(5, dataInclusao); // dataInclusao
+				ps.setDate(4, dataInclusao); // dataInclusao
 				if (horasEntity.getTipoImportacao()) {
-					ps.setString(6, null); // observacao
-					ps.setNull(7, java.sql.Types.INTEGER); // idTpJustificativa
-					ps.setNull(8, java.sql.Types.INTEGER); // idControleDiario
-					ps.setInt(11, idArquivo); // idArquivoApontamento
+					ps.setString(5, null); // observacao
+					ps.setNull(6, java.sql.Types.INTEGER); // idTpJustificativa
+					ps.setNull(7, java.sql.Types.INTEGER); // idControleDiario
+					ps.setInt(10, idArquivo); // idArquivoApontamento
 				} else {
-					ps.setString(6, horasEntity.getObservacao()); // observacao
-					ps.setInt(7, horasEntity.getTipoJustificativa().getId()); // idTpJustificativa
-					ps.setInt(8, horasEntity.getControleDiario().getId()); // idControleDiario
-					ps.setNull(11, java.sql.Types.INTEGER); // idArquivoApontamento
+					ps.setString(5, horasEntity.getObservacao()); // observacao
+					ps.setInt(6, horasEntity.getTipoJustificativa().getId()); // idTpJustificativa
+					ps.setInt(7, horasEntity.getControleDiario().getId()); // idControleDiario
+					ps.setNull(10, java.sql.Types.INTEGER); // idArquivoApontamento
 				}
-				ps.setInt(9, horasEntity.getIdEmpresa()); // idEmpresa
-				ps.setInt(10, horasEntity.getIdUsuarioInclusao()); // idUsuarioInclusao
+				ps.setInt(8, horasEntity.getIdEmpresa()); // idEmpresa
+				ps.setInt(9, horasEntity.getIdUsuarioInclusao()); // idUsuarioInclusao
 				ps.execute();
 			}
 		}

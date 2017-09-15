@@ -181,7 +181,7 @@
 					<!--Modal footer-->
 					<div class="modal-footer">
 						<button data-dismiss="modal" class="btn btn-danger" type="button" onclick="confirmarRemover()" id="btn-cancelar-apontamento">Cancelar</button>
-						<button class="btn btn-primary" onclick="informarHorario();">Salvar</button>
+						<button class="btn btn-success" onclick="informarHorario();">Salvar</button>
 					</div>
 				</div>
 			</div>

@@ -18,11 +18,10 @@ function inserirSA(){
 }
 function removerSA(click, id){
 	$.ajax({
-		url: 'sobre-aviso/remover',
-		type : 'GET',
+		url: 'sobre-aviso/remover/'+id,
+		type : 'DELETE',
 		contentType : 'application/json',
-		data: {'id' : id},
-		cache: true,
+		dataType : 'json',
 		success: function(data){
 			$(click).parent().parent().remove();
 		},
