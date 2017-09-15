@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -58,16 +59,17 @@ public class GerenciarApontamentoController {
 	private AtestadoBusiness atestadoBusiness;
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public String consultar(Model model,Integer idFuncionario, String...periodo) {
+	public String consultar(SecurityContextHolderAwareRequestWrapper request, Model model,Integer idFuncionario, String...periodo) {
 		apontamentos(model,idFuncionario,periodo);
-		funcionarios(model);
 		justificativas(model);
-		tipoAfastamentos(model);
-		tipoAtestado(model);
 		sobreAvisos(model,idFuncionario,periodo);
-		afastamentos(model,idFuncionario,periodo);
-		atestados(model,idFuncionario,periodo);
-		
+		if(request.isUserInRole("ROLE_MULTI-EMPRESA")) {
+			funcionarios(model);
+			tipoAfastamentos(model);
+			tipoAtestado(model);
+			afastamentos(model,idFuncionario,periodo);
+			atestados(model,idFuncionario,periodo);
+		}
 		return "apontamento/gerenciar";
 	}
 	@RequestMapping(value = "/apontar", method = RequestMethod.POST)
