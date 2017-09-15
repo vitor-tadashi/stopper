@@ -16,9 +16,14 @@ public class ControleMensalConverter implements Converter<ControleMensalEntity, 
 		ControleMensalEntity entity = new ControleMensalEntity();
 		
 		entity.setId(bean.getId());
+		entity.setAdcNoturno(bean.getAdicionalNoturno());
+		entity.setBancoHora(bean.getBancoHora());
+		entity.setHrTotal(bean.getHoraTotal());
+		entity.setSobreAviso(bean.getSobreAviso());
+		entity.setSobreAvisoTrabalhado(bean.getSobreAvisoTrabalhado());
+		entity.setMes(bean.getMes());
 		entity.setAno(bean.getAno());
 		entity.setIdFuncionario(bean.getIdFuncionario());
-		entity.setMes(bean.getMes());
 		
 		return entity;
 	}
@@ -31,9 +36,15 @@ public class ControleMensalConverter implements Converter<ControleMensalEntity, 
 		ControleMensalBean bean = new ControleMensalBean();
 		
 		bean.setId(entity.getId());
+		bean.setAdicionalNoturno(entity.getAdcNoturno());
+		bean.setBancoHora(entity.getBancoHora());
+		bean.setHoraTotal(entity.getHrTotal());
+		bean.setSobreAviso(entity.getSobreAviso());
+		bean.setSobreAvisoTrabalhado(entity.getSobreAvisoTrabalhado());
+		bean.setMes(entity.getMes());
 		bean.setAno(entity.getAno());
 		bean.setIdFuncionario(entity.getIdFuncionario());
-		bean.setMes(entity.getMes());
+		
 		
 		return bean;
 	}

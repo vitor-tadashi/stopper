@@ -58,4 +58,8 @@ public class ControleMensalBusiness {
 		}
 		return false;
 	}
+
+	public ControleMensalBean obterPorIdFuncionarioMesAnoDataDia(Date dtHoje, Integer id) {
+		return controleMensalConverter.convertEntityToBean(controleMensalDAO.findByDataAndIdFunc(dtHoje, id));
+	}
 }
