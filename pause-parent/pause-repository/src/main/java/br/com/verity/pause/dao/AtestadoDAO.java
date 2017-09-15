@@ -66,7 +66,7 @@ public class AtestadoDAO {
 
 	public AtestadoEntity save(AtestadoEntity entity) {
 		Connection conn = null;
-		String sql = "INSERT INTO PAUSEAtestado VALUES (?,?,?,?)";
+		String sql = "INSERT INTO PAUSEAtestado VALUES (?,?,?,?,?)";
 
 		try {
 			conn = ConnectionFactory.createConnection();
@@ -77,6 +77,7 @@ public class AtestadoDAO {
 			ps.setInt(2, entity.getControleDiario().getId());
 			ps.setDate(3, entity.getDataInclusao());
 			ps.setInt(4, entity.getIdUsuarioInclusao());
+			ps.setInt(5, entity.getTipoAtestado().getIdTipoAtestado());
 
 			ps.execute();
 			ps.close();

@@ -9,22 +9,17 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.verity.pause.bean.AfastamentoBean;
 import br.com.verity.pause.bean.AtestadoBean;
 import br.com.verity.pause.bean.ControleDiarioBean;
 import br.com.verity.pause.bean.FuncionarioBean;
-import br.com.verity.pause.bean.TipoAfastamentoBean;
 import br.com.verity.pause.bean.TipoAtestadoBean;
 import br.com.verity.pause.bean.UsuarioBean;
 import br.com.verity.pause.converter.AtestadoConverter;
 import br.com.verity.pause.converter.ControleDiarioConverter;
 import br.com.verity.pause.converter.TipoAtestadoConverter;
 import br.com.verity.pause.dao.AtestadoDAO;
-import br.com.verity.pause.entity.AfastamentoEntity;
 import br.com.verity.pause.entity.AtestadoEntity;
-import br.com.verity.pause.entity.SobreAvisoEntity;
 import br.com.verity.pause.entity.TipoAtestadoEntity;
-import br.com.verity.pause.entity.enumerator.TipoAfastamento;
 import br.com.verity.pause.exception.BusinessException;
 
 @Service

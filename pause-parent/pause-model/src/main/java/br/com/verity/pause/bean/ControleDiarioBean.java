@@ -1,5 +1,8 @@
 package br.com.verity.pause.bean;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -35,7 +38,14 @@ public class ControleDiarioBean {
 	public void setData(Date data) {
 		this.data = data;
 	}
-
+	public void setDataJson(String data) {
+		DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		try {
+			this.data = formatter.parse(data);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+	}
 	public String getDiaDaSemana() {
 		return diaDaSemana;
 	}

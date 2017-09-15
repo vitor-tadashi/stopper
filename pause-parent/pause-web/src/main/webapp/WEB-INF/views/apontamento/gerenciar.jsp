@@ -345,7 +345,7 @@
 							<div class="row mar-btm">
 								<div class="col-sm-4">
 									<label class="control-label">Data</label>
-									<input type="date" id="data-atestado" class="form-control" placeholder="dd/mm/aaaa"/>
+									<input type="date" id="atestadoData" class="form-control" placeholder="dd/mm/aaaa"/>
 								</div>
 								<div class="col-sm-3">
 									<label class="control-label">Quantidade de horas</label>
@@ -386,7 +386,7 @@
 											<td>${data }</td>
 											<td>${at.quantidadeHora }</td>
 											<td>${at.tipoAtestado.descricao }</td>
-											<td><a class="text-danger" onclick="removerAfastamento(this, ${at.id})" href="#">Remover</a></td>
+											<td><a class="text-danger" onclick="removerAtestado(this, ${at.id})" href="#">Remover</a></td>
 										</tr>
 									</c:forEach>
 								</tbody>

@@ -69,7 +69,7 @@ function inserirAfastamento(){
 	var tpDesc = $('#afastamentoJus option:selected').text();
 	var tpId = $('#afastamentoJus option:selected').val();
 	
-	inserirAfastamento_ajax(de, ate, tpId, tpDesc)
+	inserirAfastamento_ajax(de, ate, tpId, tpDesc);
 }
 function inserirAfastamento_ajax(de, ate, tpId, tpDesc){
 	var afastamento={	
@@ -120,17 +120,62 @@ function removerAfastamento(click, id){
 	});
 }
 function inserirAtestado(){
+	var data = formatardataHtml($('#atestadoData').val());
 	var qtd_hr = $('#qtd-hr-atestado').val();
-	var justificativa = $('#atestadoJus').text();
+	var tpDesc = $('#atestadoJus option:selected').text();
+	var tpId = $('#atestadoJus option:selected').val();
 	
-	$('#body-atestado')
-		.append($('<tr>')
-			.append($('<td>').text(qtd_hr))
-			.append($('<td>').text(justificativa))
-			.append($('<td>')
-				.append($('<a>').text('Remover').addClass('text-danger').attr('href',"#").attr('onclick','removerTr(this)'))
-			)
-		);
+	inserirAtestado_ajax(data, qtd_hr, tpId, tpDesc);
+}
+function inserirAtestado_ajax(dt, qtdHora, tpId, tpDesc){
+	var atestado={
+			'controleDiario' : {
+				'dataJson' : dt
+			},
+			'quantidadeHora' : qtdHora,
+			'tipoAtestado' : {
+				'id' : tpId
+			},
+			'idFuncionario' : $('#apontamento-funcionario').val()
+		}
+	$.ajax({
+		url: 'atestado/inserir',
+		type : 'POST',
+		contentType : 'application/json',
+		data: JSON.stringify(atestado),
+		cache: false,
+		success: function(data){
+			$('#body-atestado')
+			.append($('<tr>')
+				.append($('<td>').text(dt))
+				.append($('<td>').text(qtdHora))
+				.append($('<td>').text(tpDesc))
+				.append($('<td>')
+					.append($('<a>').text('Remover').addClass('text-danger').attr('href',"#").attr('onclick','removerAfastamento(this ,'+ data.id +')'))
+				)
+			);
+			clearForm(3);
+		},
+		error: function(erro){
+			$('#erro-label').text(erro.responseText);
+			$('#erro-sm-modal').modal();
+		}
+	});
+}
+function removerAtestado(click, id){
+	$.ajax({
+		url: 'atestado/remover/'+id,
+		type : 'DELETE',
+		contentType : 'application/json',
+		dataType : 'json',
+		success: function(data){
+			$(click).parent().parent().remove();
+		},
+		error: function(erro){
+			$('#erro-label').text(erro.responseText);
+			$('#erro-sm-modal').modal();
+		}
+	});
 }
 function clearForm(i){
 	$('.clear-form')[i].reset();
