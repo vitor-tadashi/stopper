@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -119,14 +120,11 @@ public class ControleDiarioDAO {
 	 * Busca todos os os funcionarios com a soma do banco de horas de controle diario, por empresa;
 	 * @author guilherme.oliveira
 	 */
-	public List<ControleDiarioEntity> findByDataSum() {
+	public List<ControleDiarioEntity> findByDataSum(Date de, Date ate, String idFuncs) {
 		List<ControleDiarioEntity> entities = new ArrayList<ControleDiarioEntity>();
 		ControleDiarioEntity entity = new ControleDiarioEntity();
 		ControleMensalEntity cmEntity = new ControleMensalEntity();
-		
-		java.util.Date data = new java.util.Date();
-		Date dtInicio = new Date(data.getYear(), data.getMonth(), 01);
-		Date dtFim = new Date(data.getTime());
+		DecimalFormat twoDForm = new DecimalFormat("####.##");
 		
 		try {
 			Connection conn = null;
@@ -141,13 +139,14 @@ public class ControleDiarioDAO {
 			sql.append("		SUM(cd.adcNoturno) AS adcNoturno, SUM(cd.sobreAviso) AS sobreAviso,");
 			sql.append("	    SUM(cd.sobreAvisoTrabalhado) AS sobreAvisoTrabalhado, cm.idFuncionario as idFuncionario");
 			sql.append("	FROM PAUSEControleDiario AS cd");
-			sql.append("		LEFT JOIN PAUSEControleMensal AS cm ON cm.idControleMensal = cd.idControleMensal");
+			sql.append("		INNER JOIN PAUSEControleMensal AS cm ON cm.idControleMensal = cd.idControleMensal");
+			sql.append("											AND cm.idFuncionario IN ("+idFuncs+")");
 			sql.append("  WHERE data BETWEEN ? AND ?");
 			sql.append("	GROUP BY cd.idControleMensal, cm.idFuncionario");
 			
 			ps = conn.prepareStatement(sql.toString());
-			ps.setDate(1, dtInicio);
-			ps.setDate(2, dtFim);
+			ps.setDate(1, de);
+			ps.setDate(2, ate);
 			
 			ResultSet rs = ps.executeQuery();
 
@@ -158,11 +157,11 @@ public class ControleDiarioDAO {
 				cmEntity.setIdFuncionario(rs.getInt("idFuncionario"));
 				cmEntity.setId(rs.getInt("cdIdControleMensal"));
 				
-				entity.setHrTotal(rs.getDouble("horaTotal"));
-				entity.setBancoHora(rs.getDouble("bancoHora"));
-				entity.setAdcNoturno(rs.getDouble("adcNoturno"));
-				entity.setSobreAviso(rs.getDouble("sobreAviso"));
-				entity.setSobreAvisoTrabalhado(rs.getDouble("sobreAvisoTrabalhado"));
+				entity.setHrTotal(Double.parseDouble(twoDForm.format(rs.getDouble("horaTotal")).replace(",", ".")));
+				entity.setBancoHora(Double.parseDouble(twoDForm.format(rs.getDouble("bancoHora")).replace(",", ".")));
+				entity.setAdcNoturno(Double.parseDouble(twoDForm.format(rs.getDouble("adcNoturno")).replace(",", ".")));
+				entity.setSobreAviso(Double.parseDouble(twoDForm.format(rs.getDouble("sobreAviso")).replace(",", ".")));
+				entity.setSobreAvisoTrabalhado(Double.parseDouble(twoDForm.format(rs.getDouble("sobreAvisoTrabalhado")).replace(",", ".")));
 				entity.setControleMensal(cmEntity);
 				
 				entities.add(entity);

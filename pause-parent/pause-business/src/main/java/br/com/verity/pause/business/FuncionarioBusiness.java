@@ -68,4 +68,5 @@ public class FuncionarioBusiness {
 	public List<FuncionarioBean> obterTodosComPis(){
 		return sav.getListFuncionarios();
 	}
+
 }

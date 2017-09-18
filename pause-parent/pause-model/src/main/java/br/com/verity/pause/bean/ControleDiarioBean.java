@@ -18,10 +18,22 @@ public class ControleDiarioBean {
 	private Double bancoHora;
 	private Double adicNoturno;
 	private Double sobreAviso;
+	private Double sobreAvisoTrabalhado;
 	private Double qtdAtestadoHoras;
 	private Integer idFuncionario;
 	private Boolean mesFechado;
 	private ControleMensalBean controleMensal;
+	
+	public ControleDiarioBean(){
+	}
+	
+	public ControleDiarioBean(Double horaTotal, Double bancoHora, Double adicNoturno, Double sobreAviso, Double sobreAvisoTrabalhado){
+		this.horaTotal = horaTotal;
+		this.bancoHora = bancoHora;
+		this.adicNoturno = adicNoturno;
+		this.sobreAviso = sobreAviso;
+		this.sobreAvisoTrabalhado = sobreAvisoTrabalhado;
+	}
 
 	public Integer getId() {
 		return id;
@@ -38,6 +50,7 @@ public class ControleDiarioBean {
 	public void setData(Date data) {
 		this.data = data;
 	}
+
 	public void setDataJson(String data) {
 		DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 		try {
@@ -46,6 +59,7 @@ public class ControleDiarioBean {
 			e.printStackTrace();
 		}
 	}
+
 	public String getDiaDaSemana() {
 		return diaDaSemana;
 	}
@@ -125,4 +139,13 @@ public class ControleDiarioBean {
 	public void setControleMensal(ControleMensalBean controleMensal) {
 		this.controleMensal = controleMensal;
 	}
+
+	public Double getSobreAvisoTrabalhado() {
+		return sobreAvisoTrabalhado;
+	}
+
+	public void setSobreAvisoTrabalhado(Double sobreAvisoTrabalhado) {
+		this.sobreAvisoTrabalhado = sobreAvisoTrabalhado;
+	}
+
 }
