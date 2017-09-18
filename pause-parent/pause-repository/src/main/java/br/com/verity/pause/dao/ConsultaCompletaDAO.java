@@ -24,7 +24,7 @@ public class ConsultaCompletaDAO {
 			String sql = "CREATE TABLE ##Apontamento (idFuncionario int, ano int, mes int, cmHora float, cmBanco float, cmAdcNot float, "+
 								"cmSA float, cmST float, cdData date, cdHora float, cdBanco float, cdAdcNot float, "+
 								"cdSA float, cdST float, aData date, aHorario TIME, aTpImport bit, aObs varchar(100), aIdTpJustificativa int, aIdApontamento int, "+
-								"atQtdHora int, sbId int) "+
+								"atQtdHora float, sbId int) "+
 		
 							"INSERT INTO ##Apontamento (idFuncionario, ano, mes, cmHora, cmBanco, cmAdcNot, "+
 													   "cmSA, cmST, cdData, cdHora, cdBanco, cdAdcNot, "+

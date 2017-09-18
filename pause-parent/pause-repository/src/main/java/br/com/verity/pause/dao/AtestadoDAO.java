@@ -9,14 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
+
 import br.com.verity.pause.connection.ConnectionFactory;
-import br.com.verity.pause.entity.AfastamentoEntity;
 import br.com.verity.pause.entity.AtestadoEntity;
 import br.com.verity.pause.entity.ControleDiarioEntity;
 import br.com.verity.pause.entity.ControleMensalEntity;
-import br.com.verity.pause.entity.SobreAvisoEntity;
 import br.com.verity.pause.entity.TipoAtestadoEntity;
-import br.com.verity.pause.entity.enumerator.TipoAfastamento;
 
 @Repository
 public class AtestadoDAO {

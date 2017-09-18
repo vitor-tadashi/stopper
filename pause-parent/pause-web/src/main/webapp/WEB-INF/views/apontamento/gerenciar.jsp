@@ -37,18 +37,20 @@
 					<c:url value="/gerenciar-apontamento" var="url"/>
 					<form action="${url }" method="get" id="bv-form">
 						<div class="row">
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label class="control-label">Nome do funcionário</label>
-									<select class="selectpicker" data-live-search="true" data-width="100%" id="select-funcionario" name="idFuncionario">
-										<option value="">Selecione</option>
-										<c:forEach items="${funcionarios }" var="funcionario">
-											<option value="${funcionario.id }" ${funcionario.id eq idFuncionario? 'selected="true"' : ''}>${funcionario.nome }</option>
-										</c:forEach>
-									</select>
+							<sec:authorize access="hasAnyRole('ROLE_FILTRAR_APONTAMENTOS_POR_FUNCIONARIO', 'ROLE_MULTI_EMPRESA')">
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label class="control-label">Nome do funcionário</label>
+										<select class="selectpicker" data-live-search="true" data-width="100%" id="select-funcionario" name="idFuncionario">
+											<option value="">Selecione</option>
+											<c:forEach items="${funcionarios }" var="funcionario">
+												<option value="${funcionario.id }" ${funcionario.id eq idFuncionario? 'selected="true"' : ''}>${funcionario.nome }</option>
+											</c:forEach>
+										</select>
+									</div>
 								</div>
-							</div>
-							<div class="col-sm-5">
+							</sec:authorize>
+							<div class="col-sm-5 pad-btm">
 								<label class="control-label">Período</label>
 								<div class="input-daterange input-group" id="datepicker">
 									<input type="date" id="periodoDe" class="form-control periodo" name="periodo" placeholder="dd/mm/aaaa" value="${periodo[0] }" min="2010-03-01" max=""/>
@@ -63,15 +65,21 @@
 					</form>
 					<div class="row">
 						<div class="col-md-12 pad-btm">
-							<div class="left">
-								<button class="btn btn-purple" type="button" data-target="#sobre-aviso-modal" data-toggle="modal"><span class="pli-add"></span> Informar sobre aviso</button>
-							</div>
-							<div class="left">
-								<button class="btn btn-success" type="button" data-target="#afastamento-modal" data-toggle="modal"><span class="pli-add"></span> Informar afastamento</button>
-							</div>
-							<div>
-								<button class="btn btn-pink" type="button" data-target="#atestado-modal" data-toggle="modal"><span class="pli-add"></span> Informar atestado</button>
-							</div>
+							<sec:authorize access="hasRole('ROLE_INSERIR_SOBRE_AVISO')">
+								<div class="left">
+									<button class="btn btn-purple" type="button" data-target="#sobre-aviso-modal" data-toggle="modal"><span class="pli-add"></span> Informar sobre aviso</button>
+								</div>
+							</sec:authorize>
+							<sec:authorize access="hasRole('ROLE_INSERIR_AFASTAMENTO')">
+								<div class="left">
+									<button class="btn btn-success" type="button" data-target="#afastamento-modal" data-toggle="modal"><span class="pli-add"></span> Informar afastamento</button>
+								</div>
+							</sec:authorize>
+							<sec:authorize access="hasRole('ROLE_INSERIR_ATESTADO')">
+								<div>
+									<button class="btn btn-pink" type="button" data-target="#atestado-modal" data-toggle="modal"><span class="pli-add"></span> Informar atestado</button>
+								</div>
+							</sec:authorize>
 						</div>
 					</div>
 					<div class="table-responsive">
@@ -137,267 +145,276 @@
 		<!--End page content-->
 	</layout:put>
 	<layout:put block="scripts">
-		<!--Default Bootstrap Modal-->
-		<!--===================================================-->
-		<div class="modal" id="demo-default-modal" role="dialog" tabindex="-1" aria-labelledby="demo-default-modal" aria-hidden="true">
-			<div class="modal-dialog modal-sm">
-				<div class="modal-content">
-		
-					<!--Modal header-->
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
-						<h4 class="modal-title" id="title-modal-apontamento">01/08/2017, terça-feira</h4>
-					</div>
-		
-					<!--Modal body-->
-					<div class="modal-body">
-						<p class="text-semibold text-main">Informe o horário:</p>
-						<form action="" id="form-time" class="clear-form">
-							<input type="hidden" id="apontamento-id" />
-							<input type="hidden" id="idApontamento" />
-							<!--Bootstrap Timepicker : Component-->
-							<!--===================================================-->
-							<div class="input-group date">
-								<input id="apontamento-time" type="text-center" class="form-control clock" placeholder="--:--">
-								<span class="input-group-addon"><i class="pli-clock"></i></span>
-							</div>
-							<div class="form-group pad-top">
-								<label class="control-label">Justificativa</label>
-								<select class="selectpicker clear-select" data-live-search="true" data-width="100%" id="apontamento-jus">
-									<option value="0">Selecione</option>
-									<c:forEach items="${justificativas }" var="jus">
-										<option value="${jus.id }">${jus.descricao }</option>
-									</c:forEach>
-								</select>
-							</div>
-							<div class="form-group">
-								<label class="control-label">Observações</label>
-								<textarea id="apontamento-obs" rows="2" maxlength="200" class="form-control"></textarea>
-							</div>
-							<!--===================================================-->
-						</form>
-					</div>
-		
-					<!--Modal footer-->
-					<div class="modal-footer">
-						<button data-dismiss="modal" class="btn btn-danger" type="button" onclick="confirmarRemover()" id="btn-cancelar-apontamento">Cancelar</button>
-						<button class="btn btn-success" onclick="informarHorario();">Salvar</button>
+	
+		<sec:authorize access="hasRole('ROLE_INSERIR_APONTAMENTO')">
+			<!--Apontamento Bootstrap Modal-->
+			<!--===================================================-->
+			<div class="modal" id="demo-default-modal" role="dialog" tabindex="-1" aria-labelledby="demo-default-modal" aria-hidden="true">
+				<div class="modal-dialog modal-sm">
+					<div class="modal-content">
+			
+						<!--Modal header-->
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
+							<h4 class="modal-title" id="title-modal-apontamento">01/08/2017, terça-feira</h4>
+						</div>
+			
+						<!--Modal body-->
+						<div class="modal-body">
+							<p class="text-semibold text-main">Informe o horário:</p>
+							<form action="" id="form-time" class="clear-form">
+								<input type="hidden" id="apontamento-id" />
+								<input type="hidden" id="idApontamento" />
+								<!--Bootstrap Timepicker : Component-->
+								<!--===================================================-->
+								<div class="input-group date">
+									<input id="apontamento-time" type="text-center" class="form-control clock" placeholder="--:--">
+									<span class="input-group-addon"><i class="pli-clock"></i></span>
+								</div>
+								<div class="form-group pad-top">
+									<label class="control-label">Justificativa</label>
+									<select class="selectpicker clear-select" data-live-search="true" data-width="100%" id="apontamento-jus">
+										<option value="0">Selecione</option>
+										<c:forEach items="${justificativas }" var="jus">
+											<option value="${jus.id }">${jus.descricao }</option>
+										</c:forEach>
+									</select>
+								</div>
+								<div class="form-group">
+									<label class="control-label">Observações</label>
+									<textarea id="apontamento-obs" rows="2" maxlength="200" class="form-control"></textarea>
+								</div>
+								<!--===================================================-->
+							</form>
+						</div>
+			
+						<!--Modal footer-->
+						<div class="modal-footer">
+							<button data-dismiss="modal" class="btn btn-danger" type="button" onclick="confirmarRemover()" id="btn-cancelar-apontamento">Cancelar</button>
+							<button class="btn btn-success" onclick="informarHorario();">Salvar</button>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-		<!--===================================================-->
-		<!--End Default Bootstrap Modal-->
-		<!--sobre aviso Modal-->
-		<!--===================================================-->
-		<div class="modal fade" id="sobre-aviso-modal" role="dialog" tabindex="-1" aria-labelledby="sobre-aviso-modal" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-		
-					<!--Modal header-->
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
-						<h4 class="modal-title">Gerenciar horas sobre aviso</h4>
-					</div>
-		
-					<!--Modal body-->
-					<div class="modal-body">
-						<form action="" id="form-sa" class="clear-form">
-							<div class="row">
-								<div class="col-sm-4">
-									<div class="form-group">
-										<label class="control-label">Data</label>
-										<input type="date" name="data" class="form-control data" id="dt-sa" placeholder="dd/mm/aaaa"/>
+			<!--===================================================-->
+			<!--End Default Bootstrap Modal-->
+		</sec:authorize>
+		<sec:authorize access="hasRole('ROLE_INSERIR_SOBRE_AVISO')">
+			<!--sobre aviso Modal-->
+			<!--===================================================-->
+			<div class="modal fade" id="sobre-aviso-modal" role="dialog" tabindex="-1" aria-labelledby="sobre-aviso-modal" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+			
+						<!--Modal header-->
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
+							<h4 class="modal-title">Gerenciar horas sobre aviso</h4>
+						</div>
+			
+						<!--Modal body-->
+						<div class="modal-body">
+							<form action="" id="form-sa" class="clear-form">
+								<div class="row">
+									<div class="col-sm-4">
+										<div class="form-group">
+											<label class="control-label">Data</label>
+											<input type="date" name="data" class="form-control data" id="dt-sa" placeholder="dd/mm/aaaa"/>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<label class="control-label">Período</label>
+										<div class="input-daterange input-group" id="datepicker">
+											<input id="hora-sa-e" name="entrada" type="text" class="form-control clock" placeholder="--:--">
+											<span class="input-group-addon">até</span>
+											<div class="input-group date">
+												<input id="hora-sa-s" name="saida" type="text" class="form-control clock" placeholder="--:--">
+												<span class="input-group-addon"><i class="pli-clock"></i></span>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-1" style="margin-top: 23px;">
+										<button class="btn btn-info" type="button" onclick="inserirSA()">Inserir</button>
 									</div>
 								</div>
-								<div class="col-sm-6">
-									<label class="control-label">Período</label>
-									<div class="input-daterange input-group" id="datepicker">
-										<input id="hora-sa-e" name="entrada" type="text" class="form-control clock" placeholder="--:--">
-										<span class="input-group-addon">até</span>
-										<div class="input-group date">
-											<input id="hora-sa-s" name="saida" type="text" class="form-control clock" placeholder="--:--">
-											<span class="input-group-addon"><i class="pli-clock"></i></span>
+							</form>
+							<div class="table-responsive">
+								<table class="table table-striped table-bordered">
+									<thead>
+										<tr class="">
+											<th class="text-center">Data</th>
+											<th class="text-center">Entrada</th>
+											<th class="text-center">Saída</th>
+											<th class="text-center">Ação</th>
+										</tr>
+									</thead>
+									<tbody class="text-center" id="body-sa">
+										<c:forEach items="${sobreAvisos }" var="sa">
+											<fmt:formatDate value="${sa.data }" pattern="dd/MM/yyyy" var="data"/>
+											<tr>
+												<td>${data }</td>
+												<td>${sa.entrada }</td>
+												<td>${sa.saida }</td>
+												<td><a class="text-danger" onclick="removerSA(this, ${sa.id})" href="#">Remover</a></td>
+											</tr>
+										</c:forEach>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--===================================================-->
+			<!--End sobre aviso Modal-->
+		</sec:authorize>
+		<sec:authorize access="hasRole('ROLE_INSERIR_AFASTAMENTO')">
+			<!--afastamento Modal-->
+			<!--===================================================-->
+			<div class="modal fade" id="afastamento-modal" role="dialog" tabindex="-1" aria-labelledby="afastamento-modal" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+			
+						<!--Modal header-->
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
+							<h4 class="modal-title">Gerenciar afastamento</h4>
+						</div>
+			
+						<!--Modal body-->
+						<div class="modal-body">
+							<form action="" class="clear-form">
+								<div class="row pad-btm">
+									<div class="col-sm-7">
+										<label class="control-label">Período</label>
+										<div class="input-daterange input-group" id="datepicker">
+											<input type="date" id="afastamentoDe" class="form-control data" name="start" placeholder="dd/mm/aaaa"/>
+											<span class="input-group-addon">até</span>
+											<input type="date" id="afastamentoAte" class="form-control data" name="end" placeholder="dd/mm/aaaa"/>
 										</div>
 									</div>
 								</div>
-								<div class="col-sm-1" style="margin-top: 23px;">
-									<button class="btn btn-info" type="button" onclick="inserirSA()">Inserir</button>
+								<div class="row">
+									<div class="col-sm-8">
+										<div class="form-group">
+											<label class="control-label">Justificativa</label>
+											<select class="selectpicker clear-select" data-live-search="true" data-width="100%" id="afastamentoJus">
+												<option value="">Selecione</option>
+												<c:forEach items="${tipoAfastamentos}" var="tp">
+													<option value="${tp.id }">${tp.descricao }</option>
+												</c:forEach>
+											</select>
+										</div>
+									</div>
+									<div class="col-sm-1" style="margin-top: 23px;">
+										<button class="btn btn-info" type="button" onclick="inserirAfastamento()">Inserir</button>
+									</div>
 								</div>
-							</div>
-						</form>
-						<div class="table-responsive">
-							<table class="table table-striped table-bordered">
-								<thead>
-									<tr class="">
-										<th class="text-center">Data</th>
-										<th class="text-center">Entrada</th>
-										<th class="text-center">Saída</th>
-										<th class="text-center">Ação</th>
-									</tr>
-								</thead>
-								<tbody class="text-center" id="body-sa">
-									<c:forEach items="${sobreAvisos }" var="sa">
-										<fmt:formatDate value="${sa.data }" pattern="dd/MM/yyyy" var="data"/>
-										<tr>
-											<td>${data }</td>
-											<td>${sa.entrada }</td>
-											<td>${sa.saida }</td>
-											<td><a class="text-danger" onclick="removerSA(this, ${sa.id})" href="#">Remover</a></td>
+							</form>
+							<div class="table-responsive">
+								<table class="table table-striped table-bordered">
+									<thead>
+										<tr class="">
+											<th class="text-center">De</th>
+											<th class="text-center">Até</th>
+											<th class="text-center">Justificativa</th>
+											<th class="text-center">Ação</th>
 										</tr>
-									</c:forEach>
-								</tbody>
-							</table>
+									</thead>
+									<tbody class="text-center" id="body-afastamento">
+										<c:forEach items="${afastamentos }" var="af">
+											<fmt:formatDate value="${af.dataInicio }" pattern="dd/MM/yyyy" var="inicio"/>
+											<fmt:formatDate value="${af.dataFim }" pattern="dd/MM/yyyy" var="fim"/>
+											<tr>
+												<td>${inicio }</td>
+												<td>${fim }</td>
+												<td>${af.tipoAfastamento.descricao }</td>
+												<td><a class="text-danger" onclick="removerAfastamento(this, ${af.id})" href="#">Remover</a></td>
+											</tr>
+										</c:forEach>
+									</tbody>
+								</table>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-		<!--===================================================-->
-		<!--End sobre aviso Modal-->
-		<!--afastamento Modal-->
-		<!--===================================================-->
-		<div class="modal fade" id="afastamento-modal" role="dialog" tabindex="-1" aria-labelledby="afastamento-modal" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-		
-					<!--Modal header-->
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
-						<h4 class="modal-title">Gerenciar afastamento</h4>
-					</div>
-		
-					<!--Modal body-->
-					<div class="modal-body">
-						<form action="" class="clear-form">
-							<div class="row pad-btm">
-								<div class="col-sm-7">
-									<label class="control-label">Período</label>
-									<div class="input-daterange input-group" id="datepicker">
-										<input type="date" id="afastamentoDe" class="form-control data" name="start" placeholder="dd/mm/aaaa"/>
-										<span class="input-group-addon">até</span>
-										<input type="date" id="afastamentoAte" class="form-control data" name="end" placeholder="dd/mm/aaaa"/>
+			<!--===================================================-->
+			<!--End afastamento Modal-->
+		</sec:authorize>
+		<sec:authorize access="hasRole('ROLE_INSERIR_ATESTADO')">
+			<!--atestado Modal-->
+			<!--===================================================-->
+			<div class="modal fade" id="atestado-modal" role="dialog" tabindex="-1" aria-labelledby="atestado-modal" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+			
+						<!--Modal header-->
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
+							<h4 class="modal-title">Gerenciar atestados</h4>
+						</div>
+			
+						<!--Modal body-->
+						<div class="modal-body">
+							<form action="" class="clear-form">
+								<div class="row mar-btm">
+									<div class="col-sm-4">
+										<label class="control-label">Data</label>
+										<input type="date" id="atestadoData" class="form-control" placeholder="dd/mm/aaaa"/>
+									</div>
+									<div class="col-sm-3">
+										<label class="control-label">Quantidade de horas</label>
+										<input id="qtd-hr-atestado" type="number" step="0.5" class="form-control" placeholder="00,00">
 									</div>
 								</div>
-							</div>
-							<div class="row">
-								<div class="col-sm-8">
-									<div class="form-group">
-										<label class="control-label">Justificativa</label>
-										<select class="selectpicker clear-select" data-live-search="true" data-width="100%" id="afastamentoJus">
-											<option value="">Selecione</option>
-											<c:forEach items="${tipoAfastamentos}" var="tp">
-												<option value="${tp.id }">${tp.descricao }</option>
-											</c:forEach>
-										</select>
+								<div class="row">
+									<div class="col-sm-7">
+										<div class="form-group">
+											<label class="control-label">Justificativa</label>
+											<select class="selectpicker clear-select" data-live-search="true" data-width="100%" id="atestadoJus">
+												<option value="">Selecione</option>
+												<c:forEach items="${tipoAtestado}" var="tp">
+													<option value="${tp.id }">${tp.descricao }</option>
+												</c:forEach>
+											</select>
+										</div>
+									</div>
+									<div class="col-sm-1" style="margin-top: 23px;">
+										<button class="btn btn-info" type="button" onclick="inserirAtestado()">Inserir</button>
 									</div>
 								</div>
-								<div class="col-sm-1" style="margin-top: 23px;">
-									<button class="btn btn-info" type="button" onclick="inserirAfastamento()">Inserir</button>
-								</div>
-							</div>
-						</form>
-						<div class="table-responsive">
-							<table class="table table-striped table-bordered">
-								<thead>
-									<tr class="">
-										<th class="text-center">De</th>
-										<th class="text-center">Até</th>
-										<th class="text-center">Justificativa</th>
-										<th class="text-center">Ação</th>
-									</tr>
-								</thead>
-								<tbody class="text-center" id="body-afastamento">
-									<c:forEach items="${afastamentos }" var="af">
-										<fmt:formatDate value="${af.dataInicio }" pattern="dd/MM/yyyy" var="inicio"/>
-										<fmt:formatDate value="${af.dataFim }" pattern="dd/MM/yyyy" var="fim"/>
-										<tr>
-											<td>${inicio }</td>
-											<td>${fim }</td>
-											<td>${af.tipoAfastamento.descricao }</td>
-											<td><a class="text-danger" onclick="removerAfastamento(this, ${af.id})" href="#">Remover</a></td>
+							</form>
+							<div class="table-responsive">
+								<table class="table table-striped table-bordered">
+									<thead>
+										<tr class="">
+											<th class="text-center">Data</th>
+											<th class="text-center">Qtd de horas</th>
+											<th class="text-center">Justificativa</th>
+											<th class="text-center">Ação</th>
 										</tr>
-									</c:forEach>
-								</tbody>
-							</table>
+									</thead>
+									<tbody class="text-center" id="body-atestado">
+										<c:forEach items="${atestados }" var="at">
+											<fmt:formatDate value="${at.controleDiario.data }" pattern="dd/MM/yyyy" var="data"/>
+											<tr>
+												<td>${data }</td>
+												<td>${at.quantidadeHora }</td>
+												<td>${at.tipoAtestado.descricao }</td>
+												<td><a class="text-danger" onclick="removerAtestado(this, ${at.id})" href="#">Remover</a></td>
+											</tr>
+										</c:forEach>
+									</tbody>
+								</table>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-		<!--===================================================-->
-		<!--End afastamento Modal-->
-		<!--atestado Modal-->
-		<!--===================================================-->
-		<div class="modal fade" id="atestado-modal" role="dialog" tabindex="-1" aria-labelledby="atestado-modal" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-		
-					<!--Modal header-->
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
-						<h4 class="modal-title">Gerenciar atestados</h4>
-					</div>
-		
-					<!--Modal body-->
-					<div class="modal-body">
-						<form action="" class="clear-form">
-							<div class="row mar-btm">
-								<div class="col-sm-4">
-									<label class="control-label">Data</label>
-									<input type="date" id="atestadoData" class="form-control" placeholder="dd/mm/aaaa"/>
-								</div>
-								<div class="col-sm-3">
-									<label class="control-label">Quantidade de horas</label>
-									<input id="qtd-hr-atestado" type="number" step="0.5" class="form-control" placeholder="00,00">
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-sm-7">
-									<div class="form-group">
-										<label class="control-label">Justificativa</label>
-										<select class="selectpicker clear-select" data-live-search="true" data-width="100%" id="atestadoJus">
-											<option value="">Selecione</option>
-											<c:forEach items="${tipoAtestado}" var="tp">
-												<option value="${tp.id }">${tp.descricao }</option>
-											</c:forEach>
-										</select>
-									</div>
-								</div>
-								<div class="col-sm-1" style="margin-top: 23px;">
-									<button class="btn btn-info" type="button" onclick="inserirAtestado()">Inserir</button>
-								</div>
-							</div>
-						</form>
-						<div class="table-responsive">
-							<table class="table table-striped table-bordered">
-								<thead>
-									<tr class="">
-										<th class="text-center">Data</th>
-										<th class="text-center">Qtd de horas</th>
-										<th class="text-center">Justificativa</th>
-										<th class="text-center">Ação</th>
-									</tr>
-								</thead>
-								<tbody class="text-center" id="body-atestado">
-									<c:forEach items="${atestados }" var="at">
-										<fmt:formatDate value="${at.controleDiario.data }" pattern="dd/MM/yyyy" var="data"/>
-										<tr>
-											<td>${data }</td>
-											<td>${at.quantidadeHora }</td>
-											<td>${at.tipoAtestado.descricao }</td>
-											<td><a class="text-danger" onclick="removerAtestado(this, ${at.id})" href="#">Remover</a></td>
-										</tr>
-									</c:forEach>
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!--===================================================-->
-		<!--End atestado Modal-->
+			<!--===================================================-->
+			<!--End atestado Modal-->
+		</sec:authorize>
 		
 	<!--erro Modal-->
     <!--===================================================-->
