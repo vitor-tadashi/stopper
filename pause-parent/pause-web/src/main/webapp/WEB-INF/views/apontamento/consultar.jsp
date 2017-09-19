@@ -44,14 +44,15 @@
 											<option value="${funcionario.id}">${funcionario.nome}</option>
 										</c:forEach>
 									</select>
+									<input type="hidden" id="funcSel" name="idFuncionario" val="${idFuncBusca }"/>
 								</div>
 							</div>
 							<div class="col-sm-5">
 								<label class="control-label">Período</label>
 								<div class="input-daterange input-group" id="datepicker">
-									<input type="date"class="form-control" name="de" id="de" value="${de }"/>
+									<input type="date"class="form-control" onBlur="permitirData()" name="de" id="de" value="${de }"/>
 									<span class="input-group-addon">até</span>
-									<input type="date" class="form-control" name="ate" id="ate" value="${ate }"/>
+									<input type="date" class="form-control" onBlur="permitirData()" name="ate" id="ate" value="${ate }"/>
 								</div>
 							</div>
 							<div class="col-sm-1" style="margin-top: 23px;">
@@ -59,7 +60,10 @@
 							</div>
 						</form>
 						<div class="col-sm-2 pull-right" style="margin-top: 23px;">
-							<a class="btn btn-success pull-right" href="#"><i class="fa fa-file-excel-o"></i> Gerar relatório</a>
+							<button type="button" class="btn btn-success pull-right" onclick="gerarRelatorio()">
+								<i class="fa fa-file-excel-o"></i> Gerar relatório
+							</button>
+							<a href="${url }" target="_blank" id="download" class="hide"></a>
 						</div>
 					</div>
 					<div class="table-respon">
@@ -98,26 +102,89 @@
 		
 	</layout:put>
 	<layout:put block="scripts">
-		<script src='<c:url value="/plugins/masked-input/jquery.mask.js"/>'></script>
 		<script src='<c:url value="/plugins/datatables/media/js/jquery.dataTables.js"/>'></script>
 		<script src='<c:url value="/plugins/datatables/media/js/dataTables.bootstrap.js"/>'></script>
 		<script src='<c:url value='/js/custom/datatable-custom.js'/>'></script>
-		<script src='<c:url value='/js/custom/masks.js'/>'></script>
+		<script src='<c:url value="/js/custom/send-ajax.js"/>'></script>
 		<script>
+		var url = window.document.URL;
 		$(document).ready(function() {
 		    $('#filtrar-bt').on('click', function(){
-		    	var url = window.document.URL;
 		    	if(url.includes("filtrar")){
 		    		$("#form-filtrar").submit();
 		    	}else if($('#ate').val() == "" && $('#de').val() == ""){
 					table
 					.columns(0).search($('#idFunc option:selected').text())
 					.draw();
+					$("#funcSel").val($("#idFunc").val());
 		    	}else{
 		    		$("#form-filtrar").submit();
 		    	}
 		    });
+		    
+	    	var date = new Date();
+	    	date = date.toLocaleDateString();
+	    	var dia = date.substring(0, 2);
+	    	var mes = date.substring(3, 5);
+	    	var ano = date.substring(6, 10);
+	    	
+	    	$("#de").attr("max", ano+"-"+mes+"-"+dia);
+	    	$("#ate").attr("max", ano+"-"+mes+"-"+dia);
+	    	$("#ate").attr("min", ano+"-"+mes+"-"+dia);
+
 		} );
+		
+		function permitirData(){
+			var deAno = $("#de").val().substring(0, 4);
+			var deMes = $("#de").val().substring(5, 7);
+			var deDia = $("#de").val().substring(8, 10);
+			
+			var ateAno = $("#ate").val().substring(0, 4);
+			var ateMes = $("#ate").val().substring(5, 7);
+			var ateDia = $("#ate").val().substring(8, 10);
+			if($("#ate").val() != ""){
+				$("#ate").attr("min", $("#de").val());
+				$("#de").attr("max", $("#ate").val());
+			}else{
+				$("#ate").attr("min", $("#de").val());
+			}
+		}
+		
+		function gerarRelatorio(){
+			var dataDe;
+			var dataAte;
+			var idFuncionario = $("#funcSel").val();
+			if(url.includes("filtrar")){
+				var deAno = $("#de").val().substring(0, 4);
+				var deMes = $("#de").val().substring(5, 7);
+				var deDia = $("#de").val().substring(8, 10);
+				
+				dataDe = new Date(deAno, deMes-1, deDia);
+				alert(dataDe);
+				
+				var ateAno = $("#ate").val().substring(0, 4);
+				var ateMes = $("#ate").val().substring(5, 7);
+				var ateDia = $("#ate").val().substring(8, 10);
+				
+				dataAte = new Date(ateAno, ateMes-1, ateDia);
+				alert(dataAte);
+	    	}else{
+	    		dataAte = new Date();
+	    		dataDe = new Date(dataAte.getYear()+1900, dataAte.getMonth(), 01);
+	    	}
+			
+			$.ajax({
+				url: "/pause/consultar-apontamento/gerar-relatorio-consulta",
+				type: "POST",
+				data: {'idFuncionario' : idFuncionario,
+						'ate' : dataAte,
+						'de' : dataDe},
+				success: function(data){
+					$("#download").attr("href", "/pause/relatorio/download?caminho="+data);
+					window.open($("#download").attr("href"),'_blank');
+				}
+			})
+		}
 		</script>
 	</layout:put>
 </layout:extends>

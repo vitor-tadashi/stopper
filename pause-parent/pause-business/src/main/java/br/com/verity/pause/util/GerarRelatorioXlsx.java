@@ -1,6 +1,7 @@
 package br.com.verity.pause.util;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -12,8 +13,10 @@ import java.util.List;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
+import br.com.verity.pause.bean.ConsultaApontamentosBean;
 import br.com.verity.pause.bean.ConsultaCompletaBean;
 import br.com.verity.pause.bean.FuncionarioBean;
 import br.com.verity.pause.enumeration.DiaSemanaEnum;
@@ -236,5 +239,44 @@ public class GerarRelatorioXlsx {
 		}
 
 		return arquivo;
+	}
+
+	public String relatorioConsulta(List<ConsultaApontamentosBean> consultaApontamentosBean, Date de, Date ate, Integer idEmpresa) {
+		String empresa = (idEmpresa == 2)?"Verity":"QA360";
+		String consolidado = "C:" + File.separator + "Pause" + File.separator + "Relatorios" + File.separator
+				+ "consolidado"+empresa+""+de.getMonth()+".xlsx";
+		ClassPathResource resourceModelo = new ClassPathResource(empresa+".xlsx");
+		DateFormat formatDt = new SimpleDateFormat("dd/MM/yyyy");
+		int linha = 5;
+		try {
+			FileInputStream fileModelo = new FileInputStream(resourceModelo.getFile());
+			XSSFWorkbook workbook = new XSSFWorkbook(fileModelo);
+			XSSFSheet sheet = workbook.getSheetAt(0);
+			XSSFRow row = sheet.createRow(linha);
+
+			String data = formatDt.format(de) + " até " + formatDt.format(ate);
+			
+			row = sheet.getRow(3);
+			row.getCell(2).setCellValue(data);
+			
+			for (ConsultaApontamentosBean bean : consultaApontamentosBean) {
+				row = sheet.createRow(linha);
+				row.createCell(0).setCellValue(bean.getNmFuncionario());
+				row.createCell(1).setCellValue(bean.getControleDiario().getHoraTotal());
+				row.createCell(2).setCellValue(bean.getControleDiario().getBancoHora());
+				row.createCell(3).setCellValue(bean.getControleDiario().getAdicNoturno());
+				row.createCell(4).setCellValue(bean.getControleDiario().getSobreAviso());
+				row.createCell(5).setCellValue(bean.getControleDiario().getSobreAvisoTrabalhado());
+				linha++;
+			}
+			
+			FileOutputStream out = new FileOutputStream(new File(consolidado));
+			workbook.write(out);
+            out.close();
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+
+		return consolidado;
 	}
 }
