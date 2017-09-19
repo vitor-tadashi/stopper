@@ -152,23 +152,23 @@
 			<div class="modal" id="demo-default-modal" role="dialog" tabindex="-1" aria-labelledby="demo-default-modal" aria-hidden="true">
 				<div class="modal-dialog modal-sm">
 					<div class="modal-content">
+						<form id="form-time" class="clear-form">
+							<!--Modal header-->
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
+								<h4 class="modal-title" id="title-modal-apontamento">01/08/2017, terça-feira</h4>
+							</div>
 			
-						<!--Modal header-->
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
-							<h4 class="modal-title" id="title-modal-apontamento">01/08/2017, terça-feira</h4>
-						</div>
-			
-						<!--Modal body-->
-						<div class="modal-body">
-							<p class="text-semibold text-main">Informe o horário:</p>
-							<form action="" id="form-time" class="clear-form">
+							<!--Modal body-->
+							<div class="modal-body">
+								<p class="text-semibold text-main">Informe o horário:</p>
+							
 								<input type="hidden" id="apontamento-id" />
 								<input type="hidden" id="idApontamento" />
 								<!--Bootstrap Timepicker : Component-->
 								<!--===================================================-->
-								<div class="input-group date">
-									<input id="apontamento-time" type="text-center" class="form-control clock" placeholder="--:--">
+								<div class="input-group date" id="div-apontamento-hora">
+									<input id="apontamento-time" name="hora" type="text-center" class="form-control clock" placeholder="--:--">
 									<span class="input-group-addon"><i class="pli-clock"></i></span>
 								</div>
 								<div class="form-group pad-top">
@@ -185,14 +185,13 @@
 									<textarea id="apontamento-obs" rows="2" maxlength="200" class="form-control"></textarea>
 								</div>
 								<!--===================================================-->
-							</form>
-						</div>
-			
-						<!--Modal footer-->
-						<div class="modal-footer">
-							<button data-dismiss="modal" class="btn btn-danger" type="button" onclick="confirmarRemover()" id="btn-cancelar-apontamento">Cancelar</button>
-							<button class="btn btn-success" onclick="informarHorario();">Salvar</button>
-						</div>
+							</div>
+							<!--Modal footer onclick="informarHorario();"-->
+							<div class="modal-footer">
+								<button data-dismiss="modal" class="btn btn-danger" type="button" onclick="confirmarRemover()" id="btn-cancelar-apontamento">Cancelar</button>
+								<button class="btn btn-success" id="btn-form-time" type="button">Salvar</button>
+							</div>
+						</form>
 					</div>
 				</div>
 			</div>
@@ -499,6 +498,32 @@
 						}
 					}
 				}
+			});
+			$('#btn-form-time').on('click', function () {
+			    var erro = false;
+				if (!$('#apontamento-time').val() && $('#apontamento-time').val() == "") {
+					if ($("#aponta-time-erro").length == 0)
+						$('#div-apontamento-hora').after('<small class="help-block" id="aponta-time-erro">Campo obrigatório.</small>')
+			        erro = true
+			    }
+				if ($('#apontamento-jus').val() == "0") {
+					if ($("#aponta-jus-erro").length == 0)
+						$('#apontamento-jus').after('<small class="help-block" id="aponta-jus-erro">Campo obrigatório.</small>')
+			        erro = true
+			    }
+				if(!erro){
+					informarHorario();
+				}
+			});
+			$('#apontamento-time').on('change', function () {
+				if ($('#apontamento-time').val() && $('#apontamento-time').val() != "") {
+					$('#div-apontamento-hora').next('small').remove();
+			    }
+			});
+			$('#apontamento-jus').on('change', function () {
+				if ($('#apontamento-jus').val() != "0") {
+					$('#apontamento-jus').next('small').remove();
+			    }
 			});
 		});
 		</script>

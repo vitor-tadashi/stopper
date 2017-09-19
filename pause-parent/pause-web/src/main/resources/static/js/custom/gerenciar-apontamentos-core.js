@@ -3,6 +3,7 @@ $(document).ready(function() {
 });
 function dialogApontamentoHora(td, idApontamento) {
 	clearForm(0);
+	$( ".help-block" ).remove();
 	
 	var id = $(td).attr('id');
 	var infoDia = $(td).parent().find('input[id^="infoDia"]');
