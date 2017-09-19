@@ -15,12 +15,12 @@
 	
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
     <link href='<c:url value="/css/bootstrap.min.css"/>' rel="stylesheet">
-    <link href='<c:url value="plugins/bootstrap-select/bootstrap-select.min.css"/>' rel="stylesheet">
+    <link href='<c:url value="/plugins/bootstrap-select/bootstrap-select.min.css"/>' rel="stylesheet">
     <link href='<c:url value="/css/nifty.min.css"/>' rel="stylesheet">
     <link href='<c:url value="/css/themes/type-a/theme-light.min.css"/>' rel="stylesheet">
     <link href='<c:url value="/premium/icon-sets/icons/line-icons/premium-line-icons.min.css"/>' rel="stylesheet">
     <link href='<c:url value="/plugins/font-awesome/css/font-awesome.min.css"/>' rel="stylesheet">
-    <link href='<c:url value="css/custom/custom.css"/>' rel="stylesheet">
+    <link href='<c:url value="/css/custom/custom.css"/>' rel="stylesheet">
 	<!-- css serão carregados aqui -->
 	<layout:block name="css"> </layout:block>
 </head>
@@ -223,7 +223,7 @@
 
     <script src='<c:url value="/js/jquery.min.js"/>'></script>
     <script src='<c:url value="/js/bootstrap.min.js"/>'></script>
-    <script src='<c:url value="plugins/bootstrap-select/bootstrap-select.min.js"/>'></script>
+    <script src='<c:url value="/plugins/bootstrap-select/bootstrap-select.min.js"/>'></script>
     <script src='<c:url value="/js/nifty.min.js"/>'></script>
     <script type="text/javascript">
     	function formatardataHtml(s){

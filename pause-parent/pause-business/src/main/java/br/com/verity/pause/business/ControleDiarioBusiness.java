@@ -19,6 +19,7 @@ import br.com.verity.pause.bean.FuncionarioBean;
 import br.com.verity.pause.converter.ControleDiarioConverter;
 import br.com.verity.pause.converter.ControleMensalConverter;
 import br.com.verity.pause.dao.ControleDiarioDAO;
+import br.com.verity.pause.entity.ApontamentoEntity;
 import br.com.verity.pause.entity.ControleDiarioEntity;
 import br.com.verity.pause.entity.ControleMensalEntity;
 import br.com.verity.pause.enumeration.DiaSemanaEnum;
@@ -145,7 +146,46 @@ public class ControleDiarioBusiness {
 		return cd;
 	}
 
-	public List<ControleDiarioBean> listSomaControleDiario() {
-		return controleDiarioConverter.convertEntityToBean(controleDiarioDAO.findByDataSum());
+	public List<ControleDiarioBean> listSomaControleDiario(List<FuncionarioBean> funcionarios) {
+		java.util.Date data = new java.util.Date();
+		java.sql.Date de = new java.sql.Date(data.getYear(), data.getMonth(), 01);
+		java.sql.Date ate = new java.sql.Date(data.getTime());
+		String idsFuncs = this.getIdFuncsString(funcionarios);
+		List<ControleDiarioBean> beans = this.setControleMensalEntityToBean(controleDiarioDAO.findByDataSum(de, ate, idsFuncs));
+		return beans;
+	}
+	
+	public List<ControleDiarioBean> listSomaControleDiarioPorPeriodo(List<FuncionarioBean> funcionarios, Date de, Date ate) {
+		java.sql.Date dtDe = new java.sql.Date(de.getTime());
+		java.sql.Date dtAte = new java.sql.Date(ate.getTime());
+		String idsFuncs = this.getIdFuncsString(funcionarios);
+		List<ControleDiarioBean> beans = this.setControleMensalEntityToBean(controleDiarioDAO.findByDataSum(dtDe, dtAte, idsFuncs));
+		return beans;
+	}
+	
+	private List<ControleDiarioBean> setControleMensalEntityToBean(List<ControleDiarioEntity> controleDiarioEntity) {
+		List<ControleDiarioBean> controlesDiario = new ArrayList<ControleDiarioBean>();
+		ControleDiarioBean controleDiario = null;
+		
+		for (ControleDiarioEntity entity : controleDiarioEntity) {
+			controleDiario = new ControleDiarioBean();
+			
+			controleDiario = controleDiarioConverter.convertEntityToBean(entity);
+			controleDiario.setControleMensal(controleMensalConverter.convertEntityToBean(entity.getControleMensal()));
+			
+			controlesDiario.add(controleDiario);
+		}
+		return controlesDiario;
+	}
+	
+	private String getIdFuncsString(List<FuncionarioBean> funcionarios) {
+		String idFuncs = "";
+		
+		for (FuncionarioBean funcionarioBean : funcionarios) {
+			idFuncs += funcionarioBean.getId().toString() +",";
+		}
+		idFuncs = idFuncs.substring(0, idFuncs.length()-1);
+		
+		return idFuncs;
 	}
 }

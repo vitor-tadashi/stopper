@@ -18,6 +18,11 @@ public class ControleDiarioConverter implements Converter<ControleDiarioEntity, 
 		entity.setId(bean.getId());
 		entity.setData(new java.sql.Date(bean.getData().getTime()));
 		entity.setIdFuncionario(bean.getIdFuncionario());
+		entity.setAdcNoturno(bean.getAdicNoturno());
+		entity.setBancoHora(bean.getBancoHora());
+		entity.setHrTotal(bean.getHoraTotal());
+		entity.setSobreAviso(bean.getSobreAviso());
+		entity.setSobreAvisoTrabalhado(bean.getSobreAvisoTrabalhado());
 		
 		return entity;
 	}
@@ -33,8 +38,12 @@ public class ControleDiarioConverter implements Converter<ControleDiarioEntity, 
 		bean.setId(entity.getId());
 		bean.setData(entity.getData());
 		bean.setIdFuncionario(entity.getIdFuncionario());
+		bean.setAdicNoturno(entity.getAdcNoturno());
+		bean.setBancoHora(entity.getBancoHora());
+		bean.setHoraTotal(entity.getHrTotal());
+		bean.setSobreAviso(entity.getSobreAviso());
+		bean.setSobreAvisoTrabalhado(entity.getSobreAvisoTrabalhado());
 		
 		return bean;
 	}
-
 }
