@@ -14,9 +14,9 @@ public class ConnectionFactory {
 			e.printStackTrace();
 		}
 		/* Configura os parâmetros da conexão */
-		String url = "jdbc:sqlserver://192.168.3.5:1433;databaseName=Pause";
-		String user = "sa";
-		String password = "1234";
+		String url = "jdbc:sqlserver://192.168.2.11:1433;databaseName=Pause";
+		String user = "Pausedb";
+		String password = "Verity@123";
 		
 		Connection conexao = null;
 		conexao = DriverManager.getConnection(url, user, password);
