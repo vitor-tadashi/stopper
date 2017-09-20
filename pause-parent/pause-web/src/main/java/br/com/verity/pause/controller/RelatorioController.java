@@ -9,6 +9,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +30,7 @@ public class RelatorioController {
 	@Autowired
 	private RelatorioBusiness relatorioBusiness;
 
+	@PreAuthorize("hasRole('ROLE_GERAR_RELATORIOS')")
 	@RequestMapping(method = RequestMethod.GET)
 	public String loginPage(Model model) {
 		List<FuncionarioBean> funcionarios = funcionarioBusiness.obterTodos();
@@ -36,6 +38,7 @@ public class RelatorioController {
 		return "relatorio/relatorio";
 	}
 
+	@PreAuthorize("hasRole('ROLE_GERAR_RELATORIOS')")
 	@RequestMapping(value = "gerar-relatorio", method = RequestMethod.POST)
 	@ResponseBody
 	public String gerarRelatorio(Integer idFuncionario, String de, String ate, HttpServletResponse response) {
@@ -44,6 +47,7 @@ public class RelatorioController {
 		return caminho;
 	}
 
+	@PreAuthorize("hasRole('ROLE_GERAR_RELATORIOS')")
 	@RequestMapping(value = "download", method = RequestMethod.GET)
 	public void download(String caminho, HttpServletResponse response) {
 		String[] nome = caminho.split("\\\\");

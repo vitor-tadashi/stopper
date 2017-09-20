@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,6 +42,7 @@ public class ConsultarApontamentoController {
 	@Autowired
 	private ControleDiarioBusiness controleDiarioBusiness;
 
+	@PreAuthorize("hasRole('ROLE_CONSULTAR_BANCO')")
 	@RequestMapping(method = RequestMethod.GET)
 	public String consultar(Model model) {
 		List<FuncionarioBean> funcionarios = funcionarioBusiness.obterTodos();
@@ -53,6 +55,7 @@ public class ConsultarApontamentoController {
 		return "apontamento/consultar";
 	}
 
+	@PreAuthorize("hasRole('ROLE_CONSULTAR_BANCO')")
 	@PostMapping(value = "/filtrar-consulta")
 	public String filtrarConsulta(Integer idFunc, String de, String ate, Model model) {
 		List<ConsultaApontamentosBean> consulta = new ArrayList<ConsultaApontamentosBean>();
@@ -92,6 +95,7 @@ public class ConsultarApontamentoController {
 		return "/apontamento/consultar";
 	}
 	
+	@PreAuthorize("hasRole('ROLE_CONSULTAR_BANCO')")
 	@RequestMapping(value = "gerar-relatorio-consulta", method = RequestMethod.POST)
 	@ResponseBody
 	public String gerarRelatorioConsulta(Integer idFuncionario, Date de, Date ate, HttpServletResponse response) {
