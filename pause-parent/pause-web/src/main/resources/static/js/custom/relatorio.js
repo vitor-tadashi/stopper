@@ -14,7 +14,7 @@ function permitirData(){
 			$("#dtAte").val("");
 			textDiv.className = "alert alert-danger";
 			textDiv.textContent = "Por favor, selecione um período dentro de um único mês.";
-			var text = "[" + div.textContent + "]";
+			var text = "[" + textDiv.textContent + "]";
 			$("#textDiv").removeClass("hide");
 			erro = true;
 		}else{
@@ -56,7 +56,7 @@ function gerarRelatorio(){
 	}else{
 		textDiv.className = "alert alert-danger";
 		textDiv.textContent = "Por favor, selecione um funcionário e um período.";
-		var text = "[" + div.textContent + "]";
+		var text = "[" + textDiv.textContent + "]";
 	}
 }
 
