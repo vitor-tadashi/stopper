@@ -1,6 +1,7 @@
 package br.com.verity.pause.util;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -12,8 +13,10 @@ import java.util.List;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
+import br.com.verity.pause.bean.ConsultaApontamentosBean;
 import br.com.verity.pause.bean.ConsultaCompletaBean;
 import br.com.verity.pause.bean.FuncionarioBean;
 import br.com.verity.pause.enumeration.DiaSemanaEnum;
@@ -32,88 +35,30 @@ public class GerarRelatorioXlsx {
 	@SuppressWarnings("deprecation")
 	public String relatorioFuncionarioPeriodo(List<ConsultaCompletaBean> consultaCompleta, FuncionarioBean funcionario,
 			String de, String ate) {
+		String empresa = (funcionario.getEmpresa().getId() == 2)?"Verity":"QA360";
 		String arquivo = "C:" + File.separator + "Pause" + File.separator + "Relatorios" + File.separator
 				+ funcionario.getNome() + ".xlsx";
+		ClassPathResource resourceModelo = new ClassPathResource(empresa+"Relatorio.xlsx");
 		DateTimeFormatter formatter = DateTimeFormatter.ISO_TIME;
 		DateFormat formatDt = new SimpleDateFormat("dd/MM/yyyy");
-		int linha = 0;
+		int linha = 1;
 		int dia = 1;
 		int mesmoDia = 0;
 		int aux = 0;
 		try {
-			// Cria uma planilha .xlsx no diretorio escolhido
-			FileOutputStream out = new FileOutputStream(new File(arquivo));
-			XSSFWorkbook workbook = new XSSFWorkbook();
-			// Cria uma planilha no arquivo;
-			@SuppressWarnings("unused")
-			XSSFSheet criaPlanilha = workbook.createSheet("Relatório");
-			// Seleciona a planilha de trabalho
+			FileInputStream fileModelo = new FileInputStream(resourceModelo.getFile());
+			XSSFWorkbook workbook = new XSSFWorkbook(fileModelo);
 			XSSFSheet sheet = workbook.getSheetAt(0);
-			XSSFRow row = sheet.createRow(linha);
-			sheet.setColumnWidth(0, 11 * 256);
-			sheet.setColumnWidth(1, 7 * 256);
-			sheet.setColumnWidth(2, 5 * 256);
-			sheet.setColumnWidth(3, 9 * 256);
-			sheet.setColumnWidth(4, 3 * 256);
-			sheet.setColumnWidth(5, 9 * 256);
-			sheet.setColumnWidth(6, 3 * 256);
-			sheet.setColumnWidth(7, 9 * 256);
-			sheet.setColumnWidth(8, 3 * 256);
-			sheet.setColumnWidth(9, 9 * 256);
-			sheet.setColumnWidth(10, 3 * 256);
-			sheet.setColumnWidth(11, 9 * 256);
-			sheet.setColumnWidth(12, 3 * 256);
-			sheet.setColumnWidth(13, 9 * 256);
-			sheet.setColumnWidth(14, 3 * 256);
-			sheet.setColumnWidth(15, 9 * 256);
-			sheet.setColumnWidth(16, 3 * 256);
-			sheet.setColumnWidth(17, 9 * 256);
-			sheet.setColumnWidth(18, 3 * 256);
-			row.createCell(0).setCellValue(funcionario.getEmpresa().getNomeFantasia());
-			row.createCell(4).setCellValue("Extrato Horas - Banco de Horas");
-			linha++;
+			XSSFRow row = sheet.getRow(linha);
 
-			row = sheet.createRow(linha);
-			row.createCell(0).setCellValue("PIS Funcionário: " + funcionario.getPis());
-			row.createCell(6).setCellValue("Matrícula: " + funcionario.getMatricula());
-			row.createCell(17).setCellValue("Período: " + de + " a " + ate);
+			row.createCell(1).setCellValue(funcionario.getPis());
+			row.createCell(6).setCellValue(funcionario.getMatricula());
+			row.createCell(18).setCellValue(de + " a " + ate);
 			linha++;
-			row = sheet.createRow(linha);
-			row.createCell(0).setCellValue("Nome: " + funcionario.getNome());
-			linha++;
-
-			row = sheet.createRow(linha);
-			row.createCell(3).setCellValue("Ponto eletrônico");
-			linha++;
-
-			row = sheet.createRow(linha);
-			row.createCell(0).setCellValue("Data Reg");
-			row.createCell(1).setCellValue("Dia");
-			row.createCell(2).setCellValue("SA");
-			row.createCell(3).setCellValue("R1");
-			row.createCell(4).setCellValue("TP");
-			row.createCell(5).setCellValue("R2");
-			row.createCell(6).setCellValue("TP");
-			row.createCell(7).setCellValue("R3");
-			row.createCell(8).setCellValue("TP");
-			row.createCell(9).setCellValue("R4");
-			row.createCell(10).setCellValue("TP");
-			row.createCell(11).setCellValue("R5");
-			row.createCell(12).setCellValue("TP");
-			row.createCell(13).setCellValue("R6");
-			row.createCell(14).setCellValue("TP");
-			row.createCell(15).setCellValue("R7");
-			row.createCell(16).setCellValue("TP");
-			row.createCell(17).setCellValue("R8");
-			row.createCell(18).setCellValue("TP");
-			row.createCell(19).setCellValue("Atestado");
-			row.createCell(20).setCellValue("Horas");
-			row.createCell(21).setCellValue("Positivas");
-			row.createCell(22).setCellValue("Negativas");
-			row.createCell(23).setCellValue("Ad Not");
-			row.createCell(24).setCellValue("Horas SA");
-			row.createCell(25).setCellValue("Observação");
-			linha++;
+			
+			row = sheet.getRow(linha);
+			row.createCell(1).setCellValue(funcionario.getNome());
+			linha+= 3;
 
 			row = sheet.createRow(linha);
 			for (ConsultaCompletaBean consulta : consultaCompleta) {
@@ -205,7 +150,7 @@ public class GerarRelatorioXlsx {
 			linha++;
 
 			row = sheet.createRow(linha);
-			row.createCell(18).setCellValue("________________________________________________________________________");
+			row.createCell(18).setCellValue("__________________________________________________________");
 			linha++;
 
 			row = sheet.createRow(linha);
@@ -227,14 +172,52 @@ public class GerarRelatorioXlsx {
 			String dtHoje = formatDt.format(hoje);
 			row.createCell(0).setCellValue(dtHoje);
 
-			// Escreve no arquivo
+			FileOutputStream out = new FileOutputStream(new File(arquivo));
 			workbook.write(out);
-			// Fecha e salva o arquivo
-			out.close();
+            out.close();
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
 
 		return arquivo;
+	}
+
+	public String relatorioConsulta(List<ConsultaApontamentosBean> consultaApontamentosBean, Date de, Date ate, Integer idEmpresa) {
+		String empresa = (idEmpresa == 2)?"Verity":"QA360";
+		String consolidado = "C:" + File.separator + "Pause" + File.separator + "Relatorios" + File.separator
+				+ "consolidado"+empresa+""+de.getMonth()+".xlsx";
+		ClassPathResource resourceModelo = new ClassPathResource(empresa+".xlsx");
+		DateFormat formatDt = new SimpleDateFormat("dd/MM/yyyy");
+		int linha = 5;
+		try {
+			FileInputStream fileModelo = new FileInputStream(resourceModelo.getFile());
+			XSSFWorkbook workbook = new XSSFWorkbook(fileModelo);
+			XSSFSheet sheet = workbook.getSheetAt(0);
+			XSSFRow row = sheet.createRow(linha);
+
+			String data = formatDt.format(de) + " até " + formatDt.format(ate);
+			
+			row = sheet.getRow(3);
+			row.getCell(2).setCellValue(data);
+			
+			for (ConsultaApontamentosBean bean : consultaApontamentosBean) {
+				row = sheet.createRow(linha);
+				row.createCell(0).setCellValue(bean.getNmFuncionario());
+				row.createCell(1).setCellValue(bean.getControleDiario().getHoraTotal());
+				row.createCell(2).setCellValue(bean.getControleDiario().getBancoHora());
+				row.createCell(3).setCellValue(bean.getControleDiario().getAdicNoturno());
+				row.createCell(4).setCellValue(bean.getControleDiario().getSobreAviso());
+				row.createCell(5).setCellValue(bean.getControleDiario().getSobreAvisoTrabalhado());
+				linha++;
+			}
+			
+			FileOutputStream out = new FileOutputStream(new File(consolidado));
+			workbook.write(out);
+            out.close();
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+
+		return consolidado;
 	}
 }
