@@ -85,6 +85,8 @@ public class GerenciarApontamentoController {
 			apontamentoCriado = apontamentoBusiness.apontar(apontamento);
 		} catch (BusinessException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}catch (Exception e){
+			return new ResponseEntity<String>("Houve um erro ao salvar apontamento. Tente novamente mais tarde.", HttpStatus.BAD_REQUEST);
 		}
 		return ResponseEntity.ok(apontamentoCriado);
 	}
@@ -105,7 +107,10 @@ public class GerenciarApontamentoController {
 			apontamentoBusiness.remover(id);
 		} catch (BusinessException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (Exception e){
+			return new ResponseEntity<String>("Houve um erro ao remover apontamento. Tenete novamente mais tarde.", HttpStatus.BAD_REQUEST);
 		}
+		
 		return ResponseEntity.ok("Apontamento removido");
 	}
 
