@@ -114,7 +114,7 @@ public class ControleDiarioBusiness {
 				ControleDiarioBean cd = obterControleDiarioDeConsultaCompleta(cc);
 				apontamentos = cd.getApontamentos();
 				controleDiarios.add(cd);
-
+				
 				dia = cc.getData();
 			}
 			apontamentos.add(apontamentoBusiness.obterApontamentoDeConsultaCompleta(cc));

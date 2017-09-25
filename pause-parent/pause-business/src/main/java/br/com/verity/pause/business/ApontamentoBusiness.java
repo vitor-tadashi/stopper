@@ -25,6 +25,7 @@ import br.com.verity.pause.converter.JustificativaConverter;
 import br.com.verity.pause.dao.ApontamentoDAO;
 import br.com.verity.pause.dao.ConsultaCompletaDAO;
 import br.com.verity.pause.entity.ApontamentoEntity;
+import br.com.verity.pause.entity.ConsultaCompletaEntity;
 import br.com.verity.pause.exception.BusinessException;
 import br.com.verity.pause.integration.SavIntegration;
 
@@ -139,8 +140,9 @@ public class ApontamentoBusiness {
 	}
 
 	public List<ConsultaCompletaBean> obterApontamentosPeriodoPorIdFuncionario(Integer id, String de, String ate) {
-		List<ConsultaCompletaBean> consultaCompleta = new ArrayList<ConsultaCompletaBean>();
+		List<ConsultaCompletaBean> consultaCompletaBean = new ArrayList<ConsultaCompletaBean>();
 		SimpleDateFormat formataData = new SimpleDateFormat("dd-MM-yyyy");
+		List<ConsultaCompletaEntity> consultaCompletaEntity = new ArrayList<ConsultaCompletaEntity>();
 		java.sql.Date dtDe = null;
 		java.sql.Date dtAte = null;
 		try {
@@ -149,10 +151,13 @@ public class ApontamentoBusiness {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		consultaCompleta = consultaCompletaConverter
-				.convertEntityToBean(consultaCompletaDAO.findByIdAndPeriodo(id, dtDe, dtAte));
+		
+		consultaCompletaEntity = consultaCompletaDAO.findByIdAndPeriodo(id, dtDe, dtAte);
+		
+		consultaCompletaBean = consultaCompletaConverter
+				.convertEntityToBean(consultaCompletaEntity);
 
-		return consultaCompleta;
+		return consultaCompletaBean;
 	}
 
 	public ApontamentoBean obterApontamentoDeConsultaCompleta(ConsultaCompletaBean cc) {

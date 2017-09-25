@@ -46,7 +46,7 @@ public class ControleMensalBusiness {
 		
 	}
 	@SuppressWarnings("deprecation")
-	Boolean verificarMesFechado(Date data) {
+	public Boolean verificarMesFechado(Date data) {
 		LocalDate hoje = LocalDate.now();
 
 		if (hoje.getDayOfMonth() > 9) {

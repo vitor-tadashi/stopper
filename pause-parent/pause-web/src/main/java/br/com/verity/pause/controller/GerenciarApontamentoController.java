@@ -1,5 +1,8 @@
 package br.com.verity.pause.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +33,7 @@ import br.com.verity.pause.business.AfastamentoBusiness;
 import br.com.verity.pause.business.ApontamentoBusiness;
 import br.com.verity.pause.business.AtestadoBusiness;
 import br.com.verity.pause.business.ControleDiarioBusiness;
+import br.com.verity.pause.business.ControleMensalBusiness;
 import br.com.verity.pause.business.FuncionarioBusiness;
 import br.com.verity.pause.business.JustificativaBusiness;
 import br.com.verity.pause.business.SobreAvisoBusiness;
@@ -60,6 +64,9 @@ public class GerenciarApontamentoController {
 	@Autowired
 	private AtestadoBusiness atestadoBusiness;
 
+	@Autowired
+	private ControleMensalBusiness controleMensalBusiness;
+
 	@RequestMapping(method = RequestMethod.GET)
 	public String consultar(SecurityContextHolderAwareRequestWrapper request, Model model, Integer idFuncionario,
 			String... periodo) {
@@ -85,8 +92,9 @@ public class GerenciarApontamentoController {
 			apontamentoCriado = apontamentoBusiness.apontar(apontamento);
 		} catch (BusinessException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		}catch (Exception e){
-			return new ResponseEntity<String>("Houve um erro ao salvar apontamento. Tente novamente mais tarde.", HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+			return new ResponseEntity<String>("Houve um erro ao salvar apontamento. Tente novamente mais tarde.",
+					HttpStatus.BAD_REQUEST);
 		}
 		return ResponseEntity.ok(apontamentoCriado);
 	}
@@ -107,11 +115,31 @@ public class GerenciarApontamentoController {
 			apontamentoBusiness.remover(id);
 		} catch (BusinessException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		} catch (Exception e){
-			return new ResponseEntity<String>("Houve um erro ao remover apontamento. Tenete novamente mais tarde.", HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+			return new ResponseEntity<String>("Houve um erro ao remover apontamento. Tenete novamente mais tarde.",
+					HttpStatus.BAD_REQUEST);
 		}
-		
+
 		return ResponseEntity.ok("Apontamento removido");
+	}
+
+	@PreAuthorize("hasRole('ROLE_INSERIR_APONTAMENTO')")
+	@GetMapping(value = "/verificar-mes-fechado")
+	@ResponseBody
+	public ResponseEntity<Boolean> verificarMesFechado(String dataApontamento) {
+		boolean indicadorMesFechado = false;
+		Date data = null;
+		SimpleDateFormat formatador = new SimpleDateFormat("dd/MM/yyyy");
+		dataApontamento = dataApontamento.split(",")[0].trim();
+		
+		try {
+			data = formatador.parse(dataApontamento);
+			indicadorMesFechado = controleMensalBusiness.verificarMesFechado(data);
+		} catch (ParseException e) {
+			return new ResponseEntity<Boolean>(indicadorMesFechado, HttpStatus.BAD_REQUEST);
+		}
+
+		return new ResponseEntity<Boolean>(indicadorMesFechado, HttpStatus.OK);
 	}
 
 	private void funcionarios(Model model) {

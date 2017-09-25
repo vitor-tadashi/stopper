@@ -1,21 +1,54 @@
+var indicadorMesFechado = false;
+
 $(document).ready(function() {
 	calcularTotal();
 });
+
 function dialogApontamentoHora(td, idApontamento) {
+	var infoDia = $(td).parent().find('input[id^="infoDia"]');
+	var id = $(td).attr('id');
+	
+
+	verificarMesFechado(infoDia.val());
+	debugger;
+	
 	clearForm(0);
 	$( ".help-block" ).remove();
 	
-	var id = $(td).attr('id');
-	var infoDia = $(td).parent().find('input[id^="infoDia"]');
-	
-	if (typeof(idApontamento) !="undefined"){
+	if (typeof(idApontamento) != "undefined"){
 		modalEditarApontamento(idApontamento);
 	}
+	
+	if(indicadorMesFechado){
+		
+	}else{
+		
+	}
+	
 	$('#btn-cancelar-apontamento').text('Cancelar');
 	$('#btn-cancelar-apontamento').attr('onclick',"");
 	$('#title-modal-apontamento').text(infoDia.val());
 	$('#apontamento-id').val(id)
 	$('#demo-default-modal').modal();
+}
+
+function verificarMesFechado(dataApontamento){
+	$.ajax({
+		url: 'gerenciar-apontamento/verificar-mes-fechado',
+		type : 'GET',
+		contentType : 'application/json',
+		data: {dataApontamento : dataApontamento},
+		cache: false,
+		async: false,
+		success: function(data){
+			
+			indicadorMesFechado =  data;
+		},
+		error: function(erro){
+			
+		}
+	});
+	
 }
 
 function informarHorario() {

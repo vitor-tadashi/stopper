@@ -12,8 +12,26 @@ function inserirSA(){
 	var dataSA = formatardataHtml($('#dt-sa').val());
 	var horaSAe = $('#hora-sa-e').val();
 	var horaSAs = $('#hora-sa-s').val();
+	var indicadorErro = false;
 	
-	inserirSA_ajax(dataSA, horaSAe, horaSAs);
+	debugger
+	
+	if(horaSAe == ""){
+		
+	}
+	
+	if(horaSAs == ""){
+		
+	}
+	
+	if (dataSA == "") {
+		
+	}
+	
+	if(!indicadorErro){
+		inserirSA_ajax(dataSA, horaSAe, horaSAs);
+	}
+	
 	
 }
 function removerSA(click, id){
