@@ -50,9 +50,9 @@
 							<div class="col-sm-5 pad-btm">
 								<label class="control-label">Período</label>
 								<div class="input-daterange input-group" id="datepicker">
-									<input type="date" class="form-control periodo" name="periodo" id="periodoDe" value="${de }" min="2010-03-01" max=""/>
+									<input type="date" class="form-control periodo" name="periodoDe" id="periodoDe" value="${de }" min="2010-03-01" max=""/>
 									<span class="input-group-addon">até</span>
-									<input type="date" class="form-control periodo" name="periodo" id="periodoAte" value="${ate }" min="2010-03-01" max=""/>
+									<input type="date" class="form-control periodo" name="periodoAte" id="periodoAte" value="${ate }" min="2010-03-01" max=""/>
 								</div>
 							</div>
 							<div class="col-sm-1" style="margin-top: 23px; ">
@@ -125,7 +125,7 @@
 		    	}
 		    }); */
 		    
-/* 	    	var date = new Date();
+   	var date = new Date();
 	    	date = date.toLocaleDateString();
 	    	var dia = date.substring(0, 2);
 	    	var mes = date.substring(3, 5);
@@ -133,7 +133,7 @@
 	    	
 	    	 $("#de").attr("max", ano+"-"+mes+"-"+dia);
 	    	 $("#ate").attr("max", ano+"-"+mes+"-"+dia);
-	    	 $("#ate").attr("min", ano+"-"+mes+"-"+dia);  */
+	    	 $("#ate").attr("min", ano+"-"+mes+"-"+dia);  
 		 
     	 
     	 	$('.periodo').prop('max',function(){

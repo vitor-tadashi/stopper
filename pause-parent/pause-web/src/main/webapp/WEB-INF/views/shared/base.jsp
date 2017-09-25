@@ -61,9 +61,11 @@
                     <ul class="nav navbar-top-links pull-right">
                         <!--User-->
                         <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+                        <sec:authorize access="hasRole('ROLE_MULTI-EMPRESA')">
                         <li>
                             <div class="username text-right"><a href="/pause/selecionaMultiEmpresa">Trocar empresa</a></div>
                         </li>
+                        </sec:authorize>
                         <li>
                             <div class="username text-right">${user.funcionario.nome }</div>
                         </li>

@@ -115,7 +115,7 @@
 			</div>
 		</div>
 		
-		<div id="modal-loader" class="modal fade">
+		<div id="modal-loader" class="modal fade" data-backdrop="static" data-keyboard="false">
 			<div class="modal-dialog">
 				<div style="text-align: center; margin-top:12%">
 					<i class="fa fa-spinner fa-pulse fa-5x fa-fw" style="color: white"></i> 
