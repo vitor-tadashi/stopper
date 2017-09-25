@@ -221,14 +221,14 @@
 							<form action="" id="form-sa" class="clear-form">
 								<div class="row">
 									<div class="col-sm-4">
-										<div class="form-group">
+										<div class="form-group sa-data">
 											<label class="control-label">Data</label>
 											<input type="date" name="data" class="form-control data" id="dt-sa" placeholder="dd/mm/aaaa"/>
 										</div>
 									</div>
 									<div class="col-sm-6">
 										<label class="control-label">Período</label>
-										<div class="input-daterange input-group" id="datepicker">
+										<div class="input-daterange input-group sa-periodo" id="datepicker">
 											<input id="hora-sa-e" name="entrada" type="text" class="form-control clock" placeholder="--:--">
 											<span class="input-group-addon">até</span>
 											<div class="input-group date">
@@ -237,6 +237,7 @@
 											</div>
 										</div>
 									</div>
+									
 									<div class="col-sm-1" style="margin-top: 23px;">
 										<button class="btn btn-info" type="button" onclick="inserirSA()">Inserir</button>
 									</div>
