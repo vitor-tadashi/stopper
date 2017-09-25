@@ -59,31 +59,35 @@
 								</div>
 							</div>
 							<div class="col-sm-1" style="margin-top: 24px;">
-								<button class="btn btn-info" type="submit">Filtrar</button>
+								<button id="filtrar-js" class="btn btn-info" type="submit">Filtrar</button>
 							</div>
 						</div>
 					</form>
+					
+					<sec:authorize access="hasRole('ROLE_MULTI-EMPRESA')" var="isMultiEmpresa"></sec:authorize>
+					
+					<c:if test="${((not empty idFuncionario) and isMultiEmpresa==true) or ((empty idFuncionario) and isMultiEmpresa==false)}">
 					<div class="row">
 						<div class="col-md-12 pad-btm">
 							<sec:authorize access="hasRole('ROLE_INSERIR_SOBRE_AVISO')">
-								<div class="left">
+								<div id="btn-sobreaviso" class="left">
 									<button class="btn btn-purple" type="button" data-target="#sobre-aviso-modal" data-toggle="modal"><span class="pli-add"></span> Informar sobre aviso</button>
 								</div>
 							</sec:authorize>
 							<sec:authorize access="hasRole('ROLE_INSERIR_AFASTAMENTO')">
-								<div class="left">
+								<div id="btn-afastamento" class="left">
 									<button class="btn btn-success" type="button" data-target="#afastamento-modal" data-toggle="modal"><span class="pli-add"></span> Informar afastamento</button>
 								</div>
 							</sec:authorize>
 							<sec:authorize access="hasRole('ROLE_INSERIR_ATESTADO')">
-								<div>
+								<div id="btn-atestado" class="">
 									<button class="btn btn-pink" type="button" data-target="#atestado-modal" data-toggle="modal"><span class="pli-add"></span> Informar atestado</button>
 								</div>
 							</sec:authorize>
 						</div>
 					</div>
 					<div class="table-responsive">
-						<table class="table table-striped table-bordered " id="dt-apontamentos">
+						<table class="table table-striped table-bordered" id="dt-apontamentos">
 							<thead>
 								<tr>
 									<th class="text-center">Data</th>
@@ -136,6 +140,7 @@
 							</tbody>
 						</table>
 					</div>
+					</c:if>
 				</div>
 				<!--===================================================-->
 				<!--End Data Table-->
@@ -490,7 +495,7 @@
 							}
 						}
 					},
-					pis : {
+					idFuncionario : {
 						validators : {
 							notEmpty : {
 								message : 'O campo é obrigatório.'

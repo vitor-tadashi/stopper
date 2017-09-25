@@ -29,6 +29,7 @@
 		<div class="col-md-12">
 			<div class="panel">
 				<form>
+				<div id="textDiv" class=""></div>
 					<div class="panel-body">
 						<div class="row">
 							<div style="margin-top: -10px"> 

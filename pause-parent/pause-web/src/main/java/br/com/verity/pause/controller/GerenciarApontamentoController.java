@@ -63,9 +63,11 @@ public class GerenciarApontamentoController {
 	@RequestMapping(method = RequestMethod.GET)
 	public String consultar(SecurityContextHolderAwareRequestWrapper request, Model model, Integer idFuncionario,
 			String... periodo) {
+		
 		apontamentos(model, idFuncionario, periodo);
 		justificativas(model);
 		sobreAvisos(model, idFuncionario, periodo);
+		
 		if (request.isUserInRole("ROLE_MULTI-EMPRESA")) {
 			funcionarios(model);
 			tipoAfastamentos(model);
@@ -73,6 +75,7 @@ public class GerenciarApontamentoController {
 			afastamentos(model, idFuncionario, periodo);
 			atestados(model, idFuncionario, periodo);
 		}
+		
 		return "apontamento/gerenciar";
 	}
 

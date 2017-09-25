@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.verity.pause.bean.ConsultaApontamentosBean;
+import br.com.verity.pause.bean.ControleDiarioBean;
 import br.com.verity.pause.bean.FuncionarioBean;
 import br.com.verity.pause.business.ConsultaApontamentosBusiness;
 import br.com.verity.pause.business.ControleDiarioBusiness;
@@ -57,7 +58,7 @@ public class ConsultarApontamentoController {
 
 	@PreAuthorize("hasRole('ROLE_CONSULTAR_BANCO')")
 	@PostMapping(value = "/filtrar-consulta")
-	public String filtrarConsulta(Integer idFunc, String de, String ate, Model model) {
+	public String filtrarConsulta(Integer idFuncionario, String periodoDe, String periodoAte, Model model) {
 		List<ConsultaApontamentosBean> consulta = new ArrayList<ConsultaApontamentosBean>();
 		List<FuncionarioBean> funcionarios = funcionarioBusiness.obterTodos();
 		List<FuncionarioBean> funcionariosConsulta = new ArrayList<FuncionarioBean>();
@@ -66,17 +67,17 @@ public class ConsultarApontamentoController {
 		Date dtAte = new Date();
 		Date dtDe = new Date(dtAte.getYear(), dtAte.getMonth(), 01);
 
-		if (idFunc != null) {
+		if (idFuncionario != null) {
 			funcionariosConsulta.addAll(
-					funcionarios.stream().filter(func -> func.getId().equals(idFunc)).collect(Collectors.toList()));
-			model.addAttribute("idFuncBusca", idFunc);
+					funcionarios.stream().filter(func -> func.getId().equals(idFuncionario)).collect(Collectors.toList()));
+			model.addAttribute("idFuncBusca", idFuncionario);
 		}
 		try {
-			if (!de.equals("")) {
-				dtDe = format.parse(de);
+			if (periodoDe!=null && !periodoDe.equals("")) {
+				dtDe = format.parse(periodoDe);
 			}
-			if (!ate.equals("")) {
-				dtAte = format.parse(ate);
+			if (periodoAte!=null && !periodoAte.equals("")) {
+				dtAte = format.parse(periodoAte);
 			}
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -87,10 +88,21 @@ public class ConsultarApontamentoController {
 						(funcionariosConsulta.size() < 1) ? funcionarios : funcionariosConsulta,
 								dtDe, dtAte));
 		
+		String dataDe = "";
+		String dataAte = "";
+		
+		if(periodoDe != null) {
+			dataDe = (periodoDe.equals(""))?format.format(dtDe):periodoDe;
+		}
+		
+		if(periodoAte != null) {
+			dataAte = (periodoAte.equals(""))?format.format(dtAte):periodoAte;
+		}
+		
 		model.addAttribute("funcionariosBusca", funcionarios);
 		model.addAttribute("funcionarios", consulta);
-		model.addAttribute("de", (de.equals(""))?format.format(dtDe):de);
-		model.addAttribute("ate", (ate.equals(""))?format.format(dtAte):ate);
+		model.addAttribute("de", dataDe);
+		model.addAttribute("ate", dataAte);
 
 		return "/apontamento/consultar";
 	}
@@ -107,9 +119,13 @@ public class ConsultarApontamentoController {
 			funcionario = funcionarioBusiness.obterPorId(idFuncionario);
 			funcionarios.add(funcionario);
 		}
+		
+		List<ControleDiarioBean> controleDiario = controleDiarioBusiness.listSomaControleDiarioPorPeriodo(funcionarios, de, ate);
 
-		String caminho = relatorioBusiness.relatorioConsulta(consultaApontamentosBusiness.mesclarFuncionarioComControleDiario(
-				funcionarios, controleDiarioBusiness.listSomaControleDiarioPorPeriodo(funcionarios, de, ate)), de, ate);
+		List<ConsultaApontamentosBean> consultaApontamentos = consultaApontamentosBusiness.mesclarFuncionarioComControleDiario(funcionarios, controleDiario);
+		
+		String caminho = relatorioBusiness.relatorioConsulta(consultaApontamentos, de, ate);
+		
 		return caminho;
 	}
 }

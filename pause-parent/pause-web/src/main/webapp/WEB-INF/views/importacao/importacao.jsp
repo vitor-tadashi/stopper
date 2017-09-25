@@ -1,4 +1,5 @@
 
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -82,8 +83,8 @@
 							</div>
 						</div>
 						<div id="botoes" class="pull-right hide">
-							<button id="submitbutton" type="submit" class="btn btn-success">Salvar</button>
 							<button type="reset" onClick="cancelar()" class="btn btn-danger">Cancelar</button>
+							<button id="submitbutton" type="submit" class="btn btn-success">Salvar</button>
 						</div>
 					</div>
 				</form:form>

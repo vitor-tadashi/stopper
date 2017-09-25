@@ -53,7 +53,7 @@ function gerarRelatorio(){
 				window.open($("#download").attr("href"),'_blank');
 			}
 		})
-	}else{
+	} else{
 		textDiv.className = "alert alert-danger";
 		textDiv.textContent = "Por favor, selecione um funcionário e um período.";
 		var text = "[" + textDiv.textContent + "]";

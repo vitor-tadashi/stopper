@@ -35,9 +35,8 @@ public class GerarRelatorioXlsx {
 	@SuppressWarnings("deprecation")
 	public String relatorioFuncionarioPeriodo(List<ConsultaCompletaBean> consultaCompleta, FuncionarioBean funcionario,
 			String de, String ate) {
-		String empresa = (funcionario.getEmpresa().getId() == 2)?"Verity":"QA360";
-		String arquivo = "C:" + File.separator + "Pause" + File.separator + "Relatorios" + File.separator
-				+ funcionario.getNome() + ".xlsx";
+		String empresa = (funcionario.getEmpresa().getId() == 2) ? "Verity" : "QA360";
+		String arquivo = funcionario.getNome() + ".xlsx";
 		ClassPathResource resourceModelo = new ClassPathResource(empresa+"Relatorio.xlsx");
 		DateTimeFormatter formatter = DateTimeFormatter.ISO_TIME;
 		DateFormat formatDt = new SimpleDateFormat("dd/MM/yyyy");
@@ -184,8 +183,7 @@ public class GerarRelatorioXlsx {
 
 	public String relatorioConsulta(List<ConsultaApontamentosBean> consultaApontamentosBean, Date de, Date ate, Integer idEmpresa) {
 		String empresa = (idEmpresa == 2)?"Verity":"QA360";
-		String consolidado = "C:" + File.separator + "Pause" + File.separator + "Relatorios" + File.separator
-				+ "consolidado"+empresa+""+de.getMonth()+".xlsx";
+		String consolidado =  "consolidado" + empresa + "" + de.getMonth() + ".xlsx";
 		ClassPathResource resourceModelo = new ClassPathResource(empresa+".xlsx");
 		DateFormat formatDt = new SimpleDateFormat("dd/MM/yyyy");
 		int linha = 5;

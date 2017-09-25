@@ -21,6 +21,7 @@ import br.com.verity.pause.converter.JustificativaConverter;
 import br.com.verity.pause.dao.ApontamentoDAO;
 import br.com.verity.pause.dao.ConsultaCompletaDAO;
 import br.com.verity.pause.entity.ApontamentoEntity;
+import br.com.verity.pause.entity.ConsultaCompletaEntity;
 import br.com.verity.pause.exception.BusinessException;
 import br.com.verity.pause.integration.SavIntegration;
 
@@ -113,8 +114,11 @@ public class ApontamentoBusiness {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+		
+		List<ConsultaCompletaEntity> resultado = consultaCompletaDAO.findByIdAndPeriodo(id, dtDe, dtAte);
+		
 		consultaCompleta = consultaCompletaConverter
-				.convertEntityToBean(consultaCompletaDAO.findByIdAndPeriodo(id, dtDe, dtAte));
+				.convertEntityToBean(resultado);
 
 		return consultaCompleta;
 	}

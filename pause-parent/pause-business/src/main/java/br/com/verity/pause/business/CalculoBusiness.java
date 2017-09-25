@@ -117,14 +117,17 @@ public class CalculoBusiness {
 			
 			if (sobreAviso != null) {
 				totalSobreAvisoTrabalhado = calcularSobreAvisoTrabalhadas(apontamento, sobreAviso);
-				totalSobreAviso = calcularSobreAviso(sobreAviso, totalSobreAvisoTrabalhado);
 			}
 		}
 		else {
 			apontamento = new ApontamentoPivotEntity();
 			apontamento.setDataApontamento(data);
 		}
-
+		
+		if (sobreAviso != null){
+			totalSobreAviso = calcularSobreAviso(sobreAviso, totalSobreAvisoTrabalhado);
+		}
+	
 		tratarHorasCalculadas(apontamento, totalHoras, totalHorasDiarias, horasExtras, totalSobreAvisoTrabalhado,
 				totalSobreAviso, totalAdicionalNoturno);
 		
