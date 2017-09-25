@@ -1,21 +1,54 @@
+var indicadorMesFechado = false;
+
 $(document).ready(function() {
 	calcularTotal();
 });
+
 function dialogApontamentoHora(td, idApontamento) {
+	var infoDia = $(td).parent().find('input[id^="infoDia"]');
+	var id = $(td).attr('id');
+	
+
+	verificarMesFechado(infoDia.val());
+	debugger;
+	
 	clearForm(0);
 	$( ".help-block" ).remove();
 	
-	var id = $(td).attr('id');
-	var infoDia = $(td).parent().find('input[id^="infoDia"]');
-	
-	if (typeof(idApontamento) !="undefined"){
+	if (typeof(idApontamento) != "undefined"){
 		modalEditarApontamento(idApontamento);
 	}
+	
+	if(indicadorMesFechado){
+		
+	}else{
+		
+	}
+	
 	$('#btn-cancelar-apontamento').text('Cancelar');
 	$('#btn-cancelar-apontamento').attr('onclick',"");
 	$('#title-modal-apontamento').text(infoDia.val());
 	$('#apontamento-id').val(id)
 	$('#demo-default-modal').modal();
+}
+
+function verificarMesFechado(dataApontamento){
+	$.ajax({
+		url: 'gerenciar-apontamento/verificar-mes-fechado',
+		type : 'GET',
+		contentType : 'application/json',
+		data: {dataApontamento : dataApontamento},
+		cache: false,
+		async: false,
+		success: function(data){
+			
+			indicadorMesFechado =  data;
+		},
+		error: function(erro){
+			
+		}
+	});
+	
 }
 
 function informarHorario() {
@@ -66,11 +99,11 @@ function informarHorario() {
 	calcularTotal();
 	$('#demo-default-modal').modal("hide");
 }
-function apontar(hr,dt,idTd){
+function apontar(horario, data, idTd){
 	var apontamento = {
 		id : $('#idApontamento').val(),
-		horarioJson : hr,
-		dataJson : dt,
+		horarioJson : horario,
+		dataJson : data,
 		observacao : $('#apontamento-obs').val(),
 		idFuncionario : $('#apontamento-funcionario').val(),
 		tpJustificativa : {
@@ -85,11 +118,13 @@ function apontar(hr,dt,idTd){
 		data: JSON.stringify(apontamento),
 		cache: false,
 		success: function(data){
+			debugger;
 			$("#"+idTd).attr('onclick',"dialogApontamentoHora(this,"+ data.id +")");
 		},
 		error: function(erro){
 			$('#erro-label').text(erro.responseText);
 			$('#erro-sm-modal').modal();
+			$("#"+idTd).html("--:--");
 		}
 	});
 }
@@ -142,6 +177,7 @@ function confirmarRemover(){
 	$('#remover-sm-modal').modal();
 }
 function removerApontamento(id){
+	$('#remover-sm-modal').modal('hide');
 	$.ajax({
 		url: 'gerenciar-apontamento/remover',
 		type : 'GET',
@@ -150,9 +186,9 @@ function removerApontamento(id){
 		cache: true,
 		success: function(data){
 			tdRemove = $('#apontamento-id').val();
+			$("#idApontamento").val("");
 			$("#"+tdRemove).attr('onclick',"dialogApontamentoHora(this)");
 			$("#"+tdRemove).text('--:--')
-			$('#remover-sm-modal').modal('hide');
 		},
 		error: function(erro){
 			$('#remover-sm-modal').modal('hide');
