@@ -478,7 +478,7 @@
 		$(document).ready(function() {
 			$('.periodo').prop('max',function(){
 		        return new Date().toJSON().split('T')[0];
-		    });
+		    }); 
 			
 			$('#bv-form').bootstrapValidator({
 				excluded : [ ':disabled' ],
