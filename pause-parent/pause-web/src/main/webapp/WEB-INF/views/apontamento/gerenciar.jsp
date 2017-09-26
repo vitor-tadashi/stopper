@@ -224,6 +224,7 @@
 										<div class="form-group sa-data">
 											<label class="control-label">Data</label>
 											<input type="date" name="data" class="form-control data" id="dt-sa" placeholder="dd/mm/aaaa"/>
+											<span id="mensagemData-js"  class="hide" style="color: #a94442;"></span>
 										</div>
 									</div>
 									<div class="col-sm-6">
@@ -236,6 +237,7 @@
 												<span class="input-group-addon"><i class="pli-clock"></i></span>
 											</div>
 										</div>
+										<span id="mensagemHora-js"  class="hide" style="color: #a94442;"></span>
 									</div>
 									
 									<div class="col-sm-1" style="margin-top: 23px;">
@@ -297,24 +299,29 @@
 											<span class="input-group-addon">até</span>
 											<input type="date" id="afastamentoAte" class="form-control data" name="end" placeholder="dd/mm/aaaa"/>
 										</div>
+										<span id="mensagemDataAfastamento-js"  class="hide" style="color: #a94442;"></span>
 									</div>
 								</div>
 								<div class="row">
 									<div class="col-sm-8">
-										<div class="form-group">
+										<div >
 											<label class="control-label">Justificativa</label>
 											<select class="selectpicker clear-select" data-live-search="true" data-width="100%" id="afastamentoJus">
-												<option value="">Selecione</option>
+												<option class="mudar-cor" value="">Selecione</option>
 												<c:forEach items="${tipoAfastamentos}" var="tp">
 													<option value="${tp.id }">${tp.descricao }</option>
 												</c:forEach>
 											</select>
 										</div>
+										<span id="mensagemSelectAfastamento-js"  class="hide" style="color: #a94442; "></span>
 									</div>
 									<div class="col-sm-1" style="margin-top: 23px;">
 										<button class="btn btn-info" type="button" onclick="inserirAfastamento()">Inserir</button>
 									</div>
+									
 								</div>
+								
+								
 							</form>
 							<div class="table-responsive">
 								<table class="table table-striped table-bordered">
@@ -367,17 +374,19 @@
 									<div class="col-sm-4">
 										<label class="control-label">Data</label>
 										<input type="date" id="atestadoData" class="form-control" placeholder="dd/mm/aaaa"/>
+										<span id="mensagemDataAtestado-js"  class="hide" style="color: #a94442; "></span>
 									</div>
 									<div class="col-sm-3">
 										<label class="control-label">Quantidade de horas</label>
-										<input id="qtd-hr-atestado" type="number" step="0.5" class="form-control" placeholder="00,00">
+										<input id="qtd-hr-atestado" type="number" step="0.5" class="form-control" placeholder="00:00">
+										<span id="mensagemHoraAtestado-js"  class="hide" style="color: #a94442; "></span>
 									</div>
 								</div>
 								<div class="row">
 									<div class="col-sm-7">
 										<div class="form-group">
 											<label class="control-label">Justificativa</label>
-											<select class="selectpicker clear-select" data-live-search="true" data-width="100%" id="atestadoJus">
+											<select class="selectpicker clear-select mudar-cor" data-live-search="true" data-width="100%" id="atestadoJus">
 												<option value="">Selecione</option>
 												<c:forEach items="${tipoAtestado}" var="tp">
 													<option value="${tp.id }">${tp.descricao }</option>
@@ -389,6 +398,7 @@
 										<button class="btn btn-info" type="button" onclick="inserirAtestado()">Inserir</button>
 									</div>
 								</div>
+								<span id="mensagemSelectAtestado-js"  class="hide" style="color: #a94442; "></span>
 							</form>
 							<div class="table-responsive">
 								<table class="table table-striped table-bordered">

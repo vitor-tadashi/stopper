@@ -1,3 +1,6 @@
+var obrigatorio = 'Campo obrigatório.';
+var cor = '#a94442';
+
 $(document).ready(function(){
     $('.clock').timepicker({
 		defaultTime: false,
@@ -11,12 +14,42 @@ $(document).ready(function(){
 
 function inserirSA(){
 	var dataSA = formatardataHtml($('#dt-sa').val());
-	var horaSAe = $('#hora-sa-e').val();
-	var horaSAs = $('#hora-sa-s').val();
-	var indicadorErro = false;
+	var horaEntrada = $('#hora-sa-e').val();
+	var horaSaida = $('#hora-sa-s').val();
 	
-	inserirSA_ajax(dataSA, horaSAe, horaSAs);
+	if (horaEntrada == "" || horaSaida == "") {
+		$('#hora-sa-e').css({ "border-color": cor });
+		$('#hora-sa-s').css({ "border-color": cor });
+		$('#mensagemHora-js').html(obrigatorio).removeClass("hide");
 		
+		if (dataSA == "") {
+			$('#dt-sa').css({ "border-color": cor });
+			$('#mensagemData-js').html(obrigatorio).removeClass("hide");
+		} else {
+			$('#dt-sa').css({ "border-color": "" });
+			$('#mensagemData-js').html(obrigatorio).addClass("hide");
+		}
+		
+	} else if (dataSA == "") {
+		
+		$('#mensagemHora-js').html(obrigatorio).addClass("hide");
+		$('#hora-sa-e').css({ "border-color": ""});
+		$('#hora-sa-s').css({ "border-color": ""});
+		
+		$('#dt-sa').css({ "border-color": cor });
+		$('#mensagemData-js').html(obrigatorio).removeClass("hide");
+		
+	} else {
+		
+		$('#hora-sa-e').css({ "border-color": ""});
+		$('#hora-sa-s').css({ "border-color": ""});
+		$('#dt-sa').css({ "border-color": "" });
+		
+		$('#mensagemHora-js').html(obrigatorio).addClass("hide");
+		$('#mensagemData-js').html(obrigatorio).addClass("hide");
+		
+		inserirSA_ajax(dataSA, horaEntrada, horaSaida);
+	}
 }
 
 function removerSA(click, id){
@@ -71,7 +104,39 @@ function inserirAfastamento(){
 	var tpDesc = $('#afastamentoJus option:selected').text();
 	var tpId = $('#afastamentoJus option:selected').val();
 	
-	inserirAfastamento_ajax(de, ate, tpId, tpDesc);
+	if ( tpId == "" ) {
+		$('.mudar-cor').css({ "border-color" : cor });
+		$('#mensagemSelectAfastamento-js').html(obrigatorio).removeClass("hide");
+		
+		if ( de == "" || ate == "") {
+			$('#afastamentoDe').css({ "border-color" : cor });
+			$('#afastamentoAte').css({ "border-color" : cor });
+			$('#mensagemDataAfastamento-js').html(obrigatorio).removeClass("hide");
+		} else {
+			$('#afastamentoDe').css({ "border-color" : "" });
+			$('#afastamentoAte').css({ "border-color" : "" });
+			$('#mensagemDataAfastamento-js').html(obrigatorio).addClass("hide");
+		}
+		
+	} else if ( de == "" || ate == "") {
+		$('.mudar-cor').css({ "border-color" : "" });
+		$('#mensagemSelectAfastamento-js').html(obrigatorio).addClass("hide");
+		
+		$('#afastamentoDe').css({ "border-color" : cor });
+		$('#afastamentoAte').css({ "border-color" : cor });
+		$('#mensagemDataAfastamento-js').html(obrigatorio).removeClass("hide");
+		
+	} else {
+		
+		$('#afastamentoDe').css({ "border-color" : "" });
+		$('#afastamentoAte').css({ "border-color" : "" });
+		$('#mensagemDataAfastamento-js').html(obrigatorio).addClass("hide");
+		
+		$('.mudar-cor').css({ "border-color" : "" });
+		$('#mensagemSelectAfastamento-js').html(obrigatorio).addClass("hide");
+		
+		inserirAfastamento_ajax(de, ate, tpId, tpDesc);
+	}
 }
 function inserirAfastamento_ajax(de, ate, tpId, tpDesc){
 	var afastamento={	
@@ -127,7 +192,75 @@ function inserirAtestado(){
 	var tpDesc = $('#atestadoJus option:selected').text();
 	var tpId = $('#atestadoJus option:selected').val();
 	
-	inserirAtestado_ajax(data, qtd_hr, tpId, tpDesc);
+	if ( data == "" ) {
+		
+		$('#atestadoData').css({ "border-color" : cor });
+		$('#mensagemDataAtestado-js').html(obrigatorio).removeClass("hide");
+		
+		if ( qtd_hr == "" ) {
+			
+			$('#qtd-hr-atestado').css({ "border-color" : cor });
+			$('#mensagemHoraAtestado-js').html(obrigatorio).removeClass("hide");
+			
+			if ( tpId == "" ){
+				
+				$('.mudar-cor').css({ "border-color" : cor });
+				$('#mensagemSelectAtestado-js').html(obrigatorio).removeClass("hide");
+				
+			} else {
+				$('.mudar-cor').css({ "border-color" : "" });
+				$('#mensagemSelectAtestado-js').html(obrigatorio).addClass("hide");
+			}
+			
+		} else {
+			
+			$('#qtd-hr-atestado').css({ "border-color" : "" });
+			$('#mensagemHoraAtestado-js').html(obrigatorio).addClass("hide");
+			
+		}
+		
+	} else if ( qtd_hr == "" ) {
+		
+		$('#atestadoData').css({ "border-color" : "" });
+		$('#mensagemDataAtestado-js').html(obrigatorio).addClass("hide");
+		
+		$('#qtd-hr-atestado').css({ "border-color" : cor });
+		$('#mensagemHoraAtestado-js').html(obrigatorio).removeClass("hide");
+		
+		if ( tpId == "" ){
+			
+			$('.mudar-cor').css({ "border-color" : cor });
+			$('#mensagemSelectAtestado-js').html(obrigatorio).removeClass("hide");
+			
+		} else {
+			$('.mudar-cor').css({ "border-color" : "" });
+			$('#mensagemSelectAtestado-js').html(obrigatorio).addClass("hide");
+		}
+		
+	} else if ( tpId == "" ){
+		
+		$('#atestadoData').css({ "border-color" : "" });
+		$('#mensagemDataAtestado-js').html(obrigatorio).addClass("hide");
+		
+		$('#qtd-hr-atestado').css({ "border-color" : "" });
+		$('#mensagemHoraAtestado-js').html(obrigatorio).addClass("hide");
+		
+		$('.mudar-cor').css({ "border-color" : cor });
+		$('#mensagemSelectAtestado-js').html(obrigatorio).removeClass("hide");
+	} else {
+		
+		$('#atestadoData').css({ "border-color" : "" });
+		$('#mensagemDataAtestado-js').html(obrigatorio).addClass("hide");
+		
+		$('#qtd-hr-atestado').css({ "border-color" : "" });
+		$('#mensagemHoraAtestado-js').html(obrigatorio).addClass("hide");
+		
+		$('.mudar-cor').css({ "border-color" : "" });
+		$('#mensagemSelectAtestado-js').html(obrigatorio).addClass("hide");
+		
+		inserirAtestado_ajax(data, qtd_hr, tpId, tpDesc);
+		
+	}
 }
 function inserirAtestado_ajax(dt, qtdHora, tpId, tpDesc){
 	var atestado={
