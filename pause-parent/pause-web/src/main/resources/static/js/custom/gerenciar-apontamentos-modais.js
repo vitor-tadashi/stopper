@@ -8,32 +8,17 @@ $(document).ready(function(){
 	
 	$('#apontamento-funcionario').val($( "#select-funcionario option:selected" ).val());
 });
+
 function inserirSA(){
 	var dataSA = formatardataHtml($('#dt-sa').val());
 	var horaSAe = $('#hora-sa-e').val();
 	var horaSAs = $('#hora-sa-s').val();
 	var indicadorErro = false;
 	
-	debugger
-	
-	if(horaSAe == ""){
+	inserirSA_ajax(dataSA, horaSAe, horaSAs);
 		
-	}
-	
-	if(horaSAs == ""){
-		
-	}
-	
-	if (dataSA == "") {
-		
-	}
-	
-	if(!indicadorErro){
-		inserirSA_ajax(dataSA, horaSAe, horaSAs);
-	}
-	
-	
 }
+
 function removerSA(click, id){
 	$.ajax({
 		url: 'sobre-aviso/remover/'+id,
