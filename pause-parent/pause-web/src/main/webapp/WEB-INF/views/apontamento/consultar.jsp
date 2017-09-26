@@ -109,55 +109,47 @@
 		<script src='<c:url value='/js/custom/datatable-custom.js'/>'></script>
 		<script src='<c:url value="/js/custom/send-ajax.js"/>'></script>
 		<script>
+		
 		var url = window.document.URL;
+		
 		$(document).ready(function() {
-			/* debugger;
-		     $('#filtrar-bt').on('click', function(){
-		    	if(url.includes("filtrar")){
-		    		$("#bv-form").submit();
-		    	}else if($('#periodoAte').val() == "" && $('#periodoDe').val() == ""){
-					table
-					.columns(0).search($('#select-funcionario option:selected').text())
-					.draw();
-					$("#funcSel").val($("#select-funcionario").val());
-		    	}else{
-		    		$("#bv-form").submit();
-		    	}
-		    }); */
+			var dataAtual = new Date();
 		    
-   	var date = new Date();
-	    	date = date.toLocaleDateString();
-	    	var dia = date.substring(0, 2);
-	    	var mes = date.substring(3, 5);
-	    	var ano = date.substring(6, 10);
-	    	
-	    	 $("#de").attr("max", ano+"-"+mes+"-"+dia);
-	    	 $("#ate").attr("max", ano+"-"+mes+"-"+dia);
-	    	 $("#ate").attr("min", ano+"-"+mes+"-"+dia);  
-		 
-    	 
-    	 	$('.periodo').prop('max',function(){
-		        return new Date().toJSON().split('T')[0];
-		    });
-			
-			$('#bv-form').bootstrapValidator({
-				excluded : [ ':disabled' ],
-				fields : {
-					periodo : {
-						validators : {
-							range : {
-								message : 'A segunda data deve ser superior ou igual à primeira.'
-							},
-							date: {
-								min: $("#periodoAte").prop('min'),
-								max: $("#periodoAte").prop('max'),
-								message:'Data inválida.'
-							}
-						}
-					}
-				}
-			});
+			$("#periodoDe").attr("max", dataAtual.toISOString().substring(0, 10));
+			$("#periodoAte").attr("max", dataAtual.toISOString().substring(0, 10));
+
 		});
+		
+		$(".periodo").change(function() {
+			var date = new Date();
+			
+			var startDate = document.getElementById("periodoDe").value;
+			var endDate = document.getElementById("periodoAte").value;
+
+			if ((Date.parse(endDate) < Date.parse(startDate))) {
+				$("#filtrar-bt").attr("disabled", true);
+			} else if (Date.parse(endDate) > date.toISOString().substring(0, 10)) {
+				$("#filtrar-bt").attr("disabled", true);
+			} else if (Date.parse(startDate) > date.toISOString().substring(0, 10)) {
+				$("#filtrar-bt").attr("disabled", true);
+			} else {
+				$("#filtrar-bt").attr("disabled", false);
+			}
+		});
+		
+		if(!url.includes("filtrar")) {
+			var dias = 7; // Quantidade de dias que você quer subtrair.
+			var dataAtual = new Date();
+			
+			$("#periodoAte").val(dataAtual.toISOString().substring(0, 10));
+			
+			var dataAnterior = new Date(dataAtual.getTime() - (dias * 24 * 60 * 60 * 1000));
+		    
+			$("#periodoDe").val(dataAnterior.toISOString().substring(0, 10));
+			$("#periodoAte").val(dataAtual.toISOString().substring(0, 10));
+			
+			$("#bv-form").submit();
+		}
 		
 		function gerarRelatorio(){
 			var dataDe;
