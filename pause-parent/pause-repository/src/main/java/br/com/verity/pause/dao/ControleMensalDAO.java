@@ -75,11 +75,11 @@ public class ControleMensalDAO {
 			sql = new StringBuilder();
 			
 			sql.append("   UPDATE CM ");
-			sql.append("	SET CM.HORATOTAL = DIARIO.HORATOTAL, ");
-			sql.append("	    CM.BANCOHORA = DIARIO.BANCOHORA, ");
-			sql.append("		CM.ADCNOTURNO = DIARIO.ADCNOTURNO, ");
-			sql.append("		CM.SOBREAVISOTRABALHADO = DIARIO.SOBREAVISOTRABALHADO, ");
-			sql.append("		CM.SOBREAVISO = DIARIO.SOBREAVISO ");
+			sql.append("	SET CM.HORATOTAL = ROUND(DIARIO.HORATOTAL, 2), ");
+			sql.append("	    CM.BANCOHORA = ROUND(DIARIO.BANCOHORA, 2), ");
+			sql.append("		CM.ADCNOTURNO = ROUND(DIARIO.ADCNOTURNO, 2), ");
+			sql.append("		CM.SOBREAVISOTRABALHADO = ROUND(DIARIO.SOBREAVISOTRABALHADO, 2), ");
+			sql.append("		CM.SOBREAVISO = ROUND(DIARIO.SOBREAVISO, 2) ");
 			sql.append("   FROM PAUSECONTROLEMENSAL CM ");
 			sql.append("		INNER JOIN ");
 			sql.append("			( ");

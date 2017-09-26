@@ -3,11 +3,14 @@ package br.com.verity.pause.business;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.verity.pause.bean.FeriadoBean;
 import br.com.verity.pause.dao.AfastamentoDAO;
 import br.com.verity.pause.dao.ApontamentoDAO;
 import br.com.verity.pause.dao.AtestadoDAO;
@@ -18,6 +21,7 @@ import br.com.verity.pause.entity.AfastamentoEntity;
 import br.com.verity.pause.entity.ApontamentoPivotEntity;
 import br.com.verity.pause.entity.AtestadoEntity;
 import br.com.verity.pause.entity.SobreAvisoEntity;
+import br.com.verity.pause.integration.SavIntegration;
 
 /**
  * Classe que possui todos os cálculos relacionados ao controle de horas
@@ -41,6 +45,9 @@ public class CalculoBusiness {
 	
 	@Autowired
 	private ControleDiarioDAO controleDiarioDAO;
+	
+	@Autowired
+	private SavIntegration savIntegration;
 	
 	@Autowired
 	private ControleMensalDAO controleMensalDAO;
@@ -119,7 +126,7 @@ public class CalculoBusiness {
 				totalSobreAvisoTrabalhado = calcularSobreAvisoTrabalhadas(apontamento, sobreAviso);
 			}
 		}
-		else {
+		else if (apontamento == null){
 			apontamento = new ApontamentoPivotEntity();
 			apontamento.setDataApontamento(data);
 			apontamento.setIdFuncionario(idFuncionario);
@@ -433,10 +440,18 @@ public class CalculoBusiness {
      */
 	private Boolean verificarFeriado(Date data)
     {
-    	Boolean response = null;
+    	Boolean response = false;
     	
-    	response = false; //procurar se a data é feriado ou não 
-        
+    	try {
+    		Optional<FeriadoBean> optional = Arrays.stream(savIntegration.listFeriados().toArray(new FeriadoBean[0]))
+    		         .filter(x -> x.getDataFeriado().compareTo(data) == 0).findFirst();
+    		        
+    		response = optional.isPresent();
+    	} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
         return response;
     }
     
@@ -543,6 +558,6 @@ public class CalculoBusiness {
 	 * @return Hora arredondada
 	 */
 	private Double timeRound(Double valor) {
-		return Math.round(valor * 100.0) / 100.0;
+		return Math.round(valor * 1000000.0) / 1000000.0;
 	}
 }
