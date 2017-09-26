@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import br.com.verity.pause.bean.ControleDiarioBean;
 import br.com.verity.pause.bean.ControleMensalBean;
 import br.com.verity.pause.bean.FuncionarioBean;
+import br.com.verity.pause.business.ControleApontamentoBusiness;
 import br.com.verity.pause.business.ControleDiarioBusiness;
 import br.com.verity.pause.business.ControleMensalBusiness;
 import br.com.verity.pause.business.FuncionarioBusiness;
@@ -20,13 +21,7 @@ import br.com.verity.pause.business.FuncionarioBusiness;
 public class RotinaDeHoras {
 	
 	@Autowired
-	private FuncionarioBusiness funcionarioBusiness;
-	
-	@Autowired
-	private ControleMensalBusiness controleMensalBusiness;
-	
-	@Autowired
-	private ControleDiarioBusiness controleDiarioBusiness;
+	private ControleApontamentoBusiness controleApontamentoBusiness;
 	
 	private static final String TIME_ZONE = "America/Sao_Paulo";
 	
@@ -35,18 +30,7 @@ public class RotinaDeHoras {
 	 */
 	@Scheduled(cron = "00 00 00 * * *", zone = TIME_ZONE)
 	public void verificaPorHora() {
-		List<FuncionarioBean> funcionarios = funcionarioBusiness.obterTodosComPis();
-		ControleMensalBean controleMensalBean;
-		ControleDiarioBean controleDiarioBean;
-		Date dtHoje = new Date();
-		for (FuncionarioBean funcionarioBean : funcionarios) {
-			controleMensalBean = controleMensalBusiness.obterPorIdFuncionarioMesAnoDataDia(dtHoje, funcionarioBean.getId());
-			if(controleMensalBean == null){
-				controleMensalBean = controleMensalBusiness.obterPorMesAnoIdFuncionario(dtHoje, funcionarioBean.getId());
-				controleDiarioBean = controleDiarioBusiness.obterPorDataIdFuncionario(dtHoje, funcionarioBean.getId());
-			} else if (controleMensalBean.getControleDiario() == null || controleMensalBean.getControleDiario().size() == 0){
-				controleDiarioBean = controleDiarioBusiness.obterPorDataIdFuncionario(dtHoje, funcionarioBean.getId());
-			}
-		}
+		Date dataDeHoje = new Date();
+		controleApontamentoBusiness.Criar(dataDeHoje);
 	}
 }

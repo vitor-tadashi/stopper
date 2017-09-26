@@ -44,6 +44,9 @@ public class SobreAvisoBusiness {
 	private FuncionarioBusiness funcionarioBusiness;
 	
 	@Autowired
+	private ControleApontamentoBusiness controleApontamentoBusiness;
+	
+	@Autowired
 	private CalculoBusiness calculoBusiness;
 
 	public SobreAvisoBean salvar(SobreAvisoBean sobreAviso) throws BusinessException {
@@ -63,6 +66,7 @@ public class SobreAvisoBusiness {
 		ControleDiarioBean controleDiario = controleDiarioBusiness.obterPorDataIdFuncionario(sobreAviso.getData(),idFuncionario);
 		entity.setControleDiario(controleDiarioConverter.convertBeanToEntity(controleDiario));
 
+		
 		sobreAviso.setId(sobreAvisoDAO.save(entity).getId());
 		
 		calculoBusiness.calcularApontamento(idFuncionario, sobreAviso.getData());

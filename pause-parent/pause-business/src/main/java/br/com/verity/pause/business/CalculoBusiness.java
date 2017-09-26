@@ -76,7 +76,7 @@ public class CalculoBusiness {
 	private void salvarApontamento(ApontamentoPivotEntity apontamento) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(apontamento.getDataApontamento());
-		  
+		
 		controleDiarioDAO.saveCalculation(apontamento);
 		controleMensalDAO.saveCalculation(apontamento.getIdFuncionario(), calendar.get(Calendar.MONTH) + 1);
 	}
@@ -122,6 +122,7 @@ public class CalculoBusiness {
 		else {
 			apontamento = new ApontamentoPivotEntity();
 			apontamento.setDataApontamento(data);
+			apontamento.setIdFuncionario(idFuncionario);
 		}
 		
 		if (sobreAviso != null){
