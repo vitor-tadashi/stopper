@@ -83,7 +83,7 @@ public class CalculoBusiness {
 	private void salvarApontamento(ApontamentoPivotEntity apontamento) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(apontamento.getDataApontamento());
-		  
+		
 		controleDiarioDAO.saveCalculation(apontamento);
 		controleMensalDAO.saveCalculation(apontamento.getIdFuncionario(), calendar.get(Calendar.MONTH) + 1);
 	}
@@ -124,14 +124,18 @@ public class CalculoBusiness {
 			
 			if (sobreAviso != null) {
 				totalSobreAvisoTrabalhado = calcularSobreAvisoTrabalhadas(apontamento, sobreAviso);
-				totalSobreAviso = calcularSobreAviso(sobreAviso, totalSobreAvisoTrabalhado);
 			}
 		}
 		else if (apontamento == null){
 			apontamento = new ApontamentoPivotEntity();
 			apontamento.setDataApontamento(data);
+			apontamento.setIdFuncionario(idFuncionario);
 		}
-
+		
+		if (sobreAviso != null){
+			totalSobreAviso = calcularSobreAviso(sobreAviso, totalSobreAvisoTrabalhado);
+		}
+	
 		tratarHorasCalculadas(apontamento, totalHoras, totalHorasDiarias, horasExtras, totalSobreAvisoTrabalhado,
 				totalSobreAviso, totalAdicionalNoturno);
 		

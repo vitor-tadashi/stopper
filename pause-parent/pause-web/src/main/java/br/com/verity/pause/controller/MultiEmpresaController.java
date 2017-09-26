@@ -27,7 +27,7 @@ public class MultiEmpresaController {
 				return "multi-empresa/multi-empresa";
 			}
 		}
-		return "redirect:/consultar-apontamento";
+		return "redirect:/gerenciar-apontamento";
 	}
 
 	@RequestMapping(value = { "/selecionaMultiEmpresa/{id}" }, method = RequestMethod.POST)

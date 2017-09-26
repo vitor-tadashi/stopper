@@ -33,33 +33,37 @@
 				<!--===================================================-->
 				<div class="panel-body">
 					<div class="row">
-						<form id="form-filtrar" action="/pause/consultar-apontamento/filtrar-consulta" method="POST">
+						<form id="bv-form" action="/pause/consultar-apontamento/filtrar-consulta" method="POST">
 							<input type="hidden" id="token" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label class="control-label">Nome do funcionário</label>
-									<select class="selectpicker" data-live-search="true" name="idFunc" data-width="100%" id="idFunc">
+									<select class="selectpicker" data-live-search="true" data-width="100%" id="select-funcionario" name="idFuncionario">
 										<option value="">Selecione</option>
 										<c:forEach items="${funcionariosBusca}" var="funcionario">
-											<option value="${funcionario.id}">${funcionario.nome}</option>
+											<option value="${funcionario.id }">${funcionario.nome }</option>
 										</c:forEach>
 									</select>
+									<input type="hidden" id="funcSel" name="idFuncionario" val="${idFuncBusca }"/>
 								</div>
 							</div>
-							<div class="col-sm-5">
+							<div class="col-sm-5 pad-btm">
 								<label class="control-label">Período</label>
 								<div class="input-daterange input-group" id="datepicker">
-									<input type="date"class="form-control" name="de" id="de" value="${de }"/>
+									<input type="date" class="form-control periodo" name="periodoDe" id="periodoDe" value="${de }" min="2010-03-01" max=""/>
 									<span class="input-group-addon">até</span>
-									<input type="date" class="form-control" name="ate" id="ate" value="${ate }"/>
+									<input type="date" class="form-control periodo" name="periodoAte" id="periodoAte" value="${ate }" min="2010-03-01" max=""/>
 								</div>
 							</div>
-							<div class="col-sm-1" style="margin-top: 23px;">
-								<button class="btn btn-info" type="button" id="filtrar-bt">Filtrar</button>
+							<div class="col-sm-1" style="margin-top: 23px; ">
+								<button class="btn btn-info" type="submit" id="filtrar-bt">Filtrar</button>
 							</div>
 						</form>
 						<div class="col-sm-2 pull-right" style="margin-top: 23px;">
-							<a class="btn btn-success pull-right" href="#"><i class="fa fa-file-excel-o"></i> Gerar relatório</a>
+							<button type="button" class="btn btn-success pull-right" onclick="gerarRelatorio()">
+								<i class="fa fa-file-excel-o"></i> Gerar relatório
+							</button>
+							<a href="${url }" target="_blank" id="download" class="hide"></a>
 						</div>
 					</div>
 					<div class="table-respon">
@@ -98,26 +102,90 @@
 		
 	</layout:put>
 	<layout:put block="scripts">
-		<script src='<c:url value="/plugins/masked-input/jquery.mask.js"/>'></script>
 		<script src='<c:url value="/plugins/datatables/media/js/jquery.dataTables.js"/>'></script>
 		<script src='<c:url value="/plugins/datatables/media/js/dataTables.bootstrap.js"/>'></script>
+		<script src='<c:url value="/plugins/bootstrap-validator/bootstrapValidator.min.js"/>'></script>
+		<script src='<c:url value="/js/custom/bootstrap-validator-data-periodo.js"/>'></script>
 		<script src='<c:url value='/js/custom/datatable-custom.js'/>'></script>
-		<script src='<c:url value='/js/custom/masks.js'/>'></script>
+		<script src='<c:url value="/js/custom/send-ajax.js"/>'></script>
 		<script>
+		
+		var url = window.document.URL;
+		
 		$(document).ready(function() {
-		    $('#filtrar-bt').on('click', function(){
-		    	var url = window.document.URL;
-		    	if(url.includes("filtrar")){
-		    		$("#form-filtrar").submit();
-		    	}else if($('#ate').val() == "" && $('#de').val() == ""){
-					table
-					.columns(0).search($('#idFunc option:selected').text())
-					.draw();
-		    	}else{
-		    		$("#form-filtrar").submit();
-		    	}
-		    });
-		} );
+			var dataAtual = new Date();
+		    
+			$("#periodoDe").attr("max", dataAtual.toISOString().substring(0, 10));
+			$("#periodoAte").attr("max", dataAtual.toISOString().substring(0, 10));
+
+		});
+		
+		$(".periodo").change(function() {
+			var date = new Date();
+			
+			var startDate = document.getElementById("periodoDe").value;
+			var endDate = document.getElementById("periodoAte").value;
+
+			if ((Date.parse(endDate) < Date.parse(startDate))) {
+				$("#filtrar-bt").attr("disabled", true);
+			} else if (Date.parse(endDate) > date.toISOString().substring(0, 10)) {
+				$("#filtrar-bt").attr("disabled", true);
+			} else if (Date.parse(startDate) > date.toISOString().substring(0, 10)) {
+				$("#filtrar-bt").attr("disabled", true);
+			} else {
+				$("#filtrar-bt").attr("disabled", false);
+			}
+		});
+		
+		if(!url.includes("filtrar")) {
+			var dias = 7; // Quantidade de dias que você quer subtrair.
+			var dataAtual = new Date();
+			
+			$("#periodoAte").val(dataAtual.toISOString().substring(0, 10));
+			
+			var dataAnterior = new Date(dataAtual.getTime() - (dias * 24 * 60 * 60 * 1000));
+		    
+			$("#periodoDe").val(dataAnterior.toISOString().substring(0, 10));
+			$("#periodoAte").val(dataAtual.toISOString().substring(0, 10));
+			
+			$("#bv-form").submit();
+		}
+		
+		function gerarRelatorio(){
+			var dataDe;
+			var dataAte;
+			var idFuncionario = $("#select-funcionario").val();
+			if(url.includes("filtrar")){
+				var deAno = $("#periodoDe").val().substring(0, 4);
+				var deMes = $("#periodoDe").val().substring(5, 7);
+				var deDia = $("#periodoDe").val().substring(8, 10);
+				
+				dataDe = new Date(deAno, deMes-1, deDia);
+				alert(dataDe);
+				
+				var ateAno = $("#periodoAte").val().substring(0, 4);
+				var ateMes = $("#periodoAte").val().substring(5, 7);
+				var ateDia = $("#periodoAte").val().substring(8, 10);
+				
+				dataAte = new Date(ateAno, ateMes-1, ateDia);
+				alert(dataAte);
+	    	}else{
+	    		dataAte = new Date();
+	    		dataDe = new Date(dataAte.getYear()+1900, dataAte.getMonth(), 01);
+	    	}
+			
+			$.ajax({
+				url: "/pause/consultar-apontamento/gerar-relatorio-consulta",
+				type: "POST",
+				data: {'idFuncionario' : idFuncionario,
+						'ate' : dataAte,
+						'de' : dataDe},
+				success: function(data){
+					$("#download").attr("href", "/pause/relatorio/download?caminho="+data);
+					window.open($("#download").attr("href"),'_blank');
+				}
+			});
+		}
 		</script>
 	</layout:put>
 </layout:extends>

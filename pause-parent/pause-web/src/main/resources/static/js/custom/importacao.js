@@ -18,10 +18,15 @@ $( document ).ready(function(){
 })
 
 function importarArquivo() {
+	debugger;
 	var div = document.getElementById("textDiv");
 	$("#textDiv").removeClass("alert alert-danger");
 	$("#textDiv").text("");
 	$(".rmvLinha").remove();
+	
+	$("#carregar-mensagem").removeClass("hide");
+	$("#modal-loader").modal("show");
+	
 	if ($("#upload-arquivo").val()) {
 		var date;
 		var form = document.getElementById("formValidar");
@@ -61,11 +66,14 @@ function importarArquivo() {
 			},
 		});
 	}
+	
+	$("#modal-loader").modal("hide");
+	$("#carregar-mensagem").addClass("hide");
 };
 	
 function exibirImportacao(bool){
 	if(bool == true){
-		$('#modal-confirmacao').modal('hide'); 
+		$('#modal-confirmacao').modal('hide');
 		$("#tbHoras").removeClass("hide");
 		$("#botoes").removeClass("hide");
 	}
@@ -99,3 +107,9 @@ function preencherImportacao(value, index){
 	$('.pis').mask('999.9999.999-9');
 	$('.data').mask('99/99/9999');
 }
+
+$("#submitbutton").click(function() {
+	$("#salvar-mensagem").removeClass("hide");
+	$("#modal-loader").modal("show");
+	$("#formValidar").submit();
+});

@@ -9,6 +9,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,29 +18,36 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.verity.pause.bean.FuncionarioBean;
 import br.com.verity.pause.business.FuncionarioBusiness;
+import br.com.verity.pause.business.RelatorioBusiness;
 
 @Controller
 @RequestMapping(value = "/relatorio")
 public class RelatorioController {
-	
+
 	@Autowired
 	private FuncionarioBusiness funcionarioBusiness;
+	
+	@Autowired
+	private RelatorioBusiness relatorioBusiness;
 
+	@PreAuthorize("hasRole('ROLE_GERAR_RELATORIOS')")
 	@RequestMapping(method = RequestMethod.GET)
 	public String loginPage(Model model) {
 		List<FuncionarioBean> funcionarios = funcionarioBusiness.obterTodos();
 		model.addAttribute("funcionarios", funcionarios);
 		return "relatorio/relatorio";
 	}
-	
+
+	@PreAuthorize("hasRole('ROLE_GERAR_RELATORIOS')")
 	@RequestMapping(value = "gerar-relatorio", method = RequestMethod.POST)
 	@ResponseBody
 	public String gerarRelatorio(Integer idFuncionario, String de, String ate, HttpServletResponse response) {
 		String caminho;
-		caminho = funcionarioBusiness.gerarRelatorio(idFuncionario, de, ate);
+		caminho = relatorioBusiness.gerarRelatorio(idFuncionario, de, ate);
 		return caminho;
 	}
-	
+
+	@PreAuthorize("hasRole('ROLE_GERAR_RELATORIOS')")
 	@RequestMapping(value = "download", method = RequestMethod.GET)
 	public void download(String caminho, HttpServletResponse response) {
 		String[] nome = caminho.split("\\\\");

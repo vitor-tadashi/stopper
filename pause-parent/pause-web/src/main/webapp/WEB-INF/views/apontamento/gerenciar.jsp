@@ -59,31 +59,35 @@
 								</div>
 							</div>
 							<div class="col-sm-1" style="margin-top: 24px;">
-								<button class="btn btn-info" type="submit">Filtrar</button>
+								<button id="filtrar-js" class="btn btn-info" type="submit">Filtrar</button>
 							</div>
 						</div>
 					</form>
+					
+					<sec:authorize access="hasRole('ROLE_MULTI-EMPRESA')" var="isMultiEmpresa"></sec:authorize>
+					
+					<c:if test="${((not empty idFuncionario) and isMultiEmpresa==true) or ((empty idFuncionario) and isMultiEmpresa==false)}">
 					<div class="row">
 						<div class="col-md-12 pad-btm">
 							<sec:authorize access="hasRole('ROLE_INSERIR_SOBRE_AVISO')">
-								<div class="left">
+								<div id="btn-sobreaviso" class="left">
 									<button class="btn btn-purple" type="button" data-target="#sobre-aviso-modal" data-toggle="modal"><span class="pli-add"></span> Informar sobre aviso</button>
 								</div>
 							</sec:authorize>
 							<sec:authorize access="hasRole('ROLE_INSERIR_AFASTAMENTO')">
-								<div class="left">
+								<div id="btn-afastamento" class="left">
 									<button class="btn btn-success" type="button" data-target="#afastamento-modal" data-toggle="modal"><span class="pli-add"></span> Informar afastamento</button>
 								</div>
 							</sec:authorize>
 							<sec:authorize access="hasRole('ROLE_INSERIR_ATESTADO')">
-								<div>
+								<div id="btn-atestado" class="">
 									<button class="btn btn-pink" type="button" data-target="#atestado-modal" data-toggle="modal"><span class="pli-add"></span> Informar atestado</button>
 								</div>
 							</sec:authorize>
 						</div>
 					</div>
 					<div class="table-responsive">
-						<table class="table table-striped table-bordered " id="dt-apontamentos">
+						<table class="table table-striped table-bordered" id="dt-apontamentos">
 							<thead>
 								<tr>
 									<th class="text-center">Data</th>
@@ -136,6 +140,7 @@
 							</tbody>
 						</table>
 					</div>
+					</c:if>
 				</div>
 				<!--===================================================-->
 				<!--End Data Table-->
@@ -152,23 +157,23 @@
 			<div class="modal" id="demo-default-modal" role="dialog" tabindex="-1" aria-labelledby="demo-default-modal" aria-hidden="true">
 				<div class="modal-dialog modal-sm">
 					<div class="modal-content">
+						<form id="form-time" class="clear-form">
+							<!--Modal header-->
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
+								<h4 class="modal-title" id="title-modal-apontamento">01/08/2017, terça-feira</h4>
+							</div>
 			
-						<!--Modal header-->
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
-							<h4 class="modal-title" id="title-modal-apontamento">01/08/2017, terça-feira</h4>
-						</div>
-			
-						<!--Modal body-->
-						<div class="modal-body">
-							<p class="text-semibold text-main">Informe o horário:</p>
-							<form action="" id="form-time" class="clear-form">
+							<!--Modal body-->
+							<div class="modal-body">
+								<p class="text-semibold text-main">Informe o horário:</p>
+							
 								<input type="hidden" id="apontamento-id" />
 								<input type="hidden" id="idApontamento" />
 								<!--Bootstrap Timepicker : Component-->
 								<!--===================================================-->
-								<div class="input-group date">
-									<input id="apontamento-time" type="text-center" class="form-control clock" placeholder="--:--">
+								<div class="input-group date" id="div-apontamento-hora">
+									<input id="apontamento-time" name="hora" type="text-center" class="form-control clock" placeholder="--:--">
 									<span class="input-group-addon"><i class="pli-clock"></i></span>
 								</div>
 								<div class="form-group pad-top">
@@ -185,14 +190,13 @@
 									<textarea id="apontamento-obs" rows="2" maxlength="200" class="form-control"></textarea>
 								</div>
 								<!--===================================================-->
-							</form>
-						</div>
-			
-						<!--Modal footer-->
-						<div class="modal-footer">
-							<button data-dismiss="modal" class="btn btn-danger" type="button" onclick="confirmarRemover()" id="btn-cancelar-apontamento">Cancelar</button>
-							<button class="btn btn-success" onclick="informarHorario();">Salvar</button>
-						</div>
+							</div>
+							<!--Modal footer onclick="informarHorario();"-->
+							<div class="modal-footer">
+								<button data-dismiss="modal" class="btn btn-danger" type="button" onclick="confirmarRemover()" id="btn-cancelar-apontamento">Cancelar</button>
+								<button class="btn btn-success" id="btn-form-time" type="button">Salvar</button>
+							</div>
+						</form>
 					</div>
 				</div>
 			</div>
@@ -217,14 +221,14 @@
 							<form action="" id="form-sa" class="clear-form">
 								<div class="row">
 									<div class="col-sm-4">
-										<div class="form-group">
+										<div class="form-group sa-data">
 											<label class="control-label">Data</label>
 											<input type="date" name="data" class="form-control data" id="dt-sa" placeholder="dd/mm/aaaa"/>
 										</div>
 									</div>
 									<div class="col-sm-6">
 										<label class="control-label">Período</label>
-										<div class="input-daterange input-group" id="datepicker">
+										<div class="input-daterange input-group sa-periodo" id="datepicker">
 											<input id="hora-sa-e" name="entrada" type="text" class="form-control clock" placeholder="--:--">
 											<span class="input-group-addon">até</span>
 											<div class="input-group date">
@@ -233,6 +237,7 @@
 											</div>
 										</div>
 									</div>
+									
 									<div class="col-sm-1" style="margin-top: 23px;">
 										<button class="btn btn-info" type="button" onclick="inserirSA()">Inserir</button>
 									</div>
@@ -474,7 +479,7 @@
 		$(document).ready(function() {
 			$('.periodo').prop('max',function(){
 		        return new Date().toJSON().split('T')[0];
-		    });
+		    }); 
 			
 			$('#bv-form').bootstrapValidator({
 				excluded : [ ':disabled' ],
@@ -491,7 +496,7 @@
 							}
 						}
 					},
-					pis : {
+					idFuncionario : {
 						validators : {
 							notEmpty : {
 								message : 'O campo é obrigatório.'
@@ -499,6 +504,32 @@
 						}
 					}
 				}
+			});
+			$('#btn-form-time').on('click', function () {
+			    var erro = false;
+				if (!$('#apontamento-time').val() && $('#apontamento-time').val() == "") {
+					if ($("#aponta-time-erro").length == 0)
+						$('#div-apontamento-hora').after('<small class="help-block" id="aponta-time-erro">Campo obrigatório.</small>')
+			        erro = true
+			    }
+				if ($('#apontamento-jus').val() == "0") {
+					if ($("#aponta-jus-erro").length == 0)
+						$('#apontamento-jus').after('<small class="help-block" id="aponta-jus-erro">Campo obrigatório.</small>')
+			        erro = true
+			    }
+				if(!erro){
+					informarHorario();
+				}
+			});
+			$('#apontamento-time').on('change', function () {
+				if ($('#apontamento-time').val() && $('#apontamento-time').val() != "") {
+					$('#div-apontamento-hora').next('small').remove();
+			    }
+			});
+			$('#apontamento-jus').on('change', function () {
+				if ($('#apontamento-jus').val() != "0") {
+					$('#apontamento-jus').next('small').remove();
+			    }
 			});
 		});
 		</script>

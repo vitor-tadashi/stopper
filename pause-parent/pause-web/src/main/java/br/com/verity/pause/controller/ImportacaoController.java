@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
@@ -59,11 +60,13 @@ public class ImportacaoController {
 		binder.setAutoGrowCollectionLimit(2048);
 	}
 
+	@PreAuthorize("hasRole('ROLE_IMPORTAR_APONTAMENTOS')")
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public String acessar() {
 		return "importacao/importacao";
 	}
 
+	@PreAuthorize("hasRole('ROLE_IMPORTAR_APONTAMENTOS')")
 	@ResponseBody
 	@RequestMapping(value = "importar-arquivo", method = RequestMethod.POST)
 	public List<FuncionarioBean> importarArquivo(MultipartHttpServletRequest request, Model model) {
@@ -91,6 +94,7 @@ public class ImportacaoController {
 		return funcionariosImportacao;
 	}
 
+	@PreAuthorize("hasRole('ROLE_IMPORTAR_APONTAMENTOS')")
 	@ResponseBody
 	@RequestMapping(value = "cancelar/{arquivo}/", method = RequestMethod.POST)
 	public void cancelar(@PathVariable String arquivo, Model model) {
@@ -101,6 +105,7 @@ public class ImportacaoController {
 		file.delete();
 	}
 
+	@PreAuthorize("hasRole('ROLE_IMPORTAR_APONTAMENTOS')")
 	@RequestMapping(value = "salvar", method = RequestMethod.POST)
 	public String salvar(RedirectAttributes redirect) {
 		List<ApontamentoBean> apontamentos = new ArrayList<ApontamentoBean>();
@@ -125,6 +130,7 @@ public class ImportacaoController {
 		return "redirect:/importacao";
 	}
 
+	@PreAuthorize("hasRole('ROLE_IMPORTAR_APONTAMENTOS')")
 	public String salvarTxt(List<MultipartFile> multipartFiles, Integer idEmpresa) throws IOException {
 		String arquivo = null;
 		String directory = "C:" + File.separator + "Pause" + File.separator + "importacao" + File.separator + idEmpresa

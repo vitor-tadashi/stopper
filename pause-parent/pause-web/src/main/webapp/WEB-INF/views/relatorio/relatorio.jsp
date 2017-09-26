@@ -19,18 +19,22 @@
 		<div id="page-title">
 			<h1 class="page-header text-overflow">Relatórios</h1>
 		</div>
+		
+		<ol class="breadcrumb">
+			<li><a href="#">Home</a></li>
+			<li class="active">Relatório</li>
+		</ol>
+		
 		<!--Page content-->
 		<div class="col-md-12">
 			<div class="panel">
-				<div class="panel-heading">
-					<div class="panel-title">
-						<h4>Extrato de horas</h4>
-					</div>
-				</div>
 				<form>
-					<div id="textDiv" class=""></div>
+				<div id="textDiv" class=""></div>
 					<div class="panel-body">
 						<div class="row">
+							<div style="margin-top: -10px"> 
+								<h4 style="margin-left: 8px">Extrato de horas</h4>
+							</div>
 							<div class="col-sm-3">
 								<label class="control-label">Nome do funcionário:</label> 
 								<select class="selectpicker" data-live-search="true" data-width="100%" id="idFunc">

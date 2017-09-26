@@ -61,9 +61,11 @@
                     <ul class="nav navbar-top-links pull-right">
                         <!--User-->
                         <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+                        <sec:authorize access="hasRole('ROLE_MULTI-EMPRESA')">
                         <li>
                             <div class="username text-right"><a href="/pause/selecionaMultiEmpresa">Trocar empresa</a></div>
                         </li>
+                        </sec:authorize>
                         <li>
                             <div class="username text-right">${user.funcionario.nome }</div>
                         </li>
@@ -137,38 +139,45 @@
                                             <i class="arrow"></i>
                                         </a>
 						            </li>
-						            <li>
-                                		<a href='<c:url value="/consultar-apontamento"/>'>
-                                            <i class="pli-magnifi-glass"></i>
-                                            <span class="menu-title">
-                                            	Consultar banco
-                                            </span>
-                                            <i class="arrow"></i>
-                                        </a>	
-						            </li>
+						            
+						            <sec:authorize access="hasAnyRole('ROLE_CONSULTAR_BANCO', 'ROLE_MULTI_EMPRESA')">
+							            <li>
+	                                		<a href='<c:url value="/consultar-apontamento"/>'>
+	                                            <i class="pli-magnifi-glass"></i>
+	                                            <span class="menu-title">
+	                                            	Consultar banco
+	                                            </span>
+	                                            <i class="arrow"></i>
+	                                        </a>	
+							            </li>
+						            </sec:authorize>
 						            
 						            <li class="list-divider"></li>
 									
-									<!--Category name-->
-						            <li class="list-header">Mais</li>
-                                	<li>
-                                		<a href='<c:url value="/importacao"/>' data-original-title="" title="">
-                                            <i class="pli-download"></i>
-                                            <span class="menu-title">
-                                            	Importar
-                                            </span>
-                                            <i class="arrow"></i>
-                                        </a>
-						            </li>
-									<li>
-                                		<a href='<c:url value="/relatorio"/>'>
-                                            <i class="pli-bar-chart"></i>
-                                            <span class="menu-title">
-                                            	Relatório
-                                            </span>
-                                            <i class="arrow"></i>
-                                        </a>
-						            </li>
+						            <sec:authorize access="hasAnyRole('ROLE_IMPORTAR_APONTAMENTOS', 'ROLE_MULTI_EMPRESA')">
+						             	<li class="list-header">Mais</li>
+							            <li>
+	                                		<a href='<c:url value="/importacao"/>' data-original-title="" title="">
+	                                            <i class="pli-download"></i>
+	                                            <span class="menu-title">
+	                                            	Importar
+	                                            </span>
+	                                            <i class="arrow"></i>
+	                                        </a>
+							            </li>
+						            </sec:authorize>
+						            
+						            <sec:authorize access="hasAnyRole('ROLE_GERAR_RELATORIOS', 'ROLE_MULTI_EMPRESA')">
+										<li>
+	                                		<a href='<c:url value="/relatorio"/>'>
+	                                            <i class="pli-bar-chart"></i>
+	                                            <span class="menu-title">
+	                                            	Relatório
+	                                            </span>
+	                                            <i class="arrow"></i>
+	                                        </a>
+							            </li>
+						            </sec:authorize>
 								
 								</ul>
                             </div>

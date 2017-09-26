@@ -51,7 +51,7 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
 		}
 
 		if (isUser) {
-			return "/consultar-apontamento";
+			return "/gerenciar-apontamento";
 		} else if (isAdmin) {
 			return "/selecionaMultiEmpresa";
 		} else {
