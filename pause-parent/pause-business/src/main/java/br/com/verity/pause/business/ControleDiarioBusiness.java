@@ -121,12 +121,17 @@ public class ControleDiarioBusiness {
 			apontamentos.sort(new Comparator<ApontamentoBean>() {
 				@Override
 				public int compare(ApontamentoBean o1, ApontamentoBean o2) {
+					int resp = 0;
 					if (o1.getHorario() != null && o2.getHorario() != null) {
-						return o1.getHorario().compareTo(o2.getHorario());
-					} else {
-						return 0;
+						resp = o1.getHorario().compareTo(o2.getHorario());
+					} else if(o1.getHorario() != null && o2.getHorario() == null){
+						resp = 1;
+					}else if(o1.getHorario() == null && o2.getHorario() != null){
+						resp = -1;
+					}else if(o1.getHorario() == null && o2.getHorario() == null){
+						resp = 0;
 					}
-
+					return resp;
 				}
 			});
 		}

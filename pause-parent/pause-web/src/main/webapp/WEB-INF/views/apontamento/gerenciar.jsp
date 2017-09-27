@@ -393,7 +393,7 @@
 									</div>
 									<div class="col-sm-3">
 										<label class="control-label">Quantidade de horas</label>
-										<input id="qtd-hr-atestado" type="number" step="0.5" class="form-control" placeholder="00:00">
+										<input id="qtd-hr-atestado" type="number" step="0.5" class="form-control" placeholder="00,00">
 										<span id="mensagemHoraAtestado-js"  class="hide" style="color: #a94442; "></span>
 									</div>
 								</div>
