@@ -108,8 +108,17 @@ public class AfastamentoBusiness {
 		
 		List<AfastamentoEntity> entities = afastamentoDAO.findByPeriodoAndIdFuncionario(funcionario.getId(), periodos[0], periodos[1]);
 		List<AfastamentoBean> afastamentos = afastamentoConverter.convertEntityToBean(entities);
+		
 		for(int i = 0; i < entities.size(); i++) {
 			afastamentos.get(i).setTipoAfastamento(tipoAfastamentoConverter.convertEntityToBean(entities.get(i).getTipoAfastamento()));
+		}
+		
+		for (AfastamentoBean afastamento : afastamentos) {
+			
+			Boolean mesFechado = controleMensalBusiness.verificarMesFechado(afastamento.getDataInicio());
+			
+			afastamento.setMesFechado(mesFechado);
+			
 		}
 		
 		return afastamentos;

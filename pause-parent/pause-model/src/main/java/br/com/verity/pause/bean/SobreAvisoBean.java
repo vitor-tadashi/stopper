@@ -23,7 +23,14 @@ public class SobreAvisoBean{
 	private ControleDiarioBean controleDiario;
 	private Integer idUsuarioInclusao;
 	private Integer idFuncionario;
+	private Boolean mesFechado;
 	
+	public Boolean getMesFechado() {
+		return mesFechado;
+	}
+	public void setMesFechado(Boolean mesFechado) {
+		this.mesFechado = mesFechado;
+	}
 	public Integer getId() {
 		return id;
 	}

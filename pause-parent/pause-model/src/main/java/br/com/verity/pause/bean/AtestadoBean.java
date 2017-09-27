@@ -13,7 +13,14 @@ public class AtestadoBean {
 	private Integer idFuncionario;
 	private ControleDiarioBean controleDiario;
 	private TipoAtestadoBean tipoAtestado;
+	private Boolean mesFechado;
 	
+	public Boolean getMesFechado() {
+		return mesFechado;
+	}
+	public void setMesFechado(Boolean mesFechado) {
+		this.mesFechado = mesFechado;
+	}
 	public Integer getId() {
 		return id;
 	}

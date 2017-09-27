@@ -17,6 +17,14 @@ public class AfastamentoBean {
 	private Integer idFuncionario;
 	private TipoAfastamentoBean tipoAfastamento;
 	private Integer idUsuarioInclusao;
+	private Boolean mesFechado;
+	
+	public Boolean getMesFechado() {
+		return mesFechado;
+	}
+	public void setMesFechado(Boolean mesFechado) {
+		this.mesFechado = mesFechado;
+	}
 	public Integer getId() {
 		return id;
 	}

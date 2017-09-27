@@ -53,9 +53,9 @@
 							<div class="col-sm-5 pad-btm">
 								<label class="control-label">Período</label>
 								<div class="input-daterange input-group" id="datepicker">
-									<input type="date" id="periodoDe" class="form-control periodo" name="periodo" placeholder="dd/mm/aaaa" value="${periodo[0] }" min="2010-03-01" max=""/>
+									<input type="date" id="periodoDe" class="form-control periodo" name="periodo" placeholder="dd/mm/aaaa" value="${periodo[0] }" min="${dataMinima }" max=""/>
 									<span class="input-group-addon">até</span>
-									<input type="date" id="periodoAte" class="form-control periodo" name="periodo" placeholder="dd/mm/aaaa" value="${periodo[1] }" min="2010-03-01" max=""/>
+									<input type="date" id="periodoAte" class="form-control periodo" name="periodo" placeholder="dd/mm/aaaa" value="${periodo[1] }" min="${dataMinima }" max=""/>
 								</div>
 							</div>
 							<div class="col-sm-1" style="margin-top: 24px;">
@@ -223,7 +223,7 @@
 									<div class="col-sm-4">
 										<div class="form-group sa-data">
 											<label class="control-label">Data</label>
-											<input type="date" name="data" class="form-control data" id="dt-sa" placeholder="dd/mm/aaaa"/>
+											<input type="date" name="data" class="form-control data" id="dt-sa" placeholder="dd/mm/aaaa" min="${dataMinima }"/>
 											<span id="mensagemData-js"  class="hide" style="color: #a94442;"></span>
 										</div>
 									</div>
@@ -241,7 +241,7 @@
 									</div>
 									
 									<div class="col-sm-1" style="margin-top: 23px;">
-										<button class="btn btn-info" type="button" onclick="inserirSA()">Inserir</button>
+										<button class="btn btn-success" type="button" onclick="inserirSA()">Inserir</button>
 									</div>
 								</div>
 							</form>
@@ -262,7 +262,14 @@
 												<td>${data }</td>
 												<td>${sa.entrada }</td>
 												<td>${sa.saida }</td>
-												<td><a class="text-danger" onclick="removerSA(this, ${sa.id})" href="#">Remover</a></td>
+												
+												<c:if test="${sa.mesFechado }">
+													<td>Remover</td>
+												</c:if>
+												
+												<c:if test="${!sa.mesFechado }">
+													<td><a class="text-danger" onclick="removerSA(this, ${sa.id})" href="#" >Remover</a></td>
+												</c:if>
 											</tr>
 										</c:forEach>
 									</tbody>
@@ -295,9 +302,9 @@
 									<div class="col-sm-7">
 										<label class="control-label">Período</label>
 										<div class="input-daterange input-group" id="datepicker">
-											<input type="date" id="afastamentoDe" class="form-control data" name="start" placeholder="dd/mm/aaaa"/>
+											<input type="date" id="afastamentoDe" class="form-control data" name="start" placeholder="dd/mm/aaaa" min="${dataMinima }"/>
 											<span class="input-group-addon">até</span>
-											<input type="date" id="afastamentoAte" class="form-control data" name="end" placeholder="dd/mm/aaaa"/>
+											<input type="date" id="afastamentoAte" class="form-control data" name="end" placeholder="dd/mm/aaaa" min="${dataMinima }"/>
 										</div>
 										<span id="mensagemDataAfastamento-js"  class="hide" style="color: #a94442;"></span>
 									</div>
@@ -316,7 +323,7 @@
 										<span id="mensagemSelectAfastamento-js"  class="hide" style="color: #a94442; "></span>
 									</div>
 									<div class="col-sm-1" style="margin-top: 23px;">
-										<button class="btn btn-info" type="button" onclick="inserirAfastamento()">Inserir</button>
+										<button class="btn btn-success" type="button" onclick="inserirAfastamento()">Inserir</button>
 									</div>
 									
 								</div>
@@ -341,7 +348,15 @@
 												<td>${inicio }</td>
 												<td>${fim }</td>
 												<td>${af.tipoAfastamento.descricao }</td>
-												<td><a class="text-danger" onclick="removerAfastamento(this, ${af.id})" href="#">Remover</a></td>
+												
+												<c:if test="${af.mesFechado }">
+													<td>Remover</td>
+												</c:if>
+												
+												<c:if test="${!af.mesFechado }">
+													<td><a class="text-danger" onclick="removerAfastamento(this, ${af.id})" href="#">Remover</a></td>
+												</c:if>
+												
 											</tr>
 										</c:forEach>
 									</tbody>
@@ -373,7 +388,7 @@
 								<div class="row mar-btm">
 									<div class="col-sm-4">
 										<label class="control-label">Data</label>
-										<input type="date" id="atestadoData" class="form-control" placeholder="dd/mm/aaaa"/>
+										<input type="date" id="atestadoData" class="form-control" placeholder="dd/mm/aaaa" min="${dataMinima }"/>
 										<span id="mensagemDataAtestado-js"  class="hide" style="color: #a94442; "></span>
 									</div>
 									<div class="col-sm-3">
@@ -395,7 +410,7 @@
 										</div>
 									</div>
 									<div class="col-sm-1" style="margin-top: 23px;">
-										<button class="btn btn-info" type="button" onclick="inserirAtestado()">Inserir</button>
+										<button class="btn btn-success" type="button" onclick="inserirAtestado()">Inserir</button>
 									</div>
 								</div>
 								<span id="mensagemSelectAtestado-js"  class="hide" style="color: #a94442; "></span>
@@ -417,7 +432,14 @@
 												<td>${data }</td>
 												<td>${at.quantidadeHora }</td>
 												<td>${at.tipoAtestado.descricao }</td>
-												<td><a class="text-danger" onclick="removerAtestado(this, ${at.id})" href="#">Remover</a></td>
+												
+												<c:if test="${sa.mesFechado }">
+													<td>Remover</td>
+												</c:if>
+												
+												<c:if test="${!sa.mesFechado }">
+													<td><a class="text-danger" onclick="removerAtestado(this, ${at.id})" href="#">Remover</a></td>
+												</c:if>
 											</tr>
 										</c:forEach>
 									</tbody>

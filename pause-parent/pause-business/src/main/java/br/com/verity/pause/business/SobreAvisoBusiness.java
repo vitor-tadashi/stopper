@@ -36,55 +36,55 @@ public class SobreAvisoBusiness {
 
 	@Autowired
 	private SobreAvisoDAO sobreAvisoDAO;
-	
+
 	@Autowired
 	private ControleMensalBusiness controleMensalBusiness;
-	
+
 	@Autowired
 	private FuncionarioBusiness funcionarioBusiness;
-	
+
 	@Autowired
 	private ControleApontamentoBusiness controleApontamentoBusiness;
-	
+
 	@Autowired
 	private CalculoBusiness calculoBusiness;
 
 	public SobreAvisoBean salvar(SobreAvisoBean sobreAviso) throws BusinessException {
-		if(controleMensalBusiness.verificarMesFechado(sobreAviso.getData()))
+		if (controleMensalBusiness.verificarMesFechado(sobreAviso.getData()))
 			throw new BusinessException("Não foi possível realizar a ação, pois o mês está fechado.");
-		
+
 		UsuarioBean usuarioLogado = userBusiness.usuarioLogado();
 		Integer idFuncionario = sobreAviso.getIdFuncionario();
-		if(idFuncionario == null)
+		if (idFuncionario == null)
 			idFuncionario = usuarioLogado.getFuncionario().getId();
-		
+
 		sobreAviso.setDataInclusao(new Date());
 		sobreAviso.setIdUsuarioInclusao(usuarioLogado.getId());
 
 		SobreAvisoEntity entity = sobreAvisoConverter.convertBeanToEntity(sobreAviso);
 
-		ControleDiarioBean controleDiario = controleDiarioBusiness.obterPorDataIdFuncionario(sobreAviso.getData(),idFuncionario);
+		ControleDiarioBean controleDiario = controleDiarioBusiness.obterPorDataIdFuncionario(sobreAviso.getData(),
+				idFuncionario);
 		entity.setControleDiario(controleDiarioConverter.convertBeanToEntity(controleDiario));
 
-		
 		sobreAviso.setId(sobreAvisoDAO.save(entity).getId());
-		
+
 		calculoBusiness.calcularApontamento(idFuncionario, sobreAviso.getData());
-		
+
 		return sobreAviso;
 	}
 
 	public void remover(Integer id) throws BusinessException {
-		if(id == null || id.equals(0)) {
+		if (id == null || id.equals(0)) {
 			throw new BusinessException("Sobre aviso não encontrado em nossa base.");
 		}
 		SobreAvisoEntity sobreAviso = sobreAvisoDAO.findById(id);
-		
-		if(controleMensalBusiness.verificarMesFechado(sobreAviso.getData()))
+
+		if (controleMensalBusiness.verificarMesFechado(sobreAviso.getData()))
 			throw new BusinessException("Não foi possível realizar a ação, pois o mês está fechado.");
-		
+
 		sobreAvisoDAO.deleteById(id);
-		
+
 		int idFuncionario = sobreAviso.getControleDiario().getControleMensal().getIdFuncionario();
 		calculoBusiness.calcularApontamento(idFuncionario, sobreAviso.getData());
 	}
@@ -114,7 +114,13 @@ public class SobreAvisoBusiness {
 		List<SobreAvisoEntity> entities = sobreAvisoDAO.findByPeriodoAndIdFuncionario(funcionario.getId(), periodos[0], periodos[1]);
 		List<SobreAvisoBean> avisoBeans = sobreAvisoConverter.convertEntityToBean(entities);
 		
+		for (SobreAvisoBean sobreAvisoBean : avisoBeans) {
+			
+			Boolean mesFechado = controleMensalBusiness.verificarMesFechado(sobreAvisoBean.getData());
+			
+			sobreAvisoBean.setMesFechado(mesFechado);
+		}
+		
 		return avisoBeans;
 	}
-
 }
