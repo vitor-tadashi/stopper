@@ -42,7 +42,6 @@ import hudson.model.*
                                      }   
  
                 stage ('Build')
-                 bat 'cd \.\_\projetos-verity\Build\pipeline-pause\pause-parent'
                  def jdk = tool name: '1.8.0_131'
                  def mvnHome = tool name: '3.5.0'
                  env.JAVA_HOME = "${jdk}"
@@ -54,8 +53,8 @@ import hudson.model.*
                 stage ('Archive')
                  step([$class: 'ArtifactArchiver', artifacts: '**/target/*.war', fingerprint: true])
                 
-               /* stage ('Delete Workpspace')
+               stage ('Delete Workpspace')
                  deleteDir()
- */
+ 
            }
      }
