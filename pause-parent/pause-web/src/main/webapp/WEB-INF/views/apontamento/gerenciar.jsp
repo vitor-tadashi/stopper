@@ -109,7 +109,7 @@
 							</thead>
 							<tbody class="text-center">
 								<c:forEach items="${dias }" var="dia" varStatus="i">
-									<tr>
+									<tr class="linha">
 										<fmt:formatDate value="${dia.data }" pattern="dd/MM/yyyy" var="data"/>
 									
 										<input type="hidden" id="infoDia" value="${data }, ${dia.diaDaSemana}"/>

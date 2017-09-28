@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.verity.pause.bean.ControleDiarioBean;
 import br.com.verity.pause.bean.SobreAvisoBean;
+import br.com.verity.pause.business.ControleDiarioBusiness;
 import br.com.verity.pause.business.SobreAvisoBusiness;
 import br.com.verity.pause.exception.BusinessException;
 
@@ -22,25 +24,41 @@ public class GerenciarSobreAvisoController {
 	@Autowired
 	private SobreAvisoBusiness sobreAvisoBusiness;
 	
+	@Autowired
+	private ControleDiarioBusiness controleDiarioBusiness;
+	
 	@PreAuthorize("hasRole('ROLE_INSERIR_SOBRE_AVISO')")
 	@PostMapping(value = "/inserir-sa")
 	public ResponseEntity<?> salvar(@RequestBody SobreAvisoBean sobreAviso){
 		SobreAvisoBean sobreAvisoCriado = null;
 		try {
 			sobreAvisoCriado = sobreAvisoBusiness.salvar(sobreAviso);
+			
+			ControleDiarioBean controle = controleDiarioBusiness.obterPorDataIdFuncionario(sobreAviso.getData(), sobreAviso.getIdFuncionario());
+			
+			sobreAvisoCriado.setControleDiario(controle);
+			
 		} catch (BusinessException e) {
-			return new ResponseEntity<String>(e.getMessage(),HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 		return ResponseEntity.ok(sobreAvisoCriado);
 	}
+	
 	@PreAuthorize("hasRole('ROLE_REMOVER_SOBRE_AVISO')")
 	@DeleteMapping(value = "/remover/{id}")
 	public ResponseEntity<String> remover(@PathVariable Integer id){
+		
 		try {
+			
 			sobreAvisoBusiness.remover(id);
+			
 		} catch (BusinessException e) {
-			return new ResponseEntity<String>(e.getMessage(),HttpStatus.BAD_REQUEST);
+			
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			
 		}
+		
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+		
 	}
 }
