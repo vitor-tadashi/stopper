@@ -32,7 +32,6 @@ function setarFinalDoDia () {
 }
 
 $('#apontamento-time').change(function () {
-	debugger;
 	var string = $('#apontamento-time').val();
 	var tamanho = string.length;
 	
@@ -123,7 +122,7 @@ function removerSA(click, id){
 				var string = $(this).find("#infoDia").val().substring(0, 10); // 22/09/2017
 				
 				if (dataSobreavisoRemovido == string) {
-					$(this).find('td:last').html('');
+					$(this).find('td:last').html('0.0');
 				}
 				
 			});
@@ -164,7 +163,6 @@ function inserirSA_ajax(dataSA, horaSAe, horaSAs){
 			
 			$('.linha').each(function() {
 				
-				debugger
 				var string = $(this).find("#infoDia").val().substring(0, 10); // 22/09/2017
 				var ano = string.substring(6, 10);
 				var mes = string.substring(3, 5);

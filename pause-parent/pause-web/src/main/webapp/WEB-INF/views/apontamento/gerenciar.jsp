@@ -172,11 +172,13 @@
 								<input type="hidden" id="idApontamento" />
 								<!--Bootstrap Timepicker : Component-->
 								<!--===================================================-->
-								<div class="input-group date" id="div-apontamento-hora">
+								<div class="input-group" id="div-apontamento-hora">
 									<input id="apontamento-time" name="hora" type="text-center" class="form-control time" placeholder="--:--">
+									<span class="input-group-btn">
 									<button type="button" onclick="setarFinalDoDia()" class="btn btn-default" data-toggle="tooltip" data-placement="right" title="Apontar final do dia">
 									  <i class="pli-clock"></i>
 									</button>
+									</span>
 								</div>
 								<div class="form-group pad-top">
 									<label class="control-label">Justificativa</label>
@@ -195,7 +197,7 @@
 							</div>
 							<!--Modal footer onclick="informarHorario();"-->
 							<div class="modal-footer">
-								<button data-dismiss="modal" class="btn btn-danger" type="button" onclick="confirmarRemover()" id="btn-cancelar-apontamento">Cancelar</button>
+								<button class="btn btn-danger" type="button" onclick="confirmarRemover()" id="btn-cancelar-apontamento">Cancelar</button>
 								<button class="btn btn-success" id="btn-form-time" type="button">Salvar</button>
 							</div>
 						</form>

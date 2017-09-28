@@ -10,7 +10,6 @@ function dialogApontamentoHora(td, idApontamento) {
 	
 
 	verificarMesFechado(infoDia.val());
-	debugger;
 	
 	clearForm(0);
 	$( ".help-block" ).remove();
@@ -19,17 +18,15 @@ function dialogApontamentoHora(td, idApontamento) {
 		modalEditarApontamento(idApontamento);
 	}
 	
-	if(indicadorMesFechado){
-		
-	}else{
-		
-	}
-	
 	$('#btn-cancelar-apontamento').text('Cancelar');
-	$('#btn-cancelar-apontamento').attr('onclick',"");
+	$('#btn-cancelar-apontamento').attr('onclick',"cancelarApontamento()");
 	$('#title-modal-apontamento').text(infoDia.val());
 	$('#apontamento-id').val(id)
 	$('#demo-default-modal').modal();
+}
+
+function cancelarApontamento() {
+	$('#demo-default-modal').modal('hide');
 }
 
 function verificarMesFechado(dataApontamento){
@@ -118,7 +115,6 @@ function apontar(horario, data, idTd){
 		data: JSON.stringify(apontamento),
 		cache: false,
 		success: function(data){
-			debugger;
 			$("#"+idTd).attr('onclick',"dialogApontamentoHora(this,"+ data.id +")");
 		},
 		error: function(erro){
@@ -174,7 +170,7 @@ function modalEditarApontamento(id){
 	});
 }
 function confirmarRemover(){
-	$('#remover-sm-modal').modal();
+	$('#remover-sm-modal').modal('show');
 }
 function removerApontamento(id){
 	$('#remover-sm-modal').modal('hide');
