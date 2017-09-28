@@ -32,11 +32,19 @@ public class GerenciarSobreAvisoController {
 	public ResponseEntity<?> salvar(@RequestBody SobreAvisoBean sobreAviso){
 		SobreAvisoBean sobreAvisoCriado = null;
 		try {
-			sobreAvisoCriado = sobreAvisoBusiness.salvar(sobreAviso);
 			
 			ControleDiarioBean controle = controleDiarioBusiness.obterPorDataIdFuncionario(sobreAviso.getData(), sobreAviso.getIdFuncionario());
 			
-			sobreAvisoCriado.setControleDiario(controle);
+			// Verifica se já existe sobre aviso para o dia de hoje:
+			if (controle.getSobreAviso() == null) {
+				
+				// Se não houver: grava.
+				sobreAvisoCriado = sobreAvisoBusiness.salvar(sobreAviso);
+				sobreAvisoCriado.setControleDiario(controle);
+				
+			} else {
+				throw new BusinessException("Não foi possível realizar a ação, pois já existe lançamento de sobre aviso para essa data.");
+			}
 			
 		} catch (BusinessException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
