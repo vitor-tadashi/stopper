@@ -39,7 +39,7 @@
 		<div class="cls-content">
 		    <div class="cls-content-sm panel">
 	            <div class="pad-btm">
-	            	<img src='<c:url value="/img/logo.jpg"/>' style="width: 250px;" alt="" class="">
+	            	
 	            </div>
 	            <form action='<c:url value="/login"/>' method="post" id="bv-form">
 					<div class="panel">
