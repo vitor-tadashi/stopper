@@ -2,7 +2,7 @@ import hudson.model.*
      node {
            wrap([$class: 'TimestamperBuildWrapper']) {
                 stage ('Checkout')
-                
+                deleteDir()
                 checkout scm
                 bat 'del /F /Q outfile '
                 bat 'git name-rev --name-only HEAD > outfile'
