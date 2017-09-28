@@ -173,8 +173,10 @@
 								<!--Bootstrap Timepicker : Component-->
 								<!--===================================================-->
 								<div class="input-group date" id="div-apontamento-hora">
-									<input id="apontamento-time" name="hora" type="text-center" class="form-control clock" placeholder="--:--">
-									<span class="input-group-addon"><i class="pli-clock"></i></span>
+									<input id="apontamento-time" name="hora" type="text-center" class="form-control time" placeholder="--:--">
+									<button type="button" onclick="setarFinalDoDia()" class="btn btn-default" data-toggle="tooltip" data-placement="right" title="Apontar final do dia">
+									  <i class="pli-clock"></i>
+									</button>
 								</div>
 								<div class="form-group pad-top">
 									<label class="control-label">Justificativa</label>
@@ -508,7 +510,13 @@
 		<script src='<c:url value="js/custom/gerenciar-apontamentos-modais.js"/>'></script>
 		<script src='<c:url value="js/custom/gerenciar-apontamentos-core.js"/>'></script>
 		<script>
+		
+		var cor = '#a94442';
+		
 		$(document).ready(function() {
+			
+			$('.time').mask('00:00');
+			
 			$('.periodo').prop('max',function(){
 		        return new Date().toJSON().split('T')[0];
 		    }); 
