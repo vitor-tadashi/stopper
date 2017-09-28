@@ -42,7 +42,7 @@ import hudson.model.*
                                      }   
  
                 stage ('Build')
-                 bat 'cd C:\_\pipeline-pause\pause-parent'
+                 bat 'cd C:\_\projetos-verity\Build\pipeline-pause\pause-parent'
                  def jdk = tool name: '1.8.0_131'
                  def mvnHome = tool name: '3.5.0'
                  env.JAVA_HOME = "${jdk}"
