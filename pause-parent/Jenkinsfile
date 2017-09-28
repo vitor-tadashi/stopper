@@ -53,8 +53,8 @@ import hudson.model.*
                 stage ('Archive')
                  step([$class: 'ArtifactArchiver', artifacts: '**/target/*.war', fingerprint: true])
                 
-                stage ('Delete Workpspace')
+               /* stage ('Delete Workpspace')
                  deleteDir()
- 
+ */
            }
      }
