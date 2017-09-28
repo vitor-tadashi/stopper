@@ -34,10 +34,10 @@
 	</dependencies>
 	
 	<modules>
-		<module>pause-web</module>
-		<module>pause-business</module>
-		<module>pause-model</module>
-		<module>pause-entity</module>
-		<module>pause-repository</module>
+		<module>src/pause-web</module>
+		<module>src/pause-business</module>
+		<module>src/pause-model</module>
+		<module>src/pause-entity</module>
+		<module>src/pause-repository</module>
 	</modules>
 </project>
