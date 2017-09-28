@@ -115,6 +115,19 @@ function removerSA(click, id){
 		contentType : 'application/json',
 		dataType : 'json',
 		success: function(data){
+			
+			var dataSobreavisoRemovido = $(click).parent().parent().find('td:first').html();
+			
+			$('.linha').each(function() {
+				
+				var string = $(this).find("#infoDia").val().substring(0, 10); // 22/09/2017
+				
+				if (dataSobreavisoRemovido == string) {
+					$(this).find('td:last').html('');
+				}
+				
+			});
+			
 			$(click).parent().parent().remove();
 		},
 		error: function(erro){
@@ -146,6 +159,27 @@ function inserirSA_ajax(dataSA, horaSAe, horaSAs){
 					.append($('<a>').text('Remover').addClass('text-danger').attr('href',"#").attr('onclick','removerSA(this ,'+ data.id +')'))
 				)
 			);
+			
+			var valorSobreAviso = data.controleDiario.sobreAviso;
+			
+			$('.linha').each(function() {
+				
+				debugger
+				var string = $(this).find("#infoDia").val().substring(0, 10); // 22/09/2017
+				var ano = string.substring(6, 10);
+				var mes = string.substring(3, 5);
+				var dia = string.substring(0, 2);
+				
+				string = ano + '-' + mes + '-' + dia;
+				
+				var dataSobreAvisoInserido = data.data.substring(0, 10); // 2017-09-22
+				
+				if (dataSobreAvisoInserido == string) {
+					$(this).find('td:last').html(valorSobreAviso);
+				}
+				
+			});
+			
 			clearForm(1);
 		},
 		error: function(erro){

@@ -20,7 +20,7 @@ import br.com.verity.pause.entity.ControleMensalEntity;
 public class ControleDiarioDAO {
 
 	public ControleDiarioEntity findByDataIdFuncionario(Date data, int idFuncionario) {
-		String sql = "SELECT cd.idControleMensal, cd.idControleDiario, cm.idFuncionario, cd.data "
+		String sql = "SELECT cd.idControleMensal, cd.idControleDiario, cm.idFuncionario, cd.data, cd.sobreAviso "
 				+ "FROM PAUSEControleDiario cd RIGHT JOIN PAUSEControleMensal cm ON cm.idControleMensal = cd.idControleMensal\r\n"
 				+ "  WHERE cm.idFuncionario = ? And cd.data = ?";
 
@@ -44,7 +44,8 @@ public class ControleDiarioDAO {
 				entity.setId(rs.getInt(2));
 				controleMensal.setIdFuncionario(3);
 				entity.setData(rs.getDate(4));
-
+				entity.setSobreAviso(rs.getDouble(5));
+				
 				entity.setControleMensal(controleMensal);
 
 			}
