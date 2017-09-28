@@ -12,6 +12,62 @@ $(document).ready(function(){
 	$('#apontamento-funcionario').val($( "#select-funcionario option:selected" ).val());
 });
 
+function setarFinalDoDia () {
+	
+	id = '#apontamento-time';
+	
+	if ($(id).val() != '23:59:59') {
+		
+		$(id).mask('00:00:00');
+		$(id).val('23:59:59');
+		
+	} else {
+		
+		$(id).mask('00:00');
+		$(id).val('');
+		
+	}
+	
+	habilitarSalvarApontamento();
+}
+
+$('#apontamento-time').change(function () {
+	debugger;
+	var string = $('#apontamento-time').val();
+	var tamanho = string.length;
+	
+	if (tamanho !=8 && tamanho != 5) {
+		
+		desabilitarSalvarApontamento();
+		
+	} else if (tamanho == 8) {
+		
+		$('#apontamento-time').val('23:59:59')
+		
+		habilitarSalvarApontamento();
+		
+	} else if ( tamanho == 5 ) {
+		var horas = string.substring(0, 2);
+		var minutos = string.substring(3, 5);
+		
+		if ( parseInt(horas) > 23 || parseInt(minutos) > 59) {
+			desabilitarSalvarApontamento();
+		} else {
+			habilitarSalvarApontamento();
+		}
+	}
+});
+
+function habilitarSalvarApontamento () {
+	$('#apontamento-time').css('border-color', "");
+	$('#btn-form-time').attr('disabled', false);
+}
+
+function desabilitarSalvarApontamento () {
+	$('#apontamento-time').css('border-color', cor);
+	$('#btn-form-time').attr('disabled', true);
+}
+
 function inserirSA(){
 	var dataSA = formatardataHtml($('#dt-sa').val());
 	var horaEntrada = $('#hora-sa-e').val();
