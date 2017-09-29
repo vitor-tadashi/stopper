@@ -17,7 +17,7 @@
     <link href='<c:url value="/css/bootstrap.min.css"/>' rel="stylesheet">
     <link href='<c:url value="/plugins/bootstrap-select/bootstrap-select.min.css"/>' rel="stylesheet">
     <link href='<c:url value="/css/nifty.min.css"/>' rel="stylesheet">
-    <link href='<c:url value="/css/themes/type-c/theme-dark.min.css"/>' rel="stylesheet">
+    <link href='<c:url value="/css/themes/type-c/theme-lime.min.css"/>' rel="stylesheet">
     <link href='<c:url value="/premium/icon-sets/icons/line-icons/premium-line-icons.min.css"/>' rel="stylesheet">
     <link href='<c:url value="/plugins/font-awesome/css/font-awesome.min.css"/>' rel="stylesheet">
     <link href='<c:url value="/css/custom/custom.css"/>' rel="stylesheet">
