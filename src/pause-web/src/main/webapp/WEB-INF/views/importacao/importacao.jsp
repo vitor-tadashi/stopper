@@ -43,16 +43,29 @@
 					<div class="panel-body">
 						<div class="row">
 						
+						
+							<div class="col-sm-2">
+								<label class="control-label">Data importação</label>
+								<div class="input-daterange input-group" id="datepicker">
+									<input type="date" name="dataImportacao" id="dataImportacao" class="form-control periodo" name="periodo" placeholder="dd/mm/aaaa" data-bv-field="periodo">
+								</div>
+							</div>
+						
 							<div class="form-group col-md-4">
-							<label class="control-label" >Arquivo:</label>
+							<label class="control-label" style="margin-bottom: 11px;" >Arquivo</label>
 								<div class="upload-file">
 								
-									<input type="file" onchange="importarArquivo();" accept=".txt"
+									<input type="file" accept=".txt"
 										name="file" id="upload-arquivo" class="upload-demo" /> 
-									<label data-title="Selecione" for="upload-arquivo"> 
+										
+									<label data-title="Selecione" for="upload-arquivo" id="upload-file"> 
 									<span id="caminho"></span>
 									</label>
 								</div>
+							</div>
+							
+							<div class="col-sm-1" style="margin-top: 26px;">
+								<input type="button" class="btn btn-info" value="Importar" onclick="importarArquivo()"/>
 							</div>
 						</div>
 						<div id="tbHoras" class="bootstrap-table hide">
