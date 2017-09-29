@@ -52,12 +52,13 @@
 							</div>
 						
 							<div class="form-group col-md-4">
-							<label class="control-label" style="margin-bottom: 11px;" >Arquivo:</label>
+							<label class="control-label" style="margin-bottom: 11px;" >Arquivo</label>
 								<div class="upload-file">
 								
 									<input type="file" accept=".txt"
 										name="file" id="upload-arquivo" class="upload-demo" /> 
-									<label data-title="Selecione" for="upload-arquivo"> 
+										
+									<label data-title="Selecione" for="upload-arquivo" id="upload-file"> 
 									<span id="caminho"></span>
 									</label>
 								</div>

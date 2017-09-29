@@ -17,17 +17,55 @@ $( document ).ready(function(){
 	}, 5000);
 })
 
+function validarCamposImportacao(){
+	var indicadorSucesso = true;
+	
+	if($("#dataImportacao").val() == ""){
+		indicadorSucesso = false;
+		
+		if($("#data-importacao-erro").length == 0){
+			$("#dataImportacao").css("border-color", "#a94442");
+			$("#dataImportacao").after('<small class="help-block" id="data-importacao-erro">Campo obrigatório.</small>');
+		}
+		
+	}
+	
+	if($("#upload-arquivo").val() == ""){
+		indicadorSucesso = false;
+		
+		if($("#upload-file-erro").length == 0){
+			$("#upload-file").css("border-color", "#a94442");
+			$(".upload-file").after('<small class="help-block" id="upload-file-erro" style="margin-top: 8px;">Campo obrigatório.</small>');
+		}
+
+	}
+	
+	return indicadorSucesso;
+}
+
+$("#dataImportacao").change(function (){
+	$("#dataImportacao").css("border-color", "");
+	$("#dataImportacao").next('small').remove();
+});
+
+$("#upload-arquivo").change(function (){
+	$("#upload-file").css("border-color", "");
+	$(".upload-file").next('small').remove();
+});
+
 function importarArquivo() {
-	debugger;
-	var div = document.getElementById("textDiv");
-	$("#textDiv").removeClass("alert alert-danger");
-	$("#textDiv").text("");
-	$(".rmvLinha").remove();
 	
-	$("#carregar-mensagem").removeClass("hide");
-	$("#modal-loader").modal("show");
+	var indicadorSucesso = validarCamposImportacao()
 	
-	if ($("#upload-arquivo").val()) {
+	if (indicadorSucesso) {
+		var div = document.getElementById("textDiv");
+		$("#textDiv").removeClass("alert alert-danger");
+		$("#textDiv").text("");
+		$(".rmvLinha").remove();
+		
+		$("#carregar-mensagem").removeClass("hide");
+		$("#modal-loader").modal("show");
+		
 		var date;
 		var form = document.getElementById("formValidar");
 		var formData = new FormData(form);
@@ -41,6 +79,7 @@ function importarArquivo() {
 			contentType : false,
 			cache : false,
 			success : function(data) {
+				debugger;
 				if(data != ''){
 					$(data).each(function(index, value) {
 						if(value.id != null){
@@ -65,10 +104,12 @@ function importarArquivo() {
 				}
 			},
 		});
+		
+		$("#modal-loader").modal("hide");
+		$("#carregar-mensagem").addClass("hide");
+		
 	}
 	
-	$("#modal-loader").modal("hide");
-	$("#carregar-mensagem").addClass("hide");
 };
 	
 function exibirImportacao(bool){
