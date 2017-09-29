@@ -29,6 +29,23 @@ public class ApontamentoBean {
 	private Integer idUsuarioInclusao;
 	private ArquivoApontamentoBean arqApontamento;
 
+	public ApontamentoBean() {
+
+	}
+
+	public ApontamentoBean(String pis, Date data, LocalTime horario, Integer idEmpresa, Date dataInclusao,
+			Boolean tipoImportacao, Integer idUsuarioInclusao) {
+		
+		this.pis = pis;
+		this.data = data;
+		this.horario = horario;
+		this.idEmpresa = idEmpresa;
+		this.dataInclusao = dataInclusao;
+		this.tipoImportacao = tipoImportacao;
+		this.idUsuarioInclusao = idUsuarioInclusao;
+
+	}
+
 	public Integer getId() {
 		return id;
 	}
@@ -75,7 +92,7 @@ public class ApontamentoBean {
 	}
 
 	public void setHorarioJson(String horarioJson) {
-		horarioJson = horarioJson.length()== 4? "0"+horarioJson : horarioJson;
+		horarioJson = horarioJson.length() == 4 ? "0" + horarioJson : horarioJson;
 		this.horario = LocalTime.parse(horarioJson);
 	}
 

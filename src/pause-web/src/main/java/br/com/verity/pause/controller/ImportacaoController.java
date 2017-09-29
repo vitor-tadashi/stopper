@@ -7,7 +7,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -51,9 +50,6 @@ public class ImportacaoController {
 
 	@Autowired
 	private ControleDiarioBusiness controleDiarioBusiness;
-	
-	@Autowired
-	private ControleMensalBusiness controleMensalBusiness;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -72,17 +68,20 @@ public class ImportacaoController {
 	public List<FuncionarioBean> importarArquivo(MultipartHttpServletRequest request, Model model) {
 		UsuarioBean usuarioLogado = customUser.usuarioLogado();
 		List<MultipartFile> arquivo = request.getFiles("file");
+		String dataImportacao = request.getParameter("dataImportacao");
 		String caminho = "";
 		funcionariosImportacao = new ArrayList<FuncionarioBean>();
 		FuncionarioBean funcionario = new FuncionarioBean();
-		arquivoApontamento = new ArquivoApontamentoBean();
+		arquivoApontamento = new ArquivoApontamentoBean();				
+		
+		
 		try {
 			caminho = this.salvarTxt(arquivo, usuarioLogado.getIdEmpresaSessao());
 			arquivoApontamento.setCaminho(caminho);
 			arquivoApontamento.setDtInclusao(new Date());
 			arquivoApontamento.setIdUsuarioInclusao(usuarioLogado.getId());
 			arquivoApontamento.setIdEmpresa(usuarioLogado.getFuncionario().getEmpresa().getId());
-			funcionariosImportacao = importacaoBusiness.importarTxt(caminho, usuarioLogado.getIdEmpresaSessao());
+			funcionariosImportacao = importacaoBusiness.importarArquivoDeApontamento(caminho, usuarioLogado.getIdEmpresaSessao(), dataImportacao);
 			arquivoApontamento.setData(
 					funcionariosImportacao.get(funcionariosImportacao.size() - 1).getApontamentos().get(0).getData());
 		} catch (BusinessException | ParseException | IOException e) {
@@ -144,4 +143,5 @@ public class ImportacaoController {
 		}
 		return arquivo;
 	}
+	
 }
