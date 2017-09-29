@@ -2,7 +2,7 @@ import hudson.model.*
      node {
            wrap([$class: 'TimestamperBuildWrapper']) {
                 stage ('Checkout')
-                
+                deleteDir()
                 checkout scm
                 bat 'del /F /Q outfile '
                 bat 'git name-rev --name-only HEAD > outfile'
@@ -11,7 +11,7 @@ import hudson.model.*
                 def Branch_Master = "remotes/origin/master"
                 Branch_Name = Branch_Name.trim()
                 Branch_Master = Branch_Master.trim()
- 
+ //teste
  
                  if (Branch_Name == Branch_Master) {
                  stage('SonarQube Analysis') {
