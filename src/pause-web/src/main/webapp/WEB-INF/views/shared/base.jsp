@@ -17,7 +17,7 @@
     <link href='<c:url value="/css/bootstrap.min.css"/>' rel="stylesheet">
     <link href='<c:url value="/plugins/bootstrap-select/bootstrap-select.min.css"/>' rel="stylesheet">
     <link href='<c:url value="/css/nifty.min.css"/>' rel="stylesheet">
-    <link href='<c:url value="/css/themes/type-a/theme-light.min.css"/>' rel="stylesheet">
+    <link href='<c:url value="/css/themes/type-c/theme-dark.min.css"/>' rel="stylesheet">
     <link href='<c:url value="/premium/icon-sets/icons/line-icons/premium-line-icons.min.css"/>' rel="stylesheet">
     <link href='<c:url value="/plugins/font-awesome/css/font-awesome.min.css"/>' rel="stylesheet">
     <link href='<c:url value="/css/custom/custom.css"/>' rel="stylesheet">
@@ -36,9 +36,9 @@
                 <!--================================-->
                 <div class="navbar-header">
                     <a class="navbar-brand" href='<c:url value="/"/>'>
-                        <img src='img/logo.png' alt="P" class="brand-icon">
+                        <img src='img/logo.png' alt="PAUSE" class="brand-icon">
                         <div class="brand-title">
-                            <span class="brand-text">PAUSE</span>
+                            <span class="brand-text"></span>
                         </div>
                     </a>
                 </div>
@@ -64,11 +64,9 @@
                         <sec:authorize access="hasRole('ROLE_MULTI-EMPRESA')">
                         <li>
                             <div class="username text-right"><a href="/pause/selecionaMultiEmpresa">Trocar empresa</a></div>
-                        </li>
+           
                         </sec:authorize>
-                        <li>
-                            <div class="username text-right">${user.funcionario.nome }</div>
-                        </li>
+                       
                         <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
                         <!--End user-->
                         <li class="add-tooltip" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="Sair">
@@ -130,13 +128,24 @@
                                 <ul id="mainnav-menu" class="list-group" style="margin-top:-25px;">
                                 	<!--Category name-->
 						            <li class="list-header">Operações</li>
+						            
+						            <sec:authorize access="hasAnyRole('ROLE_IMPORTAR_APONTAMENTOS', 'ROLE_MULTI_EMPRESA')">
+							           <li>
+							            
+	                                		<a href='<c:url value="/importacao"/>' data-original-title="" title="">
+	                                            <i class="pli-download"></i>
+	                                            <span class="menu-title">
+	                                            	Importar
+	                                            </span>
+	                                        </a>
+							            </li>
+						            </sec:authorize>
 									<li>
                                 		<a href='<c:url value="/gerenciar-apontamento"/>'>
                                             <i class="pli-data-clock"></i>
                                             <span class="menu-title">
                                             	Gerenciar horas
                                             </span>
-                                            <i class="arrow"></i>
                                         </a>
 						            </li>
 						            
@@ -147,26 +156,10 @@
 	                                            <span class="menu-title">
 	                                            	Consultar banco
 	                                            </span>
-	                                            <i class="arrow"></i>
 	                                        </a>	
 							            </li>
 						            </sec:authorize>
-						            
-						            <li class="list-divider"></li>
-									
-						            <sec:authorize access="hasAnyRole('ROLE_IMPORTAR_APONTAMENTOS', 'ROLE_MULTI_EMPRESA')">
-						             	<li class="list-header">Mais</li>
-							            <li>
-	                                		<a href='<c:url value="/importacao"/>' data-original-title="" title="">
-	                                            <i class="pli-download"></i>
-	                                            <span class="menu-title">
-	                                            	Importar
-	                                            </span>
-	                                            <i class="arrow"></i>
-	                                        </a>
-							            </li>
-						            </sec:authorize>
-						            
+    
 						            <sec:authorize access="hasAnyRole('ROLE_GERAR_RELATORIOS', 'ROLE_MULTI_EMPRESA')">
 										<li>
 	                                		<a href='<c:url value="/relatorio"/>'>
@@ -174,7 +167,6 @@
 	                                            <span class="menu-title">
 	                                            	Relatório
 	                                            </span>
-	                                            <i class="arrow"></i>
 	                                        </a>
 							            </li>
 						            </sec:authorize>
