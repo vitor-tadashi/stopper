@@ -50,14 +50,12 @@ function gerarRelatorio() {
 		var deDia = $("#periodoDe").val().substring(8, 10);
 
 		dataDe = new Date(deAno, deMes - 1, deDia);
-		alert(dataDe);
 
 		var ateAno = $("#periodoAte").val().substring(0, 4);
 		var ateMes = $("#periodoAte").val().substring(5, 7);
 		var ateDia = $("#periodoAte").val().substring(8, 10);
 
 		dataAte = new Date(ateAno, ateMes - 1, ateDia);
-		alert(dataAte);
 	} else {
 		dataAte = new Date();
 		dataDe = new Date(dataAte.getYear() + 1900, dataAte.getMonth(), 01);
