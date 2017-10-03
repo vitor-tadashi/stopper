@@ -181,12 +181,14 @@ function removerApontamento(id){
 		data: {'id' : id},
 		cache: true,
 		success: function(data){
+			$('#demo-default-modal').modal('hide');
 			tdRemove = $('#apontamento-id').val();
 			$("#idApontamento").val("");
 			$("#"+tdRemove).attr('onclick',"dialogApontamentoHora(this)");
 			$("#"+tdRemove).text('--:--')
 		},
 		error: function(erro){
+			$('#demo-default-modal').modal('hide');
 			$('#remover-sm-modal').modal('hide');
 			$('#erro-label').text(erro.responseText);
 			$('#erro-sm-modal').modal();
