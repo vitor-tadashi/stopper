@@ -173,7 +173,7 @@
 								<!--Bootstrap Timepicker : Component-->
 								<!--===================================================-->
 								<div class="input-group" id="div-apontamento-hora">
-									<input id="apontamento-time" name="hora" type="text-center" class="form-control time" placeholder="--:--">
+									<input id="apontamento-time" name="hora" type="text" class="form-control time" placeholder="--:--">
 									<span class="input-group-btn">
 									<button type="button" onclick="setarFinalDoDia()" class="btn btn-default" data-toggle="tooltip" data-placement="right" title="Apontar final do dia">
 									  <i class="pli-clock"></i>
@@ -517,7 +517,7 @@
 		
 		$(document).ready(function() {
 			
-			$('.time').mask('00:00');
+			$('#apontamento-time').mask('00:00');
 			
 			$('.periodo').prop('max',function(){
 		        return new Date().toJSON().split('T')[0];
