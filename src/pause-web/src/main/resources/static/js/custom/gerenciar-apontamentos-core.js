@@ -8,7 +8,8 @@ function dialogApontamentoHora(td, idApontamento) {
 	var infoDia = $(td).parent().find('input[id^="infoDia"]');
 	var id = $(td).attr('id');
 	
-
+	var tempo = $('#' + id).html()
+	
 	verificarMesFechado(infoDia.val());
 	
 	clearForm(0);
@@ -23,6 +24,9 @@ function dialogApontamentoHora(td, idApontamento) {
 	$('#title-modal-apontamento').text(infoDia.val());
 	$('#apontamento-id').val(id)
 	$('#demo-default-modal').modal();
+	
+	$('#apontamento-time').mask('00:00');
+	$('#apontamento-time').val(tempo);
 }
 
 function cancelarApontamento() {
@@ -96,6 +100,7 @@ function informarHorario() {
 	calcularTotal();
 	$('#demo-default-modal').modal("hide");
 }
+
 function apontar(horario, data, idTd){
 	var apontamento = {
 		id : $('#idApontamento').val(),
@@ -163,7 +168,6 @@ function modalEditarApontamento(id){
 			$('#btn-remover-apontamento').attr('onclick',"removerApontamento("+ data.id +")");
 			$('#idApontamento').val(data.id);
 			$('#apontamento-obs').val(data.observacao);
-			$('#apontamento-time').timepicker('setTime', data.horario.substring(0,5));
 			$('#apontamento-jus').prop('selectedIndex',data.tpJustificativa.id);
 			$('#apontamento-jus').selectpicker('refresh');
 		}

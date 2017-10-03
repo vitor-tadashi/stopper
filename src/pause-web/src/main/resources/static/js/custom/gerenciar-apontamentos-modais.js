@@ -32,6 +32,8 @@ function setarFinalDoDia () {
 }
 
 $('#apontamento-time').change(function () {
+	debugger
+	
 	var string = $('#apontamento-time').val();
 	var tamanho = string.length;
 	
@@ -39,13 +41,7 @@ $('#apontamento-time').change(function () {
 		
 		desabilitarSalvarApontamento();
 		
-	} else if (tamanho == 8) {
-		
-		$('#apontamento-time').val('23:59:59')
-		
-		habilitarSalvarApontamento();
-		
-	} else if ( tamanho == 5 ) {
+	}  else if ( tamanho == 5 ) {
 		var horas = string.substring(0, 2);
 		var minutos = string.substring(3, 5);
 		
@@ -54,6 +50,12 @@ $('#apontamento-time').change(function () {
 		} else {
 			habilitarSalvarApontamento();
 		}
+	} else if (tamanho == 8) {
+		
+		$('#apontamento-time').val('23:59:59')
+		
+		habilitarSalvarApontamento();
+		
 	}
 });
 
