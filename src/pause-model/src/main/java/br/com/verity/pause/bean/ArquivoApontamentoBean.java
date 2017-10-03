@@ -12,6 +12,17 @@ public class ArquivoApontamentoBean {
 	private Date dtInclusao;
 	private Integer idEmpresa;
 	private Integer idUsuarioInclusao;
+	
+	public ArquivoApontamentoBean(){
+		
+	}
+	
+	public ArquivoApontamentoBean(String caminho, Date dtInclusao, Integer idUsuarioInclusao, Integer idEmpresa){
+		this.caminho = caminho;
+		this.dtInclusao = dtInclusao;
+		this.idUsuarioInclusao = idUsuarioInclusao;
+		this.idEmpresa = idEmpresa;
+	}
 
 	public Integer getId() {
 		return id;

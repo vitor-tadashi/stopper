@@ -17,17 +17,55 @@ $( document ).ready(function(){
 	}, 5000);
 })
 
+function validarCamposImportacao(){
+	var indicadorSucesso = true;
+	
+	if($("#dataImportacao").val() == ""){
+		indicadorSucesso = false;
+		
+		if($("#data-importacao-erro").length == 0){
+			$("#dataImportacao").css("border-color", "#a94442");
+			$("#dataImportacao").after('<small class="help-block" id="data-importacao-erro">Campo obrigatório.</small>');
+		}
+		
+	}
+	
+	if($("#upload-arquivo").val() == ""){
+		indicadorSucesso = false;
+		
+		if($("#upload-file-erro").length == 0){
+			$("#upload-file").css("border-color", "#a94442");
+			$(".upload-file").after('<small class="help-block" id="upload-file-erro" style="margin-top: 8px;">Campo obrigatório.</small>');
+		}
+
+	}
+	
+	return indicadorSucesso;
+}
+
+$("#dataImportacao").change(function (){
+	$("#dataImportacao").css("border-color", "");
+	$("#dataImportacao").next('small').remove();
+});
+
+$("#upload-arquivo").change(function (){
+	$("#upload-file").css("border-color", "");
+	$(".upload-file").next('small').remove();
+});
+
 function importarArquivo() {
-	debugger;
-	var div = document.getElementById("textDiv");
-	$("#textDiv").removeClass("alert alert-danger");
-	$("#textDiv").text("");
-	$(".rmvLinha").remove();
 	
-	$("#carregar-mensagem").removeClass("hide");
-	$("#modal-loader").modal("show");
+	var indicadorSucesso = validarCamposImportacao()
 	
-	if ($("#upload-arquivo").val()) {
+	if (indicadorSucesso) {
+		var div = document.getElementById("textDiv");
+		$("#textDiv").removeClass("alert alert-danger");
+		$("#textDiv").text("");
+		$(".rmvLinha").remove();
+		
+		$("#carregar-mensagem").removeClass("hide");
+		$("#modal-loader").modal("show");
+		
 		var date;
 		var form = document.getElementById("formValidar");
 		var formData = new FormData(form);
@@ -41,34 +79,48 @@ function importarArquivo() {
 			contentType : false,
 			cache : false,
 			success : function(data) {
-				if(data != ''){
-					$(data).each(function(index, value) {
-						if(value.id != null){
-							preencherImportacao(value, index);
-							$("#upload-arquivo").attr("disabled", true);
-							$("#empresa").attr("disabled", true);
-							exibirImportacao(exibir);
-						}else if(value.mensagem.includes("Arquivo") == true){
-							textDiv.className = "alert alert-danger";
-							textDiv.textContent = value.mensagem;
-							var text = "[" + div.textContent + "]";
+				var arquivo = JSON.parse(data);
+				
+				arquivo.funcionariosImportacao = JSON.parse(arquivo.funcionariosImportacao);
+				
+				debugger;
+				if(arquivo.funcionariosImportacao.length > 0){
+					
+					var indice = 0;
+					for(var linha in arquivo.funcionariosImportacao){
+						preencherImportacao(arquivo.funcionariosImportacao[linha], indice);
+						indice++;
+					}
+					
+					$("#upload-arquivo").attr("disabled", true);
+					$("#empresa").attr("disabled", true);
+					
+					if(true){
 						
-						}else{
-							exibir = false;
-							$('#modal-confirmacao').modal('show'); 
-						}
-					});
+                        $('#modal-confirmacao').modal('show'); 
+
+					}else{
+						
+						exibirImportacao(true);
+						
+					}
+					
+					
 				}else{
+					
 					textDiv.className = "alert alert-danger";
-					textDiv.textContent = "Nenhum funcionário coincide com o arquivo.";
+					textDiv.textContent = "Nenhum apontamento encontrado para o dia solicitado.";
 					var text = "[" + div.textContent + "]";
+					
 				}
 			},
 		});
+		
+		$("#modal-loader").modal("hide");
+		$("#carregar-mensagem").addClass("hide");
+		
 	}
 	
-	$("#modal-loader").modal("hide");
-	$("#carregar-mensagem").addClass("hide");
 };
 	
 function exibirImportacao(bool){
@@ -79,32 +131,41 @@ function exibirImportacao(bool){
 	}
 }
 	
-function preencherImportacao(value, index){
-	var campos = "<tr role='row' class='odd text-center rmvLinha'>"+
-	"<td id='pis"+index+"' class='pis'></td>" +
-	"<td id='funcionario"+index+"'></td>" +
-	"<td id='data"+index+"' class='data'></td>" +
-	"<td id='hora0"+index+"' class='hora'></td>" +
-	"<td id='hora1"+index+"' class='hora'></td>" +
-	"<td id='hora2"+index+"' class='hora'></td>" +
-	"<td id='hora3"+index+"' class='hora'></td>" +
-	"<td id='hora4"+index+"' class='hora'></td>" +
-	"<td id='hora5"+index+"' class='hora'></td>" +
-	"<td id='hora6"+index+"' class='hora'></td>" +
-	"<td id='hora7"+index+"' class='hora'></td>"+
+function preencherImportacao(funcionario, indice){
+    var campos = "<tr role='row' class='odd text-center rmvLinha'>"+
+    "<td id='pis" + indice + "' class='pis'></td>" +
+    "<td id='funcionario" + indice + "'></td>" +
+    "<td id='data" + indice + "' class='data'></td>" +
+    "<td id='hora0" + indice + "' class='hora'></td>" +
+    "<td id='hora1" + indice + "' class='hora'></td>" +
+    "<td id='hora2" + indice + "' class='hora'></td>" +
+    "<td id='hora3" + indice + "' class='hora'></td>" +
+    "<td id='hora4" + indice + "' class='hora'></td>" +
+    "<td id='hora5" + indice + "' class='hora'></td>" +
+    "<td id='hora6" + indice + "' class='hora'></td>" +
+    "<td id='hora7" + indice + "' class='hora'></td>"+
 	"</tr>";
 	
 	$("#list").append(campos);
 	
 	
-	$('#pis'+index).text(value.pis);
-	$('#funcionario'+index).text(value.nome);
-	$(value.apontamentos).each(function(i, value) {
-		$('#hora'+i+index).text(value.horario);
-	})
-	date = new Date(value.apontamentos[0].data);
-	$('#data'+index).text(date.toLocaleDateString());
-	$('.pis').mask('999.9999.999-9');
+	$('#pis'+indice).text(funcionario.pis);
+	$('#funcionario'+indice).text(funcionario.nome);
+	
+	var horario = "";
+	$(funcionario.apontamentos).each(function(i, value) {
+		if(value.horario.hour < 10){
+			value.horario.hour = "0" + value.horario.hour;
+		}
+		if(value.horario.minute < 10){
+			value.horario.minute = "0" + value.horario.minute;
+		}
+		horario = value.horario.hour + ":" + value.horario.minute; 
+		$('#hora'+i+indice).text(horario);
+	});
+	
+	date = new Date(funcionario.apontamentos[0].data);
+	$('#data'+indice).text(date.toLocaleDateString());
 	$('.data').mask('99/99/9999');
 }
 

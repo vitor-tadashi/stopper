@@ -32,26 +32,31 @@
     <script src='<c:url value="/js/nifty.min.js"/>'></script>
     
 </head>
-<body>
+<body style="background: white;">
 <sec:authentication property="principal" var="user"/>
-	<div class="cls-container">
+	<div class="cls-container" style="background: white;">
 		<div class="cls-content">
+		<div class="panel-body">
+		<div class="row">
+		
            	<h3>Olá, ${user.funcionario.nome }!</h3>
            	<h3>Qual empresa deseja acessar hoje?</h3>
-           	<br><br><br>
             <form action='<c:url value="/selecionaMultiEmpresa/2"/>' method="post" id="bv-form">
            		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
             	<div class="panel col-sm-offset-2 col-sm-3">
-              		<input type="image" class="text-center" src='<c:url value="/img/verity.png"/>' style="width:300px; height: 120px;">
+            	
+              		<button type="image" class="text-center" src='<c:url value="/img/verity.png"/>' style="width:300px; height: 120px;"></button>
 				</div>
 			 </form>
 			 <form action='<c:url value="/selecionaMultiEmpresa/65"/>' method="post" id="bv-form">
 			 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 				<div class="panel col-sm-3 col-sm-offset-2">
-					<input type="image" class="text-center" src='<c:url value="/img/qa360.png"/>' style="width: 300px;  height: 120px;">
+					<button type="image" class="text-center" src='<c:url value="/img/qa360.png"/>' style="width: 300px;  height: 120px;"></button>
 				</div>
             </form>
 		</div>
+		</div>
+	</div>
 	</div>
 	<!--===================================================-->
 	<!-- END OF CONTAINER -->

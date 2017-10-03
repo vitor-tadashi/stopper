@@ -122,7 +122,7 @@ public class GerenciarApontamentoController {
 		} catch (BusinessException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (Exception e) {
-			return new ResponseEntity<String>("Houve um erro ao remover apontamento. Tenete novamente mais tarde.",
+			return new ResponseEntity<String>("Houve um erro ao remover apontamento. Tente novamente mais tarde.",
 					HttpStatus.BAD_REQUEST);
 		}
 
