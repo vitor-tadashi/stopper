@@ -31,6 +31,15 @@ public class FuncionarioIntegrationBean implements Serializable {
 	private List<FuncionarioCargoBean> funcionarioCargo;
 	private List<ApontamentoBean> apontamentos;
 	private String mensagem;
+	private Boolean podeApontarHora;
+
+	public Boolean getPodeApontarHora() {
+		return podeApontarHora;
+	}
+
+	public void setPodeApontarHora(Boolean podeApontarHora) {
+		this.podeApontarHora = podeApontarHora;
+	}
 
 	public Integer getId() {
 		return id;

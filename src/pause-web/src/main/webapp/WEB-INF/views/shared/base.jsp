@@ -196,7 +196,7 @@
             <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
             <!-- Remove the class "show-fixed" and "hide-fixed" to make the content always appears. -->
             <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-            <p class="pad-lft">&#0169; 2017 Your Company</p>
+            <p class="pad-lft">&#0169; Verity Consultoria Em Tecnologia Ltda</p>
         </footer>
         <!--===================================================-->
         <!-- END FOOTER -->
@@ -234,6 +234,7 @@
     <script src='<c:url value="/js/bootstrap.min.js"/>'></script>
     <script src='<c:url value="/plugins/bootstrap-select/bootstrap-select.min.js"/>'></script>
     <script src='<c:url value="/js/nifty.min.js"/>'></script>
+
     <script type="text/javascript">
     	function formatardataHtml(s){
 		    if (s) { 
@@ -243,6 +244,15 @@
 			}
 		    return s;
     	}
+    	
+    	$( document ).ready(function() {
+    		var year = new Date();
+    		
+    		year = year.getFullYear();
+    		
+    		$('#footer').html('&#0169; ' + year + ' Verity Consultoria Em Tecnologia Ltda');
+    	});
+    	
     </script>
 	<!-- scripts serão carregados aqui -->
 	<layout:block name="scripts"> </layout:block>
