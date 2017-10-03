@@ -1,12 +1,9 @@
 package br.com.verity.pause.controller;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
@@ -59,6 +56,7 @@ public class ConsultarApontamentoController {
 	public String filtrarConsulta(Integer idFuncionario, String periodoDe, String periodoAte, Model model) {
 		List<ConsultaApontamentosBean> consulta = new ArrayList<ConsultaApontamentosBean>();
 		List<FuncionarioBean> funcionarios = funcionarioBusiness.obterTodos();
+		List<FuncionarioBean> filtro = funcionarioBusiness.obterTodos();
 		List<ControleDiarioBean> controles = new ArrayList<ControleDiarioBean>();
 		SimpleDateFormat padrao = new SimpleDateFormat("yyyy-MM-dd");
 		Date dtAte = new Date();
@@ -67,7 +65,7 @@ public class ConsultarApontamentoController {
 		dtDe = this.formatarData(periodoDe);
 		dtAte = this.formatarData(periodoAte);
 
-		this.filtrarFuncionariosPorId(funcionarios, idFuncionario);
+		funcionarios = this.filtrarFuncionariosPorId(funcionarios, idFuncionario);
 
 		controles = controleDiarioBusiness.listSomaControleDiarioPorPeriodo(funcionarios, dtDe, dtAte);
 
@@ -81,8 +79,7 @@ public class ConsultarApontamentoController {
         	periodoAte = (periodoAte.equals(""))?padrao.format(dtAte):periodoAte;
         }
 
-
-		model.addAttribute("funcionariosBusca", funcionarios);
+    	model.addAttribute("funcionariosBusca", filtro);
 		model.addAttribute("funcionarios", consulta);
 		model.addAttribute("de", periodoDe);
 		model.addAttribute("ate", periodoAte);
@@ -131,15 +128,18 @@ public class ConsultarApontamentoController {
 		return dataFormatada;
 	}
 
-	private void filtrarFuncionariosPorId(List<FuncionarioBean> funcionarios, Integer idFuncionario) {
+	private List<FuncionarioBean> filtrarFuncionariosPorId(List<FuncionarioBean> funcionarios, Integer idFuncionario) {
+		List<FuncionarioBean> funcionariosFiltrados = new ArrayList<FuncionarioBean>();
+		
 		if (idFuncionario != null && idFuncionario > 0) {
-
-			List<FuncionarioBean> funcionariosFiltrados = new ArrayList<FuncionarioBean>();
 
 			funcionariosFiltrados.addAll(funcionarios.stream().filter(func -> func.getId().equals(idFuncionario))
 					.collect(Collectors.toList()));
+			
 			funcionarios = funcionariosFiltrados;
 		}
+		
+		return funcionarios;
 
 	}
 }
