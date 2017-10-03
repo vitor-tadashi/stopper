@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import br.com.verity.pause.connection.ConnectionFactory;
@@ -13,11 +14,11 @@ import br.com.verity.pause.entity.ArquivoApontamentoEntity;
 @Repository
 public class ArquivoApontamentoDAO {
 	
-	private ConnectionFactory connection;
+	@Autowired
+	private ConnectionFactory connectionFactory;
 
 	public void excludeDate(ArquivoApontamentoEntity arquivoApontamento) throws SQLException {
-		connection = new ConnectionFactory();
-		Connection conn = connection.createConnection();
+		Connection conn = connectionFactory.createConnection();
 		String sql = "DELETE PAUSEArquivoApontamento WHERE data = ? AND idEmpresa = ?";
 
 		PreparedStatement ps = conn.prepareStatement(sql);
@@ -31,8 +32,7 @@ public class ArquivoApontamentoDAO {
 	}
 
 	public void save(ArquivoApontamentoEntity arquivoApontamento) throws SQLException {
-		connection = new ConnectionFactory();
-		Connection conn = connection.createConnection();
+		Connection conn = connectionFactory.createConnection();
 		String sql = "INSERT INTO PAUSEArquivoApontamento VALUES (?,?,?,?,?)";
 		
 		PreparedStatement ps = conn.prepareStatement(sql);
@@ -50,8 +50,7 @@ public class ArquivoApontamentoDAO {
 	}
 
 	public Integer findByDateAndEmpresa(ArquivoApontamentoEntity arquivoApontamento) throws SQLException {
-		connection = new ConnectionFactory();
-		Connection conn = connection.createConnection();
+		Connection conn = connectionFactory.createConnection();
 		Integer idArquivo = null;
 		String sql = "SELECT idArquivoApontamento FROM PAUSEArquivoApontamento WHERE data = ? AND idEmpresa = ?";
 

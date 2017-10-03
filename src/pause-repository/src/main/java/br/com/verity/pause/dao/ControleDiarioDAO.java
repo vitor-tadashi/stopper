@@ -9,6 +9,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import br.com.verity.pause.connection.ConnectionFactory;
@@ -18,6 +19,9 @@ import br.com.verity.pause.entity.ControleMensalEntity;
 
 @Repository
 public class ControleDiarioDAO {
+	
+	@Autowired
+	private ConnectionFactory connectionFactory;
 
 	public ControleDiarioEntity findByDataIdFuncionario(Date data, int idFuncionario) {
 		String sql = "SELECT cd.idControleMensal, cd.idControleDiario, cm.idFuncionario, cd.data, cd.sobreAviso "
@@ -27,7 +31,7 @@ public class ControleDiarioDAO {
 		Connection conn;
 		ControleDiarioEntity entity = null;
 		try {
-			conn = ConnectionFactory.createConnection();
+			conn = connectionFactory.createConnection();
 
 			PreparedStatement ps = conn.prepareStatement(sql);
 
@@ -60,7 +64,7 @@ public class ControleDiarioDAO {
 
 		Connection conn;
 		try {
-			conn = ConnectionFactory.createConnection();
+			conn = connectionFactory.createConnection();
 
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setDate(1, entity.getData());
@@ -85,7 +89,7 @@ public class ControleDiarioDAO {
 			Connection conn = null;
 			PreparedStatement ps = null;
 			StringBuilder sql = null;
-			conn = ConnectionFactory.createConnection();
+			conn = connectionFactory.createConnection();
 
 			sql = new StringBuilder();
 
@@ -131,7 +135,7 @@ public class ControleDiarioDAO {
 			Connection conn = null;
 			PreparedStatement ps = null;
 			StringBuilder sql = null;
-			conn = ConnectionFactory.createConnection();
+			conn = connectionFactory.createConnection();
 
 			sql = new StringBuilder();
 			

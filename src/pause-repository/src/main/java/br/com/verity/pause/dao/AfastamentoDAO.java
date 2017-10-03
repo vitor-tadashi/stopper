@@ -8,17 +8,18 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
 import br.com.verity.pause.connection.ConnectionFactory;
 import br.com.verity.pause.entity.AfastamentoEntity;
-import br.com.verity.pause.entity.ControleDiarioEntity;
-import br.com.verity.pause.entity.ControleMensalEntity;
-import br.com.verity.pause.entity.SobreAvisoEntity;
-import br.com.verity.pause.entity.TipoJustificativaEntity;
 import br.com.verity.pause.entity.enumerator.TipoAfastamento;
 
 @Repository
 public class AfastamentoDAO {
+	
+	@Autowired
+	private ConnectionFactory connectionFactory;
 	
 	/**
 	 * Encontra os afastamentos do funcionário da respectiva data
@@ -36,7 +37,7 @@ public class AfastamentoDAO {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		StringBuilder sql = null;
-		conn = ConnectionFactory.createConnection();
+		conn = connectionFactory.createConnection();
 
 		sql = new StringBuilder();
 
@@ -73,7 +74,7 @@ public class AfastamentoDAO {
 		String sql = "INSERT INTO PAUSEAfastamento VALUES (?,?,?,?,?,?)";
 		Connection conn = null;
 		try {
-			conn = ConnectionFactory.createConnection();
+			conn = connectionFactory.createConnection();
 
 			PreparedStatement ps = conn.prepareStatement(sql);
 
@@ -105,7 +106,7 @@ public class AfastamentoDAO {
 		sql = "SELECT MAX(idAfastamento) FROM PAUSEAfastamento WHERE idFuncionario = ?";
 
 		try {
-			conn = ConnectionFactory.createConnection();
+			conn = connectionFactory.createConnection();
 			ps = conn.prepareStatement(sql);
 
 			ps.setInt(1, id); 
@@ -130,7 +131,7 @@ public class AfastamentoDAO {
 		AfastamentoEntity entity = null;
 		String sql = "SELECT * FROM PAUSEAfastamento WHERE idAfastamento = ?";
 		try {
-			Connection conn = ConnectionFactory.createConnection();
+			Connection conn = connectionFactory.createConnection();
 			PreparedStatement ps = conn.prepareStatement(sql);
 
 			ps.setInt(1, id);
@@ -154,7 +155,7 @@ public class AfastamentoDAO {
 	public void deleteById(Integer id) {
 		Connection conn;
 		try {
-			conn = ConnectionFactory.createConnection();
+			conn = connectionFactory.createConnection();
 
 			String sql = "DELETE FROM PAUSEAfastamento WHERE idAfastamento = ?";
 
@@ -178,7 +179,7 @@ public class AfastamentoDAO {
 		String sql = "SELECT * FROM PAUSETipoAfastamento";
 		
 		try {
-			conn = ConnectionFactory.createConnection();
+			conn = connectionFactory.createConnection();
 			
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
@@ -203,7 +204,7 @@ public class AfastamentoDAO {
 		List<AfastamentoEntity> entities = new ArrayList<>();
 
 		try {
-			Connection conn = ConnectionFactory.createConnection();
+			Connection conn = connectionFactory.createConnection();
 
 			PreparedStatement ps = conn.prepareStatement(sql);
 

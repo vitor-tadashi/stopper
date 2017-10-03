@@ -4,24 +4,34 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
+
+@Component
 public class ConnectionFactory {
-	
-	public static Connection createConnection() throws SQLException{
+
+	@Autowired
+	private Environment ambiente;
+
+	private Connection conexao;
+
+	public Connection createConnection() throws SQLException {
+
 		try {
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+			
+			String url = ambiente.getProperty("datasource.url");
+			String user = ambiente.getProperty("datasource.username");
+			String password = ambiente.getProperty("datasource.password");
+			
+			conexao = DriverManager.getConnection(url, user, password);
+
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		/* Configura os parâmetros da conexão */
-		String url = "jdbc:sqlserver://192.168.2.11:1433;databaseName=Pause";
-		String user = "Pausedb";
-		String password = "Verity@123";
-		
-		Connection conexao = null;
-		conexao = DriverManager.getConnection(url, user, password);
-		
+
 		return conexao;
 	}
-	
+
 }

@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import br.com.verity.pause.connection.ConnectionFactory;
@@ -17,6 +18,9 @@ import br.com.verity.pause.entity.SobreAvisoEntity;
 
 @Repository
 public class SobreAvisoDAO {
+	
+	@Autowired
+	private ConnectionFactory connectionFactory;
 
 	private Connection conn;
 
@@ -24,7 +28,7 @@ public class SobreAvisoDAO {
 		String sql = "INSERT INTO PAUSESobreAviso VALUES (?,?,?,?,?,?)";
 
 		try {
-			conn = ConnectionFactory.createConnection();
+			conn = connectionFactory.createConnection();
 
 			PreparedStatement ps = conn.prepareStatement(sql);
 
@@ -56,7 +60,7 @@ public class SobreAvisoDAO {
 		sql = "SELECT MAX(idSobreAviso) FROM PAUSESobreAviso WHERE idControleDiario = ?";
 
 		try {
-			conn = ConnectionFactory.createConnection();
+			conn = connectionFactory.createConnection();
 			ps = conn.prepareStatement(sql);
 
 			ps.setInt(1, id); 
@@ -93,7 +97,7 @@ public class SobreAvisoDAO {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		StringBuilder sql = null;
-		conn = ConnectionFactory.createConnection();
+		conn = connectionFactory.createConnection();
 
 		sql = new StringBuilder();
 
@@ -138,7 +142,7 @@ public class SobreAvisoDAO {
 		List<SobreAvisoEntity> entities = new ArrayList<>();
 
 		try {
-			Connection conn = ConnectionFactory.createConnection();
+			Connection conn = connectionFactory.createConnection();
 
 			PreparedStatement ps = conn.prepareStatement(sql);
 
@@ -179,7 +183,7 @@ public class SobreAvisoDAO {
 				"  WHERE sa.idSobreAviso = ?";
 		
 		try {
-			Connection conn = ConnectionFactory.createConnection();
+			Connection conn = connectionFactory.createConnection();
 			PreparedStatement ps = conn.prepareStatement(sql);
 
 			ps.setInt(1, id);
@@ -209,7 +213,7 @@ public class SobreAvisoDAO {
 	public void deleteById(Integer id) {
 		Connection conn;
 		try {
-			conn = ConnectionFactory.createConnection();
+			conn = connectionFactory.createConnection();
 
 			String sql = "DELETE FROM PAUSESobreAviso WHERE idSobreAviso = ?";
 

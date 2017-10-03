@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import br.com.verity.pause.connection.ConnectionFactory;
@@ -15,12 +16,15 @@ import br.com.verity.pause.entity.ConsultaCompletaEntity;
 
 @Repository
 public class ConsultaCompletaDAO {
+	
+	@Autowired
+	private ConnectionFactory connectionFactory;
 
 	public List<ConsultaCompletaEntity> findByIdAndPeriodo(Integer id, Date de, Date ate) {
 		List<ConsultaCompletaEntity> entities = new ArrayList<ConsultaCompletaEntity>();
 		ConsultaCompletaEntity entity = new ConsultaCompletaEntity();
 		try {
-			Connection conn = ConnectionFactory.createConnection();
+			Connection conn = connectionFactory.createConnection();
 			String sql = "CREATE TABLE ##Apontamento (idFuncionario int, ano int, mes int, cmHora float, cmBanco float, cmAdcNot float, "+
 								"cmSA float, cmST float, cdData date, cdHora float, cdBanco float, cdAdcNot float, "+
 								"cdSA float, cdST float, aData date, aHorario TIME, aTpImport bit, aObs varchar(100), aIdTpJustificativa int, aIdApontamento int, "+

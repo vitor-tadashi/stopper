@@ -9,6 +9,7 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import br.com.verity.pause.connection.ConnectionFactory;
@@ -22,11 +23,11 @@ import br.com.verity.pause.entity.TipoJustificativaEntity;
 @Repository
 public class ApontamentoDAO {
 
-	private ConnectionFactory connection;
+	@Autowired
+	private ConnectionFactory connectionFactory;
 
 	public List<ApontamentoEntity> findAll() throws SQLException {
-		connection = new ConnectionFactory();
-		Connection conn = connection.createConnection();
+		Connection conn = connectionFactory.createConnection();
 		String sql = "SELECT * FROM PAUSEApontamento";
 		// Prepara a instrução SQL
 		PreparedStatement ps = conn.prepareStatement(sql);
@@ -45,8 +46,7 @@ public class ApontamentoDAO {
 	}
 
 	public Boolean findByData(ApontamentoEntity horas, int idEmpresa) throws SQLException {
-		connection = new ConnectionFactory();
-		Connection conn = connection.createConnection();
+		Connection conn = connectionFactory.createConnection();
 		String sql = "SELECT * FROM PAUSEApontamento WHERE data = ? AND idEmpresa = ?";
 
 		PreparedStatement ps = conn.prepareStatement(sql);
@@ -70,7 +70,7 @@ public class ApontamentoDAO {
 	public ApontamentoEntity save(ApontamentoEntity horas) {
 		Connection conn;
 		try {
-			conn = ConnectionFactory.createConnection();
+			conn = connectionFactory.createConnection();
 
 			String sql = "INSERT INTO PAUSEApontamento VALUES (?,?,?,?,?,?,?,?,?,?)";
 
@@ -103,8 +103,7 @@ public class ApontamentoDAO {
 	}
 
 	public void saveAll(List<ApontamentoEntity> horas, Integer idArquivo) throws SQLException {
-		connection = new ConnectionFactory();
-		Connection conn = connection.createConnection();
+		Connection conn = connectionFactory.createConnection();
 		String sql = "INSERT INTO PAUSEApontamento VALUES (?,?,?,?,?,?,?,?,?,?)";
 
 		PreparedStatement ps = conn.prepareStatement(sql);
@@ -136,8 +135,7 @@ public class ApontamentoDAO {
 	}
 
 	public void excludeAllDate(Date data) throws SQLException {
-		connection = new ConnectionFactory();
-		Connection conn = connection.createConnection();
+		Connection conn = connectionFactory.createConnection();
 		String sql = "DELETE PAUSEApontamento WHERE data = ?";
 
 		PreparedStatement ps = conn.prepareStatement(sql);
@@ -154,7 +152,7 @@ public class ApontamentoDAO {
 		String sql = "SELECT * FROM PAUSEApontamento WHERE pis LIKE ? AND data BETWEEN ? AND ? ORDER BY data ASC";
 
 		try {
-			Connection conn = ConnectionFactory.createConnection();
+			Connection conn = connectionFactory.createConnection();
 
 			PreparedStatement ps = conn.prepareStatement(sql);
 
@@ -210,7 +208,7 @@ public class ApontamentoDAO {
 				" where ap.idApontamento = ?";
 
 		try {
-			Connection conn = ConnectionFactory.createConnection();
+			Connection conn = connectionFactory.createConnection();
 
 			PreparedStatement ps = conn.prepareStatement(sql);
 
@@ -259,7 +257,7 @@ public class ApontamentoDAO {
 	public void update(ApontamentoEntity horas) {
 		Connection conn;
 		try {
-			conn = ConnectionFactory.createConnection();
+			conn = connectionFactory.createConnection();
 
 			String sql = "UPDATE PAUSEApontamento SET horario = ?, dataInclusao = ?, observacao = ?, idTipoJustificativa = ?, idUsuarioInclusao = ? WHERE idApontamento = ?";
 
@@ -291,7 +289,7 @@ public class ApontamentoDAO {
 		sql = "SELECT MAX(idApontamento) FROM PAUSEApontamento WHERE idControleDiario = ?";
 
 		try {
-			conn = ConnectionFactory.createConnection();
+			conn = connectionFactory.createConnection();
 			ps = conn.prepareStatement(sql);
 
 			ps.setInt(1, id); 
@@ -316,7 +314,7 @@ public class ApontamentoDAO {
 	public void deleteById(Integer id) {
 		Connection conn;
 		try {
-			conn = ConnectionFactory.createConnection();
+			conn = connectionFactory.createConnection();
 
 			String sql = "DELETE FROM PAUSEApontamento WHERE idApontamento = ?";
 
@@ -349,7 +347,7 @@ public class ApontamentoDAO {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		StringBuilder sql = null;
-		conn = ConnectionFactory.createConnection();
+		conn = connectionFactory.createConnection();
 
 		sql = new StringBuilder();
 

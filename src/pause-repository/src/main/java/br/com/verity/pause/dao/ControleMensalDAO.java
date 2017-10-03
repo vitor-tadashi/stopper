@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import br.com.verity.pause.connection.ConnectionFactory;
@@ -15,13 +16,18 @@ import br.com.verity.pause.entity.ControleMensalEntity;
 
 @Repository
 public class ControleMensalDAO {
+	
+	
+	@Autowired
+	private ConnectionFactory connectionFactory;
+	
 	public ControleMensalEntity findByMesAnoIdFuncionario(int mes, int ano, int idFuncionario) {
 		String sql = "SELECT * FROM PAUSEControleMensal WHERE mes = ? AND ano = ? AND idFuncionario = ?";
 
 		Connection conn;
 		ControleMensalEntity entity = null;
 		try {
-			conn = ConnectionFactory.createConnection();
+			conn = connectionFactory.createConnection();
 
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setInt(1, mes);
@@ -46,7 +52,7 @@ public class ControleMensalDAO {
 
 		Connection conn;
 		try {
-			conn = ConnectionFactory.createConnection();
+			conn = connectionFactory.createConnection();
 
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setInt(1, entity.getMes());
@@ -70,7 +76,7 @@ public class ControleMensalDAO {
 			Connection conn = null;
 			PreparedStatement ps = null;
 			StringBuilder sql = null;
-			conn = ConnectionFactory.createConnection();
+			conn = connectionFactory.createConnection();
 
 			sql = new StringBuilder();
 			
@@ -120,7 +126,7 @@ public class ControleMensalDAO {
 
 		Connection conn;
 		try {
-			conn = ConnectionFactory.createConnection();
+			conn = connectionFactory.createConnection();
 
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setDate(1, new java.sql.Date(dtHoje.getTime()));

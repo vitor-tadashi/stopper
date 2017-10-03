@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import br.com.verity.pause.connection.ConnectionFactory;
@@ -14,6 +15,9 @@ import br.com.verity.pause.entity.TipoJustificativaEntity;
 
 @Repository
 public class JustificativaDAO {
+	
+	@Autowired
+	private ConnectionFactory connectionFactory;
 
 	private Connection conn;
 
@@ -23,7 +27,7 @@ public class JustificativaDAO {
 		String sql = "SELECT * FROM PAUSETipoJustificativa";
 		
 		try {
-			conn = ConnectionFactory.createConnection();
+			conn = connectionFactory.createConnection();
 			
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();

@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import br.com.verity.pause.connection.ConnectionFactory;
@@ -18,6 +19,9 @@ import br.com.verity.pause.entity.TipoAtestadoEntity;
 
 @Repository
 public class AtestadoDAO {
+	
+	@Autowired
+	private ConnectionFactory connectionFactory;
 
 	/**
 	 * Encontra os afastamentos do funcionário da respectiva data
@@ -35,7 +39,7 @@ public class AtestadoDAO {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		StringBuilder sql = null;
-		conn = ConnectionFactory.createConnection();
+		conn = connectionFactory.createConnection();
 
 		sql = new StringBuilder();
 
@@ -67,7 +71,7 @@ public class AtestadoDAO {
 		String sql = "INSERT INTO PAUSEAtestado VALUES (?,?,?,?,?)";
 
 		try {
-			conn = ConnectionFactory.createConnection();
+			conn = connectionFactory.createConnection();
 
 			PreparedStatement ps = conn.prepareStatement(sql);
 			
@@ -98,7 +102,7 @@ public class AtestadoDAO {
 		sql = "SELECT MAX(idAtestado) FROM PAUSEAtestado WHERE idControleDiario = ?";
 
 		try {
-			conn = ConnectionFactory.createConnection();
+			conn = connectionFactory.createConnection();
 			ps = conn.prepareStatement(sql);
 
 			ps.setInt(1, id); 
@@ -127,7 +131,7 @@ public class AtestadoDAO {
 				"  WHERE at.idAtestado = ?";
 		
 		try {
-			Connection conn = ConnectionFactory.createConnection();
+			Connection conn = connectionFactory.createConnection();
 			PreparedStatement ps = conn.prepareStatement(sql);
 
 			ps.setInt(1, id);
@@ -159,7 +163,7 @@ public class AtestadoDAO {
 	public void deleteById(Integer id) {
 		Connection conn;
 		try {
-			conn = ConnectionFactory.createConnection();
+			conn = connectionFactory.createConnection();
 
 			String sql = "DELETE FROM PAUSEAtestado WHERE idAtestado = ?";
 
@@ -183,7 +187,7 @@ public class AtestadoDAO {
 		String sql = "SELECT * FROM PAUSETipoAtestado";
 		
 		try {
-			conn = ConnectionFactory.createConnection();
+			conn = connectionFactory.createConnection();
 			
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
@@ -216,7 +220,7 @@ public class AtestadoDAO {
 		List<AtestadoEntity> entities = new ArrayList<>();
 
 		try {
-			Connection conn = ConnectionFactory.createConnection();
+			Connection conn = connectionFactory.createConnection();
 
 			PreparedStatement ps = conn.prepareStatement(sql);
 
