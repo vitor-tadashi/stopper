@@ -1,14 +1,13 @@
 package br.com.verity.pause.controller;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import org.apache.commons.io.IOUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,12 +21,14 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
 import br.com.verity.pause.bean.ApontamentoBean;
 import br.com.verity.pause.bean.ArquivoApontamentoBean;
 import br.com.verity.pause.bean.FuncionarioBean;
 import br.com.verity.pause.bean.UsuarioBean;
 import br.com.verity.pause.business.ControleDiarioBusiness;
-import br.com.verity.pause.business.ControleMensalBusiness;
 import br.com.verity.pause.business.CustomUserDetailsBusiness;
 import br.com.verity.pause.business.ImportacaoBusiness;
 import br.com.verity.pause.exception.BusinessException;
@@ -65,32 +66,42 @@ public class ImportacaoController {
 	@PreAuthorize("hasRole('ROLE_IMPORTAR_APONTAMENTOS')")
 	@ResponseBody
 	@RequestMapping(value = "importar-arquivo", method = RequestMethod.POST)
-	public List<FuncionarioBean> importarArquivo(MultipartHttpServletRequest request, Model model) {
+	public ResponseEntity<String> importarArquivo(MultipartHttpServletRequest request, Model model) {
+		funcionariosImportacao = new ArrayList<FuncionarioBean>();
 		UsuarioBean usuarioLogado = customUser.usuarioLogado();
-		List<MultipartFile> arquivo = request.getFiles("file");
+		MultipartFile arquivo = request.getFile("file");
 		String dataImportacao = request.getParameter("dataImportacao");
 		String caminho = "";
-		funcionariosImportacao = new ArrayList<FuncionarioBean>();
-		FuncionarioBean funcionario = new FuncionarioBean();
-		arquivoApontamento = new ArquivoApontamentoBean();				
+		boolean indicadorReenvio = false;
+		JsonObject reposta = new JsonObject();
 		
 		
+
 		try {
-			caminho = this.salvarTxt(arquivo, usuarioLogado.getIdEmpresaSessao());
-			arquivoApontamento.setCaminho(caminho);
-			arquivoApontamento.setDtInclusao(new Date());
-			arquivoApontamento.setIdUsuarioInclusao(usuarioLogado.getId());
-			arquivoApontamento.setIdEmpresa(usuarioLogado.getFuncionario().getEmpresa().getId());
-			funcionariosImportacao = importacaoBusiness.importarArquivoDeApontamento(caminho, usuarioLogado.getIdEmpresaSessao(), dataImportacao);
+			caminho = importacaoBusiness.salvarArquivo(arquivo, usuarioLogado.getIdEmpresaSessao(), dataImportacao);
+			
+			indicadorReenvio = importacaoBusiness.verificarReenvioDeArquivo(dataImportacao, usuarioLogado.getIdEmpresaSessao());
+
+			funcionariosImportacao = importacaoBusiness.importarArquivoDeApontamento(caminho,
+					usuarioLogado.getIdEmpresaSessao(), dataImportacao);
+			
+			arquivoApontamento = new ArquivoApontamentoBean(caminho, new Date(), usuarioLogado.getId(),
+					usuarioLogado.getFuncionario().getEmpresa().getId());
+			
 			arquivoApontamento.setData(
 					funcionariosImportacao.get(funcionariosImportacao.size() - 1).getApontamentos().get(0).getData());
-		} catch (BusinessException | ParseException | IOException e) {
+			
+			
+			reposta.addProperty("indicadorReenvio", indicadorReenvio);
+			reposta.addProperty("funcionariosImportacao", new Gson().toJson(funcionariosImportacao));
+			
+		} catch (BusinessException e) {
 			this.cancelar(caminho, model);
-			funcionario.setMensagem(e.getMessage());
-			funcionariosImportacao.add(funcionario);
-			return funcionariosImportacao;
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
-		return funcionariosImportacao;
+	
+		
+		return new ResponseEntity<String>(reposta.toString(), HttpStatus.OK);
 	}
 
 	@PreAuthorize("hasRole('ROLE_IMPORTAR_APONTAMENTOS')")
@@ -129,19 +140,4 @@ public class ImportacaoController {
 		return "redirect:/importacao";
 	}
 
-	@PreAuthorize("hasRole('ROLE_IMPORTAR_APONTAMENTOS')")
-	public String salvarTxt(List<MultipartFile> multipartFiles, Integer idEmpresa) throws IOException {
-		String arquivo = null;
-		String directory = "C:" + File.separator + "Pause" + File.separator + "importacao" + File.separator + idEmpresa
-				+ File.separator;
-		File file = new File(directory);
-		file.mkdirs();
-		for (MultipartFile multipartFile : multipartFiles) {
-			file = new File(directory + multipartFile.getOriginalFilename());
-			IOUtils.copy(multipartFile.getInputStream(), new FileOutputStream(file));
-			arquivo = directory + multipartFile.getOriginalFilename();
-		}
-		return arquivo;
-	}
-	
 }

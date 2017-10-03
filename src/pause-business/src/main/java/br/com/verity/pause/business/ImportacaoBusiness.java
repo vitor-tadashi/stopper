@@ -1,6 +1,8 @@
 package br.com.verity.pause.business;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -12,10 +14,14 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+import org.apache.poi.util.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import br.com.verity.pause.bean.ApontamentoBean;
 import br.com.verity.pause.bean.ArquivoApontamentoBean;
 import br.com.verity.pause.bean.EmpresaBean;
@@ -60,8 +66,43 @@ public class ImportacaoBusiness {
 	@Autowired
 	private ControleDiarioConverter controleDiarioConverter;
 
+	@Autowired
+	private ControleMensalBusiness controleMensalBusiness;
+
+	public String salvarArquivo(MultipartFile arquivosSelecionado, Integer idEmpresa, String dataImportacao)
+			throws BusinessException {
+		String diretorio = "";
+	//	boolean indicadorMesFechado = false;
+		try {
+		//	indicadorMesFechado = controleMensalBusiness
+			//		.verificarMesFechado(DataUtil.converterData(dataImportacao, "yyyy-MM-dd"));
+
+			//if (!indicadorMesFechado) {
+
+				diretorio = "C:" + File.separator + "Pause" + File.separator + "importacao" + File.separator + idEmpresa
+						+ File.separator;
+				File arquivo = new File(diretorio);
+				arquivo.mkdirs();
+
+				arquivo = new File(diretorio + arquivosSelecionado.getOriginalFilename());
+				IOUtils.copy(arquivosSelecionado.getInputStream(), new FileOutputStream(arquivo));
+				diretorio = diretorio + arquivosSelecionado.getOriginalFilename();
+
+		//	} else {
+
+		//		throw new BusinessException("Não é possível importar o arquivo porque o mês escolhido está fechado");
+
+	//		}
+
+		} catch (Exception e) {
+			throw new BusinessException("Houve um erro ao tentar salvar o arquivo, tente novamente mais tarde.");
+		}
+
+		return diretorio;
+	}
+
 	public List<FuncionarioBean> importarArquivoDeApontamento(String caminho, int idEmpresa, String data)
-			throws BusinessException, IOException, ParseException {
+			throws BusinessException{
 		List<FuncionarioBean> funcionarios = new ArrayList<FuncionarioBean>();
 		List<FuncionarioBean> funcionariosComApontamentos = new ArrayList<FuncionarioBean>();
 		FuncionarioBean funcMensagem = new FuncionarioBean();
@@ -83,11 +124,6 @@ public class ImportacaoBusiness {
 				apontamentos.addAll(this.selecionarApontamentos(caminho, empresaBean, diaImportacao));
 			}
 
-		} catch (BusinessException e) {
-			throw new BusinessException(e.getMessage());
-		}
-
-		try {
 			verificarImportacao = apontamentoDao
 					.findByData(apontamentoConverter.convertBeanToEntity(apontamentos.get(0)), idEmpresa);
 
@@ -95,20 +131,21 @@ public class ImportacaoBusiness {
 				funcMensagem.setMensagem("Este arquivo já foi importado. Deseja substituí-lo?");
 				funcionariosComApontamentos.add(funcMensagem);
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 
-		funcionarios = integration.getFuncionarios(idEmpresa);
+			funcionarios = integration.getFuncionarios(idEmpresa);
 
-		for (FuncionarioBean bean : funcionarios) {
+			for (FuncionarioBean bean : funcionarios) {
 
-			bean.setApontamentos(
-					apontamentos.stream().filter(hr -> hr.getPis().equals(bean.getPis())).collect(Collectors.toList()));
+				bean.setApontamentos(apontamentos.stream().filter(hr -> hr.getPis().equals(bean.getPis()))
+						.collect(Collectors.toList()));
 
-			if (bean.getApontamentos() != null && bean.getApontamentos().size() > 0) {
-				funcionariosComApontamentos.add(bean);
+				if (bean.getApontamentos() != null && bean.getApontamentos().size() > 0) {
+					funcionariosComApontamentos.add(bean);
+				}
 			}
+
+		} catch (Exception e) {
+			throw new BusinessException("Houve um erro interno, tente novamente mais tarde.");
 		}
 
 		return funcionariosComApontamentos;
@@ -199,10 +236,10 @@ public class ImportacaoBusiness {
 				dataImportacao = DataUtil.converterData(linha.substring(10, 18), "ddMMyyyy");
 
 				while (linha != null) {
-					
+
 					combinacao = padraoLinha.matcher(linha);
 
-					if(combinacao.find()) {
+					if (combinacao.find()) {
 
 						codReg = linha.substring(0, 10);
 						data = DataUtil.converterData(linha.substring(10, 18), "ddMMyyyy");
@@ -244,5 +281,28 @@ public class ImportacaoBusiness {
 		}
 
 		return apontamentos;
+	}
+	
+	public boolean verificarReenvioDeArquivo(String dataImportacao, Integer idEmpresa) throws BusinessException{
+		ArquivoApontamentoEntity arquivoApontamento =  new ArquivoApontamentoEntity();
+		Integer idArquivoApontamento = null;
+		boolean indicadorReenvio = false;
+		
+		try {
+			
+			arquivoApontamento.setData(DataUtil.converterData(dataImportacao, "yyyy-MM-dd"));
+			arquivoApontamento.setIdEmpresa(idEmpresa);
+			
+			idArquivoApontamento = arquivoApontamentoDao.findByDateAndEmpresa(arquivoApontamento);
+			
+			indicadorReenvio = ((idArquivoApontamento != null) && (idArquivoApontamento > 0));
+			
+		} catch (Exception e) {
+			
+			throw new BusinessException("Houve um erro ao importar arquivo, tente novamente mais tarde");
+		}
+		
+		
+		return indicadorReenvio;
 	}
 }
