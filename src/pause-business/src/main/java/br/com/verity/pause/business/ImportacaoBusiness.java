@@ -223,7 +223,7 @@ public class ImportacaoBusiness {
 				padraoLinha = Pattern.compile(expressaoRegular);
 				combinacao = padraoLinha.matcher(linha);
 
-				dataImportacao = DataUtil.converterData(linha.substring(10, 18), "ddMMyyyy");
+				dataImportacao = DataUtil.converterData(diaSemFormatacao, "ddMMyyyy");
 
 				while (linha != null) {
 

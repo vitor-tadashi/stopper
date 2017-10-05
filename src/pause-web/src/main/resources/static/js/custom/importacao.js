@@ -93,7 +93,7 @@ function importarArquivo() {
 					$("#upload-arquivo").attr("disabled", true);
 					$("#empresa").attr("disabled", true);
 					
-					if(true){
+					if(arquivo.indicadorReenvio){
 						
                         $('#modal-confirmacao').modal('show'); 
 

@@ -32,6 +32,7 @@ import br.com.verity.pause.business.ControleDiarioBusiness;
 import br.com.verity.pause.business.CustomUserDetailsBusiness;
 import br.com.verity.pause.business.ImportacaoBusiness;
 import br.com.verity.pause.exception.BusinessException;
+import br.com.verity.pause.util.DataUtil;
 
 @Controller
 @RequestMapping(value = "/importacao")
@@ -74,33 +75,36 @@ public class ImportacaoController {
 		String caminho = "";
 		boolean indicadorReenvio = false;
 		JsonObject reposta = new JsonObject();
-		
-		
 
 		try {
 			caminho = importacaoBusiness.salvarArquivo(arquivo, usuarioLogado.getIdEmpresaSessao(), dataImportacao);
-			
-			indicadorReenvio = importacaoBusiness.verificarReenvioDeArquivo(dataImportacao, usuarioLogado.getIdEmpresaSessao());
+
+			indicadorReenvio = importacaoBusiness.verificarReenvioDeArquivo(dataImportacao,
+					usuarioLogado.getIdEmpresaSessao());
 
 			funcionariosImportacao = importacaoBusiness.importarArquivoDeApontamento(caminho,
 					usuarioLogado.getIdEmpresaSessao(), dataImportacao);
-			
-			arquivoApontamento = new ArquivoApontamentoBean(caminho, new Date(), usuarioLogado.getId(),
-					usuarioLogado.getFuncionario().getEmpresa().getId());
-			
-			arquivoApontamento.setData(
-					funcionariosImportacao.get(funcionariosImportacao.size() - 1).getApontamentos().get(0).getData());
-			
+
+			if (!funcionariosImportacao.isEmpty()) {
+				arquivoApontamento = new ArquivoApontamentoBean(caminho, new Date(), usuarioLogado.getId(),
+						usuarioLogado.getFuncionario().getEmpresa().getId());
+				
+
+				arquivoApontamento.setData(DataUtil.converterData(dataImportacao, "yyyy-MM-dd"));
+			}
 			
 			reposta.addProperty("indicadorReenvio", indicadorReenvio);
 			reposta.addProperty("funcionariosImportacao", new Gson().toJson(funcionariosImportacao));
-			
+
 		} catch (BusinessException e) {
 			this.cancelar(caminho, model);
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+			this.cancelar(caminho, model);
+			return new ResponseEntity<String>("Houve um erro interno, tente novamente mais tarde",
+					HttpStatus.BAD_REQUEST);
 		}
-	
-		
+
 		return new ResponseEntity<String>(reposta.toString(), HttpStatus.OK);
 	}
 
