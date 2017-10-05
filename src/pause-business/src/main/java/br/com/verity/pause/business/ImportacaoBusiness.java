@@ -72,12 +72,12 @@ public class ImportacaoBusiness {
 	public String salvarArquivo(MultipartFile arquivosSelecionado, Integer idEmpresa, String dataImportacao)
 			throws BusinessException {
 		String diretorio = "";
-	//	boolean indicadorMesFechado = false;
+		boolean indicadorMesFechado = false;
 		try {
-		//	indicadorMesFechado = controleMensalBusiness
-			//		.verificarMesFechado(DataUtil.converterData(dataImportacao, "yyyy-MM-dd"));
+			indicadorMesFechado = controleMensalBusiness
+					.verificarMesFechado(DataUtil.converterData(dataImportacao, "yyyy-MM-dd"));
 
-			//if (!indicadorMesFechado) {
+			if (!indicadorMesFechado) {
 
 				diretorio = "C:" + File.separator + "Pause" + File.separator + "importacao" + File.separator + idEmpresa
 						+ File.separator;
@@ -88,11 +88,11 @@ public class ImportacaoBusiness {
 				IOUtils.copy(arquivosSelecionado.getInputStream(), new FileOutputStream(arquivo));
 				diretorio = diretorio + arquivosSelecionado.getOriginalFilename();
 
-		//	} else {
+			} else {
 
-		//		throw new BusinessException("Não é possível importar o arquivo porque o mês escolhido está fechado");
+				throw new BusinessException("Não é possível importar o arquivo porque o mês escolhido está fechado");
 
-	//		}
+			}
 
 		} catch (Exception e) {
 			throw new BusinessException("Houve um erro ao tentar salvar o arquivo, tente novamente mais tarde.");
@@ -105,9 +105,7 @@ public class ImportacaoBusiness {
 			throws BusinessException{
 		List<FuncionarioBean> funcionarios = new ArrayList<FuncionarioBean>();
 		List<FuncionarioBean> funcionariosComApontamentos = new ArrayList<FuncionarioBean>();
-		FuncionarioBean funcMensagem = new FuncionarioBean();
 		List<ApontamentoBean> apontamentos = new ArrayList<ApontamentoBean>();
-		Boolean verificarImportacao;
 		EmpresaBean empresaBean = new EmpresaBean();
 		Date dataImportacao = new Date();
 		List<Date> diasImportacao = new ArrayList<Date>();
