@@ -175,7 +175,7 @@
 								<div class="input-group" id="div-apontamento-hora">
 									<input id="apontamento-time" name="hora" type="text" class="form-control time" placeholder="--:--">
 									<span class="input-group-btn">
-									<button type="button" onclick="setarFinalDoDia('#apontamento-time')" class="btn btn-default" data-toggle="tooltip" data-placement="Top" title="Apontar final do dia">
+									<button type="button" onclick="setarFinalDoDia('#apontamento-time')" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Apontar final do dia">
 									  <i class="pli-clock"></i>
 									</button>
 									</span>
@@ -239,7 +239,7 @@
 											<div class="input-group date">
 												<input id="hora-sa-s" name="saida" type="text" class="form-control clock" placeholder="--:--">
 												<span class="input-group-btn">
-													<button type="button" onclick="setarFinalDoDia('#hora-sa-s')" class="btn btn-default" data-toggle="add-tooltip" data-placement="Top" title="Apontar final do dia">
+													<button type="button" onclick="setarFinalDoDia('#hora-sa-s')" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Apontar final do dia">
 													  <i class="pli-clock"></i>
 													</button>
 												</span>
