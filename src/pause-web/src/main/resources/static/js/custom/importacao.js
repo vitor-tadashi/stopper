@@ -83,7 +83,6 @@ function importarArquivo() {
 				
 				arquivo.funcionariosImportacao = JSON.parse(arquivo.funcionariosImportacao);
 				
-				debugger;
 				if(arquivo.funcionariosImportacao.length > 0){
 					
 					var indice = 0;
@@ -95,7 +94,7 @@ function importarArquivo() {
 					$("#upload-arquivo").attr("disabled", true);
 					$("#empresa").attr("disabled", true);
 					
-					if(true){
+					if(arquivo.indicadorReenvio){
 						
                         $('#modal-confirmacao').modal('show'); 
 

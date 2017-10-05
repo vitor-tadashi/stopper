@@ -139,6 +139,28 @@
 				</div>
 			</div>
 		</div>
+		
+		
+			<!--erro Modal-->
+    <!--===================================================-->
+    <div id="erro-sm-modal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
+                    <h4 class="modal-title text-center">Atenção!</h4>
+                </div>
+                <div class="content">
+                    <h4 class="text-center" id="erro-label"></h4>
+                </div>
+                <div class="modal-footer">
+                    <div class="pull-right">
+						<button data-dismiss="modal" class="btn btn-primary" type="button">OK</button>
+					</div>
+                </div>
+            </div>
+        </div>
+    </div>
 	</layout:put>
 
 	<layout:put block="scripts" type="REPLACE">
