@@ -1,5 +1,6 @@
 package br.com.verity.pause.business;
 
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -7,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import br.com.verity.pause.bean.AfastamentoBean;
@@ -21,6 +23,7 @@ import br.com.verity.pause.entity.enumerator.TipoAfastamento;
 import br.com.verity.pause.exception.BusinessException;
 
 @Service
+@Component
 public class AfastamentoBusiness {
 	
 	@Autowired
@@ -70,6 +73,15 @@ public class AfastamentoBusiness {
 		//calculoBusiness.calcularApontamento(idFuncionario, afastamento.getData());
 		
 		return afastamento;
+	}
+	
+	public Boolean existeAfastamentoPara (int idFuncionario, java.sql.Date hoje) {
+		
+		AfastamentoEntity entity = null;
+		
+		entity = this.afastamentoDAO.findAbsence(idFuncionario, hoje);
+		
+		return (entity != null);
 	}
 
 	public void remover(Integer id) throws BusinessException {

@@ -3,6 +3,7 @@ package br.com.verity.pause.business;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import br.com.verity.pause.bean.UsuarioBean;
 import br.com.verity.pause.converter.ControleDiarioConverter;
 import br.com.verity.pause.converter.SobreAvisoConverter;
 import br.com.verity.pause.dao.SobreAvisoDAO;
+import br.com.verity.pause.entity.ApontamentoPivotEntity;
 import br.com.verity.pause.entity.SobreAvisoEntity;
 import br.com.verity.pause.exception.BusinessException;
 
@@ -50,26 +52,41 @@ public class SobreAvisoBusiness {
 	private CalculoBusiness calculoBusiness;
 
 	public SobreAvisoBean salvar(SobreAvisoBean sobreAviso) throws BusinessException {
+		List<SobreAvisoEntity> sobreAvisos = new ArrayList<SobreAvisoEntity>();
+		
 		if (controleMensalBusiness.verificarMesFechado(sobreAviso.getData()))
 			throw new BusinessException("Não foi possível realizar a ação, pois o mês está fechado.");
+		
+		sobreAvisos = sobreAvisoDAO.findByPeriodoAndIdFuncionario(sobreAviso.getIdFuncionario(), new java.sql.Date(sobreAviso.getData().getTime()), new java.sql.Date(sobreAviso.getData().getTime()));
 
-		UsuarioBean usuarioLogado = userBusiness.usuarioLogado();
-		Integer idFuncionario = sobreAviso.getIdFuncionario();
-		if (idFuncionario == null)
-			idFuncionario = usuarioLogado.getFuncionario().getId();
+		if (sobreAvisos.isEmpty()) {
+			
+			UsuarioBean usuarioLogado = userBusiness.usuarioLogado();
+			Integer idFuncionario = sobreAviso.getIdFuncionario();
+			if (idFuncionario == null)
+				idFuncionario = usuarioLogado.getFuncionario().getId();
 
-		sobreAviso.setDataInclusao(new Date());
-		sobreAviso.setIdUsuarioInclusao(usuarioLogado.getId());
+			sobreAviso.setDataInclusao(new Date());
+			sobreAviso.setIdUsuarioInclusao(usuarioLogado.getId());
 
-		SobreAvisoEntity entity = sobreAvisoConverter.convertBeanToEntity(sobreAviso);
+			SobreAvisoEntity entity = sobreAvisoConverter.convertBeanToEntity(sobreAviso);
 
-		ControleDiarioBean controleDiario = controleDiarioBusiness.obterPorDataIdFuncionario(sobreAviso.getData(),
-				idFuncionario);
-		entity.setControleDiario(controleDiarioConverter.convertBeanToEntity(controleDiario));
+			ControleDiarioBean controleDiario = controleDiarioBusiness.obterPorDataIdFuncionario(sobreAviso.getData(),
+					idFuncionario);
+			entity.setControleDiario(controleDiarioConverter.convertBeanToEntity(controleDiario));
 
-		sobreAviso.setId(sobreAvisoDAO.save(entity).getId());
+			sobreAviso.setId(sobreAvisoDAO.save(entity).getId());
 
-		calculoBusiness.calcularApontamento(idFuncionario, sobreAviso.getData());
+			ApontamentoPivotEntity apontamento = calculoBusiness.calcularApontamento(idFuncionario, sobreAviso.getData());
+			
+			sobreAviso.setControleDiario(controleDiario);
+			sobreAviso.getControleDiario().setSobreAviso(apontamento.getTotalSobreAviso());
+			
+		}else{
+			
+			throw new BusinessException("Não é possível lançar dois sobre avivos para o mesmo dia");
+		}
+
 
 		return sobreAviso;
 	}

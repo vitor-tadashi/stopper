@@ -1,5 +1,6 @@
 var obrigatorio = 'Campo obrigatório.';
 var cor = '#a94442';
+var valorQueTava;
 
 $(document).ready(function(){
     $('.clock').timepicker({
@@ -12,11 +13,11 @@ $(document).ready(function(){
 	$('#apontamento-funcionario').val($( "#select-funcionario option:selected" ).val());
 });
 
-function setarFinalDoDia () {
-	
-	id = '#apontamento-time';
+function setarFinalDoDia (id) {
 	
 	if ($(id).val() != '23:59:59') {
+		
+		valorQueTava = $(id).val();
 		
 		$(id).mask('00:00:00');
 		$(id).val('23:59:59');
@@ -24,7 +25,7 @@ function setarFinalDoDia () {
 	} else {
 		
 		$(id).mask('00:00');
-		$(id).val('');
+		$(id).val(valorQueTava);
 		
 	}
 	
@@ -32,7 +33,6 @@ function setarFinalDoDia () {
 }
 
 $('#apontamento-time').change(function () {
-	debugger
 	
 	var string = $('#apontamento-time').val();
 	var tamanho = string.length;
@@ -188,7 +188,7 @@ function inserirSA_ajax(dataSA, horaSAe, horaSAs){
 		}
 	});
 }
-function inserirAfastamento(){
+function inserirAfastamento (){
 	var de = formatardataHtml($('#afastamentoDe').val());
 	var ate = formatardataHtml($('#afastamentoAte').val());
 	var tpDesc = $('#afastamentoJus option:selected').text();
@@ -228,8 +228,10 @@ function inserirAfastamento(){
 		inserirAfastamento_ajax(de, ate, tpId, tpDesc);
 	}
 }
-function inserirAfastamento_ajax(de, ate, tpId, tpDesc){
-	var afastamento={	
+
+function inserirAfastamento_ajax (de, ate, tpId, tpDesc) {
+	
+	var afastamento = {	
 			'dataInicio' : de,
 			'dataFim' : ate,
 			'tipoAfastamento' : {
@@ -237,6 +239,7 @@ function inserirAfastamento_ajax(de, ate, tpId, tpDesc){
 			},
 			'idFuncionario' : $('#apontamento-funcionario').val()
 		}
+	
 	$.ajax({
 		url: 'afastamento/inserir',
 		type : 'POST',
@@ -253,6 +256,7 @@ function inserirAfastamento_ajax(de, ate, tpId, tpDesc){
 					.append($('<a>').text('Remover').addClass('text-danger').attr('href',"#").attr('onclick','removerAfastamento(this ,'+ data.id +')'))
 				)
 			);
+			
 			clearForm(2);
 		},
 		error: function(erro){
@@ -276,6 +280,7 @@ function removerAfastamento(click, id){
 		}
 	});
 }
+
 function inserirAtestado(){
 	var data = formatardataHtml($('#atestadoData').val());
 	var qtd_hr = $('#qtd-hr-atestado').val();
