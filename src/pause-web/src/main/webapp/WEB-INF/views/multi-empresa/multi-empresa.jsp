@@ -23,41 +23,45 @@
 
     <!--Nifty Stylesheet [ REQUIRED ]-->
     <link href='<c:url value="/css/nifty.min.css"/>' rel="stylesheet">
-    
-    <link href='<c:url value="/plugins/ionicons/css/ionicons.min.css"/>' rel="stylesheet">
-    
-    
+    <link href='<c:url value="/css/custom/custom.css"/>' rel="stylesheet">
     <script src='<c:url value="/js/jquery.min.js"/>'></script>
     <script src='<c:url value="/js/bootstrap.min.js"/>'></script>
     <script src='<c:url value="/js/nifty.min.js"/>'></script>
     
 </head>
-<body style="background: white;">
+<body>
 <sec:authentication property="principal" var="user"/>
-	<div class="cls-container" style="background: white;">
+	<div class="csl-container">
 		<div class="cls-content">
 		<div class="panel-body">
-		<div class="row">
-		
-           	<h3>Olá, ${user.funcionario.nome }!</h3>
+		<div class="container-fluid">
+		<div class="row ">
+		<div style="text-align: center">
+			<h3 >Olá, ${user.funcionario.nome}!</h3>
            	<h3>Qual empresa deseja acessar hoje?</h3>
-            <form action='<c:url value="/selecionaMultiEmpresa/2"/>' method="post" id="bv-form">
+             		<br><br><br>
+		</div>
+           <form action='<c:url value="/selecionaMultiEmpresa/2"/>' method="post" id="bv-form">
            		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-            	<div class="panel col-sm-offset-2 col-sm-3">
-            	
-              		<button type="image" class="text-center" src='<c:url value="/img/verity.png"/>' style="width:300px; height: 120px;"></button>
+            	<div class="panel col-md-5 bombom">
+              		<input type="image" class="ouro" src='<c:url value="/img/verity.png"/>'>
 				</div>
 			 </form>
 			 <form action='<c:url value="/selecionaMultiEmpresa/65"/>' method="post" id="bv-form">
+			 <div class="col-md-2"></div>
 			 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-				<div class="panel col-sm-3 col-sm-offset-2">
-					<button type="image" class="text-center" src='<c:url value="/img/qa360.png"/>' style="width: 300px;  height: 120px;"></button>
+				<div class="panel col-md-5 bombom">
+					<input type="image" class="ouro"  id="centro "src='<c:url value="/img/qa360.png"/>'>
 				</div>
+				<div class="fixed-rectangle"></div>
+				
             </form>
 		</div>
 		</div>
 	</div>
 	</div>
+	</div>
+	
 	<!--===================================================-->
 	<!-- END OF CONTAINER -->
 </body>
