@@ -124,14 +124,6 @@ public class ImportacaoBusiness {
 				apontamentos.addAll(this.selecionarApontamentos(caminho, empresaBean, diaImportacao));
 			}
 
-			verificarImportacao = apontamentoDao
-					.findByData(apontamentoConverter.convertBeanToEntity(apontamentos.get(0)), idEmpresa);
-
-			if (verificarImportacao) {
-				funcMensagem.setMensagem("Este arquivo já foi importado. Deseja substituí-lo?");
-				funcionariosComApontamentos.add(funcMensagem);
-			}
-
 			funcionarios = integration.getFuncionarios(idEmpresa);
 
 			for (FuncionarioBean bean : funcionarios) {

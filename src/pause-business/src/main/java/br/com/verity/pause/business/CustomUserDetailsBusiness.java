@@ -1,5 +1,6 @@
 package br.com.verity.pause.business;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,9 +15,11 @@ import br.com.verity.pause.integration.SavIntegration;
 @Service
 public class CustomUserDetailsBusiness implements UserDetailsService {
 	
+	@Autowired
+	private SavIntegration sav;
+	
 	@Override
 	public UserDetails loadUserByUsername(String usuario) throws UsernameNotFoundException{
-		SavIntegration sav = new SavIntegration();
 		UsuarioBean usuarioBean = sav.getUsuario(usuario);
 		if(usuarioBean.getId() == null){
 			throw new UsernameNotFoundException("Usuário não localizado");

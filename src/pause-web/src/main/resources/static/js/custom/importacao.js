@@ -114,6 +114,10 @@ function importarArquivo() {
 					
 				}
 			},
+			error: function(erro){
+				$('#erro-label').text(erro.responseText);
+				$('#erro-sm-modal').modal();
+			}
 		});
 		
 		$("#modal-loader").modal("hide");
