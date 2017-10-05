@@ -1,20 +1,13 @@
 package br.com.verity.pause.batch;
 
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import br.com.verity.pause.bean.ControleDiarioBean;
-import br.com.verity.pause.bean.ControleMensalBean;
-import br.com.verity.pause.bean.FuncionarioBean;
 import br.com.verity.pause.business.ControleApontamentoBusiness;
-import br.com.verity.pause.business.ControleDiarioBusiness;
-import br.com.verity.pause.business.ControleMensalBusiness;
-import br.com.verity.pause.business.FuncionarioBusiness;
 
 @Component
 @EnableScheduling

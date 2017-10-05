@@ -54,7 +54,6 @@ $("#upload-arquivo").change(function (){
 });
 
 function importarArquivo() {
-	
 	var indicadorSucesso = validarCamposImportacao()
 	
 	if (indicadorSucesso) {
@@ -113,7 +112,7 @@ function importarArquivo() {
 					
 				}
 			},
-			error: function(erro){
+			error: function(data) {
 				$('#erro-label').text(erro.responseText);
 				$('#erro-sm-modal').modal();
 			}
@@ -135,6 +134,7 @@ function exibirImportacao(bool){
 }
 	
 function preencherImportacao(funcionario, indice){
+	debugger
     var campos = "<tr role='row' class='odd text-center rmvLinha'>"+
     "<td id='pis" + indice + "' class='pis'></td>" +
     "<td id='funcionario" + indice + "'></td>" +
@@ -167,9 +167,13 @@ function preencherImportacao(funcionario, indice){
 		$('#hora'+i+indice).text(horario);
 	});
 	
-	date = new Date(funcionario.apontamentos[0].data);
-	$('#data'+indice).text(date.toLocaleDateString());
-	$('.data').mask('99/99/9999');
+	if (funcionario != undefined && funcionario.apontamentos != undefined) {
+		
+		date = new Date(funcionario.apontamentos[0].data);
+		$('#data'+indice).text(date.toLocaleDateString());
+		$('.data').mask('99/99/9999');
+		
+	}
 }
 
 $("#submitbutton").click(function() {

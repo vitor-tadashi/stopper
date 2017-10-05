@@ -31,12 +31,14 @@ public class AfastamentoDAO {
 	 * @return
 	 * @throws SQLException
 	 */
-	public AfastamentoEntity findAbsence(int idFuncionario, Date data) throws SQLException {
+	public AfastamentoEntity findAbsence(int idFuncionario, Date data) {
 		AfastamentoEntity response = null;
 		Connection conn = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		StringBuilder sql = null;
+		
+		try {
 		conn = connectionFactory.createConnection();
 
 		sql = new StringBuilder();
@@ -66,7 +68,11 @@ public class AfastamentoDAO {
 		}
 
 		ps.close();
-
+		
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 		return response;
 	}
 

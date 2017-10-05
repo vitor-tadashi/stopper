@@ -175,7 +175,7 @@
 								<div class="input-group" id="div-apontamento-hora">
 									<input id="apontamento-time" name="hora" type="text" class="form-control time" placeholder="--:--">
 									<span class="input-group-btn">
-									<button type="button" onclick="setarFinalDoDia()" class="btn btn-default" data-toggle="tooltip" data-placement="right" title="Apontar final do dia">
+									<button type="button" onclick="setarFinalDoDia('#apontamento-time')" class="btn btn-default" data-toggle="tooltip" data-placement="Top" title="Apontar final do dia">
 									  <i class="pli-clock"></i>
 									</button>
 									</span>
@@ -238,7 +238,11 @@
 											<span class="input-group-addon">até</span>
 											<div class="input-group date">
 												<input id="hora-sa-s" name="saida" type="text" class="form-control clock" placeholder="--:--">
-												<span class="input-group-addon"><i class="pli-clock"></i></span>
+												<span class="input-group-btn">
+													<button type="button" onclick="setarFinalDoDia('#hora-sa-s')" class="btn btn-default" data-toggle="add-tooltip" data-placement="Top" title="Apontar final do dia">
+													  <i class="pli-clock"></i>
+													</button>
+												</span>
 											</div>
 										</div>
 										<span id="mensagemHora-js"  class="hide" style="color: #a94442;"></span>
@@ -397,7 +401,7 @@
 									</div>
 									<div class="col-sm-3">
 										<label class="control-label">Quantidade de horas</label>
-										<input id="qtd-hr-atestado" type="number" step="0.5" class="form-control" placeholder="00,00">
+										<input id="qtd-hr-atestado" type="number" step="0.5" class="form-control" placeholder="00,00" min="0.5" max="8">
 										<span id="mensagemHoraAtestado-js"  class="hide" style="color: #a94442; "></span>
 									</div>
 								</div>
@@ -573,6 +577,15 @@
 					$('#apontamento-jus').next('small').remove();
 			    }
 			});
+			
+			$('#qtd-hr-atestado').on('blur', function () {
+				if ($('#qtd-hr-atestado').val() > 8) {
+					$('#qtd-hr-atestado').val(8);
+			    } else if ($('#qtd-hr-atestado').val() < 0.5) {
+					$('#qtd-hr-atestado').val(0.5);
+			    }
+			});
+			
 		});
 		</script>
 	</layout:put>

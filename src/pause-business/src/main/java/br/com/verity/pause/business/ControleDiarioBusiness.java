@@ -58,6 +58,7 @@ public class ControleDiarioBusiness {
 			bean.setIdFuncionario(idFuncionario);
 			inserir(bean);
 		}
+		
 		return obterPorDataIdFuncionario(data, idFuncionario);
 	}
 

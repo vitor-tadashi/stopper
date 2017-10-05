@@ -31,7 +31,7 @@ public class SobreAvisoDAO {
 			conn = connectionFactory.createConnection();
 
 			PreparedStatement ps = conn.prepareStatement(sql);
-
+			
 			ps.setTime(1, entity.getHoraInicio());
 			ps.setTime(2, entity.getHoraFim());
 			ps.setDate(3, entity.getDataInclusao());
@@ -43,11 +43,12 @@ public class SobreAvisoDAO {
 			ps.close();
 			conn.close();
 			
-			return findByControleDiarioMaxIdSobreAviso(entity.getControleDiario().getId());
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
+		
+		return findByControleDiarioMaxIdSobreAviso(entity.getControleDiario().getId());
 	}
 
 	private SobreAvisoEntity findByControleDiarioMaxIdSobreAviso(Integer id) {

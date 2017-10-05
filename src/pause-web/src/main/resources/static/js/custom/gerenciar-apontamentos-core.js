@@ -26,7 +26,10 @@ function dialogApontamentoHora(td, idApontamento) {
 	$('#demo-default-modal').modal();
 	
 	$('#apontamento-time').mask('00:00');
-	$('#apontamento-time').val(tempo);
+	
+	if (tempo != '--:--') {
+		$('#apontamento-time').val(tempo);
+	}
 }
 
 function cancelarApontamento() {
@@ -77,7 +80,6 @@ function informarHorario() {
 	
 	$(tr).find('td[id^="apontamento"], span[id^="apontamento"]').each (function(index) {
 		if (typeof horarios[index] == 'undefined') {
-			$(this).html('--:--');
 			$(this).attr("class", "");
 			$(this).attr("style", "cursor:pointer;");
 			$(this).attr("onclick", "dialogApontamentoHora(this);");
@@ -129,6 +131,7 @@ function apontar(horario, data, idTd){
 		}
 	});
 }
+
 function calcularTotal() {
 	
 	$("#dt-apontamentos").find('tr').each (function() {
@@ -155,6 +158,7 @@ function calcularTotal() {
 		horaTotal = 0;
 	});	
 }
+
 function modalEditarApontamento(id){
 	$.ajax({
 		url: 'gerenciar-apontamento/obter',

@@ -22,6 +22,7 @@ import br.com.verity.pause.converter.ApontamentoConverter;
 import br.com.verity.pause.converter.ConsultaCompletaConverter;
 import br.com.verity.pause.converter.ControleDiarioConverter;
 import br.com.verity.pause.converter.JustificativaConverter;
+import br.com.verity.pause.dao.AfastamentoDAO;
 import br.com.verity.pause.dao.ApontamentoDAO;
 import br.com.verity.pause.dao.ConsultaCompletaDAO;
 import br.com.verity.pause.entity.ApontamentoEntity;
@@ -46,6 +47,9 @@ public class ApontamentoBusiness {
 
 	@Autowired
 	private CustomUserDetailsBusiness userBusiness;
+	
+	@Autowired
+	private AfastamentoDAO afastamentoDAO;
 
 	@Autowired
 	private SavIntegration sav;
@@ -64,7 +68,10 @@ public class ApontamentoBusiness {
 
 	@Autowired
 	private CalculoBusiness calculoBusiness;
-
+	
+	@Autowired
+	private AfastamentoBusiness afastamentoBusiness;
+	
 	public ApontamentoBean apontar(ApontamentoBean apontamento) throws BusinessException {
 		Integer idFuncionario;
 		UsuarioBean usuarioLogado = null;
@@ -75,7 +82,7 @@ public class ApontamentoBusiness {
 		usuarioLogado = userBusiness.usuarioLogado();
 	
 		this.validarData(apontamento.getData(), apontamento.getHorario());
-
+		
 		if (apontamento.getIdFuncionario() == null || apontamento.getIdFuncionario().equals(0)) {
 
 			apontamento.setIdEmpresa(usuarioLogado.getFuncionario().getEmpresa().getId());
@@ -86,6 +93,8 @@ public class ApontamentoBusiness {
 			funcionario = sav.getFuncionario(apontamento.getIdFuncionario());
 			apontamento.setIdEmpresa(funcionario.getEmpresa().getId());
 			idFuncionario = funcionario.getId();
+			
+			this.verificaAfastamento(idFuncionario, apontamento.getData());
 
 		}
 
@@ -118,6 +127,17 @@ public class ApontamentoBusiness {
 		calculoBusiness.calcularApontamento(idFuncionario, apontamento.getData());
 
 		return apontamento;
+	}
+
+	private void verificaAfastamento(int idFuncionario, Date data) throws BusinessException {
+		
+		java.sql.Date dataSql = new java.sql.Date(data.getTime());
+		
+		Boolean funcionarioAfastado = afastamentoBusiness.existeAfastamentoPara(idFuncionario, dataSql);
+		
+		if (funcionarioAfastado) {
+			throw new BusinessException("Não foi possível realizar a ação, pois o funcionário está afastado.");
+		}
 	}
 
 	private void validarData(Date data, LocalTime horario) throws BusinessException {
