@@ -237,6 +237,7 @@ public class AtestadoDAO {
 
 				entity.setIdAtestado(rs.getInt(1));
 				entity.setQuantidadeHora(rs.getDouble(2));
+				entity.setDataInclusao(rs.getDate(4));
 				diarioEntity.setId(rs.getInt(3));
 				diarioEntity.setData(rs.getDate(4));
 				atestadoEntity.setIdTipoAtestado(rs.getInt(5));

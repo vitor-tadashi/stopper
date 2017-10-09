@@ -102,6 +102,36 @@ public class ControleDiarioBusiness {
 
 		List<ControleDiarioBean> controleDiarios = separarDia(dadosGerais);
 
+		controleDiarios = tratarArredondamentos(controleDiarios);
+		
+		return controleDiarios;
+	}
+
+	private List<ControleDiarioBean> tratarArredondamentos(List<ControleDiarioBean> controleDiarios) {
+		
+		
+		for (ControleDiarioBean c : controleDiarios) {
+			
+			Double adicionalNoturno =  c.getAdicNoturno();
+			Double horaTotal = c.getHoraTotal();
+			Double banco = c.getBancoHora();
+			
+			if (adicionalNoturno != null) {
+				adicionalNoturno = Math.round(adicionalNoturno*100.0)/100.0;
+				c.setAdicNoturno(adicionalNoturno);
+			}
+			
+			if (horaTotal != null) {
+				horaTotal = Math.round(horaTotal*100.0)/100.0;
+				c.setHoraTotal(horaTotal);
+			}
+			
+			if (banco != null) {
+				banco = Math.round(banco*100.0)/100.0;
+				c.setBancoHora(banco);
+			}
+		}
+		
 		return controleDiarios;
 	}
 

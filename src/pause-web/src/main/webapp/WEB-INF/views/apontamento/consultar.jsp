@@ -81,7 +81,7 @@
 							<tbody class="text-center">
 								<c:forEach items="${funcionarios }" var="funcionario">
 									<tr>
-										<td>${funcionario.nmFuncionario }</td>
+										<td><a href="#" onclick="linkGerenciar(${funcionario.idFuncionario })">${funcionario.nmFuncionario }</a></td>
 										<td>${funcionario.controleDiario.horaTotal }</td>
 										<td>${funcionario.controleDiario.bancoHora }</td>
 										<td>${funcionario.controleDiario.adicNoturno }</td>

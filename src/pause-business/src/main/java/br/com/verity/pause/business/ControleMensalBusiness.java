@@ -45,6 +45,7 @@ public class ControleMensalBusiness {
 		controleMensalDAO.save(entity);
 		
 	}
+	
 	@SuppressWarnings("deprecation")
 	public Boolean verificarMesFechado(Date data) {
 		LocalDate hoje = LocalDate.now();

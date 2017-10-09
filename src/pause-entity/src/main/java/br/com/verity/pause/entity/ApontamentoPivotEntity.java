@@ -3,6 +3,9 @@ package br.com.verity.pause.entity;
 import java.sql.Date;
 import java.sql.Time;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class ApontamentoPivotEntity {
 
 	private int idFuncionario;

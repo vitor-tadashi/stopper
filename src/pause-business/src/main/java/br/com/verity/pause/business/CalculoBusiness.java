@@ -488,16 +488,13 @@ public class CalculoBusiness {
 	private Boolean possuiAfastamento(int idFuncionario, Date data) {
 		Boolean possuiAfastamento = false;
 		
-		try {
+
 			AfastamentoEntity afastamento = afastamentoDAO.findAbsence(idFuncionario, data);
 			
 			if (afastamento != null) {
 				possuiAfastamento = true;
 			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 		
 		return possuiAfastamento;
 	}

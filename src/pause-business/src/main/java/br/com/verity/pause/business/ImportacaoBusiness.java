@@ -126,8 +126,10 @@ public class ImportacaoBusiness {
 
 			for (FuncionarioBean bean : funcionarios) {
 
-				bean.setApontamentos(apontamentos.stream().filter(hr -> hr.getPis().equals(bean.getPis()))
-						.collect(Collectors.toList()));
+				List<ApontamentoBean> a = apontamentos.stream().filter(hr -> hr.getPis().equals(bean.getPis()))
+						.collect(Collectors.toList());
+				
+				bean.setApontamentos(a);
 
 				if (bean.getApontamentos() != null && bean.getApontamentos().size() > 0) {
 					funcionariosComApontamentos.add(bean);
@@ -240,9 +242,16 @@ public class ImportacaoBusiness {
 							horario = new Time(
 									DataUtil.converterData(linha.substring(18, 22) + 00, "HHmmSS").getTime());
 
-							apontamentos.add(new ApontamentoBean(pis, data, horario.toLocalTime(), empresa.getId(),
-									new Date(), true, usuarioLogado.getId()));
-
+							ApontamentoBean ap = new ApontamentoBean(pis, data, horario.toLocalTime(), empresa.getId(),
+									new Date(), true, usuarioLogado.getId());
+							
+							if ( !existeApontamentoComMesmoPisDataHorario(ap, apontamentos)){
+								
+								apontamentos.add(ap);
+								
+							}
+								
+							
 						} else if (!dataImportacao.equals(data) && !codReg.contains("9999999")) {
 
 							throw new BusinessException("Arquivo importado inválido.");
@@ -272,7 +281,30 @@ public class ImportacaoBusiness {
 
 		return apontamentos;
 	}
-	
+
+	// Este método retorna true caso o funcionário tenha dois apontamentos no mesmo horário: Exemplo: 9:12 e 9:12
+	private boolean existeApontamentoComMesmoPisDataHorario(ApontamentoBean ap, List<ApontamentoBean> apontamentos) {
+
+		for (ApontamentoBean a : apontamentos) {
+			
+			if (a.getPis().equals(ap.getPis())) {
+				
+				if ( a.getData().equals(ap.getData()) ) {
+					
+					if ( a.getHorario().equals(ap.getHorario()) ) {
+						return true;
+					}
+					
+				}
+				
+			}
+			
+		}
+		
+		
+		return false;
+	}
+
 	public boolean verificarReenvioDeArquivo(String dataImportacao, Integer idEmpresa) throws BusinessException{
 		ArquivoApontamentoEntity arquivoApontamento =  new ArquivoApontamentoEntity();
 		Integer idArquivoApontamento = null;

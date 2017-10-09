@@ -89,7 +89,7 @@ function informarHorario() {
 			
 			$(this).html(horarioAlterado);
 			if (horarioAlterado.indexOf('E') > -1) {
-				$(this).attr("class", "text-muted demo-pli-clock");
+				$(this).attr("class", "demo-pli-clock");
 				$(this).attr("style", "");
 				$(this).attr("onclick", "");
 			}
@@ -103,7 +103,7 @@ function informarHorario() {
 	$('#demo-default-modal').modal("hide");
 }
 
-function apontar(horario, data, idTd){
+function apontar (horario, data, idTd) {
 	var apontamento = {
 		id : $('#idApontamento').val(),
 		horarioJson : horario,
@@ -154,7 +154,13 @@ function calcularTotal() {
 			}
 		});
 		
+		var bancoHora = -8;
+		
+		bancoHora += horaTotal;
+		
 		$(this).find('td[id^="total-hora"]').text(Math.round(horaTotal*100)/100);
+		$(this).find('td[id^="banco-hora"]').text(Math.round(bancoHora*100)/100);
+		
 		horaTotal = 0;
 	});	
 }

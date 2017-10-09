@@ -125,7 +125,9 @@ public class AtestadoBusiness {
 
 		List<AtestadoEntity> entities = atestadoDAO.findByPeriodoAndIdFuncionario(funcionario.getId(), periodos[0],
 				periodos[1]);
+		
 		List<AtestadoBean> atestados = atestadoConverter.convertEntityToBean(entities);
+		
 		for (int i = 0; i < entities.size(); i++) {
 			atestados.get(i)
 					.setTipoAtestado(tipoAtestadoConverter.convertEntityToBean(entities.get(i).getTipoAtestado()));
