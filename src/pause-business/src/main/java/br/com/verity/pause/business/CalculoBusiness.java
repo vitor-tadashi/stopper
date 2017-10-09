@@ -314,7 +314,10 @@ public class CalculoBusiness {
 			Long msEntradaSobreAviso = entradaSobreAviso.getTime();
 			Long msSaidaSobreAviso = saidaSobreAviso.getTime();
 			
-			if (msEntrada >= msEntradaSobreAviso && msEntrada < msSaidaSobreAviso && msSaida <= msSaidaSobreAviso) {
+			if (msSaida <= msEntradaSobreAviso) {
+				return 0.0;
+			}
+			else if (msEntrada >= msEntradaSobreAviso && msEntrada < msSaidaSobreAviso && msSaida <= msSaidaSobreAviso) {
 				diferenca = (double) msSaida - msEntrada;
 			} 
 			else if (msEntrada >= msEntradaSobreAviso && msEntrada < msSaidaSobreAviso && msSaida > msSaidaSobreAviso) {

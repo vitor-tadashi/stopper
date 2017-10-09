@@ -107,7 +107,7 @@ public class ControleDiarioBusiness {
 		return controleDiarios;
 	}
 
-	private List<ControleDiarioBean> tratarArredondamentos(List<ControleDiarioBean> controleDiarios) {
+	public List<ControleDiarioBean> tratarArredondamentos(List<ControleDiarioBean> controleDiarios) {
 		
 		
 		for (ControleDiarioBean c : controleDiarios) {
@@ -115,6 +115,7 @@ public class ControleDiarioBusiness {
 			Double adicionalNoturno =  c.getAdicNoturno();
 			Double horaTotal = c.getHoraTotal();
 			Double banco = c.getBancoHora();
+			Double sobreAviso = c.getSobreAviso();
 			
 			if (adicionalNoturno != null) {
 				adicionalNoturno = Math.round(adicionalNoturno*100.0)/100.0;
@@ -129,6 +130,11 @@ public class ControleDiarioBusiness {
 			if (banco != null) {
 				banco = Math.round(banco*100.0)/100.0;
 				c.setBancoHora(banco);
+			}
+			
+			if (sobreAviso != null) {
+				sobreAviso = Math.round(sobreAviso*100.0)/100.0;
+				c.setSobreAviso(sobreAviso);
 			}
 		}
 		
@@ -231,5 +237,34 @@ public class ControleDiarioBusiness {
 		idFuncs = idFuncs.substring(0, idFuncs.length() - 1);
 
 		return idFuncs;
+	}
+
+	public ControleDiarioBean tratarArredondamentos(ControleDiarioBean controleDiario) {
+		Double adicionalNoturno =  controleDiario.getAdicNoturno();
+		Double horaTotal = controleDiario.getHoraTotal();
+		Double banco = controleDiario.getBancoHora();
+		Double sobreAviso = controleDiario.getSobreAviso();
+		
+		if (adicionalNoturno != null) {
+			adicionalNoturno = Math.round(adicionalNoturno*100.0)/100.0;
+			controleDiario.setAdicNoturno(adicionalNoturno);
+		}
+		
+		if (horaTotal != null) {
+			horaTotal = Math.round(horaTotal*100.0)/100.0;
+			controleDiario.setHoraTotal(horaTotal);
+		}
+		
+		if (banco != null) {
+			banco = Math.round(banco*100.0)/100.0;
+			controleDiario.setBancoHora(banco);
+		}
+		
+		if (sobreAviso != null) {
+			sobreAviso = Math.round(sobreAviso*100.0)/100.0;
+			controleDiario.setSobreAviso(sobreAviso);
+		}
+		
+		return controleDiario;
 	}
 }

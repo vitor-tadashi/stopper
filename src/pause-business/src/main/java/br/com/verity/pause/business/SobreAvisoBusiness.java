@@ -79,12 +79,13 @@ public class SobreAvisoBusiness {
 
 			ApontamentoPivotEntity apontamento = calculoBusiness.calcularApontamento(idFuncionario, sobreAviso.getData());
 			
-			sobreAviso.setControleDiario(controleDiario);
-			sobreAviso.getControleDiario().setSobreAviso(apontamento.getTotalSobreAviso());
+			controleDiario.setSobreAviso(apontamento.getTotalSobreAviso());
 			
-		}else{
+			sobreAviso.setControleDiario(controleDiarioBusiness.tratarArredondamentos(controleDiario));
 			
-			throw new BusinessException("Não é possível lançar dois sobre avivos para o mesmo dia");
+		} else{
+			
+			throw new BusinessException("Não é possível lançar dois sobre avisos para o mesmo dia");
 		}
 
 
