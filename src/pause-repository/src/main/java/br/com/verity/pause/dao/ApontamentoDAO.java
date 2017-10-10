@@ -146,19 +146,18 @@ public class ApontamentoDAO {
 		ps.close();
 	}
 
-	public List<ApontamentoEntity> findByPisAndPeriodo(String pis, java.sql.Date de, java.sql.Date ate) {
+	public List<ApontamentoEntity> findByPisAndPeriodo(Integer idFunc, java.sql.Date data) {
 		List<ApontamentoEntity> entities = new ArrayList<>();
 
-		String sql = "SELECT * FROM PAUSEApontamento WHERE pis LIKE ? AND data BETWEEN ? AND ? ORDER BY data ASC";
+		String sql = "SELECT PA.* FROM PAUSEApontamento PA JOIN PAUSEControleDiario PCD	ON PA.idControleDiario = PCD.idControleDiario JOIN PAUSEControleMensal PCM ON PCD.idControleMensal = PCM.idControleMensal	WHERE PA.data LIKE ? AND PCM.idFuncionario = ?";
 
 		try {
 			Connection conn = connectionFactory.createConnection();
 
 			PreparedStatement ps = conn.prepareStatement(sql);
 
-			ps.setString(1, pis);
-			ps.setDate(2, de);
-			ps.setDate(3, ate);
+			ps.setDate(1, data);
+			ps.setInt(2, idFunc);
 
 			ResultSet rs = ps.executeQuery();
 
@@ -169,23 +168,22 @@ public class ApontamentoDAO {
 				ArquivoApontamentoEntity arquivoApontamento = new ArquivoApontamentoEntity();
 
 				entity.setId(rs.getInt(1));
-				entity.setPis(rs.getString(2));
-				entity.setData(rs.getDate(3));
-				entity.setHorario(rs.getTime(4));
-				entity.setTipoImportacao(rs.getBoolean(5));
-				entity.setDataInclusao(rs.getDate(6));
-				entity.setObservacao(rs.getString(7));
+				entity.setData(rs.getDate(2));
+				entity.setHorario(rs.getTime(3));
+				entity.setTipoImportacao(rs.getBoolean(4));
+				entity.setDataInclusao(rs.getDate(5));
+				entity.setObservacao(rs.getString(6));
 
-				justificativa.setId(rs.getInt(8));
+				justificativa.setId(rs.getInt(7));
 				entity.setTipoJustificativa(justificativa);
 
-				controleDiario.setId(rs.getInt(9));
+				controleDiario.setId(rs.getInt(8));
 				entity.setControleDiario(controleDiario);
 
-				entity.setIdEmpresa(rs.getInt(10));
-				entity.setIdUsuarioInclusao(rs.getInt(11));
+				entity.setIdEmpresa(rs.getInt(9));
+				entity.setIdUsuarioInclusao(rs.getInt(10));
 
-				arquivoApontamento.setId(rs.getInt(12));
+				arquivoApontamento.setId(rs.getInt(11));
 				entity.setArquivoApontamento(arquivoApontamento);
 
 				entities.add(entity);
@@ -196,6 +194,7 @@ public class ApontamentoDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
 		return entities;
 	}
 
