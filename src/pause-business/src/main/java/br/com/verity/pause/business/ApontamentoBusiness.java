@@ -1,6 +1,5 @@
 package br.com.verity.pause.business;
 
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
@@ -26,6 +25,7 @@ import br.com.verity.pause.dao.AfastamentoDAO;
 import br.com.verity.pause.dao.ApontamentoDAO;
 import br.com.verity.pause.dao.ConsultaCompletaDAO;
 import br.com.verity.pause.entity.ApontamentoEntity;
+import br.com.verity.pause.entity.ApontamentoPivotEntity;
 import br.com.verity.pause.entity.ConsultaCompletaEntity;
 import br.com.verity.pause.exception.BusinessException;
 import br.com.verity.pause.integration.SavIntegration;
@@ -71,6 +71,9 @@ public class ApontamentoBusiness {
 	
 	@Autowired
 	private AfastamentoBusiness afastamentoBusiness;
+	
+	@Autowired
+	private ApontamentoPivotEntity apontamentoPivotEntity;
 	
 	public ApontamentoBean apontar(ApontamentoBean apontamento) throws BusinessException {
 		Integer idFuncionario;
@@ -124,8 +127,12 @@ public class ApontamentoBusiness {
 			apontamentoDAO.update(entity);
 		}
 		
-		calculoBusiness.calcularApontamento(idFuncionario, apontamento.getData());
+		apontamentoPivotEntity = calculoBusiness.calcularApontamento(idFuncionario, apontamento.getData());
 
+		controleDiario.setAdicNoturno(apontamentoPivotEntity.getTotalAdicionalNoturno());
+
+		apontamento.setCntrDiario(controleDiario);
+		
 		return apontamento;
 	}
 

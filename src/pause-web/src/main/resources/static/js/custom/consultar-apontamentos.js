@@ -40,6 +40,16 @@ if (!url.includes("filtrar")) {
 	$("#bv-form").submit();
 }
 
+function linkGerenciar (idFuncionario) {
+	var link = window.location.href;
+	
+	link = link.substring(0, link.indexOf('pause'));
+	
+	link += 'pause/gerenciar-apontamento?idFuncionario=' + idFuncionario + '&periodo=&periodo=';
+	
+	window.open(link);
+}
+
 function gerarRelatorio() {
 	var dataDe;
 	var dataAte;

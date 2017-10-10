@@ -138,7 +138,7 @@ function removerSA(click, id){
 	});
 }
 function inserirSA_ajax(dataSA, horaSAe, horaSAs){
-	var sobreAviso={	
+	var sobreAviso = {	
 			'data' : dataSA,
 			'entrada' : horaSAe,
 			'saida' : horaSAs,

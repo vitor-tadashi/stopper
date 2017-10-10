@@ -11,9 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.verity.pause.bean.ControleDiarioBean;
 import br.com.verity.pause.bean.SobreAvisoBean;
-import br.com.verity.pause.business.ControleDiarioBusiness;
 import br.com.verity.pause.business.SobreAvisoBusiness;
 import br.com.verity.pause.exception.BusinessException;
 
@@ -24,9 +22,6 @@ public class GerenciarSobreAvisoController {
 	@Autowired
 	private SobreAvisoBusiness sobreAvisoBusiness;
 	
-	@Autowired
-	private ControleDiarioBusiness controleDiarioBusiness;
-	
 	@PreAuthorize("hasRole('ROLE_INSERIR_SOBRE_AVISO')")
 	@PostMapping(value = "/inserir-sa")
 	public ResponseEntity<?> salvar(@RequestBody SobreAvisoBean sobreAviso){
@@ -34,9 +29,12 @@ public class GerenciarSobreAvisoController {
 		try {
 			
 			sobreAvisoCriado = sobreAvisoBusiness.salvar(sobreAviso);
+			
+			
 		} catch (BusinessException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
+		
 		return ResponseEntity.ok(sobreAvisoCriado);
 	}
 	

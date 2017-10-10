@@ -128,7 +128,7 @@
 											<c:if test="${not empty dia.apontamentos[cont.index] && not empty dia.apontamentos[cont.index].horario}">
 												<c:choose>
 													<c:when test="${dia.apontamentos[cont.index].tipoImportacao || dia.mesFechado}">
-														<td id="apontamento${cont.count + 8 * (i.count - 1)}" class="text-muted pli-clock">${dia.apontamentos[cont.index].horario }${dia.apontamentos[cont.index].tipoImportacao? 'E':''}</td>
+														<td id="apontamento${cont.count + 8 * (i.count - 1)}" class="">${dia.apontamentos[cont.index].horario }${dia.apontamentos[cont.index].tipoImportacao? 'E':''}</td>
 													</c:when>
 													<c:otherwise>
 														<td id="apontamento${cont.count + 8 * (i.count - 1)}" style="cursor:pointer;" onclick="dialogApontamentoHora(this, ${dia.apontamentos[cont.index].id });">${dia.apontamentos[cont.index].horario }</td>
@@ -141,8 +141,8 @@
 										</c:forEach>
 										<td id="#">${dia.qtdAtestadoHoras }</td>
 										<td id="total-hora${i.count }">${dia.horaTotal }</td>
-										<td id="#">${dia.bancoHora }</td>
-										<td id="#">${dia.adicNoturno }</td>
+										<td id="banco-hora${i.count }">${dia.bancoHora }</td>
+										<td id="adic-noturno${i.count }">${dia.adicNoturno }</td>
 										<td id="#">${dia.sobreAviso }</td>
 									</tr>
 								</c:forEach>
@@ -192,7 +192,6 @@
 								<div class="form-group pad-top">
 									<label class="control-label">Justificativa</label>
 									<select class="selectpicker clear-select" data-live-search="true" data-width="100%" id="apontamento-jus">
-										<option value="0">Selecione</option>
 										<c:forEach items="${justificativas }" var="jus">
 											<option value="${jus.id }">${jus.descricao }</option>
 										</c:forEach>
@@ -202,9 +201,7 @@
 									<label class="control-label">Observações</label>
 									<textarea id="apontamento-obs" rows="2" maxlength="200" class="form-control"></textarea>
 								</div>
-								<!--===================================================-->
 							</div>
-							<!--Modal footer onclick="informarHorario();"-->
 							<div class="modal-footer">
 								<button class="btn btn-danger" type="button" onclick="confirmarRemover()" id="btn-cancelar-apontamento">Cancelar</button>
 								<button class="btn btn-success" id="btn-form-time" type="button">Salvar</button>
@@ -419,7 +416,6 @@
 										<div class="form-group">
 											<label class="control-label">Justificativa</label>
 											<select class="selectpicker clear-select mudar-cor" data-live-search="true" data-width="100%" id="atestadoJus">
-												<option value="">Selecione</option>
 												<c:forEach items="${tipoAtestado}" var="tp">
 													<option value="${tp.id }">${tp.descricao }</option>
 												</c:forEach>
