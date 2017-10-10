@@ -69,9 +69,6 @@ public class GerenciarApontamentoController {
 
 	@Autowired
 	private ControleMensalBusiness controleMensalBusiness;
-	
-	@Autowired
-	private ControleApontamentoBusiness controleApontamentoBusiness;
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String consultar(SecurityContextHolderAwareRequestWrapper request, Model model, Integer idFuncionario,
