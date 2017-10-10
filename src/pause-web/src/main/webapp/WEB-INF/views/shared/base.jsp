@@ -17,7 +17,7 @@
     <link href='<c:url value="/css/bootstrap.min.css"/>' rel="stylesheet">
     <link href='<c:url value="/plugins/bootstrap-select/bootstrap-select.min.css"/>' rel="stylesheet">
     <link href='<c:url value="/css/nifty.min.css"/>' rel="stylesheet">
-    <link href='<c:url value="/css/themes/type-c/theme-lime.min.css"/>' rel="stylesheet">
+    <link href='<c:url value="/css/themes/type-a/theme-light.min.css"/>' rel="stylesheet">
     <link href='<c:url value="/premium/icon-sets/icons/line-icons/premium-line-icons.min.css"/>' rel="stylesheet">
     <link href='<c:url value="/plugins/font-awesome/css/font-awesome.min.css"/>' rel="stylesheet">
     <link href='<c:url value="/css/custom/custom.css"/>' rel="stylesheet">
@@ -142,7 +142,7 @@
 						            </sec:authorize>
 									<li>
                                 		<a href='<c:url value="/gerenciar-apontamento"/>'>
-                                            <i class="pli-data-clock"></i>
+                                            <i class="psi-gear-2"></i>
                                             <span class="menu-title">
                                             	Gerenciar horas
                                             </span>
@@ -243,6 +243,8 @@
     		year = year.getFullYear();
     		
     		$('#footer').html('&#0169; ' + year + ' Verity Consultoria Em Tecnologia Ltda');
+    		
+    		$('[data-toggle="tooltip"]').tooltip();   
     	});
     	
     </script>

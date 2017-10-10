@@ -7,6 +7,15 @@
 	<layout:put block="css">
 		<link href='<c:url value="plugins/datatables/media/css/dataTables.bootstrap.css"/>' rel="stylesheet">
 		<link href='<c:url value="plugins/bootstrap-timepicker/bootstrap-timepicker.min.css"/>' rel="stylesheet">
+
+
+        
+    <!--Font Awesome [ OPTIONAL ]-->
+    <link href="plugins/magic-check/css/magic-check.min.css" rel="stylesheet">
+
+
+    <!--Bootstrap Validator [ OPTIONAL ]-->
+    <link href="plugins/bootstrap-validator/bootstrapValidator.min.css" rel="stylesheet">
 	</layout:put>
 	<layout:put block="contents">
 		<!--Page Title-->
@@ -104,7 +113,7 @@
 									<th class="text-center">Horas</th>
 									<th class="text-center">Banco</th>
 									<th class="text-center">Ad. Not.</th>
-									<th class="text-center">S. A.</th>
+									<th class="text-center">S.A</th>
 								</tr>
 							</thead>
 							<tbody class="text-center">
@@ -175,7 +184,7 @@
 								<div class="input-group" id="div-apontamento-hora">
 									<input id="apontamento-time" name="hora" type="text" class="form-control time" placeholder="--:--">
 									<span class="input-group-btn">
-									<button type="button" onclick="setarFinalDoDia('#apontamento-time')" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Apontar final do dia">
+									<button type="button" onclick="setarFinalDoDia('#apontamento-time')" class="btn btn-default" data-toggle="tooltip" title="final do dia">
 									  <i class="pli-clock"></i>
 									</button>
 									</span>
