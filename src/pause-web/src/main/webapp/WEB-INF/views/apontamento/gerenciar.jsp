@@ -109,11 +109,11 @@
 									<th class="text-center">3-Saída</th>
 									<th class="text-center">4-Entr.</th>
 									<th class="text-center">4-Saída</th>
-									<th class="text-center">Atestado</th>
-									<th class="text-center">Horas</th>
-									<th class="text-center">Banco</th>
-									<th class="text-center">Ad. Not.</th>
-									<th class="text-center">S.A</th>
+									<th class="text-center table-color" style="color: white">Atestado</th>
+									<th class="text-center table-color" style="color: white">Horas</th>
+									<th class="text-center table-color" style="color: white">Banco</th>
+									<th class="text-center table-color" style="color: white">Ad. Not.</th>
+									<th class="text-center table-color" style="color: white">S.A</th>
 								</tr>
 							</thead>
 							<tbody class="text-center">
@@ -129,7 +129,7 @@
 												<c:choose>
 													<c:when test="${dia.apontamentos[cont.index].tipoImportacao || dia.mesFechado}">
 														<td id="apontamento${cont.count + 8 * (i.count - 1)}" class="">${dia.apontamentos[cont.index].horario }${dia.apontamentos[cont.index].tipoImportacao? 'E':''}</td>
-													</c:when>
+												</c:when>
 													<c:otherwise>
 														<td id="apontamento${cont.count + 8 * (i.count - 1)}" style="cursor:pointer;" onclick="dialogApontamentoHora(this, ${dia.apontamentos[cont.index].id });">${dia.apontamentos[cont.index].horario }</td>
 													</c:otherwise>

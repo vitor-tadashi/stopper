@@ -142,7 +142,7 @@
 						            </sec:authorize>
 									<li>
                                 		<a href='<c:url value="/gerenciar-apontamento"/>'>
-                                            <i class="psi-gear-2"></i>
+                                            <i class="pli-clock"></i>
                                             <span class="menu-title">
                                             	Gerenciar horas
                                             </span>
