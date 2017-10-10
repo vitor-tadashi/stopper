@@ -57,6 +57,7 @@ function verificarMesFechado(dataApontamento){
 }
 
 function informarHorario() {
+	
 	var id = $('#apontamento-id').val();
 	var horario = $('#apontamento-time').val();
 	var dtApontamento = $('#title-modal-apontamento').text().split(',');
@@ -81,6 +82,7 @@ function informarHorario() {
 	
 	$(tr).find('td[id^="apontamento"], span[id^="apontamento"]').each (function(index) {
 		if (typeof horarios[index] == 'undefined') {
+			$(this).html('--:--');
 			$(this).attr("class", "");
 			$(this).attr("style", "cursor:pointer;");
 			$(this).attr("onclick", "dialogApontamentoHora(this);");
@@ -156,8 +158,6 @@ function calcularTotal() {
 				}
 			}
 		});
-		
-		debugger
 		
 		var bancoHora = -8;
 		

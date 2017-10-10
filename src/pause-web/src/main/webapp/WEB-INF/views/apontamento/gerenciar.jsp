@@ -563,11 +563,7 @@
 						$('#div-apontamento-hora').after('<small class="help-block" id="aponta-time-erro">Campo obrigatório.</small>')
 			        erro = true
 			    }
-				if ($('#apontamento-jus').val() == "0") {
-					if ($("#aponta-jus-erro").length == 0)
-						$('#apontamento-jus').after('<small class="help-block" id="aponta-jus-erro">Campo obrigatório.</small>')
-			        erro = true
-			    }
+			
 				if(!erro){
 					informarHorario();
 				}

@@ -1,5 +1,6 @@
 package br.com.verity.pause.business;
 
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
@@ -47,7 +48,7 @@ public class ApontamentoBusiness {
 
 	@Autowired
 	private CustomUserDetailsBusiness userBusiness;
-	
+
 	@Autowired
 	private AfastamentoDAO afastamentoDAO;
 
@@ -68,13 +69,13 @@ public class ApontamentoBusiness {
 
 	@Autowired
 	private CalculoBusiness calculoBusiness;
-	
+
 	@Autowired
 	private AfastamentoBusiness afastamentoBusiness;
-	
+
 	@Autowired
 	private ApontamentoPivotEntity apontamentoPivotEntity;
-	
+
 	public ApontamentoBean apontar(ApontamentoBean apontamento) throws BusinessException {
 		Integer idFuncionario;
 		UsuarioBean usuarioLogado = null;
@@ -83,9 +84,9 @@ public class ApontamentoBusiness {
 		ControleDiarioBean controleDiario = null;
 		ApontamentoEntity apontamentoAtual = null;
 		usuarioLogado = userBusiness.usuarioLogado();
-	
+
 		this.validarData(apontamento.getData(), apontamento.getHorario());
-		
+
 		if (apontamento.getIdFuncionario() == null || apontamento.getIdFuncionario().equals(0)) {
 
 			apontamento.setIdEmpresa(usuarioLogado.getFuncionario().getEmpresa().getId());
@@ -96,8 +97,9 @@ public class ApontamentoBusiness {
 			funcionario = sav.getFuncionario(apontamento.getIdFuncionario());
 			apontamento.setIdEmpresa(funcionario.getEmpresa().getId());
 			idFuncionario = funcionario.getId();
-			
-			this.verificaAfastamento(idFuncionario, apontamento.getData());
+
+			verificaAfastamento(idFuncionario, apontamento.getData());
+			verificaApontamentoMesmoHorario(apontamento);
 
 		}
 
@@ -111,37 +113,55 @@ public class ApontamentoBusiness {
 		entity.setControleDiario(controleDiarioConverter.convertBeanToEntity(controleDiario));
 
 		if (apontamento.getId() == null || apontamento.getId().equals(0)) {
-			
+
 			apontamento.setId(apontamentoDAO.save(entity).getId());
-			
+
 		} else {
-			
+
 			apontamentoAtual = apontamentoDAO.findById(apontamento.getId());
-			
+
 			if (apontamentoAtual.getTipoImportacao()) {
-				
+
 				throw new BusinessException("Não foi possível realizar a ação, pois o apontamento é eletrônico.");
-			
+
 			}
-			
+
 			apontamentoDAO.update(entity);
 		}
-		
+
 		apontamentoPivotEntity = calculoBusiness.calcularApontamento(idFuncionario, apontamento.getData());
 
 		controleDiario.setAdicNoturno(apontamentoPivotEntity.getTotalAdicionalNoturno());
 
 		apontamento.setCntrDiario(controleDiario);
-		
+
 		return apontamento;
 	}
 
+	private void verificaApontamentoMesmoHorario(ApontamentoBean apontamento) throws BusinessException {
+
+		java.sql.Date dataSql = new java.sql.Date(apontamento.getData().getTime());
+
+		List<ApontamentoEntity> aps = apontamentoDAO.findByPisAndPeriodo(apontamento.getIdFuncionario(), dataSql);
+		List<ApontamentoBean> apontamentos = apontamentoConverter.convertEntityToBean(aps);
+		
+		
+		for (ApontamentoBean a : apontamentos) {
+
+			if (a.getHorario().equals(apontamento.getHorario())) {
+				throw new BusinessException("Você não pode fazer dois apontamentos no mesmo horário.");
+			}
+
+		}
+
+	}
+
 	private void verificaAfastamento(int idFuncionario, Date data) throws BusinessException {
-		
+
 		java.sql.Date dataSql = new java.sql.Date(data.getTime());
-		
+
 		Boolean funcionarioAfastado = afastamentoBusiness.existeAfastamentoPara(idFuncionario, dataSql);
-		
+
 		if (funcionarioAfastado) {
 			throw new BusinessException("Não foi possível realizar a ação, pois o funcionário está afastado.");
 		}
@@ -153,15 +173,15 @@ public class ApontamentoBusiness {
 		Matcher verificaddor = padrao.matcher(horario.toString());
 
 		if (!verificaddor.find()) {
-			
+
 			throw new BusinessException("Formato da hora inválido");
-		
+
 		}
 
 		if (controleMensalBusiness.verificarMesFechado(data)) {
-			
+
 			throw new BusinessException("Não foi possível realizar a ação, pois o mês está fechado.");
-			
+
 		}
 
 	}
@@ -180,9 +200,8 @@ public class ApontamentoBusiness {
 		}
 
 		consultaCompletaEntity = consultaCompletaDAO.findByIdAndPeriodo(id, dtDe, dtAte);
-		
-		consultaCompletaBean = consultaCompletaConverter
-				.convertEntityToBean(consultaCompletaEntity);
+
+		consultaCompletaBean = consultaCompletaConverter.convertEntityToBean(consultaCompletaEntity);
 
 		return consultaCompletaBean;
 	}
