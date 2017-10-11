@@ -13,6 +13,7 @@
 		<!--Page Title-->
 		<div id="page-title">
 			<h1 class="page-header text-overflow">Erro 404</h1>
+			<i class="ion-sad-outline"></i>
 		</div>
 		<!--End page title-->
 	</layout:put>

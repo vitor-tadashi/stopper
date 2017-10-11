@@ -1,5 +1,6 @@
 var indicadorMesFechado = false;
 var adicionalNoturno = 0.0;
+var bancoHora = 0.0;
 
 $(document).ready(function() {
 	calcularTotal();
@@ -107,6 +108,7 @@ function informarHorario() {
 }
 
 function apontar (horario, data, idTd) {
+	debugger
 	var apontamento = {
 		id : $('#idApontamento').val(),
 		horarioJson : horario,
@@ -127,12 +129,16 @@ function apontar (horario, data, idTd) {
 		success: function(data){
 			$("#"+idTd).attr('onclick',"dialogApontamentoHora(this,"+ data.id +")");
 			adicionalNoturno = data.cntrDiario.adicNoturno;
-			$(this).find('td[id^="adic-noturno"]').text(Math.round(adicionalNoturno*100)/100);
+			bancoHora = data.cntrDiario.bancoHora;
+			
+			$("#"+idTd).parent().find('.banco-hora-js').text(Math.round(bancoHora*100)/100);
+			$("#"+idTd).parent().find('.adic-noturno-js').text(Math.round(adicionalNoturno*100)/100);
 		},
 		error: function(erro){
 			$('#erro-label').text(erro.responseText);
 			$('#erro-sm-modal').modal();
 			$("#"+idTd).html("--:--");
+			adicionalNoturno = bancoHora = 0.0;
 		}
 	});
 }
@@ -159,13 +165,7 @@ function calcularTotal() {
 			}
 		});
 		
-		var bancoHora = -8;
-		
-		bancoHora += horaTotal;
-		
 		$(this).find('td[id^="total-hora"]').text(Math.round(horaTotal*100)/100);
-		$(this).find('td[id^="adic-noturno"]').text(Math.round(adicionalNoturno*100)/100);
-		$(this).find('td[id^="banco-hora"]').text(Math.round(bancoHora*100)/100);
 		
 		horaTotal = 0;
 	});	
@@ -206,6 +206,7 @@ function removerApontamento(id){
 			$("#idApontamento").val("");
 			$("#"+tdRemove).attr('onclick',"dialogApontamentoHora(this)");
 			$("#"+tdRemove).text('--:--')
+			location.reload();
 		},
 		error: function(erro){
 			$('#demo-default-modal').modal('hide');

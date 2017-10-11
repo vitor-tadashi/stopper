@@ -54,6 +54,14 @@ public class SobreAvisoBusiness {
 	public SobreAvisoBean salvar(SobreAvisoBean sobreAviso) throws BusinessException {
 		List<SobreAvisoEntity> sobreAvisos = new ArrayList<SobreAvisoEntity>();
 		
+		if(sobreAviso.getIdFuncionario() == null) {
+			UsuarioBean usuarioLogado = userBusiness.usuarioLogado();
+			
+			Integer idFuncionario = usuarioLogado.getFuncionario().getId();
+			
+			sobreAviso.setIdFuncionario(idFuncionario);
+		}
+		
 		if (controleMensalBusiness.verificarMesFechado(sobreAviso.getData()))
 			throw new BusinessException("Não foi possível realizar a ação, pois o mês está fechado.");
 		

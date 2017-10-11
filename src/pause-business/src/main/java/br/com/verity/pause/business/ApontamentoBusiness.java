@@ -132,9 +132,10 @@ public class ApontamentoBusiness {
 		apontamentoPivotEntity = calculoBusiness.calcularApontamento(idFuncionario, apontamento.getData());
 
 		controleDiario.setAdicNoturno(apontamentoPivotEntity.getTotalAdicionalNoturno());
+		controleDiario.setBancoHora(apontamentoPivotEntity.getHorasExtras());
 
 		apontamento.setCntrDiario(controleDiario);
-
+		
 		return apontamento;
 	}
 

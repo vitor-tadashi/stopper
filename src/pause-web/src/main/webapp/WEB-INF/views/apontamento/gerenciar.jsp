@@ -132,8 +132,8 @@
 										</c:forEach>
 										<td id="#">${dia.qtdAtestadoHoras }</td>
 										<td id="total-hora${i.count }">${dia.horaTotal }</td>
-										<td id="banco-hora${i.count }">${dia.bancoHora }</td>
-										<td id="adic-noturno${i.count }">${dia.adicNoturno }</td>
+										<td class="banco-hora-js">${dia.bancoHora }</td>
+										<td class="adic-noturno-js">${dia.adicNoturno }</td>
 										<td id="#">${dia.sobreAviso }</td>
 									</tr>
 								</c:forEach>

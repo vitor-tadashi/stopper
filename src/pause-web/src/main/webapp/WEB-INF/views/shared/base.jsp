@@ -121,7 +121,7 @@
                                 <div id="mainnav-shortcut">
 									<ul class="list-unstyled">
 										<li class="col-xs-4" data-content="Shortcut 1" data-original-title="" title="">
-										&nbsp
+										&nbsp;
 										</li>
 									</ul>
 								</div>

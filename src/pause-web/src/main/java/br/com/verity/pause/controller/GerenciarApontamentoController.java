@@ -34,7 +34,6 @@ import br.com.verity.pause.bean.TipoJustificativaBean;
 import br.com.verity.pause.business.AfastamentoBusiness;
 import br.com.verity.pause.business.ApontamentoBusiness;
 import br.com.verity.pause.business.AtestadoBusiness;
-import br.com.verity.pause.business.ControleApontamentoBusiness;
 import br.com.verity.pause.business.ControleDiarioBusiness;
 import br.com.verity.pause.business.ControleMensalBusiness;
 import br.com.verity.pause.business.FuncionarioBusiness;
@@ -120,6 +119,7 @@ public class GerenciarApontamentoController {
 	public ResponseEntity<String> remover(@RequestParam Integer id) {
 		try {
 			apontamentoBusiness.remover(id);
+			
 		} catch (BusinessException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (Exception e) {
