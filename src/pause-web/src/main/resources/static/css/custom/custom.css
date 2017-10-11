@@ -31,3 +31,7 @@ input[type=date].form-control {
     width: 300px;
     height: 98px;
 }
+.table-color {
+    background: #00CAB2;
+    color: #F5FFFB;
+}
