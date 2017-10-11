@@ -190,6 +190,7 @@ function modalEditarApontamento(id){
 	});
 }
 function confirmarRemover(){
+	$('#demo-default-modal').modal('hide');
 	$('#remover-sm-modal').modal('show');
 }
 function removerApontamento(id){
