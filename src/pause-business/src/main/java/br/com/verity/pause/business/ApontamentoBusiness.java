@@ -97,11 +97,9 @@ public class ApontamentoBusiness {
 			funcionario = sav.getFuncionario(apontamento.getIdFuncionario());
 			apontamento.setIdEmpresa(funcionario.getEmpresa().getId());
 			idFuncionario = funcionario.getId();
-
-			verificaAfastamento(idFuncionario, apontamento.getData());
-			verificaApontamentoMesmoHorario(apontamento);
-
 		}
+		verificaAfastamento(idFuncionario, apontamento.getData());
+		verificaApontamentoMesmoHorario(idFuncionario,apontamento);
 
 		apontamento.setDataInclusao(new Date());
 		apontamento.setIdUsuarioInclusao(usuarioLogado.getId());
@@ -139,11 +137,11 @@ public class ApontamentoBusiness {
 		return apontamento;
 	}
 
-	private void verificaApontamentoMesmoHorario(ApontamentoBean apontamento) throws BusinessException {
+	private void verificaApontamentoMesmoHorario(Integer idFuncionario, ApontamentoBean apontamento) throws BusinessException {
 
 		java.sql.Date dataSql = new java.sql.Date(apontamento.getData().getTime());
 
-		List<ApontamentoEntity> aps = apontamentoDAO.findByPisAndPeriodo(apontamento.getIdFuncionario(), dataSql);
+		List<ApontamentoEntity> aps = apontamentoDAO.findByPisAndPeriodo(idFuncionario, dataSql);
 		List<ApontamentoBean> apontamentos = apontamentoConverter.convertEntityToBean(aps);
 		
 		
