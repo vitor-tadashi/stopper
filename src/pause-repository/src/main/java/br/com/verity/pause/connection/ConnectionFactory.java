@@ -20,7 +20,7 @@ public class ConnectionFactory {
 		
 		try {
 			
-			if (conexao == null) {
+			if (conexao == null || conexao.isClosed()) {
 				
 				Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 				
