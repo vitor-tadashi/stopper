@@ -13,17 +13,22 @@ import java.util.List;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import br.com.verity.pause.bean.ConsultaApontamentosBean;
 import br.com.verity.pause.bean.ConsultaCompletaBean;
 import br.com.verity.pause.bean.FuncionarioBean;
+import br.com.verity.pause.business.AfastamentoBusiness;
 import br.com.verity.pause.enumeration.DiaSemanaEnum;
 import br.com.verity.pause.enumeration.MesEnum;
 
 @Component
 public class GerarRelatorioXlsx {
+	
+	@Autowired
+	private AfastamentoBusiness afastamentoBusiness;
 
 	/**
 	 * @author guilherme.oliveira XSSF gera um arquivo .xlsx e HSSF gera um
@@ -61,6 +66,9 @@ public class GerarRelatorioXlsx {
 
 			row = sheet.createRow(linha);
 			for (ConsultaCompletaBean consulta : consultaCompleta) {
+				Integer idFuncionario = consulta.getIdFuncionario();
+				Boolean afastado = false;
+				
 				if (consulta.getData().getDate() == dia) {
 					mesmoDia += 2;
 				} else {
@@ -75,6 +83,10 @@ public class GerarRelatorioXlsx {
 					row = sheet.createRow(linha);
 					aux = 0;
 				}
+				if(idFuncionario != null){
+					afastado = afastamentoBusiness.existeAfastamentoPara(consulta.getIdFuncionario(), new java.sql.Date(consulta.getData().getTime()));
+				}
+				
 				String dtApontamento = formatDt.format(consulta.getData());
 				row.createCell(0).setCellValue(dtApontamento);
 				row.createCell(1).setCellValue(DiaSemanaEnum.valueOf(consulta.getData().getDay()).getDiaSimples());
@@ -93,9 +105,13 @@ public class GerarRelatorioXlsx {
 						(consulta.getControleDiarioHoraTotal() != null) ? consulta.getControleDiarioHoraTotal() : 0);
 				row.createCell(21).setCellFormula("IF(U" + (linha + 1) + "+T" + (linha + 1) + ">8,U" + (linha + 1)
 						+ "+T" + (linha + 1) + "-8,0)");
-				row.createCell(22).setCellFormula(
-						"IF(OR(B" + (linha + 1) + "=\"Dom\", B" + (linha + 1) + "=\"Sáb\"),0,IF(U" + (linha + 1) + "+T"
-								+ (linha + 1) + "<8,U" + (linha + 1) + "+T" + (linha + 1) + "-8,0))");
+				if(afastado != null && afastado){
+					row.createCell(22).setCellFormula("0");
+				}else{
+					row.createCell(22).setCellFormula(
+							"IF(OR(B" + (linha + 1) + "=\"Dom\", B" + (linha + 1) + "=\"Sáb\"),0,IF(U" + (linha + 1) + "+T"
+									+ (linha + 1) + "<8,U" + (linha + 1) + "+T" + (linha + 1) + "-8,0))");
+				}
 				row.createCell(23).setCellValue(
 						(consulta.getControleDiarioAdcNoturno() != null) ? consulta.getControleDiarioAdcNoturno() : 0);
 				row.createCell(24)

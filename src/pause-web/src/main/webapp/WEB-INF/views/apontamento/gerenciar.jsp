@@ -62,9 +62,9 @@
 							<div class="col-sm-5 pad-btm">
 								<label class="control-label">Período</label>
 								<div class="input-daterange input-group" id="datepicker">
-									<input type="date" id="periodoDe" class="form-control periodo" name="periodo" placeholder="dd/mm/aaaa" value="${periodo[0] }" min="${dataMinima }" max=""/>
+									<input type="date" id="periodoDe" class="form-control periodo" name="periodo" placeholder="dd/mm/aaaa" value="${periodo[0] }" min="2010-03-01" max=""/>
 									<span class="input-group-addon">até</span>
-									<input type="date" id="periodoAte" class="form-control periodo" name="periodo" placeholder="dd/mm/aaaa" value="${periodo[1] }" min="${dataMinima }" max=""/>
+									<input type="date" id="periodoAte" class="form-control periodo" name="periodo" placeholder="dd/mm/aaaa" value="${periodo[1] }" min="2010-03-01" max=""/>
 								</div>
 							</div>
 							<div class="col-sm-1" style="margin-top: 24px;">
