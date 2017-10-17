@@ -114,6 +114,7 @@
 									<th class="text-center table-color" style="color: white">Banco</th>
 									<th class="text-center table-color" style="color: white">Ad. Not.</th>
 									<th class="text-center table-color" style="color: white">S.A</th>
+									<th class="text-center table-color" style="color: white">S.T</th>
 								</tr>
 							</thead>
 							<tbody class="text-center">
@@ -143,7 +144,8 @@
 										<td id="total-hora${i.count }">${dia.horaTotal }</td>
 										<td class="banco-hora-js">${dia.bancoHora }</td>
 										<td class="adic-noturno-js">${dia.adicNoturno }</td>
-										<td id="#">${dia.sobreAviso }</td>
+										<td id="#" class="sa-js">${dia.sobreAviso }</td>
+										<td id="#" class="sat-js">${dia.sobreAvisoTrabalhado }</td>
 									</tr>
 								</c:forEach>
 							</tbody>

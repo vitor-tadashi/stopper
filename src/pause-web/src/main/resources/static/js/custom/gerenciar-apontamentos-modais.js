@@ -124,7 +124,8 @@ function removerSA(click, id){
 				var string = $(this).find("#infoDia").val().substring(0, 10); // 22/09/2017
 				
 				if (dataSobreavisoRemovido == string) {
-					$(this).find('td:last').html('0.0');
+					$(this).find('.sa-js').html('0.0');
+					$(this).find('.sat-js').html('0.0');
 				}
 				
 			});
@@ -162,6 +163,7 @@ function inserirSA_ajax(dataSA, horaSAe, horaSAs){
 			);
 			
 			var valorSobreAviso = data.controleDiario.sobreAviso;
+			var valorSobreTrabalhado = data.controleDiario.sobreAvisoTrabalhado;
 			
 			$('.linha').each(function() {
 				
@@ -175,7 +177,8 @@ function inserirSA_ajax(dataSA, horaSAe, horaSAs){
 				var dataSobreAvisoInserido = data.data.substring(0, 10); // 2017-09-22
 				
 				if (dataSobreAvisoInserido == string) {
-					$(this).find('td:last').html(valorSobreAviso);
+					$(this).find('.sa-js').html(valorSobreAviso);
+					$(this).find('.sat-js').html(valorSobreTrabalhado);
 				}
 				
 			});
