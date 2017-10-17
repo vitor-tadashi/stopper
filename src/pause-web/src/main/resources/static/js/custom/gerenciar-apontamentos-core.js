@@ -1,6 +1,8 @@
 var indicadorMesFechado = false;
 var adicionalNoturno = 0.0;
 var bancoHora = 0.0;
+var sa = 0.0;
+var sat = 0.0;
 
 $(document).ready(function() {
 	calcularTotal();
@@ -108,7 +110,6 @@ function informarHorario() {
 }
 
 function apontar (horario, data, idTd) {
-	debugger
 	var apontamento = {
 		id : $('#idApontamento').val(),
 		horarioJson : horario,
@@ -130,15 +131,19 @@ function apontar (horario, data, idTd) {
 			$("#"+idTd).attr('onclick',"dialogApontamentoHora(this,"+ data.id +")");
 			adicionalNoturno = data.cntrDiario.adicNoturno;
 			bancoHora = data.cntrDiario.bancoHora;
+			sa = data.cntrDiario.sobreAviso;
+			sat = data.cntrDiario.sobreAvisoTrabalhado;
 			
 			$("#"+idTd).parent().find('.banco-hora-js').text(Math.round(bancoHora*100)/100);
 			$("#"+idTd).parent().find('.adic-noturno-js').text(Math.round(adicionalNoturno*100)/100);
+			$("#"+idTd).parent().find('.sa-js').text(Math.round(sa*100)/100);
+			$("#"+idTd).parent().find('.sat-js').text(Math.round(sat*100)/100);
 		},
 		error: function(erro){
 			$('#erro-label').text(erro.responseText);
 			$('#erro-sm-modal').modal();
 			$("#"+idTd).html("--:--");
-			adicionalNoturno = bancoHora = 0.0;
+			adicionalNoturno = bancoHora = sa = sat = 0.0;
 		}
 	});
 }

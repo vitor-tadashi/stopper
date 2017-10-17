@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.verity.pause.bean.ControleDiarioBean;
 import br.com.verity.pause.bean.ControleMensalBean;
 import br.com.verity.pause.bean.FuncionarioBean;
 
@@ -22,6 +21,8 @@ public class ControleApontamentoBusiness {
 	@Autowired
 	private ControleDiarioBusiness controleDiarioBusiness;
 	
+	@Autowired
+	private CalculoBusiness calculoBusiness;
 
 	/**
 	 * Criação de controle mensal e/ou controle diário.
@@ -30,7 +31,6 @@ public class ControleApontamentoBusiness {
 	public void Criar(Date dataDeCriacao){
 		List<FuncionarioBean> funcionarios = funcionarioBusiness.obterTodosComPis();
 		ControleMensalBean controleMensalBean;
-		ControleDiarioBean controleDiarioBean;
 		
 		for (FuncionarioBean funcionarioBean : funcionarios) {
 			
@@ -39,13 +39,14 @@ public class ControleApontamentoBusiness {
 			if(controleMensalBean == null){
 				
 				controleMensalBean = controleMensalBusiness.obterPorMesAnoIdFuncionario(dataDeCriacao, funcionarioBean.getId());
-				controleDiarioBean = controleDiarioBusiness.obterPorDataIdFuncionario(dataDeCriacao, funcionarioBean.getId());
+				controleDiarioBusiness.obterPorDataIdFuncionario(dataDeCriacao, funcionarioBean.getId());
 				
 			} else if (controleMensalBean.getControleDiario() == null || controleMensalBean.getControleDiario().size() == 0){
 				
-				controleDiarioBean = controleDiarioBusiness.obterPorDataIdFuncionario(dataDeCriacao, funcionarioBean.getId());
+				controleDiarioBusiness.obterPorDataIdFuncionario(dataDeCriacao, funcionarioBean.getId());
 				
 			}
+			calculoBusiness.calcularApontamento(funcionarioBean.getId(), dataDeCriacao);
 		}
 	}
 

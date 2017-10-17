@@ -21,7 +21,7 @@ import hudson.model.*
                  sonar.projectKey=$pom.groupId:$pom.name
                  sonar.projectName=$pom.artifactId
                  sonar.projectVersion=$pom.version
-                 sonar.genericcoverage.reportPaths=target/surefire-reports/TEST-jenkins.plugins.jsonHelper.FromJsonStepTest.xml
+                 #sonar.genericcoverage.reportPaths=target/surefire-reports/TEST-jenkins.plugins.jsonHelper.FromJsonStepTest.xml
                  sonar.sourceEncoding=UTF-8
                  sonar.java.source=1.8
                  # Path is relative to the sonar-project.properties file. Replace "\\" by "/" on Windows.

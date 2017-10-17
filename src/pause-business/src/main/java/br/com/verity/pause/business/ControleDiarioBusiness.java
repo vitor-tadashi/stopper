@@ -186,6 +186,7 @@ public class ControleDiarioBusiness {
 		cd.setBancoHora(cc.getControleDiarioBancoHora());
 		cd.setAdicNoturno(cc.getControleDiarioAdcNoturno());
 		cd.setSobreAviso(cc.getControleDiarioSA());
+		cd.setSobreAvisoTrabalhado(cc.getControleDiarioST());
 		cd.setQtdAtestadoHoras(cc.getAtestadoQuantidadeHora());
 		cd.setMesFechado(controleMensalBusiness.verificarMesFechado(cd.getData()));
 		cd.setApontamentos(apontamentos);

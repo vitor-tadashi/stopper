@@ -131,6 +131,8 @@ public class ApontamentoBusiness {
 
 		controleDiario.setAdicNoturno(apontamentoPivotEntity.getTotalAdicionalNoturno());
 		controleDiario.setBancoHora(apontamentoPivotEntity.getHorasExtras());
+		controleDiario.setSobreAviso(apontamentoPivotEntity.getTotalSobreAviso());
+		controleDiario.setSobreAvisoTrabalhado(apontamentoPivotEntity.getTotalSobreAvisoTrabalhado());
 
 		apontamento.setCntrDiario(controleDiario);
 		
