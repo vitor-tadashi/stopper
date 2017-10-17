@@ -101,7 +101,14 @@
                                 <div id="mainnav-profile" class="mainnav-profile">
                                     <div class="profile-wrap">
                                         <div class="pad-btm">
-                                            <img class="img-circle img-sm img-border" src='<c:url value="/img/profile-photos/1.png"/>' alt="Profile Picture">
+                                            <c:choose>
+                                           		<c:when test="${user.funcionario.genero.genero eq 'Feminino'}">
+                                           			<img class="img-circle img-sm img-border" src='<c:url value="/img/profile-photos/1.png"/>' alt="Profile Picture">
+                                           		</c:when>
+                                           		<c:otherwise>
+                                           			<img class="img-circle img-sm img-border" src='<c:url value="/img/profile-photos/7.png"/>' alt="Profile Picture">
+                                           		</c:otherwise>
+                                           	</c:choose>
                                         </div>
                                         <a  class="box-block" data-toggle="collapse" aria-expanded="false">
                                            <p class="mnp-name">${user.funcionario.nome}</p>
@@ -142,7 +149,7 @@
 						            </sec:authorize>
 									<li>
                                 		<a href='<c:url value="/gerenciar-apontamento"/>'>
-                                            <i class="pli-clock"></i>
+                                            <i class="pli-page"></i>
                                             <span class="menu-title">
                                             	Gerenciar horas
                                             </span>
