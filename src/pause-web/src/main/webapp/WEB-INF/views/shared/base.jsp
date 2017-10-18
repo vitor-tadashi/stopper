@@ -69,6 +69,9 @@
                        
                         <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
                         <!--End user-->
+                        <li class="add-tooltip" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="Trimestre anterior: ${bancos[1] }">
+                            <a class="">Banco de horas: ${bancos[0] }</a>
+                        </li>
                         <li class="add-tooltip" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="Sair">
                             <a href="#" class="" data-target="#demo-sm-modal" data-toggle="modal"><i class="pli-arrow-inside"></i></a>
                         </li>
