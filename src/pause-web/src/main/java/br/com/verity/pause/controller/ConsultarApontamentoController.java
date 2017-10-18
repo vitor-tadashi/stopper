@@ -69,6 +69,8 @@ public class ConsultarApontamentoController {
 
 		controles = controleDiarioBusiness.listSomaControleDiarioPorPeriodo(funcionarios, dtDe, dtAte);
 
+		controles = controleDiarioBusiness.trocaPontoPorVirgula(controles);
+		
 		consulta = consultaApontamentosBusiness.mesclarFuncionarioComControleDiario(funcionarios, controles);
 
 		

@@ -28,7 +28,7 @@ public class ApontamentoBean {
 	private Integer idEmpresa;
 	private Integer idUsuarioInclusao;
 	private ArquivoApontamentoBean arqApontamento;
-
+	
 	public ApontamentoBean() {
 
 	}

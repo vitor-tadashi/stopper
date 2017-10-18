@@ -268,4 +268,97 @@ public class ControleDiarioBusiness {
 		
 		return controleDiario;
 	}
+
+	public List<ControleDiarioBean> trocaPontoPorVirgula(List<ControleDiarioBean> dias) {
+
+		for (ControleDiarioBean c : dias) {
+			Double qtdAtestadoHoras = c.getQtdAtestadoHoras();
+			Double horaTotal = c.getHoraTotal();
+			Double bancoHora = c.getBancoHora();
+			Double adicNoturno = c.getAdicNoturno();
+			Double sobreAviso = c.getSobreAviso();
+			Double sobreAvisoTrabalhado = c.getSobreAvisoTrabalhado();
+			
+			
+			String qtdAtestadoHorasString = "0,0";
+			String horaTotalString = "0,0";
+			String bancoHoraString = "0,0";
+			String adicNoturnoString = "0,0";
+			String sobreAvisoString = "0,0";
+			String sobreAvisoTrabalhadoString = "0,0";
+			
+			if (qtdAtestadoHoras != null)
+				qtdAtestadoHorasString = qtdAtestadoHoras.toString().replace(".", ",");
+			
+			if (horaTotal != null)
+				horaTotalString = horaTotal.toString().replace(".", ",");
+			
+			if (bancoHora != null)
+				bancoHoraString = bancoHora.toString().replace(".", ",");
+			
+			if (adicNoturno != null)
+				adicNoturnoString = adicNoturno.toString().replace(".", ",");
+			
+			if (sobreAviso != null)
+				sobreAvisoString = sobreAviso.toString().replace(".", ",");
+			
+			if (sobreAvisoTrabalhado != null)
+				sobreAvisoTrabalhadoString = sobreAvisoTrabalhado.toString().replace(".", ",");
+			
+			c.setQtdAtestadoHorasString(qtdAtestadoHorasString);
+			c.setAdicNoturnoString(adicNoturnoString);
+			c.setBancoHoraString(bancoHoraString);
+			c.setHoraTotalString(horaTotalString);
+			c.setSobreAvisoString(sobreAvisoString);
+			c.setSobreAvisoTrabalhadoString(sobreAvisoTrabalhadoString);
+			
+		}
+		
+		return dias;
+	}
+
+	public ControleDiarioBean trocaPontoPorVirgula(ControleDiarioBean controleDiario) {
+		
+		Double qtdAtestadoHoras = controleDiario.getQtdAtestadoHoras();
+		Double horaTotal = controleDiario.getHoraTotal();
+		Double bancoHora = controleDiario.getBancoHora();
+		Double adicNoturno = controleDiario.getAdicNoturno();
+		Double sobreAviso = controleDiario.getSobreAviso();
+		Double sobreAvisoTrabalhado = controleDiario.getSobreAvisoTrabalhado();
+		
+		String qtdAtestadoHorasString = "0,0";
+		String horaTotalString = "0,0";
+		String bancoHoraString = "0,0";
+		String adicNoturnoString = "0,0";
+		String sobreAvisoString = "0,0";
+		String sobreAvisoTrabalhadoString = "0,0";
+		
+		if (qtdAtestadoHoras != null)
+			qtdAtestadoHorasString = qtdAtestadoHoras.toString().replace(".", ",");
+		
+		if (horaTotal != null)
+			horaTotalString = horaTotal.toString().replace(".", ",");
+		
+		if (bancoHora != null)
+			bancoHoraString = bancoHora.toString().replace(".", ",");
+		
+		if (adicNoturno != null)
+			adicNoturnoString = adicNoturno.toString().replace(".", ",");
+		
+		if (sobreAviso != null)
+			sobreAvisoString = sobreAviso.toString().replace(".", ",");
+		
+		if (sobreAvisoTrabalhado != null)
+			sobreAvisoTrabalhadoString = sobreAvisoTrabalhado.toString().replace(".", ",");
+		
+		controleDiario.setQtdAtestadoHorasString(qtdAtestadoHorasString);
+		controleDiario.setAdicNoturnoString(adicNoturnoString);
+		controleDiario.setBancoHoraString(bancoHoraString);
+		controleDiario.setHoraTotalString(horaTotalString);
+		controleDiario.setSobreAvisoString(sobreAvisoString);
+		controleDiario.setSobreAvisoTrabalhadoString(sobreAvisoTrabalhadoString);
+		
+		return controleDiario;
+		
+	}
 }

@@ -136,7 +136,9 @@ public class ImportacaoBusiness {
 				}
 			}
 
-		} catch (Exception e) {
+		} catch(StringIndexOutOfBoundsException | BusinessException ex){
+			throw new BusinessException("Arquivo importado inválido.");
+		}catch (Exception e) {
 			throw new BusinessException("Houve um erro interno, tente novamente mais tarde.");
 		}
 
@@ -275,6 +277,8 @@ public class ImportacaoBusiness {
 			System.err.printf("Erro na abertura do arquivo: %s.\n", e.getMessage());
 			throw new BusinessException("Arquivo importado inválido.");
 
+		}catch(StringIndexOutOfBoundsException ex){
+			throw new StringIndexOutOfBoundsException();
 		} finally {
 			leitor.close();
 		}

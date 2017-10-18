@@ -23,7 +23,62 @@ public class ControleDiarioBean {
 	private Integer idFuncionario;
 	private Boolean mesFechado;
 	private ControleMensalBean controleMensal;
+
+	private String qtdAtestadoHorasString;
+	private String horaTotalString;
+	private String bancoHoraString;
+	private String adicNoturnoString;
+	private String sobreAvisoString;
+	private String sobreAvisoTrabalhadoString;
 	
+	public String getQtdAtestadoHorasString() {
+		return qtdAtestadoHorasString;
+	}
+
+	public void setQtdAtestadoHorasString(String qtdAtestadoHorasString) {
+		this.qtdAtestadoHorasString = qtdAtestadoHorasString;
+	}
+
+	public String getHoraTotalString() {
+		return horaTotalString;
+	}
+
+	public void setHoraTotalString(String horaTotalString) {
+		this.horaTotalString = horaTotalString;
+	}
+
+	public String getBancoHoraString() {
+		return bancoHoraString;
+	}
+
+	public void setBancoHoraString(String bancoHoraString) {
+		this.bancoHoraString = bancoHoraString;
+	}
+
+	public String getAdicNoturnoString() {
+		return adicNoturnoString;
+	}
+
+	public void setAdicNoturnoString(String adicNoturnoString) {
+		this.adicNoturnoString = adicNoturnoString;
+	}
+
+	public String getSobreAvisoString() {
+		return sobreAvisoString;
+	}
+
+	public void setSobreAvisoString(String sobreAvisoString) {
+		this.sobreAvisoString = sobreAvisoString;
+	}
+
+	public String getSobreAvisoTrabalhadoString() {
+		return sobreAvisoTrabalhadoString;
+	}
+
+	public void setSobreAvisoTrabalhadoString(String sobreAvisoTrabalhadoString) {
+		this.sobreAvisoTrabalhadoString = sobreAvisoTrabalhadoString;
+	}
+
 	public ControleDiarioBean(){
 	}
 	

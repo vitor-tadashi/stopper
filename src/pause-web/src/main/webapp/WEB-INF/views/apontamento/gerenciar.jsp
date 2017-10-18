@@ -140,12 +140,12 @@
 												<td id="apontamento${cont.count + 8 * (i.count - 1)}" ${!dia.mesFechado? 'style="cursor:pointer;" onclick="dialogApontamentoHora(this);"':''}>--:--</td>
 											</c:if>
 										</c:forEach>
-										<td id="#">${dia.qtdAtestadoHoras }</td>
-										<td id="total-hora${i.count }">${dia.horaTotal }</td>
-										<td class="banco-hora-js">${dia.bancoHora }</td>
-										<td class="adic-noturno-js">${dia.adicNoturno }</td>
-										<td id="#" class="sa-js">${dia.sobreAviso }</td>
-										<td id="#" class="sat-js">${dia.sobreAvisoTrabalhado }</td>
+										<td id="#">${dia.qtdAtestadoHorasString }</td>
+										<td id="total-hora${i.count }">${dia.horaTotalString }</td>
+										<td class="banco-hora-js">${dia.bancoHoraString }</td>
+										<td class="adic-noturno-js">${dia.adicNoturnoString }</td>
+										<td id="#" class="sa-js">${dia.sobreAvisoString }</td>
+										<td id="#" class="sat-js">${dia.sobreAvisoTrabalhadoString }</td>
 									</tr>
 								</c:forEach>
 							</tbody>

@@ -165,6 +165,9 @@ function inserirSA_ajax(dataSA, horaSAe, horaSAs){
 			var valorSobreAviso = data.controleDiario.sobreAviso;
 			var valorSobreTrabalhado = data.controleDiario.sobreAvisoTrabalhado;
 			
+			valorSobreAviso = valorSobreAviso.toString().replace('.', ',');
+			valorSobreTrabalhado = valorSobreTrabalhado.toString().replace('.', ',');
+			
 			$('.linha').each(function() {
 				
 				var string = $(this).find("#infoDia").val().substring(0, 10); // 22/09/2017
