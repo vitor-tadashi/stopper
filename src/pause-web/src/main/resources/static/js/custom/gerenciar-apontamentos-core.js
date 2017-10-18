@@ -134,10 +134,20 @@ function apontar (horario, data, idTd) {
 			sa = data.cntrDiario.sobreAviso;
 			sat = data.cntrDiario.sobreAvisoTrabalhado;
 			
-			$("#"+idTd).parent().find('.banco-hora-js').text(Math.round(bancoHora*100)/100);
-			$("#"+idTd).parent().find('.adic-noturno-js').text(Math.round(adicionalNoturno*100)/100);
-			$("#"+idTd).parent().find('.sa-js').text(Math.round(sa*100)/100);
-			$("#"+idTd).parent().find('.sat-js').text(Math.round(sat*100)/100);
+			bancoHora = Math.round(bancoHora*100)/100;
+			adicionalNoturno = Math.round(adicionalNoturno*100)/100;
+			sa = Math.round(sa*100)/100;
+			sat = Math.round(sat*100)/100;
+			
+			bancoHora = bancoHora.toString().replace('.', ',');
+			adicionalNoturno = adicionalNoturno.toString().replace('.', ',');
+			sa = sa.toString().replace('.', ',');
+			sat = sat.toString().replace('.', ',');
+			
+			$("#"+idTd).parent().find('.banco-hora-js').text(bancoHora);
+			$("#"+idTd).parent().find('.adic-noturno-js').text(adicionalNoturno);
+			$("#"+idTd).parent().find('.sa-js').text(sa);
+			$("#"+idTd).parent().find('.sat-js').text(sat);
 		},
 		error: function(erro){
 			$('#erro-label').text(erro.responseText);
@@ -170,7 +180,12 @@ function calcularTotal() {
 			}
 		});
 		
-		$(this).find('td[id^="total-hora"]').text(Math.round(horaTotal*100)/100);
+		
+		horaTotal = Math.round(horaTotal*100)/100;
+		
+		horaTotal = horaTotal.toString().replace('.', ',');
+		
+		$(this).find('td[id^="total-hora"]').text(horaTotal);
 		
 		horaTotal = 0;
 	});	

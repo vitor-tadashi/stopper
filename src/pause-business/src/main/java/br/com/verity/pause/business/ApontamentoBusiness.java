@@ -133,7 +133,9 @@ public class ApontamentoBusiness {
 		controleDiario.setBancoHora(apontamentoPivotEntity.getHorasExtras());
 		controleDiario.setSobreAviso(apontamentoPivotEntity.getTotalSobreAviso());
 		controleDiario.setSobreAvisoTrabalhado(apontamentoPivotEntity.getTotalSobreAvisoTrabalhado());
-
+		
+		controleDiarioBusiness.trocaPontoPorVirgula(controleDiario);
+		
 		apontamento.setCntrDiario(controleDiario);
 		
 		return apontamento;

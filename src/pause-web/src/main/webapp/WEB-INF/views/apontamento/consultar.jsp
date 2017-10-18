@@ -82,11 +82,11 @@
 								<c:forEach items="${funcionarios }" var="funcionario">
 									<tr>
 										<td><a href="#" onclick="linkGerenciar(${funcionario.idFuncionario })">${funcionario.nmFuncionario }</a></td>
-										<td>${funcionario.controleDiario.horaTotal }</td>
-										<td>${funcionario.controleDiario.bancoHora }</td>
-										<td>${funcionario.controleDiario.adicNoturno }</td>
-										<td>${funcionario.controleDiario.sobreAviso }</td>
-										<td>${funcionario.controleDiario.sobreAvisoTrabalhado }</td>
+										<td>${funcionario.controleDiario.horaTotalString }</td>
+										<td>${funcionario.controleDiario.bancoHoraString }</td>
+										<td>${funcionario.controleDiario.adicNoturnoString }</td>
+										<td>${funcionario.controleDiario.sobreAvisoString }</td>
+										<td>${funcionario.controleDiario.sobreAvisoTrabalhadoString }</td>
 									</tr>
 								</c:forEach>
 							</tbody>

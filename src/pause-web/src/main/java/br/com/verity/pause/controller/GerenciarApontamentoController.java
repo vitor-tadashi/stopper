@@ -102,6 +102,7 @@ public class GerenciarApontamentoController {
 			return new ResponseEntity<String>("Houve um erro ao salvar apontamento. Tente novamente mais tarde.",
 					HttpStatus.BAD_REQUEST);
 		}
+		
 		return ResponseEntity.ok(apontamentoCriado);
 	}
 
@@ -171,6 +172,9 @@ public class GerenciarApontamentoController {
 
 	private void apontamentos(Model model, Integer idFuncionario, String... periodo) {
 		List<ControleDiarioBean> dias = controleDiarioBusiness.listarControleDiario(idFuncionario, periodo);
+		
+		dias = controleDiarioBusiness.trocaPontoPorVirgula(dias);
+		
 		model.addAttribute("periodo", periodo);
 		model.addAttribute("dias", dias);
 		model.addAttribute("idFuncionario", idFuncionario);
