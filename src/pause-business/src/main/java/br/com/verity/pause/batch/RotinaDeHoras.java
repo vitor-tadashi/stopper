@@ -21,7 +21,7 @@ public class RotinaDeHoras {
 	/** Método .bat que é executado todo dia as 00:00 hrs, para inclusão de controle Mensal e controle Diário.
 	 * @author guilherme.oliveira
 	 */
-	@Scheduled(cron = "00 00 00 * * *", zone = TIME_ZONE)
+	@Scheduled(cron = "0 0 0 * * ?", zone = TIME_ZONE)
 	public void verificaPorHora() {
 		Date dataDeHoje = new Date();
 		controleApontamentoBusiness.Criar(dataDeHoje);

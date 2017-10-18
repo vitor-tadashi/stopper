@@ -62,9 +62,9 @@
 							<div class="col-sm-5 pad-btm">
 								<label class="control-label">Período</label>
 								<div class="input-daterange input-group" id="datepicker">
-									<input type="date" id="periodoDe" class="form-control periodo" name="periodo" placeholder="dd/mm/aaaa" value="${periodo[0] }" min="${dataMinima }" max=""/>
+									<input type="date" id="periodoDe" class="form-control periodo" name="periodo" placeholder="dd/mm/aaaa" value="${periodo[0] }" min="2010-03-01" max=""/>
 									<span class="input-group-addon">até</span>
-									<input type="date" id="periodoAte" class="form-control periodo" name="periodo" placeholder="dd/mm/aaaa" value="${periodo[1] }" min="${dataMinima }" max=""/>
+									<input type="date" id="periodoAte" class="form-control periodo" name="periodo" placeholder="dd/mm/aaaa" value="${periodo[1] }" min="2010-03-01" max=""/>
 								</div>
 							</div>
 							<div class="col-sm-1" style="margin-top: 24px;">
@@ -114,6 +114,7 @@
 									<th class="text-center table-color" style="color: white">Banco</th>
 									<th class="text-center table-color" style="color: white">Ad. Not.</th>
 									<th class="text-center table-color" style="color: white">S.A</th>
+									<th class="text-center table-color" style="color: white">S.T</th>
 								</tr>
 							</thead>
 							<tbody class="text-center">
@@ -143,7 +144,8 @@
 										<td id="total-hora${i.count }">${dia.horaTotal }</td>
 										<td class="banco-hora-js">${dia.bancoHora }</td>
 										<td class="adic-noturno-js">${dia.adicNoturno }</td>
-										<td id="#">${dia.sobreAviso }</td>
+										<td id="#" class="sa-js">${dia.sobreAviso }</td>
+										<td id="#" class="sat-js">${dia.sobreAvisoTrabalhado }</td>
 									</tr>
 								</c:forEach>
 							</tbody>
