@@ -113,7 +113,7 @@ function importarArquivo() {
 				}
 			},
 			error: function(data) {
-				$('#erro-label').text(erro.responseText);
+				$('#erro-label').text(data.responseText);
 				$('#erro-sm-modal').modal();
 			}
 		});
