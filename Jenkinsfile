@@ -39,7 +39,7 @@ node {
                 # Since SonarQube 4.2, this property is optional if sonar.modules is set.
                 # If not set, SonarQube starts looking for source code from the directory containing
                 # the sonar-project.properties file.
-                sonar.sources=**/*.java"""
+                sonar.sources=*.java"""
                 archive 'sonar-project.properties'                
                 // requires SonarQube Scanner 2.8+
                 def jdk8 = tool name: '1.8.0_131'
