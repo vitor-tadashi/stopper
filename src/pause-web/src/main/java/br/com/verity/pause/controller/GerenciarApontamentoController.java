@@ -34,6 +34,7 @@ import br.com.verity.pause.bean.TipoJustificativaBean;
 import br.com.verity.pause.business.AfastamentoBusiness;
 import br.com.verity.pause.business.ApontamentoBusiness;
 import br.com.verity.pause.business.AtestadoBusiness;
+import br.com.verity.pause.business.ControleApontamentoBusiness;
 import br.com.verity.pause.business.ControleDiarioBusiness;
 import br.com.verity.pause.business.ControleMensalBusiness;
 import br.com.verity.pause.business.FuncionarioBusiness;
@@ -68,6 +69,9 @@ public class GerenciarApontamentoController {
 
 	@Autowired
 	private ControleMensalBusiness controleMensalBusiness;
+	
+	@Autowired
+	private ControleApontamentoBusiness controleApontamentoBusiness;
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String consultar(SecurityContextHolderAwareRequestWrapper request, Model model, Integer idFuncionario,
@@ -76,7 +80,7 @@ public class GerenciarApontamentoController {
 		apontamentos(model, idFuncionario, periodo);
 		justificativas(model);
 		sobreAvisos(model, idFuncionario, periodo);
-		definirDataLimiteMinima(model);
+		//definirDataLimiteMinima(model);
 		
 		if (request.isUserInRole("ROLE_MULTI-EMPRESA")) {
 			funcionarios(model);

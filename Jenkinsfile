@@ -8,7 +8,7 @@ import hudson.model.*
                 bat 'git name-rev --name-only HEAD > outfile'
                 def Branch_Name = readFile 'outFile'
                 println Branch_Name
-                def Branch_Master = "remotes/origin/develop"
+                def Branch_Master = "remotes/origin/master"
                 Branch_Name = Branch_Name.trim()
                 Branch_Master = Branch_Master.trim()
  //teste
