@@ -204,7 +204,7 @@ function modalEditarApontamento(id){
 			$('#btn-remover-apontamento').attr('onclick',"removerApontamento("+ data.id +")");
 			$('#idApontamento').val(data.id);
 			$('#apontamento-obs').val(data.observacao);
-			$('#apontamento-jus').prop('selectedIndex',data.tpJustificativa.id);
+			$('#apontamento-jus').val(data.tpJustificativa.id);
 			$('#apontamento-jus').selectpicker('refresh');
 		}
 	});
