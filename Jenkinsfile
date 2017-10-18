@@ -35,6 +35,8 @@ node {
                 sonar.genericcoverage.reportPaths=target/surefire-reports/TEST-jenkins.plugins.jsonHelper.FromJsonStepTest.xml
                 sonar.sourceEncoding=UTF-8
                 sonar.java.source=1.8
+				sonar.analysis.mode=preview 
+                sonar.issuesReport.html.enable=true
                 # Path is relative to the sonar-project.properties file. Replace "\\" by "/" on Windows.
                 # Since SonarQube 4.2, this property is optional if sonar.modules is set.
                 # If not set, SonarQube starts looking for source code from the directory containing
