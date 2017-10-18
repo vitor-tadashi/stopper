@@ -68,7 +68,8 @@ node {
            warnings canComputeNew: false, canResolveRelativePaths: false, consoleParsers: [[parserName: 'Java Compiler (javac)'], [parserName: 'JavaDoc Tool'], [parserName: 'Maven']], defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', messagesPattern: '', unHealthy: '' 
         
         stage 'Publish HMTL Sonar'
-		   publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: '/reports', reportFiles: 'issues-report-light.html', reportName: 'SonarQube Report', reportTitles: '${BUILD_ID}-issues-report-light.html'])
+		   publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: '', reportFiles: 'issues-report-light.html', reportName: 'SonarQube Report', reportTitles: '${BUILD_ID}-issues-report-light.html'])
+
 		
         stage 'Archive'
            step([$class: 'ArtifactArchiver', artifacts: '**/*.war', fingerprint: true])
