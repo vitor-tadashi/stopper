@@ -103,10 +103,10 @@
                                         <div class="pad-btm">
                                             <c:choose>
                                            		<c:when test="${user.funcionario.genero.genero eq 'Feminino'}">
-                                           			<img class="img-circle img-sm img-border" src='<c:url value="/img/profile-photos/1.png"/>' alt="Profile Picture">
+                                           			<img class="img-circle img-sm img-border" src='<c:url value="/img/profile-photos/7.png"/>' alt="Profile Picture">
                                            		</c:when>
                                            		<c:otherwise>
-                                           			<img class="img-circle img-sm img-border" src='<c:url value="/img/profile-photos/7.png"/>' alt="Profile Picture">
+                                           			<img class="img-circle img-sm img-border" src='<c:url value="/img/profile-photos/1.png"/>' alt="Profile Picture">
                                            		</c:otherwise>
                                            	</c:choose>
                                         </div>
