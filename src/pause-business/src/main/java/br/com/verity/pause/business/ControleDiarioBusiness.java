@@ -275,7 +275,7 @@ public class ControleDiarioBusiness {
 		
 		if (sobreAvisoTrabalhado != null) {
 			sobreAvisoTrabalhado = Math.round(sobreAvisoTrabalhado*100.0)/100.0;
-			controleDiario.setSobreAviso(sobreAvisoTrabalhado);
+			controleDiario.setSobreAvisoTrabalhado(sobreAvisoTrabalhado);
 		}
 		
 		return controleDiario;

@@ -88,6 +88,7 @@ public class SobreAvisoBusiness {
 			ApontamentoPivotEntity apontamento = calculoBusiness.calcularApontamento(idFuncionario, sobreAviso.getData());
 			
 			controleDiario.setSobreAviso(apontamento.getTotalSobreAviso());
+			controleDiario.setSobreAvisoTrabalhado(apontamento.getTotalSobreAvisoTrabalhado());
 			
 			sobreAviso.setControleDiario(controleDiarioBusiness.tratarArredondamentos(controleDiario));
 			
