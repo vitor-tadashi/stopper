@@ -162,4 +162,33 @@ public class ControleMensalDAO {
 		}
 		return entity;
 	}
+
+	public Double findSumBancoTrimestre(int primeiroMesTrimestre, int ultimoMesTrimestre, int year,
+			Integer idFuncionario) throws SQLException {
+		Double banco = null;
+		Connection conn = null;
+		
+		String sql = "SELECT SUM(bancoHora) FROM PAUSEControleMensal WHERE ano = ? AND idFuncionario = ? AND mes BETWEEN ? AND ?";
+		try {
+			conn = connectionFactory.createConnection();
+
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setInt(1, year);
+			ps.setInt(2, idFuncionario);
+			ps.setInt(3, primeiroMesTrimestre);
+			ps.setInt(4, ultimoMesTrimestre);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				banco = rs.getDouble(1);
+			}
+			ps.execute();
+			ps.close();
+			conn.close();
+			}catch(SQLException e){
+				throw new SQLException();
+			}
+		return banco;
+	}
 }
