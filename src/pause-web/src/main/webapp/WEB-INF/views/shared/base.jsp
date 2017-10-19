@@ -155,7 +155,7 @@
 						            </sec:authorize>
 									<li>
                                 		<a href='<c:url value="/gerenciar-apontamento"/>'>
-                                            <i class="pli-page"></i>
+                                            <i class="pli-settings"></i>
                                             <span class="menu-title">
                                             	Gerenciar horas
                                             </span>
