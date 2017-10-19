@@ -139,15 +139,15 @@ public class ControleDiarioDAO {
 
 			sql = new StringBuilder();
 			
-			sql.append("SELECT cd.idControleMensal AS cdIdControleMensal,");
+			sql.append("SELECT");
 			sql.append("		SUM(cd.horaTotal) AS horaTotal, SUM(cd.bancoHora) AS bancoHora,");
 			sql.append("		SUM(cd.adcNoturno) AS adcNoturno, SUM(cd.sobreAviso) AS sobreAviso,");
 			sql.append("	    SUM(cd.sobreAvisoTrabalhado) AS sobreAvisoTrabalhado, cm.idFuncionario as idFuncionario");
 			sql.append("	FROM PAUSEControleDiario AS cd");
 			sql.append("		INNER JOIN PAUSEControleMensal AS cm ON cm.idControleMensal = cd.idControleMensal");
-			sql.append("											AND cm.idFuncionario IN ("+idFuncs+")");
 			sql.append("  WHERE data BETWEEN ? AND ?");
-			sql.append("	GROUP BY cd.idControleMensal, cm.idFuncionario");
+			sql.append("											AND cm.idFuncionario IN ("+idFuncs+")");
+			sql.append("	GROUP BY cm.idFuncionario");
 			
 			ps = conn.prepareStatement(sql.toString());
 			ps.setDate(1, de);
@@ -160,7 +160,7 @@ public class ControleDiarioDAO {
 				cmEntity = new ControleMensalEntity();
 				
 				cmEntity.setIdFuncionario(rs.getInt("idFuncionario"));
-				cmEntity.setId(rs.getInt("cdIdControleMensal"));
+				//cmEntity.setId(rs.getInt("cdIdControleMensal"));
 				
 				entity.setHrTotal(Double.parseDouble(twoDForm.format(rs.getDouble("horaTotal")).replace(",", ".")));
 				entity.setBancoHora(Double.parseDouble(twoDForm.format(rs.getDouble("bancoHora")).replace(",", ".")));
