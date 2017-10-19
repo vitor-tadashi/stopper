@@ -35,11 +35,14 @@ node {
                 sonar.genericcoverage.reportPaths=target/surefire-reports/TEST-jenkins.plugins.jsonHelper.FromJsonStepTest.xml
                 sonar.sourceEncoding=UTF-8
                 sonar.java.source=1.8
+				sonar.analysis.mode=preview 
+                sonar.issuesReport.html.enable=true
                 # Path is relative to the sonar-project.properties file. Replace "\\" by "/" on Windows.
                 # Since SonarQube 4.2, this property is optional if sonar.modules is set.
                 # If not set, SonarQube starts looking for source code from the directory containing
                 # the sonar-project.properties file.
-                sonar.sources=src"""
+                sonar.sources=src
+				sonar.inclusions=**/*.java"""
                 archive 'sonar-project.properties'                
                 // requires SonarQube Scanner 2.8+
                 def jdk8 = tool name: '1.8.0_131'
@@ -63,10 +66,14 @@ node {
     def postbuild () {
         stage 'Warnings-Publisher'
            warnings canComputeNew: false, canResolveRelativePaths: false, consoleParsers: [[parserName: 'Java Compiler (javac)'], [parserName: 'JavaDoc Tool'], [parserName: 'Maven']], defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', messagesPattern: '', unHealthy: '' 
-               
+        
+        stage 'Publish HMTL Sonar'
+		   publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: '', reportFiles: 'issues-report-light.html', reportName: 'SonarQube Report', reportTitles: '${BUILD_ID}-issues-report-light.html'])
+
+		
         stage 'Archive'
            step([$class: 'ArtifactArchiver', artifacts: '**/*.war', fingerprint: true])
                    
-        stage 'Delete Workpspace'
-           deleteDir()
+       // stage 'Delete Workpspace'
+       //    deleteDir()
     }
