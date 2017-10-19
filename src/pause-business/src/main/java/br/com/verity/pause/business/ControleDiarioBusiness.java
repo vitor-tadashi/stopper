@@ -116,6 +116,7 @@ public class ControleDiarioBusiness {
 			Double horaTotal = c.getHoraTotal();
 			Double banco = c.getBancoHora();
 			Double sobreAviso = c.getSobreAviso();
+			Double sobreAvisoTrabalhado = c.getSobreAvisoTrabalhado();
 			
 			if (adicionalNoturno != null) {
 				adicionalNoturno = Math.round(adicionalNoturno*100.0)/100.0;
@@ -135,6 +136,11 @@ public class ControleDiarioBusiness {
 			if (sobreAviso != null) {
 				sobreAviso = Math.round(sobreAviso*100.0)/100.0;
 				c.setSobreAviso(sobreAviso);
+			}
+			
+			if (sobreAvisoTrabalhado != null) {
+				sobreAvisoTrabalhado = Math.round(sobreAvisoTrabalhado*100.0)/100.0;
+				c.setSobreAvisoTrabalhado(sobreAvisoTrabalhado);
 			}
 		}
 		
@@ -245,6 +251,7 @@ public class ControleDiarioBusiness {
 		Double horaTotal = controleDiario.getHoraTotal();
 		Double banco = controleDiario.getBancoHora();
 		Double sobreAviso = controleDiario.getSobreAviso();
+		Double sobreAvisoTrabalhado = controleDiario.getSobreAvisoTrabalhado();
 		
 		if (adicionalNoturno != null) {
 			adicionalNoturno = Math.round(adicionalNoturno*100.0)/100.0;
@@ -264,6 +271,11 @@ public class ControleDiarioBusiness {
 		if (sobreAviso != null) {
 			sobreAviso = Math.round(sobreAviso*100.0)/100.0;
 			controleDiario.setSobreAviso(sobreAviso);
+		}
+		
+		if (sobreAvisoTrabalhado != null) {
+			sobreAvisoTrabalhado = Math.round(sobreAvisoTrabalhado*100.0)/100.0;
+			controleDiario.setSobreAvisoTrabalhado(sobreAvisoTrabalhado);
 		}
 		
 		return controleDiario;

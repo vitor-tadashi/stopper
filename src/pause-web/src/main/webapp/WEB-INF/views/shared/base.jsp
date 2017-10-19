@@ -25,6 +25,7 @@
 	<layout:block name="css"> </layout:block>
 </head>
 <body>
+	<fmt:setLocale value="pt-BR" /> 
 	<sec:authentication property="principal" var="user"/>
 	<div id="container" class="effect aside-fixed aside-bright mainnav-lg footer-fixed">
 	
@@ -64,11 +65,16 @@
                         <sec:authorize access="hasRole('ROLE_MULTI-EMPRESA')">
                         <li>
                             <div class="username text-right"><a href="/pause/selecionaMultiEmpresa">Trocar empresa</a></div>
-           
+           				</li>
                         </sec:authorize>
                        
                         <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
                         <!--End user-->
+                        <sec:authorize access="!hasRole('ROLE_MULTI-EMPRESA')">
+                        <li class="add-tooltip" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="Trimestre anterior: <fmt:formatNumber value="${bancos[1] }" type="number"/>">
+                            <a class="">Banco de horas: <fmt:formatNumber value="${bancos[0] }" type="number"/></a>
+                        </li>
+                        </sec:authorize>
                         <li class="add-tooltip" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="Sair">
                             <a href="#" class="" data-target="#demo-sm-modal" data-toggle="modal"><i class="pli-arrow-inside"></i></a>
                         </li>
@@ -103,10 +109,10 @@
                                         <div class="pad-btm">
                                             <c:choose>
                                            		<c:when test="${user.funcionario.genero.genero eq 'Feminino'}">
-                                           			<img class="img-circle img-sm img-border" src='<c:url value="/img/profile-photos/1.png"/>' alt="Profile Picture">
+                                           			<img class="img-circle img-sm img-border" src='<c:url value="/img/profile-photos/7.png"/>' alt="Profile Picture">
                                            		</c:when>
                                            		<c:otherwise>
-                                           			<img class="img-circle img-sm img-border" src='<c:url value="/img/profile-photos/7.png"/>' alt="Profile Picture">
+                                           			<img class="img-circle img-sm img-border" src='<c:url value="/img/profile-photos/1.png"/>' alt="Profile Picture">
                                            		</c:otherwise>
                                            	</c:choose>
                                         </div>

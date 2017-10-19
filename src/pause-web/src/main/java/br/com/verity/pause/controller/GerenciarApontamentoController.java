@@ -1,5 +1,6 @@
 package br.com.verity.pause.controller;
 
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
@@ -80,6 +81,7 @@ public class GerenciarApontamentoController {
 		apontamentos(model, idFuncionario, periodo);
 		justificativas(model);
 		sobreAvisos(model, idFuncionario, periodo);
+		bancosTrimestre(model);
 		//definirDataLimiteMinima(model);
 		
 		if (request.isUserInRole("ROLE_MULTI-EMPRESA")) {
@@ -199,7 +201,14 @@ public class GerenciarApontamentoController {
 		List<AtestadoBean> atestados = atestadoBusiness.listarPorIdFuncionarioEPeriodo(idFuncionario, periodo);
 		model.addAttribute("atestados", atestados);
 	}
-	
+	private void bancosTrimestre(Model model){
+		try {
+			List<Double>bancosTrimestre = controleMensalBusiness.obterTrimestreAtualEAnterior();
+			model.addAttribute("bancos", bancosTrimestre);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	private void definirDataLimiteMinima(Model model) {
 		
