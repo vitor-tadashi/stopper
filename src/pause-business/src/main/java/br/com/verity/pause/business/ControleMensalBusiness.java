@@ -84,7 +84,7 @@ public class ControleMensalBusiness {
 		
 		Double bancoTrimestre = controleMensalDAO.findSumBancoTrimestre(primeiroMesTrimestre, ultimoMesTrimestre
 				, LocalDate.now().getYear(), idFuncionario);
-		bancosTrimestre.add(bancoTrimestre);
+		bancosTrimestre.add(Math.round(bancoTrimestre*100.0)/100.0);
 		
 		if(primeiroMesTrimestre == 1){
 			primeiroMesTrimestre = 10;
@@ -95,7 +95,7 @@ public class ControleMensalBusiness {
 		}
 		Double bancoTrimestreAnterior = controleMensalDAO.findSumBancoTrimestre(primeiroMesTrimestre, ultimoMesTrimestre
 				, LocalDate.now().getYear(), idFuncionario);
-		bancosTrimestre.add(bancoTrimestreAnterior);
+		bancosTrimestre.add(Math.round(bancoTrimestreAnterior*100.0)/100.0);
 		
 		return bancosTrimestre;
 	}

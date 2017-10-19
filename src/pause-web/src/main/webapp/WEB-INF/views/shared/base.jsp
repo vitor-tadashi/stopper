@@ -25,6 +25,7 @@
 	<layout:block name="css"> </layout:block>
 </head>
 <body>
+	<fmt:setLocale value="pt-BR" /> 
 	<sec:authentication property="principal" var="user"/>
 	<div id="container" class="effect aside-fixed aside-bright mainnav-lg footer-fixed">
 	
@@ -64,14 +65,16 @@
                         <sec:authorize access="hasRole('ROLE_MULTI-EMPRESA')">
                         <li>
                             <div class="username text-right"><a href="/pause/selecionaMultiEmpresa">Trocar empresa</a></div>
-           
+           				</li>
                         </sec:authorize>
                        
                         <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
                         <!--End user-->
-                        <li class="add-tooltip" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="Trimestre anterior: ${bancos[1] }">
-                            <a class="">Banco de horas: ${bancos[0] }</a>
+                        <sec:authorize access="!hasRole('ROLE_MULTI-EMPRESA')">
+                        <li class="add-tooltip" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="Trimestre anterior: <fmt:formatNumber value="${bancos[1] }" type="number"/>">
+                            <a class="">Banco de horas: <fmt:formatNumber value="${bancos[0] }" type="number"/></a>
                         </li>
+                        </sec:authorize>
                         <li class="add-tooltip" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="Sair">
                             <a href="#" class="" data-target="#demo-sm-modal" data-toggle="modal"><i class="pli-arrow-inside"></i></a>
                         </li>
