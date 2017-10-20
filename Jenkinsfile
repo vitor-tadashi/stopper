@@ -51,7 +51,7 @@ node {
                 withSonarQubeEnv('sonar-pmd') {
                 //sh "${scannerHome}/bin/sonar-scanner"
             	bat "${scannerHome}\\bin\\sonar-scanner.bat"
-				bat "wkhtmltopdf C:\\_\\projetos-verity\\Build\\pipeline-pause\\.sonar\\issues-report pause.pdf"
+				bat "wkhtmltopdf ${WORKSPACE}\pipeline-pause\.sonar\issues-report\issues-report.html pause.pdf"
                 }
     }    
 
