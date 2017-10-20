@@ -73,8 +73,8 @@ node {
 
 		
         stage 'Archive'
-           step([$class: 'ArtifactArchiver', artifacts: '**/*.war', fingerprint: true])
+           step([$class: 'ArtifactArchiver', artifacts: '**/*.war, pause.pdf', fingerprint: true])
                    
-        //stage 'Delete Workpspace'
-          // deleteDir()
+        stage 'Delete Workpspace'
+          deleteDir()
     }
