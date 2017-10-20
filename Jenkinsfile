@@ -51,6 +51,7 @@ node {
                 withSonarQubeEnv('sonar-pmd') {
                 //sh "${scannerHome}/bin/sonar-scanner"
             	bat "${scannerHome}\\bin\\sonar-scanner.bat"
+				bat "wkhtmltopdf --readme .sonar\\issues-report\\issues-report.html pause.pdf"
 				bat "wkhtmltopdf .sonar\\issues-report\\issues-report.html pause.pdf"
                 }
     }    
