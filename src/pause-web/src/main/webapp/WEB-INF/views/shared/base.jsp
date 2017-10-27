@@ -37,9 +37,9 @@
                 <!--================================-->
                 <div class="navbar-header">
                     <a class="navbar-brand" href='<c:url value="/"/>'>
-                        <img src='img/logo.png' alt="PAUSE" class="brand-icon">
+                        <img src='img/logo/LOGO_PAUSE1.png' alt="PAUSE" class="brand-icon">
                         <div class="brand-title">
-                            <span class="brand-text"></span>
+                            <span class="brand-text">PAUSE</span>
                         </div>
                     </a>
                 </div>

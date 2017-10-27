@@ -39,12 +39,12 @@
 		<div class="cls-content">
 		    <div class="cls-content-sm panel">
 	            <div class="pad-btm">
-	            	
+	            	<img src='<c:url value="/img/logo/LOGO.png"/>'alt="" class="">
 	            </div>
 	            <form action='<c:url value="/login"/>' method="post" id="bv-form">
-					<div class="panel">
+					<div class="">
 						<div class="panel-heading">
-							<h4 class="panel-title">Login</h4>
+							<h4 class="panel-title">Acesso</h4>
 						</div>
 						<div class="panel-body">
 							<c:if test="${param.error != null}">
