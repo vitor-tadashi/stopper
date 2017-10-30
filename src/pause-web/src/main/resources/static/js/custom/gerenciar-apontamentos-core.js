@@ -5,7 +5,7 @@ var sa = 0.0;
 var sat = 0.0;
 
 $(document).ready(function() {
-	calcularTotal();
+	//calcularTotal();
 });
 
 function dialogApontamentoHora(td, idApontamento) {
