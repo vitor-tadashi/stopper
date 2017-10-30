@@ -10,7 +10,7 @@
 		<relativePath>../../</relativePath>
 	</parent>
 	<artifactId>pause-web</artifactId>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 	<name>pause-web</name>
 	<url>http://maven.apache.org</url>
 
