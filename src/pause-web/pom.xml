@@ -10,7 +10,7 @@
 		<relativePath>../../</relativePath>
 	</parent>
 	<artifactId>pause-web</artifactId>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>pause-web</name>
 	<url>http://maven.apache.org</url>
 
@@ -117,6 +117,10 @@
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
 		</dependency>
+		<dependency>
+		  <groupId>org.eclipse.jetty</groupId>
+		  <artifactId>jetty-util</artifactId>
+		  </dependency>
 	</dependencies>
 
 	<properties>
