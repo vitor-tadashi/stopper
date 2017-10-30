@@ -42,9 +42,9 @@
 	            	<img src='<c:url value="/img/logo/LOGO.png"/>'alt="" class="">
 	            </div>
 	            <form action='<c:url value="/login"/>' method="post" id="bv-form">
-					<div class="">
-						<div class="panel-heading">
-							<h4 class="panel-title">Acesso</h4>
+					<div class="panel">
+						<div class="">
+							<h4 class="panel-title">Acessar</h4>
 						</div>
 						<div class="panel-body">
 							<c:if test="${param.error != null}">
@@ -57,34 +57,25 @@
                                     <p>Você foi desconectado com sucesso.</p>
                                 </div>
                            	</c:if>
-							<div class="form-group text-left">
-								<label class="control-label">Usuário:</label>
-								<div class="">
-									<div class="input-group">
-										<span class="input-group-addon"><i class="ion-person"></i></span>
-										<input type="text" class="form-control" id="#" name="user" placeholder="Insira nome de usuário" autofocus>
-									</div>
-								</div>
-							</div>
-							<div class="form-group text-left">
-								<label class="control-label">Senha:</label>
-								<div class="">
-									<div class="input-group">
-										<span class="input-group-addon"><i class="ion-locked"></i></span>
-										<input type="password" class="form-control" id="#" name="senha" placeholder="Insira senha">	
-									</div>
-								</div>
-							</div>
+							<div class="form-group has-feedback">
+								<i class="ion-person icon-lg form-control-feedback"></i>
+				               	<input type="text" id="#" class="form-control" name="user" placeholder="Usuário" autofocus>
+				            </div>
+				            <div class="form-group has-feedback">
+								<i class="ion-locked icon-lg form-control-feedback"></i>
+				               	<input type="password" id="#" class="form-control" name="senha" placeholder="Senha 	" autofocus>
+				            </div>
 							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 							<div class="pad-top">
                                	<input type="submit"
-                                   	class="btn btn-block btn-primary btn-default" value="Entrar">
+                                   	class="btn btn-block btn-info btn-rounded" value="Acessar">
                            	</div>
 						</div>
 					</div>
+					
 	            </form>
 		    </div>
-		</div>
+
 		<!--===================================================-->
 	</div>
 	<!--===================================================-->
