@@ -114,12 +114,10 @@ public class CalculoBusiness {
 		
 		apontamento = obterApontamentoFuncionario(idFuncionario, data);
 		sobreAviso = obterSobreAvisoFuncionario(idFuncionario, data);
+		totalHorasDiarias = obterQuantidadeHorasDiarias(idFuncionario, data);
 		
 		if (apontamento != null && apontamento.getEntrada1() != null && apontamento.getSaida1() != null) {
 			totalHoras = calcularHoraTotal(apontamento);
-			totalHoras = calcularHoraTotalAtestado(totalHoras, idFuncionario, data);
-			totalHorasDiarias = obterQuantidadeHorasDiarias(idFuncionario, data);
-			horasExtras = calcularHorasExtras(totalHoras, totalHorasDiarias, data);
 			totalAdicionalNoturno = calcularAdicionalNoturno(apontamento);
 			
 			if (sobreAviso != null) {
@@ -131,6 +129,8 @@ public class CalculoBusiness {
 			apontamento.setDataApontamento(data);
 			apontamento.setIdFuncionario(idFuncionario);
 		}
+		totalHoras = calcularHoraTotalAtestado(totalHoras, idFuncionario, data);
+		horasExtras = calcularHorasExtras(totalHoras, totalHorasDiarias, data);
 		
 		if (sobreAviso != null){
 			totalSobreAviso = calcularSobreAviso(sobreAviso, totalSobreAvisoTrabalhado);
