@@ -111,7 +111,7 @@ public class ControleDiarioBusiness {
 		
 		
 		for (ControleDiarioBean c : controleDiarios) {
-			
+			Double qtdAtestadoHoras = c.getQtdAtestadoHoras();
 			Double adicionalNoturno =  c.getAdicNoturno();
 			Double horaTotal = c.getHoraTotal();
 			Double banco = c.getBancoHora();
@@ -122,7 +122,10 @@ public class ControleDiarioBusiness {
 				adicionalNoturno = Math.round(adicionalNoturno*100.0)/100.0;
 				c.setAdicNoturno(adicionalNoturno);
 			}
-			
+			if (qtdAtestadoHoras != null) {
+				qtdAtestadoHoras = Math.round(qtdAtestadoHoras*100.0)/100.0;
+				c.setQtdAtestadoHoras(qtdAtestadoHoras);
+			}
 			if (horaTotal != null) {
 				horaTotal = Math.round(horaTotal*100.0)/100.0;
 				c.setHoraTotal(horaTotal);
@@ -247,6 +250,7 @@ public class ControleDiarioBusiness {
 	}
 
 	public ControleDiarioBean tratarArredondamentos(ControleDiarioBean controleDiario) {
+		Double qtdAtestadoHoras =  controleDiario.getQtdAtestadoHoras();
 		Double adicionalNoturno =  controleDiario.getAdicNoturno();
 		Double horaTotal = controleDiario.getHoraTotal();
 		Double banco = controleDiario.getBancoHora();
@@ -257,7 +261,10 @@ public class ControleDiarioBusiness {
 			adicionalNoturno = Math.round(adicionalNoturno*100.0)/100.0;
 			controleDiario.setAdicNoturno(adicionalNoturno);
 		}
-		
+		if (qtdAtestadoHoras != null) {
+			qtdAtestadoHoras = Math.round(qtdAtestadoHoras*100.0)/100.0;
+			controleDiario.setQtdAtestadoHoras(qtdAtestadoHoras);
+		}
 		if (horaTotal != null) {
 			horaTotal = Math.round(horaTotal*100.0)/100.0;
 			controleDiario.setHoraTotal(horaTotal);
