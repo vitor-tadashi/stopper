@@ -37,7 +37,7 @@ public class SavIntegration {
 		List<FuncionarioIntegrationBean> funcionarios = new ArrayList<FuncionarioIntegrationBean>();
 		ObjectMapper mapper = new ObjectMapper();
 		// Properties props = this.getProp();
-		String endereco = "http://" + ambiente.getProperty("integration.sav.ip") + "/sav/listFuncionariosDaEmpresa/"+idEmpresa;
+		String endereco = "http://" + ambiente.getProperty("integration.sav.ip") + "/listFuncionariosDaEmpresa/"+idEmpresa;
 		try {
 			URL url = new URL(endereco);
 			funcionarios = mapper.readValue(url,  new TypeReference<List<FuncionarioIntegrationBean>>(){});
@@ -52,7 +52,7 @@ public class SavIntegration {
 		List<FuncionarioIntegrationBean> funcionarios = new ArrayList<FuncionarioIntegrationBean>();
 		ObjectMapper mapper = new ObjectMapper();
 		// Properties props = this.getProp();
-		String endereco = "http://" + ambiente.getProperty("integration.sav.ip") + "/sav/listFuncionariosComPis";
+		String endereco = "http://" + ambiente.getProperty("integration.sav.ip") + "/listFuncionariosComPis";
 		try {
 			URL url = new URL(endereco);
 			funcionarios = mapper.readValue(url,  new TypeReference<List<FuncionarioIntegrationBean>>(){});
@@ -66,7 +66,7 @@ public class SavIntegration {
 	public UsuarioBean getUsuario(String user){
 		UsuarioBean usuario = new UsuarioBean();
 		ObjectMapper mapper = new ObjectMapper();
-		String endereco = "http://" + ambiente.getProperty("integration.sav.ip") + "/sav/getUsuarioSistema/";
+		String endereco = "http://" + ambiente.getProperty("integration.sav.ip") + "/getUsuarioSistema/";
 		try {
 			URL url = new URL(endereco + user + "/PAUSE");
 			usuario = mapper.readValue(url, UsuarioBean.class);
@@ -125,7 +125,7 @@ public class SavIntegration {
 		FuncionarioIntegrationBean funcionario = new FuncionarioIntegrationBean();
 		ObjectMapper mapper = new ObjectMapper();
 		// Properties props = this.getProp();
-		String endereco = "http://" + ambiente.getProperty("integration.sav.ip") + "/sav/getFuncionario/"+idFuncionario;
+		String endereco = "http://" + ambiente.getProperty("integration.sav.ip") + "/getFuncionario/"+idFuncionario;
 		try {
 			URL url = new URL(endereco);
 			funcionario = mapper.readValue(url,  new TypeReference<FuncionarioIntegrationBean>(){});
@@ -142,7 +142,7 @@ public class SavIntegration {
 		EmpresaBean empresa = new EmpresaBean();
 		ObjectMapper mapper = new ObjectMapper();
 		// Properties props = this.getProp();
-		String endereco = "http://" + ambiente.getProperty("integration.sav.ip") + "/sav/getEmpresa/"+idEmpresa;
+		String endereco = "http://" + ambiente.getProperty("integration.sav.ip") + "/getEmpresa/"+idEmpresa;
 		try {
 			URL url = new URL(endereco);
 			empresa = mapper.readValue(url,  new TypeReference<EmpresaBean>(){});
@@ -157,7 +157,7 @@ public class SavIntegration {
 		FuncionarioIntegrationBean funcionario = new FuncionarioIntegrationBean();
 		ObjectMapper mapper = new ObjectMapper();
 		
-		String endereco = "http://" + ambiente.getProperty("integration.sav.ip") + "/sav/getFuncionarioPorPis/"+pis;
+		String endereco = "http://" + ambiente.getProperty("integration.sav.ip") + "/getFuncionarioPorPis/"+pis;
 		try {
 			URL url = new URL(endereco);
 			funcionario = mapper.readValue(url,  new TypeReference<FuncionarioIntegrationBean>(){});
@@ -174,7 +174,7 @@ public class SavIntegration {
 		List<EmpresaBean> empresas = new ArrayList<EmpresaBean>();
 		ObjectMapper mapper = new ObjectMapper();
 		// Properties props = this.getProp();
-		String endereco = "http://" + ambiente.getProperty("integration.sav.ip") + "/sav/listEmpresasGrupoVerity";
+		String endereco = "http://" + ambiente.getProperty("integration.sav.ip") + "/listEmpresasGrupoVerity";
 		try {
 			URL url = new URL(endereco);
 			empresas = mapper.readValue(url,  new TypeReference<ArrayList<EmpresaBean>>(){});
@@ -188,7 +188,7 @@ public class SavIntegration {
 		List<FeriadoBean> feriados = new ArrayList<FeriadoBean>();
 		ObjectMapper mapper = new ObjectMapper();
 		// Properties props = this.getProp();
-		String endereco = "http://" + ambiente.getProperty("integration.sav.ip") + "/sav/listFeriados";
+		String endereco = "http://" + ambiente.getProperty("integration.sav.ip") + "/listFeriados";
 		try {
 			URL url = new URL(endereco);
 			feriados = mapper.readValue(url,  new TypeReference<ArrayList<FeriadoBean>>(){});
