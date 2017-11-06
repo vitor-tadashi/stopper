@@ -1,5 +1,7 @@
 package br.com.verity.pause.controller;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,6 +11,8 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,8 +24,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import br.com.verity.pause.bean.ConsultaApontamentosBean;
 import br.com.verity.pause.bean.ControleDiarioBean;
 import br.com.verity.pause.bean.FuncionarioBean;
+import br.com.verity.pause.bean.UsuarioBean;
 import br.com.verity.pause.business.ConsultaApontamentosBusiness;
 import br.com.verity.pause.business.ControleDiarioBusiness;
+import br.com.verity.pause.business.CustomUserDetailsBusiness;
 import br.com.verity.pause.business.FuncionarioBusiness;
 import br.com.verity.pause.business.RelatorioBusiness;
 
@@ -40,6 +46,9 @@ public class ConsultarApontamentoController {
 
 	@Autowired
 	private ControleDiarioBusiness controleDiarioBusiness;
+	
+	@Autowired
+	private CustomUserDetailsBusiness userBusiness;
 
 	@PreAuthorize("hasRole('ROLE_CONSULTAR_BANCO')")
 	@RequestMapping(method = RequestMethod.GET)
@@ -90,9 +99,8 @@ public class ConsultarApontamentoController {
 	}
 
 	@PreAuthorize("hasRole('ROLE_CONSULTAR_BANCO')")
-	@RequestMapping(value = "gerar-relatorio-consulta", method = RequestMethod.POST)
-	@ResponseBody
-	public String gerarRelatorioConsulta(Integer idFuncionario, Date de, Date ate, HttpServletResponse response) {
+	@RequestMapping(value = "gerar-relatorio-consulta", method = RequestMethod.GET)
+	public ResponseEntity<?> gerarRelatorioConsulta(Integer idFuncionario, Date de, Date ate, HttpServletResponse response) {
 		List<FuncionarioBean> funcionarios = new ArrayList<FuncionarioBean>();
 		FuncionarioBean funcionario = new FuncionarioBean();
 		if (idFuncionario == null) {
@@ -108,9 +116,34 @@ public class ConsultarApontamentoController {
 		List<ConsultaApontamentosBean> consultaApontamentos = consultaApontamentosBusiness
 				.mesclarFuncionarioComControleDiario(funcionarios, controleDiario);
 
-		String caminho = relatorioBusiness.relatorioConsulta(consultaApontamentos, de, ate);
+		byte[] outArray = relatorioBusiness.relatorioConsulta(consultaApontamentos, de, ate);
+		if(outArray != null){
+			return downloadFile(outArray, de, response );
+		}
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	}
 
-		return caminho;
+	private ResponseEntity<?> downloadFile(byte[] outArray, Date dataRelatorio, HttpServletResponse response) {
+		UsuarioBean usuarioLogado = userBusiness.usuarioLogado();
+		String empresa = (usuarioLogado.getIdEmpresaSessao() == 2)?"Verity":"QA360";
+		@SuppressWarnings("deprecation")
+		String consolidado =  "consolidado" + empresa + "" + dataRelatorio.getMonth() + ".xlsx";
+		
+		response.setContentType("application/ms-excel");
+		response.setContentLength(outArray.length);
+		response.setHeader("Expires:", "0"); // eliminates browser caching
+		response.setHeader("Content-Disposition", "attachment; filename=" + consolidado + ".xlsx");
+		OutputStream outStream;
+		try {
+			outStream = response.getOutputStream();
+			outStream.write(outArray);
+			outStream.flush();
+
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	}
 
 	private Date formatarData(String dataEntrada) {

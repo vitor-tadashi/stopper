@@ -1,9 +1,8 @@
 package br.com.verity.pause.util;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
@@ -38,10 +37,9 @@ public class GerarRelatorioXlsx {
 	 *         na planilha
 	 */
 	@SuppressWarnings("deprecation")
-	public String relatorioFuncionarioPeriodo(List<ConsultaCompletaBean> consultaCompleta, FuncionarioBean funcionario,
+	public byte[] relatorioFuncionarioPeriodo(List<ConsultaCompletaBean> consultaCompleta, FuncionarioBean funcionario,
 			String de, String ate) {
 		String empresa = (funcionario.getEmpresa().getId() == 2) ? "Verity" : "QA360";
-		String arquivo = funcionario.getNome() + ".xlsx";
 		ClassPathResource resourceModelo = new ClassPathResource(empresa+"Relatorio.xlsx");
 		DateTimeFormatter formatter = DateTimeFormatter.ISO_TIME;
 		DateFormat formatDt = new SimpleDateFormat("dd/MM/yyyy");
@@ -50,7 +48,7 @@ public class GerarRelatorioXlsx {
 		int mesmoDia = 0;
 		int aux = 0;
 		try {
-			FileInputStream fileModelo = new FileInputStream(resourceModelo.getFile());
+			InputStream fileModelo = resourceModelo.getInputStream();
 			XSSFWorkbook workbook = new XSSFWorkbook(fileModelo);
 			XSSFSheet sheet = workbook.getSheetAt(0);
 			XSSFRow row = sheet.getRow(linha);
@@ -187,24 +185,27 @@ public class GerarRelatorioXlsx {
 			String dtHoje = formatDt.format(hoje);
 			row.createCell(0).setCellValue(dtHoje);
 
-			FileOutputStream out = new FileOutputStream(new File(arquivo));
-			workbook.write(out);
-            out.close();
+			//FileOutputStream out = new FileOutputStream(new File(arquivo));
+			ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
+			workbook.write(outByteStream);
+			
+			byte [] outArray = outByteStream.toByteArray();
+			outByteStream.close();
+			return outArray;
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
 
-		return arquivo;
+		return null;
 	}
 
-	public String relatorioConsulta(List<ConsultaApontamentosBean> consultaApontamentosBean, Date de, Date ate, Integer idEmpresa) {
+	public byte[] relatorioConsulta(List<ConsultaApontamentosBean> consultaApontamentosBean, Date de, Date ate, Integer idEmpresa) {
 		String empresa = (idEmpresa == 2)?"Verity":"QA360";
-		String consolidado =  "consolidado" + empresa + "" + de.getMonth() + ".xlsx";
 		ClassPathResource resourceModelo = new ClassPathResource(empresa+".xlsx");
 		DateFormat formatDt = new SimpleDateFormat("dd/MM/yyyy");
 		int linha = 5;
 		try {
-			FileInputStream fileModelo = new FileInputStream(resourceModelo.getFile());
+			InputStream fileModelo = resourceModelo.getInputStream();
 			XSSFWorkbook workbook = new XSSFWorkbook(fileModelo);
 			XSSFSheet sheet = workbook.getSheetAt(0);
 			XSSFRow row = sheet.createRow(linha);
@@ -225,13 +226,16 @@ public class GerarRelatorioXlsx {
 				linha++;
 			}
 			
-			FileOutputStream out = new FileOutputStream(new File(consolidado));
-			workbook.write(out);
-            out.close();
+			//FileOutputStream out = new FileOutputStream(new File(consolidado));
+			ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
+			workbook.write(outByteStream);
+			
+			byte [] outArray = outByteStream.toByteArray();
+			outByteStream.close();
+			return outArray;
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
-
-		return consolidado;
+		return null;
 	}
 }

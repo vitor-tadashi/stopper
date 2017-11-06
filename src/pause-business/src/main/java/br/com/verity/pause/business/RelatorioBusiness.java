@@ -29,19 +29,19 @@ public class RelatorioBusiness {
 	@Autowired
 	private CustomUserDetailsBusiness userBusiness;
 	
-	public String gerarRelatorio(Integer idFuncionario, String de, String ate) {
+	public byte[] gerarRelatorio(Integer idFuncionario, String de, String ate) {
 		FuncionarioBean funcionario = sav.getFuncionario(idFuncionario);
 		List<ConsultaCompletaBean> consultaCompleta = new ArrayList<ConsultaCompletaBean>();
-		String caminho;
+		byte[] outArray ;
 		
 		consultaCompleta = apontamentoBusiness.obterApontamentosPeriodoPorIdFuncionario(funcionario.getId(), de, ate);
 		
-		caminho = gerarRelatorio.relatorioFuncionarioPeriodo(consultaCompleta, funcionario, de, ate);
+		outArray  = gerarRelatorio.relatorioFuncionarioPeriodo(consultaCompleta, funcionario, de, ate);
 		
-		return caminho;
+		return outArray ;
 	}
 	
-	public String relatorioConsulta(List<ConsultaApontamentosBean> consultaApontamentosBean, Date de,
+	public byte[] relatorioConsulta(List<ConsultaApontamentosBean> consultaApontamentosBean, Date de,
 			Date ate) {
 		UsuarioBean usuarioLogado = userBusiness.usuarioLogado(); 
 		return gerarRelatorio.relatorioConsulta(consultaApontamentosBean, de, ate, usuarioLogado.getIdEmpresaSessao());

@@ -70,19 +70,7 @@ function gerarRelatorio() {
 		dataAte = new Date();
 		dataDe = new Date(dataAte.getYear() + 1900, dataAte.getMonth(), 01);
 	}
-
-	$.ajax({
-		url : "/pause/consultar-apontamento/gerar-relatorio-consulta",
-		type : "POST",
-		data : {
-			'idFuncionario' : idFuncionario,
-			'ate' : dataAte,
-			'de' : dataDe
-		},
-		success : function(data) {
-			$("#download").attr("href",
-					"/pause/relatorio/download?caminho=" + data);
-			window.open($("#download").attr("href"), '_blank');
-		}
-	});
+	$("#download").attr("href", "/pause/consultar-apontamento/gerar-relatorio-consulta?idFuncionario="+idFuncionario+
+			"&de="+dataDe+"&ate="+dataAte);
+	window.open($("#download").attr("href"),'_blank');
 }

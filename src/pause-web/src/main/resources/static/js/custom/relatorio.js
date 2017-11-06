@@ -41,18 +41,10 @@ function gerarRelatorio(){
 		
 		var de = deDia+"-"+deMes+"-"+deAno;
 		var ate = ateDia+"-"+ateMes+"-"+ateAno;
-		$.ajax({
-			url: "relatorio/gerar-relatorio",
-			type : 'POST',
-			data : {'idFuncionario': $("#idFunc").val(),
-					'ate' : ate,
-					'de' : de},
-			DataType: "text",
-			success: function(data){
-				$("#download").attr("href", "/pause/relatorio/download?caminho="+data);
-				window.open($("#download").attr("href"),'_blank');
-			}
-		})
+		var id = $("#idFunc").val();
+		
+		$("#download").attr("href", "/pause/relatorio/gerar-relatorio?idFuncionario="+id+"&de="+de+"&ate="+ate);
+		window.open($("#download").attr("href"),'_blank');
 	} else{
 		textDiv.className = "alert alert-danger";
 		textDiv.textContent = "Por favor, selecione um funcionário e um período.";
