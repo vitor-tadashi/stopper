@@ -43,7 +43,7 @@ public class AfastamentoDAO {
 
 		sql = new StringBuilder();
 
-		sql.append("SELECT idAfastamento, dataInicio");
+		sql.append("SELECT idAfastamento, dataInicio,");
 		sql.append("	   dataFim, dataInclusao, ");
 		sql.append("	   idFuncionario, idTipoAfastamento, idUsuarioInclusao");
 		sql.append("  FROM PAUSEAfastamento");
