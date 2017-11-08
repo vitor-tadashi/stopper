@@ -99,7 +99,6 @@ public class ApontamentoBusiness {
 			idFuncionario = funcionario.getId();
 		}
 		verificaAfastamento(idFuncionario, apontamento.getData());
-		verificaApontamentoMesmoHorario(idFuncionario,apontamento);
 
 		apontamento.setDataInclusao(new Date());
 		apontamento.setIdUsuarioInclusao(usuarioLogado.getId());
@@ -111,22 +110,18 @@ public class ApontamentoBusiness {
 		entity.setControleDiario(controleDiarioConverter.convertBeanToEntity(controleDiario));
 
 		if (apontamento.getId() == null || apontamento.getId().equals(0)) {
-
+			verificaApontamentoMesmoHorario(idFuncionario,apontamento,null);
 			apontamento.setId(apontamentoDAO.save(entity).getId());
 
 		} else {
-
 			apontamentoAtual = apontamentoDAO.findById(apontamento.getId());
+			verificaApontamentoMesmoHorario(idFuncionario,apontamento, apontamentoAtual);
 
 			if (apontamentoAtual.getTipoImportacao()) {
-
 				throw new BusinessException("Não foi possível realizar a ação, pois o apontamento é eletrônico.");
-
 			}
-
 			apontamentoDAO.update(entity);
 		}
-
 		apontamentoPivotEntity = calculoBusiness.calcularApontamento(idFuncionario, apontamento.getData());
 
 		controleDiario.setAdicNoturno(apontamentoPivotEntity.getTotalAdicionalNoturno());
@@ -141,22 +136,23 @@ public class ApontamentoBusiness {
 		return apontamento;
 	}
 
-	private void verificaApontamentoMesmoHorario(Integer idFuncionario, ApontamentoBean apontamento) throws BusinessException {
-
+	private void verificaApontamentoMesmoHorario(Integer idFuncionario, ApontamentoBean apontamento,
+			ApontamentoEntity apontamentoAtual) throws BusinessException {
+		Boolean alterouHora = false;
 		java.sql.Date dataSql = new java.sql.Date(apontamento.getData().getTime());
 
-		List<ApontamentoEntity> aps = apontamentoDAO.findByPisAndPeriodo(idFuncionario, dataSql);
-		List<ApontamentoBean> apontamentos = apontamentoConverter.convertEntityToBean(aps);
-		
-		
-		for (ApontamentoBean a : apontamentos) {
-
-			if (a.getHorario().equals(apontamento.getHorario())) {
-				throw new BusinessException("Você não pode fazer dois apontamentos no mesmo horário.");
-			}
-
+		if(apontamentoAtual != null){
+			alterouHora = !apontamentoAtual.getHorario().toLocalTime().equals(apontamento.getHorario());
 		}
-
+		if(apontamentoAtual == null || alterouHora){
+			List<ApontamentoEntity> aps = apontamentoDAO.findByPisAndPeriodo(idFuncionario, dataSql);
+			List<ApontamentoBean> apontamentos = apontamentoConverter.convertEntityToBean(aps);
+			for (ApontamentoBean a : apontamentos) {
+				if (a.getHorario().equals(apontamento.getHorario())) {
+					throw new BusinessException("Você não pode fazer dois apontamentos no mesmo horário.");
+				}
+			}
+		}
 	}
 
 	private void verificaAfastamento(int idFuncionario, Date data) throws BusinessException {

@@ -110,6 +110,7 @@ function informarHorario() {
 }
 
 function apontar (horario, data, idTd) {
+	var apontamentoNaTela = $("#"+idTd).html();
 	var apontamento = {
 		id : $('#idApontamento').val(),
 		horarioJson : horario,
@@ -152,7 +153,7 @@ function apontar (horario, data, idTd) {
 		error: function(erro){
 			$('#erro-label').text(erro.responseText);
 			$('#erro-sm-modal').modal();
-			$("#"+idTd).html("--:--");
+			$("#"+idTd).html(apontamentoNaTela);
 			adicionalNoturno = bancoHora = sa = sat = 0.0;
 		}
 	});

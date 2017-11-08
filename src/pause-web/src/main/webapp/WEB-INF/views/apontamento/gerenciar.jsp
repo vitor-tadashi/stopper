@@ -7,15 +7,8 @@
 	<layout:put block="css">
 		<link href='<c:url value="plugins/datatables/media/css/dataTables.bootstrap.css"/>' rel="stylesheet">
 		<link href='<c:url value="plugins/bootstrap-timepicker/bootstrap-timepicker.min.css"/>' rel="stylesheet">
-
-
-        
-    <!--Font Awesome [ OPTIONAL ]-->
-    <link href="plugins/magic-check/css/magic-check.min.css" rel="stylesheet">
-
-
-    <!--Bootstrap Validator [ OPTIONAL ]-->
-    <link href="plugins/bootstrap-validator/bootstrapValidator.min.css" rel="stylesheet">
+	    <!--Bootstrap Validator [ OPTIONAL ]-->
+	    <link href="plugins/bootstrap-validator/bootstrapValidator.min.css" rel="stylesheet">
 	</layout:put>
 	<layout:put block="contents">
 		<!--Page Title-->
