@@ -51,7 +51,6 @@ node {
                 withSonarQubeEnv('sonar-pmd') {
                 //sh "${scannerHome}/bin/sonar-scanner"
             	bat "${scannerHome}\\bin\\sonar-scanner.bat"
-				bat "wkhtmltopdf --readme .sonar\\issues-report\\issues-report.html pause.pdf"
 				bat "wkhtmltopdf .sonar\\issues-report\\issues-report.html pause.pdf"
                 }
     }    
@@ -69,12 +68,12 @@ node {
         stage 'Warnings-Publisher'
            warnings canComputeNew: false, canResolveRelativePaths: false, consoleParsers: [[parserName: 'Java Compiler (javac)'], [parserName: 'JavaDoc Tool'], [parserName: 'Maven']], defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', messagesPattern: '', unHealthy: '' 
         
-        stage 'Publish HMTL Sonar'
+       /* stage 'Publish HMTL Sonar'
 		   publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '.sonar/issues-report', reportFiles: 'issues-report.html', reportName: 'SonarQube Report', reportTitles: ''])
-
+*/
 		
         stage 'Archive'
-           step([$class: 'ArtifactArchiver', artifacts: '**/*.war, pause.pdf', fingerprint: true])
+           step([$class: 'ArtifactArchiver', artifacts: '**/*.war', fingerprint: true])
                    
         //stage 'Delete Workpspace'
           //deleteDir()
