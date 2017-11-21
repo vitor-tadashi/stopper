@@ -8,7 +8,13 @@ import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.DataFormat;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -18,6 +24,7 @@ import org.springframework.stereotype.Component;
 
 import br.com.verity.pause.bean.ConsultaApontamentosBean;
 import br.com.verity.pause.bean.ConsultaCompletaBean;
+import br.com.verity.pause.bean.ControleMensalBean;
 import br.com.verity.pause.bean.FuncionarioBean;
 import br.com.verity.pause.business.AfastamentoBusiness;
 import br.com.verity.pause.enumeration.DiaSemanaEnum;
@@ -37,11 +44,12 @@ public class GerarRelatorioXlsx {
 	 *         na planilha
 	 */
 	@SuppressWarnings("deprecation")
-	public byte[] relatorioFuncionarioPeriodo(List<ConsultaCompletaBean> consultaCompleta, FuncionarioBean funcionario,
+	public byte[] relatorioFuncionarioPeriodo(List<ConsultaCompletaBean> consultaCompleta, List<ControleMensalBean> saldoDeHoras ,FuncionarioBean funcionario,
 			String de, String ate) {
 		String empresa = (funcionario.getEmpresa().getId() == 2) ? "Verity" : "QA360";
 		ClassPathResource resourceModelo = new ClassPathResource(empresa+"Relatorio.xlsx");
 		DateTimeFormatter formatter = DateTimeFormatter.ISO_TIME;
+		DateFormat formatador = DateFormat.getDateInstance(DateFormat.FULL, new Locale("pt", "BR"));
 		DateFormat formatDt = new SimpleDateFormat("dd/MM/yyyy");
 		int linha = 1;
 		int dia = 1;
@@ -52,18 +60,21 @@ public class GerarRelatorioXlsx {
 			XSSFWorkbook workbook = new XSSFWorkbook(fileModelo);
 			XSSFSheet sheet = workbook.getSheetAt(0);
 			XSSFRow row = sheet.getRow(linha);
-
-			row.createCell(1).setCellValue(funcionario.getPis());
-			row.createCell(6).setCellValue(funcionario.getMatricula());
-			row.createCell(18).setCellValue(de + " a " + ate);
+			
+			row.getCell(1).setCellValue(funcionario.getPis());
+			row.getCell(6).setCellValue(funcionario.getMatricula());
+			row.getCell(18).setCellValue(de.replace('-', '/') + " a " + ate.replace('-', '/'));
 			linha++;
 			
 			row = sheet.getRow(linha);
-			row.createCell(1).setCellValue(funcionario.getNome());
+			row.getCell(1).setCellValue(funcionario.getNome());
+			row.getCell(17).setCellValue(formatador.format(new Date()));
 			linha+= 3;
 
 			row = sheet.createRow(linha);
+			int cont = 0;
 			for (ConsultaCompletaBean consulta : consultaCompleta) {
+				row.setHeight((short) 500);
 				Integer idFuncionario = consulta.getIdFuncionario();
 				Boolean afastado = false;
 				
@@ -98,9 +109,9 @@ public class GerarRelatorioXlsx {
 					aux++;
 				}
 				row.createCell(19).setCellValue(
-						(consulta.getAtestadoQuantidadeHora() != null) ? consulta.getAtestadoQuantidadeHora() : 0);
+						(consulta.getAtestadoQuantidadeHora() != null) ? round(consulta.getAtestadoQuantidadeHora(),2) : 0);
 				row.createCell(20).setCellValue(
-						(consulta.getControleDiarioHoraTotal() != null) ? consulta.getControleDiarioHoraTotal() : 0);
+						(consulta.getControleDiarioHoraTotal() != null) ? round(consulta.getControleDiarioHoraTotal(),2) : 0);
 				row.createCell(21).setCellFormula("IF(U" + (linha + 1) + "+T" + (linha + 1) + ">8,U" + (linha + 1)
 						+ "+T" + (linha + 1) + "-8,0)");
 				if(afastado != null && afastado){
@@ -111,12 +122,20 @@ public class GerarRelatorioXlsx {
 									+ (linha + 1) + "<8,U" + (linha + 1) + "+T" + (linha + 1) + "-8,0))");
 				}
 				row.createCell(23).setCellValue(
-						(consulta.getControleDiarioAdcNoturno() != null) ? consulta.getControleDiarioAdcNoturno() : 0);
+						(consulta.getControleDiarioAdcNoturno() != null) ? round(consulta.getControleDiarioAdcNoturno(),2) : 0);
 				row.createCell(24)
-						.setCellValue((consulta.getControleDiarioSA() != null) ? consulta.getControleDiarioSA() : 0);
+						.setCellValue((consulta.getControleDiarioSA() != null) ? round(consulta.getControleDiarioSA(),2) : 0);
 				row.createCell(25).setCellValue(consulta.getApontamentoObs());
+				if(cont == consultaCompleta.size()-1){
+					mesmoDia = (aux == 0) ? 2 : mesmoDia + 2;
+					while (mesmoDia <= 16) {
+						row.createCell(1 + mesmoDia).setCellValue("00:00:00");
+						mesmoDia += 2;
+					}
+				}
+				cont++;
 			}
-
+			linha++;
 			row = sheet.createRow(linha);
 			row.createCell(20).setCellFormula("SUM(U6:U" + (linha) + ")");
 			row.createCell(21).setCellFormula("SUM(V6:V" + (linha) + ")");
@@ -128,8 +147,7 @@ public class GerarRelatorioXlsx {
 			row = sheet.createRow(linha);
 			row.createCell(18).setCellValue("Saldo Final: ");
 			row.createCell(20).setCellFormula("V" + (linha) + "+W" + (linha));
-			row.createCell(21).setCellFormula("IF(U" + (linha + 1) + ">0,TEXT(U" + (linha + 1)
-					+ "/24,\"d hh:mm\"),TEXT(-(U" + (linha + 1) + ")/24,\"- d hh:mm\"))");
+			row.createCell(21).setCellFormula("TEXT(ABS(U" + (linha + 1) + ")/24,\"([h]:mm)\")");
 			linha++;
 
 			row = sheet.createRow(linha);
@@ -143,25 +161,23 @@ public class GerarRelatorioXlsx {
 			row.createCell(3).setCellValue("Banco");
 			row.createCell(4).setCellValue("Saldo");
 			linha++;
-
-			row = sheet.createRow(linha);
-			row.createCell(0)
-					.setCellValue(MesEnum.valueOf(((consultaCompleta.get(0).getControleMensalMes() != null)
-							? consultaCompleta.get(0).getControleMensalMes() : Integer.parseInt(de.substring(3, 5)))).getSemestre());
-			row.createCell(1).setCellValue((consultaCompleta.get(0).getControleMensalAno() != null)
-					? consultaCompleta.get(0).getControleMensalAno() : Integer.parseInt(de.substring(6, 10)));
-			row.createCell(2).setCellValue(MesEnum.valueOf((consultaCompleta.get(0).getControleMensalMes() != null)
-					? consultaCompleta.get(0).getControleMensalMes() : Integer.parseInt(de.substring(3, 5))).getMes());
-			if (consultaCompleta.get(0).getControleMensalHoraTotal() != null) {
-				row.createCell(3).setCellValue(consultaCompleta.get(0).getControleMensalBancoHora());
-				row.createCell(4).setCellValue(consultaCompleta.get(0).getControleMensalHoraTotal()
-						+ consultaCompleta.get(0).getControleMensalBancoHora());
-			}else{
-				row.createCell(3).setCellValue(0);
-				row.createCell(4).setCellValue(0);
+			
+			double saldoAnterior = 0.0d;
+			for(ControleMensalBean cm: saldoDeHoras){
+				if(cm != null){
+					row = sheet.createRow(linha);
+					row.createCell(0)
+							.setCellValue(MesEnum.valueOf((cm.getMes())).getSemestre());
+					row.createCell(1).setCellValue(cm.getAno());
+					row.createCell(2).setCellValue(cm.getMes());
+					row.createCell(3).setCellValue(round(cm.getBancoHora(),2));
+					row.createCell(4).setCellValue(round(cm.getBancoHora()
+							+ saldoAnterior,2));
+					
+					saldoAnterior = cm.getBancoHora() + saldoAnterior;
+					linha++;
+				}
 			}
-			linha++;
-
 			row = sheet.createRow(linha);
 			row.createCell(18).setCellValue("__________________________________________________________");
 			linha++;
@@ -172,7 +188,7 @@ public class GerarRelatorioXlsx {
 
 			row = sheet.createRow(linha);
 			row.createCell(18).setCellValue("veracidade dos registros.");
-			linha++;
+			/*linha++;
 			linha++;
 
 			row = sheet.createRow(linha);
@@ -183,9 +199,11 @@ public class GerarRelatorioXlsx {
 			row = sheet.createRow(linha);
 			Date hoje = new Date();
 			String dtHoje = formatDt.format(hoje);
-			row.createCell(0).setCellValue(dtHoje);
-
+			row.createCell(0).setCellValue(dtHoje);*/
+			
 			//FileOutputStream out = new FileOutputStream(new File(arquivo));
+			sheet.setColumnWidth(4, 2000);
+			
 			ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
 			workbook.write(outByteStream);
 			
@@ -237,5 +255,13 @@ public class GerarRelatorioXlsx {
 			System.out.println(e.getMessage());
 		}
 		return null;
+	}
+	public static double round(double value, int places) {
+	    if (places < 0) throw new IllegalArgumentException();
+
+	    long factor = (long) Math.pow(10, places);
+	    value = value * factor;
+	    long tmp = Math.round(value);
+	    return (double) tmp / factor;
 	}
 }

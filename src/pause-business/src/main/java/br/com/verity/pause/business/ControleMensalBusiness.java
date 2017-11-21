@@ -1,7 +1,9 @@
 package br.com.verity.pause.business;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,10 +11,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.verity.pause.bean.ConsultaCompletaBean;
 import br.com.verity.pause.bean.ControleMensalBean;
 import br.com.verity.pause.bean.UsuarioBean;
 import br.com.verity.pause.converter.ControleMensalConverter;
 import br.com.verity.pause.dao.ControleMensalDAO;
+import br.com.verity.pause.entity.ConsultaCompletaEntity;
 import br.com.verity.pause.entity.ControleMensalEntity;
 import br.com.verity.pause.enumeration.MesEnum;
 
@@ -98,5 +102,18 @@ public class ControleMensalBusiness {
 		bancosTrimestre.add(Math.round(bancoTrimestreAnterior*100.0)/100.0);
 		
 		return bancosTrimestre;
+	}
+
+	public List<ControleMensalBean> obterBancoESaldoPorIdFuncionario(Integer id, String de) throws SQLException {
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+		LocalDate date = LocalDate.parse(de, dtf);
+		int trimestre = Integer.parseInt(MesEnum.valueOf(date.getMonthValue()).getSemestre());
+		int ultimoMesTrimestre = trimestre * 3;
+		int primeiroMesTrimestre = ultimoMesTrimestre - 2;
+		
+		List<ControleMensalEntity> bancoEHoras = controleMensalDAO.findHoraAndBancoByIdFuncionario(id, primeiroMesTrimestre, ultimoMesTrimestre);
+		if(bancoEHoras.size()<1)bancoEHoras = null;
+		
+		return controleMensalConverter.convertEntityToBean(bancoEHoras);
 	}
 }

@@ -191,4 +191,43 @@ public class ControleMensalDAO {
 			}
 		return banco;
 	}
+
+	public List<ControleMensalEntity> findHoraAndBancoByIdFuncionario(Integer id, int primeiroMesTrimestre,
+			int ultimoMesTrimestre) throws SQLException {
+		Connection conn = null;
+		List<ControleMensalEntity> response = new ArrayList<>();
+		ControleMensalEntity controleMensal = null;
+		
+		String sql = "SELECT cm.idControleMensal, cm.horaTotal, cm.bancoHora, cm.idFuncionario, cm.mes, cm.ano FROM PAUSEControleMensal cm"+
+				" WHERE cm.mes >= ? AND cm.mes <= ? AND cm.idFuncionario = ?";
+		try {
+			conn = connectionFactory.createConnection();
+
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setInt(1, primeiroMesTrimestre);
+			ps.setInt(2, ultimoMesTrimestre);
+			ps.setInt(3, id);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				controleMensal = new ControleMensalEntity();
+				
+				controleMensal.setId(rs.getInt(1));
+				controleMensal.setHrTotal(rs.getDouble(2));
+				controleMensal.setBancoHora(rs.getDouble(3));
+				controleMensal.setIdFuncionario(rs.getInt(4));
+				controleMensal.setMes(rs.getInt(5));
+				controleMensal.setAno(rs.getInt(6));
+				
+				response.add(controleMensal);
+			}
+			ps.execute();
+			ps.close();
+			conn.close();
+			}catch(SQLException e){
+				throw new SQLException();
+			}
+		return response;
+	}
 }
