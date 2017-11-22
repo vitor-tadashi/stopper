@@ -112,14 +112,15 @@ public class GerarRelatorioXlsx {
 						(consulta.getAtestadoQuantidadeHora() != null) ? round(consulta.getAtestadoQuantidadeHora(),2) : 0);
 				row.createCell(20).setCellValue(
 						(consulta.getControleDiarioHoraTotal() != null) ? round(consulta.getControleDiarioHoraTotal(),2) : 0);
-				row.createCell(21).setCellFormula("IF(U" + (linha + 1) + "+T" + (linha + 1) + ">8,U" + (linha + 1)
-						+ "+T" + (linha + 1) + "-8,0)");
-				if(afastado != null && afastado){
-					row.createCell(22).setCellFormula("0");
+				if(consulta.getControleDiarioBancoHora() > 0){
+					row.createCell(21).setCellValue(round(consulta.getControleDiarioBancoHora(),2));
+					row.createCell(22).setCellValue(0);
+				}else if(consulta.getControleDiarioBancoHora()<0){
+					row.createCell(21).setCellValue(0);
+					row.createCell(22).setCellValue(round(consulta.getControleDiarioBancoHora(),2));
 				}else{
-					row.createCell(22).setCellFormula(
-							"IF(OR(B" + (linha + 1) + "=\"Dom\", B" + (linha + 1) + "=\"Sáb\"),0,IF(U" + (linha + 1) + "+T"
-									+ (linha + 1) + "<8,U" + (linha + 1) + "+T" + (linha + 1) + "-8,0))");
+					row.createCell(21).setCellValue(0);
+					row.createCell(22).setCellValue(0);
 				}
 				row.createCell(23).setCellValue(
 						(consulta.getControleDiarioAdcNoturno() != null) ? round(consulta.getControleDiarioAdcNoturno(),2) : 0);

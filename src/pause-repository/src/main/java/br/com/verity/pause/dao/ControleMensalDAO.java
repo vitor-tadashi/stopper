@@ -199,7 +199,7 @@ public class ControleMensalDAO {
 		ControleMensalEntity controleMensal = null;
 		
 		String sql = "SELECT cm.idControleMensal, cm.horaTotal, cm.bancoHora, cm.idFuncionario, cm.mes, cm.ano FROM PAUSEControleMensal cm"+
-				" WHERE cm.mes >= ? AND cm.mes <= ? AND cm.idFuncionario = ?";
+				" WHERE cm.mes >= ? AND cm.mes <= ? AND cm.idFuncionario = ? ORDER BY cm.mes ASC";
 		try {
 			conn = connectionFactory.createConnection();
 
