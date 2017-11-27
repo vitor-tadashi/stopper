@@ -1,9 +1,9 @@
 package br.com.verity.pause.entity.enumerator;
 
 public enum TipoAfastamento {
-	Ferias(1,"Férias"), LicencaNaoRemunerada(2, "Licença não remunerada"), A(3, "Licença não remunerada")
-	, B(4, "Licença não remunerada"), C(5, "Licença não remunerada"), D(6, "Licença não remunerada")
-	, E(7, "Licença não remunerada"), F(8, "Licença não remunerada"), G(9, "Licença não remunerada");
+	Ferias(1,"Férias"), LicencaNaoRemunerada(2, "Licença não remunerada"), AbonoDoCliente(3, "Abono do cliente")
+	, NovoFuncionario(4, "Novo funcionário"), Desligamento(5, "Desligamento"), Estagiario(6, "Estagiário")
+	, Greve(7, "Greve"), QA360(8, "QA360"), AfastamentoINSS(9, "Afastamento/INSS"), AbonoCasamentoEOutro(10, "Abono (Casamento e outro)");
 
 	public Integer idTipoAfastamento;
 	public String descricao;

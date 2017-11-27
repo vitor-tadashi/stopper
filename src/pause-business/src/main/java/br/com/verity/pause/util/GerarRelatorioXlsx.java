@@ -112,10 +112,10 @@ public class GerarRelatorioXlsx {
 						(consulta.getAtestadoQuantidadeHora() != null) ? round(consulta.getAtestadoQuantidadeHora(),2) : 0);
 				row.createCell(20).setCellValue(
 						(consulta.getControleDiarioHoraTotal() != null) ? round(consulta.getControleDiarioHoraTotal(),2) : 0);
-				if(consulta.getControleDiarioBancoHora() > 0){
+				if(consulta.getControleDiarioBancoHora() != null && consulta.getControleDiarioBancoHora() > 0){
 					row.createCell(21).setCellValue(round(consulta.getControleDiarioBancoHora(),2));
 					row.createCell(22).setCellValue(0);
-				}else if(consulta.getControleDiarioBancoHora()<0){
+				}else if(consulta.getControleDiarioBancoHora() != null && consulta.getControleDiarioBancoHora()<0){
 					row.createCell(21).setCellValue(0);
 					row.createCell(22).setCellValue(round(consulta.getControleDiarioBancoHora(),2));
 				}else{
