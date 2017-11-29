@@ -18,7 +18,7 @@ node {
            build()
            postbuild()
         }
-        else{
+        else {
              build()
              unitTest()
              allCodeQualityTests()
