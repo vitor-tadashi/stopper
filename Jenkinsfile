@@ -14,7 +14,8 @@ node {
         else {
              build()
              postbuild()
-             allCodeQualityTests()
+             allTests()
+             deploy()
         }    
       }
 }
