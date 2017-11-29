@@ -61,7 +61,8 @@ node {
     def allTests() {
     stage 'All tests'
     // don't skip anything
-    mvn 'test -B'
+    def mvnHome = tool name: '3.5.0'
+    bat "${mvnHome}/bin/mvn 'test -B'
     step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
     if (currentBuild.result == "UNSTABLE") {
         // input "Unit tests are failing, proceed?"
