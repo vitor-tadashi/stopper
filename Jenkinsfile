@@ -20,6 +20,8 @@ node {
         }
         else{
              build()
+             unitTest()
+             allCodeQualityTests()
              postbuild()
         }    
       }
@@ -51,8 +53,6 @@ node {
                 withSonarQubeEnv('sonar-pmd') {
                 //sh "${scannerHome}/bin/sonar-scanner"
             	bat "${scannerHome}\\bin\\sonar-scanner.bat"
-				bat "wkhtmltopdf --readme .sonar\\issues-report\\issues-report.html pause.pdf"
-				bat "wkhtmltopdf .sonar\\issues-report\\issues-report.html pause.pdf"
                 }
     }    
 
@@ -65,17 +65,74 @@ node {
 
     }
 
+    def allTests() {
+    stage 'All tests'
+    // don't skip anything
+    mvn 'test -B'
+    step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
+    if (currentBuild.result == "UNSTABLE") {
+        // input "Unit tests are failing, proceed?"
+        sh "exit 1"
+       }
+    }
+
+    def allCodeQualityTests() {
+    stage 'Code Quality'
+    lintTest()
+    coverageTest()
+    }
+
+    def lintTest() {
+    context="continuous-integration/jenkins/linting"
+    setBuildStatus ("${context}", 'Checking code conventions', 'PENDING')
+    lintTestPass = true
+
+    try {
+        mvn 'verify -DskipTests=true'
+        } catch (err) {
+                    setBuildStatus ("${context}", 'Some code conventions are broken', 'FAILURE')
+                    lintTestPass = false
+        } finally {
+        if (lintTestPass) setBuildStatus ("${context}", 'Code conventions OK', 'SUCCESS')
+       }
+    }
+
+    def coverageTest() {
+    context="continuous-integration/jenkins/coverage"
+    setBuildStatus ("${context}", 'Checking code coverage levels', 'PENDING')
+
+    coverageTestStatus = true
+
+    try {
+        mvn 'cobertura:check'
+    } catch (err) {
+        setBuildStatus("${context}", 'Code coverage below 90%', 'FAILURE')
+        throw err
+    }
+
+    setBuildStatus ("${context}", 'Code coverage above 90%', 'SUCCESS')
+
+    }
+
     def postbuild () {
         stage 'Warnings-Publisher'
            warnings canComputeNew: false, canResolveRelativePaths: false, consoleParsers: [[parserName: 'Java Compiler (javac)'], [parserName: 'JavaDoc Tool'], [parserName: 'Maven']], defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', messagesPattern: '', unHealthy: '' 
         
-        stage 'Publish HMTL Sonar'
-		   publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '.sonar/issues-report', reportFiles: 'issues-report.html', reportName: 'SonarQube Report', reportTitles: ''])
+        //stage 'Publish HMTL Sonar'
+		   //publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: '', reportFiles: 'issues-report-light.html', reportName: 'SonarQube Report', reportTitles: '${BUILD_ID}-issues-report-light.html'])
 
 		
         stage 'Archive'
-           step([$class: 'ArtifactArchiver', artifacts: '**/*.war, pause.pdf', fingerprint: true])
+           step([$class: 'ArtifactArchiver', artifacts: '**/*.war', fingerprint: true])
                    
-        //stage 'Delete Workpspace'
-          //deleteDir()
+       // stage 'Delete Workpspace'
+       //    deleteDir()
     }
+
+    def deploy () {     
+          stage 'Deploy'
+             step ([$class: 'CopyArtifact',projectName: 'projetos-verity/Build/pipeline-pause',filter: 'src/pause-web/target/pause-web.war']);
+             sh 'ssh pause@192.168.2.175 "sudo service pause stop; sudo mv /opt/pause/pause-web.war /tmp/bkp/pause/pause-web.war"'
+             sh 'scp ./src/pause-web/target/pause-web.war pause@192.168.2.175:/opt/pause'
+             sh 'ssh pause@192.168.2.175 sudo service pause start'
+      }
