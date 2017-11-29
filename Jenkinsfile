@@ -4,25 +4,17 @@ import groovy.json.JsonSlurper
 node {
       wrap([$class: 'TimestamperBuildWrapper']) {
       stage ('Checkout')
-        deleteDir()
-        checkout scm
-        bat 'del /F /Q outfile '
-        bat 'git name-rev --name-only HEAD > outfile'
-        def Branch_Name = readFile 'outFile'
-        println Branch_Name
-        def Branch_Master = "remotes/origin/develop"
-        Branch_Name = Branch_Name.trim()
-        Branch_Master = Branch_Master.trim()
-        if (Branch_Name == Branch_Master) {
+         deleteDir()
+         checkout scm
+         if  (env.BRANCH_NAME == 'master') {
            sonarqube()
            build()
            postbuild()
         }
         else {
              build()
-             unitTest()
-             allCodeQualityTests()
              postbuild()
+             allCodeQualityTests()
         }    
       }
 }
