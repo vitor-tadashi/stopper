@@ -133,8 +133,12 @@ function removerSA(click, id){
 			$(click).parent().parent().remove();
 		},
 		error: function(erro){
-			$('#erro-label').text(erro.responseText);
-			$('#erro-sm-modal').modal();
+			if(erro.status === 403){
+				location.reload();
+			}else{
+				$('#erro-label').text(erro.responseText);
+				$('#erro-sm-modal').modal();
+			}
 		}
 	});
 }
@@ -189,8 +193,12 @@ function inserirSA_ajax(dataSA, horaSAe, horaSAs){
 			clearForm(1);
 		},
 		error: function(erro){
-			$('#erro-label').text(erro.responseText);
-			$('#erro-sm-modal').modal();
+			if(erro.status === 403){
+				location.reload();
+			}else{
+				$('#erro-label').text(erro.responseText);
+				$('#erro-sm-modal').modal();
+			}
 		}
 	});
 }
@@ -266,8 +274,12 @@ function inserirAfastamento_ajax (de, ate, tpId, tpDesc) {
 			clearForm(2);
 		},
 		error: function(erro){
-			$('#erro-label').text(erro.responseText);
-			$('#erro-sm-modal').modal();
+			if(erro.status === 403){
+				location.reload();
+			}else{
+				$('#erro-label').text(erro.responseText);
+				$('#erro-sm-modal').modal();
+			}
 		}
 	});
 }
@@ -281,8 +293,12 @@ function removerAfastamento(click, id){
 			$(click).parent().parent().remove();
 		},
 		error: function(erro){
-			$('#erro-label').text(erro.responseText);
-			$('#erro-sm-modal').modal();
+			if(erro.status === 403){
+				location.reload();
+			}else{
+				$('#erro-label').text(erro.responseText);
+				$('#erro-sm-modal').modal();
+			}
 		}
 	});
 }
@@ -393,8 +409,12 @@ function inserirAtestado_ajax(dt, qtdHora, tpId, tpDesc){
 			clearForm(3);
 		},
 		error: function(erro){
-			$('#erro-label').text(erro.responseText);
-			$('#erro-sm-modal').modal();
+			if(erro.status === 403){
+				location.reload();
+			}else{
+				$('#erro-label').text(erro.responseText);
+				$('#erro-sm-modal').modal();
+			}
 		}
 	});
 }
@@ -408,8 +428,12 @@ function removerAtestado(click, id){
 			$(click).parent().parent().remove();
 		},
 		error: function(erro){
-			$('#erro-label').text(erro.responseText);
-			$('#erro-sm-modal').modal();
+			if(erro.status === 403){
+				location.reload();
+			}else{
+				$('#erro-label').text(erro.responseText);
+				$('#erro-sm-modal').modal();
+			}
 		}
 	});
 }
