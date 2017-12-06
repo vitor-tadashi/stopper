@@ -3,8 +3,6 @@ package br.com.verity.pause.controller;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -35,7 +33,6 @@ import br.com.verity.pause.bean.TipoJustificativaBean;
 import br.com.verity.pause.business.AfastamentoBusiness;
 import br.com.verity.pause.business.ApontamentoBusiness;
 import br.com.verity.pause.business.AtestadoBusiness;
-import br.com.verity.pause.business.ControleApontamentoBusiness;
 import br.com.verity.pause.business.ControleDiarioBusiness;
 import br.com.verity.pause.business.ControleMensalBusiness;
 import br.com.verity.pause.business.FuncionarioBusiness;
@@ -71,9 +68,6 @@ public class GerenciarApontamentoController {
 	@Autowired
 	private ControleMensalBusiness controleMensalBusiness;
 	
-	@Autowired
-	private ControleApontamentoBusiness controleApontamentoBusiness;
-
 	@RequestMapping(method = RequestMethod.GET)
 	public String consultar(SecurityContextHolderAwareRequestWrapper request, Model model, Integer idFuncionario,
 			String... periodo) {
@@ -82,7 +76,6 @@ public class GerenciarApontamentoController {
 		justificativas(model);
 		sobreAvisos(model, idFuncionario, periodo);
 		bancosTrimestre(model);
-		//definirDataLimiteMinima(model);
 		
 		if (request.isUserInRole("ROLE_MULTI-EMPRESA")) {
 			funcionarios(model);
@@ -207,42 +200,6 @@ public class GerenciarApontamentoController {
 			model.addAttribute("bancos", bancosTrimestre);
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
-	}
-
-	private void definirDataLimiteMinima(Model model) {
-		
-		String dataMinima = "";
-		
-		ZoneId zona = ZoneId.of( "America/Montreal" );
-		ZonedDateTime hoje = ZonedDateTime.now( zona );
-		ZonedDateTime primeiroDiaMes = ZonedDateTime.now( zona );
-		
-		int valorDiaHoje = hoje.getDayOfMonth();
-		int quantidadeDeDiasParaPrimeiroDia = valorDiaHoje - 1;
-		
-		// Neste if, se for dia dez ou mais, a data mínima será setada para o dia um deste mesmo mês.
-		if (valorDiaHoje >= 10) {
-			
-			primeiroDiaMes = hoje.minusDays(quantidadeDeDiasParaPrimeiroDia);
-			
-			dataMinima = primeiroDiaMes.toString().substring(0, 10);
-			
-			model.addAttribute("dataMinima", dataMinima);
-			
-		} else {
-			// Aqui no else, se for menor que dia dez, a data mínima será setada para o dia um do mês anterior.
-			primeiroDiaMes = hoje.minusMonths(1);
-			
-			valorDiaHoje = primeiroDiaMes.getDayOfMonth();
-			quantidadeDeDiasParaPrimeiroDia = valorDiaHoje - 1;
-			
-			primeiroDiaMes = primeiroDiaMes.minusDays(quantidadeDeDiasParaPrimeiroDia);
-			
-			dataMinima = primeiroDiaMes.toString().substring(0, 10);
-			
-			model.addAttribute("dataMinima", dataMinima);
-			
 		}
 	}
 }

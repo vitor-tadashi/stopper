@@ -3,6 +3,8 @@ package br.com.verity.pause.business;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Optional;
@@ -26,6 +28,10 @@ import br.com.verity.pause.integration.SavIntegration;
 /**
  * Classe que possui todos os cálculos relacionados ao controle de horas
  * @author vitor.tadashi
+ *
+ */
+/**
+ * @author igor.almeida
  *
  */
 @Service
@@ -130,7 +136,7 @@ public class CalculoBusiness {
 			apontamento.setIdFuncionario(idFuncionario);
 		}
 		totalHoras = calcularHoraTotalAtestado(totalHoras, idFuncionario, data);
-		horasExtras = calcularHorasExtras(totalHoras, totalHorasDiarias, data);
+		horasExtras = calcularHorasExtras(totalHoras, totalHorasDiarias, data, apontamento, idFuncionario);
 		
 		if (sobreAviso != null){
 			totalSobreAviso = calcularSobreAviso(sobreAviso, totalSobreAvisoTrabalhado);
@@ -352,13 +358,19 @@ public class CalculoBusiness {
 	
 	/**
 	 * Calcular horas extras
-	 * @param entrada Horário de entrada
-	 * @param saida Horário de saída
-	 * @return Retorna a diferença entre dois horários
+	 * @param horasRealizadas HorasRealizadas horas totais do período de apontamento do funcionário
+	 * @param horasARealizar HorasARealizar quantidade de horas diárias a serem realizadas pelo funcionário
+	 * @param data Data do apontamento diário
+	 * @param apontamento Apontamento diário do funcionário
+	 * @param idFuncionario Id do funcionário
+	 * @return Retorna a quantidade de horas extras
 	 */
-	private Double calcularHorasExtras(Double horasRealizadas, Double horasARealizar, Date data) {
+	private Double calcularHorasExtras(Double horasRealizadas, Double horasARealizar, Date data, 
+			ApontamentoPivotEntity apontamento, int idFuncionario) {
 		Double horasExtras = 0d;
+		Boolean continuidade = null;
 		Boolean finalSemanaOuFeriado = null;
+		Boolean temApontamento = apontamento != null && apontamento.getEntrada1() != null && apontamento.getSaida1() != null;
 		
 		finalSemanaOuFeriado = verificarDomingo(data) || verificarFeriado(data);
 		
@@ -366,11 +378,61 @@ public class CalculoBusiness {
 		
 		if (finalSemanaOuFeriado) {
 			horasExtras = horasExtras + (horasExtras * 0.4);
+		}else if(temApontamento && apontamento.getEntrada1().getTime() == adNotInicio1.getTime()){
+			continuidade = verificarContinuidade(data, idFuncionario);
+			if(continuidade){	
+				horasExtras = (calcularPeriodo(apontamento.getEntrada1(), apontamento.getSaida1()) * 0.40) + horasExtras;
+			}
 		}
 		
 		return horasExtras;
 	}
-	
+	/**
+	 * Verificar se o funcionario tem continualidade de horas com domingo ou feriado.
+	 * @param data Data a qual se deseja verificar a continualidade
+	 * @param idFuncionario Id do funcionário 
+	 * @return Retorna se é continuidade
+	 */
+	private Boolean verificarContinuidade(Date data, int idFuncionario) {
+		Date dataAnterior = null;
+		Time ultimoApontamento = null;
+		Boolean continuidade = false;
+		Boolean dataAnteriorDomingoOuFeriado = null;
+		ApontamentoPivotEntity aptDiaAnterior = null;
+		Time fimDoDia = new Time(23,59,00);
+		
+		dataAnterior = Date.valueOf(data.toLocalDate().minusDays(1));
+		dataAnteriorDomingoOuFeriado = verificarDomingo(dataAnterior) || verificarFeriado(dataAnterior);
+		
+		if(dataAnteriorDomingoOuFeriado){
+			aptDiaAnterior = obterApontamentoFuncionario(idFuncionario, dataAnterior);
+			ultimoApontamento = ultimoApontamento(aptDiaAnterior);
+			continuidade = ultimoApontamento != null && ultimoApontamento.getTime() >= fimDoDia.getTime();
+		}
+		return continuidade;
+	}
+
+	/**
+	 * Obter o ultimo apontamento realizado na data.
+	 * @param apontamento Apontamento diário do funcionário
+	 * @return Retorna ultimo apontamento realizado pelo funcionário
+	 */
+	private Time ultimoApontamento(ApontamentoPivotEntity apontamento) {
+		Time ultimoApontamento = null;
+		if(apontamento != null && apontamento.getEntrada1() != null && apontamento.getSaida1() != null){
+			if(apontamento.getSaida4() != null){
+				ultimoApontamento = apontamento.getSaida4();
+			}else if(apontamento.getSaida3() != null){
+				ultimoApontamento = apontamento.getSaida3();
+			}else if(apontamento.getSaida2() != null){
+				ultimoApontamento = apontamento.getSaida2();
+			}else if(apontamento.getSaida1() != null){
+				ultimoApontamento = apontamento.getSaida1();
+			}
+		}
+		return ultimoApontamento;
+	}
+
 	/**
 	 * Obter a quantidade de horas diárias do funcionário na respectiva data.
 	 * Considera as férias, feriados e finais de semana.

@@ -94,6 +94,7 @@ public class ConsultarApontamentoController {
 		model.addAttribute("funcionarios", consulta);
 		model.addAttribute("de", periodoDe);
 		model.addAttribute("ate", periodoAte);
+		model.addAttribute("idFuncionario", idFuncionario);
 
 		return "/apontamento/consultar";
 	}

@@ -5,7 +5,13 @@ var sa = 0.0;
 var sat = 0.0;
 
 $(document).ready(function() {
-	//calcularTotal();
+	$('#demo-default-modal').on('hidden.bs.modal', function () {
+		$('#idApontamento').val(undefined);
+		$('#apontamento-obs').val("");
+		$('#apontamento-jus').val('default');
+		$('#apontamento-jus').selectpicker('refresh');
+
+	});
 });
 
 function dialogApontamentoHora(td, idApontamento) {
@@ -66,9 +72,10 @@ function informarHorario() {
 	var dtApontamento = $('#title-modal-apontamento').text().split(',');
 	
 	apontar(horario,dtApontamento[0],id);
-	
+}
+function ordenarHorarios(id,horario){
 	var tr = $("#"+id).parent();
-	var horarios = [];
+	var horarios = new Array(8);
 	$("#"+id).text(horario);
 	
 	$(tr).find('td[id^="apontamento"], span[id^="apontamento"]').each (function() {
@@ -77,7 +84,9 @@ function informarHorario() {
 			var horarioSetado = $(this).html();
 			var pad = "00:00";
 			var ans = pad.substring(0, pad.length - horarioSetado.length) + horarioSetado;
-			horarios.push(ans);
+			var onclick = $(this).attr("onclick");
+			var tdHorario = new Array(ans, onclick);
+			horarios.push(tdHorario);
 		}
 	});
 	
@@ -91,7 +100,7 @@ function informarHorario() {
 			$(this).attr("onclick", "dialogApontamentoHora(this);");
 		}
 		else {
-			var horarioAlterado = horarios[index];
+			var horarioAlterado = horarios[index][0];
 			
 			$(this).html(horarioAlterado);
 			if (horarioAlterado.indexOf('E') > -1) {
@@ -102,13 +111,11 @@ function informarHorario() {
 			else {
 				$(this).attr("class", "");
 				$(this).attr("style", "cursor:pointer;");
+				$(this).attr("onclick", horarios[index][1]);
 			}                
 		}
 	});
-	calcularTotal();
-	$('#demo-default-modal').modal("hide");
 }
-
 function apontar (horario, data, idTd) {
 	var apontamentoNaTela = $("#"+idTd).html();
 	var apontamento = {
@@ -121,7 +128,6 @@ function apontar (horario, data, idTd) {
 			id : $('#apontamento-jus').val()
 		}
 	};
-	
 	$.ajax({
 		url: 'gerenciar-apontamento/apontar',
 		type : 'POST',
@@ -149,12 +155,16 @@ function apontar (horario, data, idTd) {
 			$("#"+idTd).parent().find('.adic-noturno-js').text(adicionalNoturno);
 			$("#"+idTd).parent().find('.sa-js').text(sa);
 			$("#"+idTd).parent().find('.sat-js').text(sat);
+			
+			ordenarHorarios(idTd, horario);
+			calcularTotal();
+			$('#demo-default-modal').modal("hide");
 		},
 		error: function(erro){
 			$('#erro-label').text(erro.responseText);
 			$('#erro-sm-modal').modal();
-			$("#"+idTd).html(apontamentoNaTela);
 			adicionalNoturno = bancoHora = sa = sat = 0.0;
+			$('#demo-default-modal').modal("hide");
 		}
 	});
 }

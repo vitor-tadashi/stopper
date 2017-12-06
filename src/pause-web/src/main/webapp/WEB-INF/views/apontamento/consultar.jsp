@@ -41,7 +41,7 @@
 									<select class="selectpicker" data-live-search="true" data-width="100%" id="select-funcionario" name="idFuncionario">
 										<option value="">Selecione</option>
 										<c:forEach items="${funcionariosBusca}" var="funcionario">
-											<option value="${funcionario.id }">${funcionario.nome }</option>
+											<option value="${funcionario.id }" ${funcionario.id eq idFuncionario? 'selected="true"' : ''}>${funcionario.nome }</option>
 										</c:forEach>
 									</select>
 									<input type="hidden" id="funcSel" name="idFuncionario" val="${idFuncBusca }"/>
