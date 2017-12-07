@@ -96,7 +96,12 @@ function inserirSA(){
 		$('#dt-sa').css({ "border-color": cor });
 		$('#mensagemData-js').html(obrigatorio).removeClass("hide");
 		
-	} else {
+	}else if(CompararHoras(horaEntrada, horaSaida) === -1){
+		$('#hora-sa-e').css({ "border-color": cor });
+		$('#hora-sa-s').css({ "border-color": cor });
+		$('#mensagemHora-js').html("A hora de saída deve ser superior à primeira.").removeClass("hide");
+	} 
+	else {
 		
 		$('#hora-sa-e').css({ "border-color": ""});
 		$('#hora-sa-s').css({ "border-color": ""});
@@ -441,4 +446,22 @@ function clearForm(i){
 	$('.clear-form')[i].reset();
 	$('.clear-select').prop('selectedIndex',0);
 	$('.clear-select').selectpicker('refresh');
+}
+
+function CompararHoras(sHora1, sHora2) { 
+    var arHora1 = sHora1.split(":"); 
+    var arHora2 = sHora2.split(":"); 
+    
+    var hh1 = parseInt(arHora1[0],10); 
+    var mm1 = parseInt(arHora1[1],10); 
+    
+    var hh2 = parseInt(arHora2[0],10); 
+    var mm2 = parseInt(arHora2[1],10); 
+
+    if (hh1<hh2 || (hh1==hh2 && mm1<mm2)) 
+        return 1; 
+    else if (hh1>hh2 || (hh1==hh2 && mm1>mm2)) 
+        return -1; 
+    else  
+        return 0; 
 }

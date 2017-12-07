@@ -111,7 +111,8 @@ public class ControleMensalBusiness {
 		int ultimoMesTrimestre = trimestre * 3;
 		int primeiroMesTrimestre = ultimoMesTrimestre - 2;
 		
-		List<ControleMensalEntity> bancoEHoras = controleMensalDAO.findHoraAndBancoByIdFuncionario(id, primeiroMesTrimestre, ultimoMesTrimestre);
+		List<ControleMensalEntity> bancoEHoras = controleMensalDAO.findHoraAndBancoByIdFuncionario(id, primeiroMesTrimestre,
+				date.getMonthValue(), date.getYear());
 		if(bancoEHoras.size()<1)bancoEHoras = null;
 		
 		return controleMensalConverter.convertEntityToBean(bancoEHoras);

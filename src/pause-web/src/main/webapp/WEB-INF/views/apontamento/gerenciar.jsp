@@ -52,7 +52,7 @@
 									</div>
 								</div>
 							</sec:authorize>
-							<div class="col-sm-5 pad-btm">
+							<div class="col-sm-5 pad-btm" id="periodo-js">
 								<label class="control-label">Período</label>
 								<div class="input-daterange input-group" id="datepicker">
 									<input type="date" id="periodoDe" class="form-control periodo" name="periodo" placeholder="dd/mm/aaaa" value="${periodo[0] }" min="2010-03-01" max=""/>
@@ -510,7 +510,6 @@
 		<script src='<c:url value="plugins/datatables/media/js/dataTables.bootstrap.js"/>'></script>
 		<script src='<c:url value="js/custom/datatable-custom.js"/>'></script>
 		<script src='<c:url value="/plugins/bootstrap-validator/bootstrapValidator.min.js"/>'></script>
-		<script src='<c:url value="/js/custom/bootstrap-validator-data-periodo.js"/>'></script>
 		<script src='<c:url value="/plugins/masked-input/jquery.mask.js"/>'></script>
 		<script src='<c:url value="/js/custom/send-ajax.js"/>'></script>
 		<script src='<c:url value="js/custom/gerenciar-apontamentos-modais.js"/>'></script>
@@ -532,9 +531,6 @@
 				fields : {
 					periodo : {
 						validators : {
-							range : {
-								message : 'A segunda data deve ser superior ou igual à primeira.'
-							},
 							date: {
 								min: $("#periodoAte").prop('min'),
 								max: $("#periodoAte").prop('max'),
@@ -549,6 +545,18 @@
 							}
 						}
 					}
+				}
+			});
+			$('#filtrar-js').on('click', function () {
+			    var startDate = document.getElementById("periodoDe").value;
+				var endDate = document.getElementById("periodoAte").value;
+
+				if ((Date.parse(endDate) < Date.parse(startDate))) {
+					if ($("#erro-periodo").length == 0){
+						$('#periodo-js')
+							.append('<small class="help-block" id="erro-periodo">A segunda data deve ser superior ou igual à primeira.</small>')
+					}
+			        return false;
 				}
 			});
 			$('#btn-form-time').on('click', function () {

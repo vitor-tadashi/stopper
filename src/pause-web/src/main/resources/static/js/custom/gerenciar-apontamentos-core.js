@@ -28,7 +28,6 @@ function dialogApontamentoHora(td, idApontamento) {
 	if (typeof(idApontamento) != "undefined"){
 		modalEditarApontamento(idApontamento);
 	}
-	
 	$('#btn-cancelar-apontamento').text('Cancelar');
 	$('#btn-cancelar-apontamento').attr('onclick',"cancelarApontamento()");
 	$('#title-modal-apontamento').text(infoDia.val());
