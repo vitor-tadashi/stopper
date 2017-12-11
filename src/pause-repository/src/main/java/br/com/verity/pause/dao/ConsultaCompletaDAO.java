@@ -66,7 +66,8 @@ public class ConsultaCompletaDAO {
 					   ")"+
 					   "SELECT * "+
 					     "FROM amonth am "+
-					   	"LEFT JOIN ##Apontamento ap ON am.day = ap.cdData option (maxrecursion 0)";
+					   	"LEFT JOIN ##Apontamento ap ON am.day = ap.cdData "+
+					     "ORDER BY am.day ASC, ap.aHorario ASC option (maxrecursion 0)";
 			
 			ps = conn.prepareStatement(sql);
 			

@@ -193,20 +193,21 @@ public class ControleMensalDAO {
 	}
 
 	public List<ControleMensalEntity> findHoraAndBancoByIdFuncionario(Integer id, int primeiroMesTrimestre,
-			int ultimoMesTrimestre) throws SQLException {
+			int mesSolicitado, int ano) throws SQLException {
 		Connection conn = null;
 		List<ControleMensalEntity> response = new ArrayList<>();
 		ControleMensalEntity controleMensal = null;
 		
 		String sql = "SELECT cm.idControleMensal, cm.horaTotal, cm.bancoHora, cm.idFuncionario, cm.mes, cm.ano FROM PAUSEControleMensal cm"+
-				" WHERE cm.mes >= ? AND cm.mes <= ? AND cm.idFuncionario = ? ORDER BY cm.mes ASC";
+				" WHERE cm.mes >= ? AND cm.mes <= ? AND cm.idFuncionario = ? AND cm.ano = ? ORDER BY cm.mes ASC";
 		try {
 			conn = connectionFactory.createConnection();
 
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setInt(1, primeiroMesTrimestre);
-			ps.setInt(2, ultimoMesTrimestre);
+			ps.setInt(2, mesSolicitado);
 			ps.setInt(3, id);
+			ps.setInt(4, ano);
 			
 			ResultSet rs = ps.executeQuery();
 			

@@ -96,7 +96,12 @@ function inserirSA(){
 		$('#dt-sa').css({ "border-color": cor });
 		$('#mensagemData-js').html(obrigatorio).removeClass("hide");
 		
-	} else {
+	}else if(CompararHoras(horaEntrada, horaSaida) === -1){
+		$('#hora-sa-e').css({ "border-color": cor });
+		$('#hora-sa-s').css({ "border-color": cor });
+		$('#mensagemHora-js').html("A hora de saída deve ser superior à primeira.").removeClass("hide");
+	} 
+	else {
 		
 		$('#hora-sa-e').css({ "border-color": ""});
 		$('#hora-sa-s').css({ "border-color": ""});
@@ -133,8 +138,12 @@ function removerSA(click, id){
 			$(click).parent().parent().remove();
 		},
 		error: function(erro){
-			$('#erro-label').text(erro.responseText);
-			$('#erro-sm-modal').modal();
+			if(erro.status === 403){
+				location.reload();
+			}else{
+				$('#erro-label').text(erro.responseText);
+				$('#erro-sm-modal').modal();
+			}
 		}
 	});
 }
@@ -189,8 +198,12 @@ function inserirSA_ajax(dataSA, horaSAe, horaSAs){
 			clearForm(1);
 		},
 		error: function(erro){
-			$('#erro-label').text(erro.responseText);
-			$('#erro-sm-modal').modal();
+			if(erro.status === 403){
+				location.reload();
+			}else{
+				$('#erro-label').text(erro.responseText);
+				$('#erro-sm-modal').modal();
+			}
 		}
 	});
 }
@@ -266,8 +279,12 @@ function inserirAfastamento_ajax (de, ate, tpId, tpDesc) {
 			clearForm(2);
 		},
 		error: function(erro){
-			$('#erro-label').text(erro.responseText);
-			$('#erro-sm-modal').modal();
+			if(erro.status === 403){
+				location.reload();
+			}else{
+				$('#erro-label').text(erro.responseText);
+				$('#erro-sm-modal').modal();
+			}
 		}
 	});
 }
@@ -281,8 +298,12 @@ function removerAfastamento(click, id){
 			$(click).parent().parent().remove();
 		},
 		error: function(erro){
-			$('#erro-label').text(erro.responseText);
-			$('#erro-sm-modal').modal();
+			if(erro.status === 403){
+				location.reload();
+			}else{
+				$('#erro-label').text(erro.responseText);
+				$('#erro-sm-modal').modal();
+			}
 		}
 	});
 }
@@ -393,8 +414,12 @@ function inserirAtestado_ajax(dt, qtdHora, tpId, tpDesc){
 			clearForm(3);
 		},
 		error: function(erro){
-			$('#erro-label').text(erro.responseText);
-			$('#erro-sm-modal').modal();
+			if(erro.status === 403){
+				location.reload();
+			}else{
+				$('#erro-label').text(erro.responseText);
+				$('#erro-sm-modal').modal();
+			}
 		}
 	});
 }
@@ -408,8 +433,12 @@ function removerAtestado(click, id){
 			$(click).parent().parent().remove();
 		},
 		error: function(erro){
-			$('#erro-label').text(erro.responseText);
-			$('#erro-sm-modal').modal();
+			if(erro.status === 403){
+				location.reload();
+			}else{
+				$('#erro-label').text(erro.responseText);
+				$('#erro-sm-modal').modal();
+			}
 		}
 	});
 }
@@ -417,4 +446,22 @@ function clearForm(i){
 	$('.clear-form')[i].reset();
 	$('.clear-select').prop('selectedIndex',0);
 	$('.clear-select').selectpicker('refresh');
+}
+
+function CompararHoras(sHora1, sHora2) { 
+    var arHora1 = sHora1.split(":"); 
+    var arHora2 = sHora2.split(":"); 
+    
+    var hh1 = parseInt(arHora1[0],10); 
+    var mm1 = parseInt(arHora1[1],10); 
+    
+    var hh2 = parseInt(arHora2[0],10); 
+    var mm2 = parseInt(arHora2[1],10); 
+
+    if (hh1<hh2 || (hh1==hh2 && mm1<mm2)) 
+        return 1; 
+    else if (hh1>hh2 || (hh1==hh2 && mm1>mm2)) 
+        return -1; 
+    else  
+        return 0; 
 }
