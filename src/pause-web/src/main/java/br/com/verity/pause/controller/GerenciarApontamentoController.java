@@ -197,7 +197,9 @@ public class GerenciarApontamentoController {
 	private void bancosTrimestre(Model model){
 		try {
 			List<Double>bancosTrimestre = controleMensalBusiness.obterTrimestreAtualEAnterior();
+			Double saldoMensal = controleMensalBusiness.obterBancoMesAtual();
 			model.addAttribute("bancos", bancosTrimestre);
+			model.addAttribute("saldoMensal", saldoMensal);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

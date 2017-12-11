@@ -71,9 +71,12 @@
                         <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
                         <!--End user-->
                         <sec:authorize access="!hasRole('ROLE_MULTI-EMPRESA')">
-                        <li class="add-tooltip" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="Trimestre anterior: <fmt:formatNumber value="${bancos[1] }" type="number"/>">
-                            <a class="">Banco de horas: <fmt:formatNumber value="${bancos[0] }" type="number"/></a>
+                        <li data-container="body" data-placement="bottom">
+                            <a class="">Saldo mensal: <fmt:formatNumber value="${saldoMensal}" type="number"/></a>
                         </li>
+						<li class="add-tooltip" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="Trimestre anterior: <fmt:formatNumber value="${bancos[1] }" type="number"/>">
+							<a class="">Saldo trimestral: <fmt:formatNumber value="${bancos[0] }" type="number"/></a>
+						</li>
                         </sec:authorize>
                         <li class="add-tooltip" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="Sair">
                             <a href="#" class="" data-target="#demo-sm-modal" data-toggle="modal"><i class="pli-arrow-inside"></i></a>
