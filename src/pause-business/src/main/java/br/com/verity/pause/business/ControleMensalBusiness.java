@@ -117,4 +117,15 @@ public class ControleMensalBusiness {
 		
 		return controleMensalConverter.convertEntityToBean(bancoEHoras);
 	}
+	
+	public Double obterBancoMesAtual() throws SQLException {
+		Double bancoMesAtual = 0.0;
+		UsuarioBean usuarioLogado = userBusiness.usuarioLogado();
+		Integer idFuncionario = usuarioLogado.getFuncionario().getId();
+		int mesAtual = LocalDate.now().getMonthValue();
+		
+		bancoMesAtual = controleMensalDAO.findBancoMesAtual(mesAtual, LocalDate.now().getYear(), idFuncionario);
+		
+		return bancoMesAtual;
+	}
 }

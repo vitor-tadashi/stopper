@@ -231,4 +231,31 @@ public class ControleMensalDAO {
 			}
 		return response;
 	}
+	
+	public Double findBancoMesAtual(int mesAtual, int ano, Integer idFuncionario) throws SQLException {
+		Double banco = null;
+		Connection conn = null;
+		
+		String sql = "SELECT bancoHora FROM PAUSEControleMensal WHERE mes = ? AND ano = ? AND idFuncionario = ?";
+		try { 
+			conn = connectionFactory.createConnection();
+
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setInt(1, mesAtual);
+			ps.setInt(2, ano);
+			ps.setInt(3, idFuncionario);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				banco = rs.getDouble(1);
+			}
+			ps.execute();
+			ps.close();
+			conn.close();
+			}catch(SQLException e){
+				throw new SQLException();
+			}
+		return banco;
+	}
 }
