@@ -4,8 +4,8 @@ import java.util.HashMap;
 
 public enum DiaSemanaEnum {
 
-	DOMINGO(0, "Domingo", "Dom"), SEGUNDA(1, "Segunda-Feira", "Seg"), TERCA(2, "Terça-Feira", "Ter"), QUARTA(3,"Quarta-Feira",
-			"Qua"), QUINTA(4, "Quinta-Feira", "Qui"), SEXTA(5, "Sexta-Feira", "Sex"), SABADO(6, "Sábado", "Sáb");
+	DOMINGO(0, "Domingo", "DOM"), SEGUNDA(1, "Segunda-Feira", "SEG"), TERCA(2, "Terça-Feira", "TER"), QUARTA(3,"Quarta-Feira",
+			"QUA"), QUINTA(4, "Quinta-Feira", "QUI"), SEXTA(5, "Sexta-Feira", "SEX"), SABADO(6, "Sábado", "SÁB");
 
 	private final Integer valor;
 	private final String diaCompleto;

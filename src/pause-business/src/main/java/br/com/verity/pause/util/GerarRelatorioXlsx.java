@@ -5,16 +5,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.DataFormat;
-import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -26,6 +23,7 @@ import br.com.verity.pause.bean.ConsultaApontamentosBean;
 import br.com.verity.pause.bean.ConsultaCompletaBean;
 import br.com.verity.pause.bean.ControleMensalBean;
 import br.com.verity.pause.bean.FuncionarioBean;
+import br.com.verity.pause.bean.SobreAvisoBean;
 import br.com.verity.pause.business.AfastamentoBusiness;
 import br.com.verity.pause.enumeration.DiaSemanaEnum;
 import br.com.verity.pause.enumeration.MesEnum;
@@ -42,18 +40,19 @@ public class GerarRelatorioXlsx {
 	 *         planilha, row gera/seleciona uma linha, Cell gera/seleciona uma
 	 *         celula da linha. WoorkBook.write(FileOutputStram) salva os dados
 	 *         na planilha
+	 * @param sobreAvisos 
 	 */
 	@SuppressWarnings("deprecation")
-	public byte[] relatorioFuncionarioPeriodo(List<ConsultaCompletaBean> consultaCompleta, List<ControleMensalBean> saldoDeHoras ,FuncionarioBean funcionario,
+	public byte[] relatorioFuncionarioPeriodo(List<ConsultaCompletaBean> consultaCompleta, List<ControleMensalBean> saldoDeHoras ,List<SobreAvisoBean> sobreAvisos, FuncionarioBean funcionario,
 			String de, String ate) {
 		String empresa = (funcionario.getEmpresa().getId() == 2) ? "Verity" : "QA360";
 		ClassPathResource resourceModelo = new ClassPathResource(empresa+"Relatorio.xlsx");
-		DateTimeFormatter formatter = DateTimeFormatter.ISO_TIME;
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 		DateFormat formatador = DateFormat.getDateInstance(DateFormat.FULL, new Locale("pt", "BR"));
 		DateFormat formatDt = new SimpleDateFormat("dd/MM/yyyy");
 		int linha = 1;
 		int dia = 1;
-		int mesmoDia = 0;
+		int mesmoDia = 1;
 		int aux = 0;
 		try {
 			InputStream fileModelo = resourceModelo.getInputStream();
@@ -63,13 +62,13 @@ public class GerarRelatorioXlsx {
 			
 			row.getCell(1).setCellValue(funcionario.getPis());
 			row.getCell(6).setCellValue(funcionario.getMatricula());
-			row.getCell(18).setCellValue(de.replace('-', '/') + " a " + ate.replace('-', '/'));
+			row.getCell(16).setCellValue(de.replace('-', '/') + " a " + ate.replace('-', '/'));
 			linha++;
 			
 			row = sheet.getRow(linha);
 			row.getCell(1).setCellValue(funcionario.getNome());
-			row.getCell(17).setCellValue(formatador.format(new Date()));
-			linha+= 3;
+			row.getCell(16).setCellValue(formatador.format(new Date())+" às "+LocalTime.now().format(formatter));
+			linha+= 4;
 
 			row = sheet.createRow(linha);
 			int cont = 0;
@@ -79,13 +78,8 @@ public class GerarRelatorioXlsx {
 				Boolean afastado = false;
 				
 				if (consulta.getData().getDate() == dia) {
-					mesmoDia += 2;
+					mesmoDia += 1;
 				} else {
-					mesmoDia = (aux == 0) ? 2 : mesmoDia + 2;
-					while (mesmoDia <= 16) {
-						row.createCell(1 + mesmoDia).setCellValue("00:00:00");
-						mesmoDia += 2;
-					}
 					linha++;
 					dia++;
 					mesmoDia = 2;
@@ -95,60 +89,63 @@ public class GerarRelatorioXlsx {
 				if(idFuncionario != null){
 					afastado = afastamentoBusiness.existeAfastamentoPara(consulta.getIdFuncionario(), new java.sql.Date(consulta.getData().getTime()));
 				}
-				
 				String dtApontamento = formatDt.format(consulta.getData());
 				row.createCell(0).setCellValue(dtApontamento);
 				row.createCell(1).setCellValue(DiaSemanaEnum.valueOf(consulta.getData().getDay()).getDiaSimples());
-				row.createCell(2).setCellValue(
-						(consulta.getSobreAvisoId() != null && consulta.getSobreAvisoId() != 0) ? "S" : "");
+				
 				if (consulta.getApontamentoHorario() != null) {
 					String hora = formatter.format(consulta.getApontamentoHorario());
-					row.createCell(1 + mesmoDia).setCellValue(hora);
-					row.createCell(2 + mesmoDia)
-							.setCellValue((consulta.getApontamentoTpImportacao() == true) ? "E" : "M");
+					hora += consulta.getApontamentoTpImportacao() == true ? " E" : " M";
+					row.createCell(mesmoDia).setCellValue(hora);
 					aux++;
 				}
-				row.createCell(19).setCellValue(
+				SobreAvisoBean sa = sobreAvisos.stream().filter(x -> x.getData().getTime()== consulta.getData().getTime()).findFirst().orElse(null);
+				if(sa != null){
+					row.createCell(10).setCellValue(sa.getEntrada().format(formatter));
+					row.createCell(11).setCellValue(sa.getSaida().format(formatter));
+				}
+				row.createCell(12).setCellValue(
 						(consulta.getAtestadoQuantidadeHora() != null) ? round(consulta.getAtestadoQuantidadeHora(),2) : 0);
-				row.createCell(20).setCellValue(
+				row.createCell(13).setCellValue(
 						(consulta.getControleDiarioHoraTotal() != null) ? round(consulta.getControleDiarioHoraTotal(),2) : 0);
 				if(consulta.getControleDiarioBancoHora() != null && consulta.getControleDiarioBancoHora() > 0){
-					row.createCell(21).setCellValue(round(consulta.getControleDiarioBancoHora(),2));
-					row.createCell(22).setCellValue(0);
+					row.createCell(14).setCellValue(round(consulta.getControleDiarioBancoHora(),2));
+					row.createCell(15).setCellValue(0);
 				}else if(consulta.getControleDiarioBancoHora() != null && consulta.getControleDiarioBancoHora()<0){
-					row.createCell(21).setCellValue(0);
-					row.createCell(22).setCellValue(round(consulta.getControleDiarioBancoHora(),2));
+					row.createCell(14).setCellValue(0);
+					row.createCell(15).setCellValue(round(consulta.getControleDiarioBancoHora(),2));
 				}else{
-					row.createCell(21).setCellValue(0);
-					row.createCell(22).setCellValue(0);
+					row.createCell(14).setCellValue(0);
+					row.createCell(15).setCellValue(0);
 				}
-				row.createCell(23).setCellValue(
+				row.createCell(16).setCellValue(
 						(consulta.getControleDiarioAdcNoturno() != null) ? round(consulta.getControleDiarioAdcNoturno(),2) : 0);
-				row.createCell(24)
+				row.createCell(17)
 						.setCellValue((consulta.getControleDiarioSA() != null) ? round(consulta.getControleDiarioSA(),2) : 0);
-				row.createCell(25).setCellValue(consulta.getApontamentoObs());
+				row.createCell(18).setCellValue(
+						(consulta.getControleDiarioST() != null) ? round(consulta.getControleDiarioST(),2) : 0);
+				row.createCell(19).setCellValue(consulta.getApontamentoObs());
 				if(cont == consultaCompleta.size()-1){
 					mesmoDia = (aux == 0) ? 2 : mesmoDia + 2;
-					while (mesmoDia <= 16) {
-						row.createCell(1 + mesmoDia).setCellValue("00:00:00");
-						mesmoDia += 2;
-					}
 				}
 				cont++;
 			}
 			linha++;
 			row = sheet.createRow(linha);
-			row.createCell(20).setCellFormula("SUM(U6:U" + (linha) + ")");
-			row.createCell(21).setCellFormula("SUM(V6:V" + (linha) + ")");
-			row.createCell(22).setCellFormula("SUM(W6:W" + (linha) + ")");
-			row.createCell(23).setCellFormula("SUM(X6:X" + (linha) + ")");
-			row.createCell(24).setCellFormula("SUM(Y6:Y" + (linha) + ")");
+			row.createCell(13).setCellFormula("SUM(N6:N" + (linha) + ")");
+			row.createCell(14).setCellFormula("SUM(O6:O" + (linha) + ")");
+			row.createCell(15).setCellFormula("SUM(P6:P" + (linha) + ")");
+			row.createCell(16).setCellFormula("SUM(Q6:Q" + (linha) + ")");
+			row.createCell(17).setCellFormula("SUM(R6:R" + (linha) + ")");
+			row.createCell(18).setCellFormula("SUM(S6:S" + (linha) + ")");
 			linha++;
-
+			
+			int linhaSaldo;
 			row = sheet.createRow(linha);
-			row.createCell(18).setCellValue("Saldo Final: ");
-			row.createCell(20).setCellFormula("V" + (linha) + "+W" + (linha));
-			row.createCell(21).setCellFormula("TEXT(ABS(U" + (linha + 1) + ")/24,\"([h]:mm)\")");
+			row.createCell(11).setCellValue("Saldo Final: ");
+			row.createCell(13).setCellFormula("O" + (linha) + "+P" + (linha));
+			row.createCell(14).setCellFormula("TEXT(ABS(N" + (linha + 1) + ")/24,\"([h]:mm)\")");
+			linhaSaldo = linha;
 			linha++;
 
 			row = sheet.createRow(linha);
@@ -179,16 +176,22 @@ public class GerarRelatorioXlsx {
 					linha++;
 				}
 			}
+			row.createCell(3).setCellFormula("O" + (linhaSaldo) + "+P" + (linhaSaldo));
+			if(saldoDeHoras.size()>1)
+				row.createCell(4).setCellFormula("D"+ (linha) + "+E" + (linha-1));
+			else
+				row.createCell(4).setCellFormula("O" + (linhaSaldo) + "+P" + (linhaSaldo));
+			
 			row = sheet.createRow(linha);
-			row.createCell(18).setCellValue("__________________________________________________________");
+			row.createCell(11).setCellValue("__________________________________________________________");
 			linha++;
 
 			row = sheet.createRow(linha);
-			row.createCell(18).setCellValue("Declaro que analisei as informações deste relatório e reconheço a");
+			row.createCell(11).setCellValue("Declaro que analisei as informações deste relatório e reconheço a");
 			linha++;
 
 			row = sheet.createRow(linha);
-			row.createCell(18).setCellValue("veracidade dos registros.");
+			row.createCell(11).setCellValue("veracidade dos registros.");
 			/*linha++;
 			linha++;
 

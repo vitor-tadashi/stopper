@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -44,7 +45,7 @@ public class RelatorioController {
 	@PreAuthorize("hasRole('ROLE_GERAR_RELATORIOS')")
 	@RequestMapping(value = "gerar-relatorio", method = RequestMethod.GET)
 	public ResponseEntity<?> gerarRelatorio(Integer idFuncionario, String de, String ate,
-			HttpServletResponse response) throws SQLException {
+			HttpServletResponse response) throws SQLException, ParseException {
 		FuncionarioBean funcionario = funcionarioBusiness.obterPorId(idFuncionario);
 		byte[] outArray;
 		outArray = relatorioBusiness.gerarRelatorio(idFuncionario, de, ate);

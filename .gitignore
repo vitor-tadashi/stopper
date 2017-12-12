@@ -1780,3 +1780,5 @@ regponto-parent/regponto-web/target/classes/static/premium/solid-icons-header.jp
 regponto-parent/regponto-web/target/m2e-wtp/web-resources/META-INF/MANIFEST.MF
 regponto-parent/regponto-web/target/m2e-wtp/web-resources/META-INF/maven/br.com.verity/regponto-web/pom.properties
 regponto-parent/regponto-web/target/m2e-wtp/web-resources/META-INF/maven/br.com.verity/regponto-web/pom.xml
+.idea/
+*.iml

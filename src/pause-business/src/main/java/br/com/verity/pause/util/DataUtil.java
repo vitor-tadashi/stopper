@@ -82,5 +82,11 @@ public final class DataUtil {
 		
 		return datas;
 	}
+	public String inverterOrdem(String data){
+		String[] s = data.split("-");
+		String novaData = s[2]+"-"+s[1]+"-"+s[0];
+		
+		return novaData;
+	}
 
 }
