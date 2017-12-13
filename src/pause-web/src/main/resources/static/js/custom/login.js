@@ -1,4 +1,5 @@
 $(document).ready(function() {
+	localStorage.removeItem("refresh");
 // FORM VALIDATION ON TABS
 	// =================================================================
 	$('#bv-form').bootstrapValidator({

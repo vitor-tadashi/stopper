@@ -461,49 +461,67 @@
 			<!--End atestado Modal-->
 		</sec:authorize>
 		
-	<!--erro Modal-->
-    <!--===================================================-->
-    <div id="erro-sm-modal" class="modal fade" tabindex="-1">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
-                    <h4 class="modal-title text-center">Atenção!</h4>
-                </div>
-                <div class="content">
-                    <h4 class="text-center" id="erro-label"></h4>
-                </div>
-                <div class="modal-footer">
-                    <div class="pull-right">
-						<button data-dismiss="modal" class="btn btn-primary" type="button">OK</button>
-					</div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--===================================================-->
-    <!--remover Modal-->
-    <!--===================================================-->
-    <div id="remover-sm-modal" class="modal fade" tabindex="-1">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
-                    <h4 class="modal-title text-center">Atenção!</h4>
-                </div>
-                <div class="content">
-                    <h4 class="text-center">Deseja remover este apontamento?</h4>
-                </div>
-                <div class="modal-footer">
-                    <div class="pull-right">
-						<button data-dismiss="modal" class="btn btn-danger" type="button">Não</button>
-						<button class="btn btn-success" type="button" id="btn-remover-apontamento" onclick="removerApontamento()">Sim</button>
-					</div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--===================================================-->	
+		<!--erro Modal-->
+	    <!--===================================================-->
+	    <div id="erro-sm-modal" class="modal fade" tabindex="-1">
+	        <div class="modal-dialog modal-sm">
+	            <div class="modal-content">
+	                <div class="modal-header">
+	                    <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
+	                    <h4 class="modal-title text-center">Atenção!</h4>
+	                </div>
+	                <div class="content">
+	                    <h4 class="text-center" id="erro-label"></h4>
+	                </div>
+	                <div class="modal-footer">
+	                    <div class="pull-right">
+							<button data-dismiss="modal" class="btn btn-primary" type="button">OK</button>
+						</div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    <!--===================================================-->
+	    <!--remover Modal-->
+	    <!--===================================================-->
+	    <div id="remover-sm-modal" class="modal fade" tabindex="-1">
+	        <div class="modal-dialog modal-sm">
+	            <div class="modal-content">
+	                <div class="modal-header">
+	                    <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
+	                    <h4 class="modal-title text-center">Atenção!</h4>
+	                </div>
+	                <div class="content">
+	                    <h4 class="text-center">Deseja remover este apontamento?</h4>
+	                </div>
+	                <div class="modal-footer">
+	                    <div class="pull-right">
+							<button data-dismiss="modal" class="btn btn-danger" type="button">Não</button>
+							<button class="btn btn-success" type="button" id="btn-remover-apontamento" onclick="removerApontamento()">Sim</button>
+						</div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    <!--===================================================-->
+    
+	    <div id="fechamento-apontamento-modal" class="modal fade" tabindex="-1">
+	        <div class="modal-dialog modal-md">
+	            <div class="modal-content text-center">
+	                <div class="modal-header" style="background-color: #e95350">
+	                	<div class="row">	
+	                		<button type="button" class="close" data-dismiss="modal"><i class="glyphicon glyphicon-remove"></i></button>
+	                    </div>
+	                    <div class="" style="padding-top: 9%;padding-bottom: 9%;">
+	                    	<img src='/pause/img/icon-alert.png'/>
+	                    </div>
+	                </div>
+	                <div class="content" style="padding-bottom: 10%;padding-top: 10%;">
+	                    <span class="text-center" id="vaiFecharBrother" style="color: black; font-size: 19px">Na data de 03/01/2018, os apontamentos do mês anterior serão bloqueados. Regularize seus apontamentos.</span>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
 	
 		<script src='<c:url value="plugins/bootstrap-timepicker/bootstrap-timepicker.min.js"/>'></script>
 		<script src='<c:url value="plugins/datatables/media/js/jquery.dataTables.js"/>'></script>
@@ -517,9 +535,7 @@
 		<script>
 		
 		var cor = '#a94442';
-		
 		$(document).ready(function() {
-			
 			$('#apontamento-time').mask('00:00');
 			
 			$('.periodo').prop('max',function(){

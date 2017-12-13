@@ -1,8 +1,11 @@
 var obrigatorio = 'Campo obrigatório.';
 var cor = '#a94442';
 var valorQueTava;
+var dataBloqueio = '01/04/2018'
 
 $(document).ready(function(){
+	exibirAviso();
+	
     $('.clock').timepicker({
 		defaultTime: false,
 		showMeridian: false,
@@ -464,4 +467,15 @@ function CompararHoras(sHora1, sHora2) {
         return -1; 
     else  
         return 0; 
+}
+
+function exibirAviso(){
+	var atual = new Date();
+	var final = new Date(dataBloqueio);
+	if(atual < final){
+		if(document.referrer.match("/login") && localStorage.getItem("refresh") != 1){
+			$("#fechamento-apontamento-modal").modal("show");
+			localStorage.setItem('refresh', 1);
+		}
+	}
 }
