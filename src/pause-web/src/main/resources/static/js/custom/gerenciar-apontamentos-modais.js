@@ -1,6 +1,7 @@
 var obrigatorio = 'Campo obrigatório.';
 var cor = '#a94442';
 var valorQueTava;
+var submit = false;
 
 $(document).ready(function(){
     $('.clock').timepicker({
@@ -110,7 +111,10 @@ function inserirSA(){
 		$('#mensagemHora-js').html(obrigatorio).addClass("hide");
 		$('#mensagemData-js').html(obrigatorio).addClass("hide");
 		
-		inserirSA_ajax(dataSA, horaEntrada, horaSaida);
+		if(!submit){
+			submit = true;
+			inserirSA_ajax(dataSA, horaEntrada, horaSaida);
+		}
 	}
 }
 
@@ -134,7 +138,6 @@ function removerSA(click, id){
 				}
 				
 			});
-			
 			$(click).parent().parent().remove();
 		},
 		error: function(erro){
@@ -194,7 +197,7 @@ function inserirSA_ajax(dataSA, horaSAe, horaSAs){
 				}
 				
 			});
-			
+			submit = false;
 			clearForm(1);
 		},
 		error: function(erro){
@@ -204,6 +207,7 @@ function inserirSA_ajax(dataSA, horaSAe, horaSAs){
 				$('#erro-label').text(erro.responseText);
 				$('#erro-sm-modal').modal();
 			}
+			submit = false;
 		}
 	});
 }
@@ -244,7 +248,10 @@ function inserirAfastamento (){
 		$('.mudar-cor').css({ "border-color" : "" });
 		$('#mensagemSelectAfastamento-js').html(obrigatorio).addClass("hide");
 		
-		inserirAfastamento_ajax(de, ate, tpId, tpDesc);
+		if(!submit){
+			submit = true;
+			inserirAfastamento_ajax(de, ate, tpId, tpDesc);
+		}
 	}
 }
 
@@ -275,7 +282,7 @@ function inserirAfastamento_ajax (de, ate, tpId, tpDesc) {
 					.append($('<a>').text('Remover').addClass('text-danger').attr('href',"#").attr('onclick','removerAfastamento(this ,'+ data.id +')'))
 				)
 			);
-			
+			submit = false;
 			clearForm(2);
 		},
 		error: function(erro){
@@ -285,6 +292,7 @@ function inserirAfastamento_ajax (de, ate, tpId, tpDesc) {
 				$('#erro-label').text(erro.responseText);
 				$('#erro-sm-modal').modal();
 			}
+			submit = false;
 		}
 	});
 }
@@ -380,7 +388,10 @@ function inserirAtestado(){
 		$('.mudar-cor').css({ "border-color" : "" });
 		$('#mensagemSelectAtestado-js').html(obrigatorio).addClass("hide");
 		
-		inserirAtestado_ajax(data, qtd_hr, tpId, tpDesc);
+		if(!submit){
+			submit = true;
+			inserirAtestado_ajax(data, qtd_hr, tpId, tpDesc);
+		}
 		
 	}
 }
@@ -408,9 +419,10 @@ function inserirAtestado_ajax(dt, qtdHora, tpId, tpDesc){
 				.append($('<td>').text(qtdHora))
 				.append($('<td>').text(tpDesc))
 				.append($('<td>')
-					.append($('<a>').text('Remover').addClass('text-danger').attr('href',"#").attr('onclick','removerAfastamento(this ,'+ data.id +')'))
+					.append($('<a>').text('Remover').addClass('text-danger').attr('href',"#").attr('onclick','removerAtestado(this ,'+ data.id +')'))
 				)
 			);
+			submit = false;
 			clearForm(3);
 		},
 		error: function(erro){
@@ -420,6 +432,7 @@ function inserirAtestado_ajax(dt, qtdHora, tpId, tpDesc){
 				$('#erro-label').text(erro.responseText);
 				$('#erro-sm-modal').modal();
 			}
+			submit = false;
 		}
 	});
 }

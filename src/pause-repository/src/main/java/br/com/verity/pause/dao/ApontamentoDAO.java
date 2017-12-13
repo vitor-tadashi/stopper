@@ -199,7 +199,7 @@ public class ApontamentoDAO {
 	}
 
 	public ApontamentoEntity findById(Integer id) {
-		ApontamentoEntity entity = new ApontamentoEntity();
+		ApontamentoEntity entity = null;
 
 		String sql = "SELECT ap.*,cd.idControleMensal, cm.idFuncionario FROM PAUSEApontamento ap"+
 				" inner join PAUSEControleDiario cd on cd.idControleDiario = ap.idControleDiario" + 
@@ -220,7 +220,8 @@ public class ApontamentoDAO {
 				ControleDiarioEntity controleDiario = new ControleDiarioEntity();
 				ArquivoApontamentoEntity arquivoApontamento = new ArquivoApontamentoEntity();
 				ControleMensalEntity controleMensalEntity = new ControleMensalEntity();
-
+				entity = new ApontamentoEntity();
+				
 				entity.setId(rs.getInt(1));
 				entity.setData(rs.getDate(2));
 				entity.setHorario(rs.getTime(3));

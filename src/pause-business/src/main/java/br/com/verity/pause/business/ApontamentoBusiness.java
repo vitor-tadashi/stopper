@@ -231,15 +231,16 @@ public class ApontamentoBusiness {
 			throw new BusinessException("Apontamento não encontrado em nossa base.");
 		}
 		ApontamentoEntity apontamento = apontamentoDAO.findById(idApontamento);
-
-		if (controleMensalBusiness.verificarMesFechado(apontamento.getData()))
-			throw new BusinessException("Não foi possível realizar a ação, pois o mês está fechado.");
-		else if (apontamento.getTipoImportacao())
-			throw new BusinessException("Não foi possível realizar a ação, pois o apontamento é eletrônico.");
-
-		apontamentoDAO.deleteById(idApontamento);
-
-		int idFuncionario = apontamento.getControleDiario().getControleMensal().getIdFuncionario();
-		calculoBusiness.calcularApontamento(idFuncionario, apontamento.getData());
+		if(apontamento != null){
+			if (controleMensalBusiness.verificarMesFechado(apontamento.getData()))
+				throw new BusinessException("Não foi possível realizar a ação, pois o mês está fechado.");
+			else if (apontamento.getTipoImportacao())
+				throw new BusinessException("Não foi possível realizar a ação, pois o apontamento é eletrônico.");
+	
+			apontamentoDAO.deleteById(idApontamento);
+	
+			int idFuncionario = apontamento.getControleDiario().getControleMensal().getIdFuncionario();
+			calculoBusiness.calcularApontamento(idFuncionario, apontamento.getData());
+		}
 	}
 }

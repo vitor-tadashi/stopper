@@ -3,6 +3,7 @@ package br.com.verity.pause.business;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,6 +20,7 @@ import br.com.verity.pause.dao.ControleMensalDAO;
 import br.com.verity.pause.entity.ConsultaCompletaEntity;
 import br.com.verity.pause.entity.ControleMensalEntity;
 import br.com.verity.pause.enumeration.MesEnum;
+import br.com.verity.pause.util.DataUtil;
 
 @Service
 public class ControleMensalBusiness {
@@ -31,6 +33,9 @@ public class ControleMensalBusiness {
 	
 	@Autowired
 	private CustomUserDetailsBusiness userBusiness;
+	
+	@Autowired
+	private DataUtil dataUtil;
 
 	@SuppressWarnings("deprecation")
 	public ControleMensalBean obterPorMesAnoIdFuncionario(Date data, int idFuncionario) {
@@ -57,16 +62,26 @@ public class ControleMensalBusiness {
 		controleMensalDAO.save(entity);
 		
 	}
-	
-	@SuppressWarnings("deprecation")
+	/**
+     * Verifica se a data esta liberada para apontamentos 
+     *
+     * @param   data
+     * @return  boolean
+     */
 	public Boolean verificarMesFechado(Date data) {
+		LocalDate dataApontamento = new java.sql.Date(data.getTime()).toLocalDate();
 		LocalDate hoje = LocalDate.now();
-
-		if (hoje.getDayOfMonth() > 9) {
-			if (data.getMonth() + 1 < hoje.getMonthValue()) {
+		final int mesPassadoValue = hoje.getMonthValue()-1;
+		LocalDate dataDeBloqueio = dataUtil.segundoDiaUtil(hoje);
+		LocalDate mesPassado = LocalDate.of(hoje.getYear(), mesPassadoValue, 1);
+		
+		if(hoje.isAfter(dataDeBloqueio)){
+			if(dataApontamento.isBefore(dataDeBloqueio) 
+					&& (dataApontamento.getMonthValue() < dataDeBloqueio.getMonthValue() || 
+							dataApontamento.getYear() < dataDeBloqueio.getYear())){
 				return true;
 			}
-		} else if(data.getMonth() + 1 < hoje.getMonthValue() - 1){
+		}else if(dataApontamento.isBefore(mesPassado)){
 			return true;
 		}
 		return false;

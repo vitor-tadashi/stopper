@@ -89,11 +89,12 @@ public class AfastamentoBusiness {
 			throw new BusinessException("Afastamento não encontrado em nossa base.");
 		}
 		AfastamentoEntity afastamento = afastamentoDAO.findById(id);
-		
-		if(controleMensalBusiness.verificarMesFechado(afastamento.getDataInicio()))
-			throw new BusinessException("Não foi possível realizar a ação, pois o mês está fechado.");
-		
-		afastamentoDAO.deleteById(id);
+		if(afastamento != null){
+			if(controleMensalBusiness.verificarMesFechado(afastamento.getDataInicio()))
+				throw new BusinessException("Não foi possível realizar a ação, pois o mês está fechado.");
+			
+			afastamentoDAO.deleteById(id);
+		}
 	}
 
 	public List<AfastamentoBean> listarPorIdFuncionarioEPeriodo(Integer idFuncionario, String[] periodo) {

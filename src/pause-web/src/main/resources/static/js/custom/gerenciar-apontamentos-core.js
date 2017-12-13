@@ -3,7 +3,7 @@ var adicionalNoturno = 0.0;
 var bancoHora = 0.0;
 var sa = 0.0;
 var sat = 0.0;
-
+var submeteu = false;
 $(document).ready(function() {
 	$('#demo-default-modal').on('hidden.bs.modal', function () {
 		$('#idApontamento').val(undefined);
@@ -69,8 +69,10 @@ function informarHorario() {
 	var id = $('#apontamento-id').val();
 	var horario = $('#apontamento-time').val();
 	var dtApontamento = $('#title-modal-apontamento').text().split(',');
-	
-	apontar(horario,dtApontamento[0],id);
+	if(!submeteu){
+		submeteu = true;
+		apontar(horario,dtApontamento[0],id);
+	}
 }
 function ordenarHorarios(id,horario){
 	var tr = $("#"+id).parent();
@@ -157,6 +159,7 @@ function apontar (horario, data, idTd) {
 			
 			ordenarHorarios(idTd, horario);
 			calcularTotal();
+			submeteu = false;
 			$('#demo-default-modal').modal("hide");
 		},
 		error: function(erro){
@@ -168,6 +171,7 @@ function apontar (horario, data, idTd) {
 				adicionalNoturno = bancoHora = sa = sat = 0.0;
 				$('#demo-default-modal').modal("hide");
 			}
+			submeteu = false;
 		}
 	});
 }

@@ -84,14 +84,15 @@ public class AtestadoBusiness {
 			throw new BusinessException("Sobre aviso não encontrado em nossa base.");
 		}
 		AtestadoEntity atestado = atestadoDAO.findById(id);
-
-		if (controleMensalBusiness.verificarMesFechado(atestado.getControleDiario().getData()))
-			throw new BusinessException("Não foi possível realizar a ação, pois o mês está fechado.");
-
-		atestadoDAO.deleteById(id);
-
-		int idFuncionario = atestado.getControleDiario().getControleMensal().getIdFuncionario();
-		calculoBusiness.calcularApontamento(idFuncionario, atestado.getControleDiario().getData());
+		if(atestado != null){
+			if (controleMensalBusiness.verificarMesFechado(atestado.getControleDiario().getData()))
+				throw new BusinessException("Não foi possível realizar a ação, pois o mês está fechado.");
+	
+			atestadoDAO.deleteById(id);
+	
+			int idFuncionario = atestado.getControleDiario().getControleMensal().getIdFuncionario();
+			calculoBusiness.calcularApontamento(idFuncionario, atestado.getControleDiario().getData());
+		}
 	}
 
 	public List<TipoAtestadoBean> listarTipoAtestado() {
