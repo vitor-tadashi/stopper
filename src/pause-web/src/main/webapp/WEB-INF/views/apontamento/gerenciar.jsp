@@ -513,11 +513,11 @@
 	                		<button type="button" class="close" data-dismiss="modal"><i class="glyphicon glyphicon-remove"></i></button>
 	                    </div>
 	                    <div class="" style="padding-top: 9%;padding-bottom: 9%;">
-	                    	<img src='/pause/img/icon-alert.png'/>
+	                    	<img src='/pause/img/icon-alert.png' width="150" height="150"/>
 	                    </div>
 	                </div>
 	                <div class="content" style="padding-bottom: 10%;padding-top: 10%;">
-	                    <span class="text-center" id="vaiFecharBrother" style="color: black; font-size: 19px">Na data de 03/01/2018, os apontamentos do mês anterior serão bloqueados. Regularize seus apontamentos.</span>
+	                    <span class="text-center" id="vaiFecharBrother" style="color: black; font-size: 19px">No segundo dia útil de cada mês os apontamentos referentes ao mês anterior serão bloqueados. Regularize seus apontamentos.</span>
 	                </div>
 	            </div>
 	        </div>
