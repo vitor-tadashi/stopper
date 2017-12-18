@@ -151,7 +151,7 @@ public class ImportacaoBusiness {
 		List<ApontamentoEntity> apontamentoEntity = this.setControleDiarioBeanToEntity(apontamentos);
 		Integer idArquivo = null;
 		try {
-			apontamentoDao.excludeAllDate(new java.sql.Date(arquivoApontamentoEntity.getData().getTime()));
+			apontamentoDao.excludeAllDate(new java.sql.Date(arquivoApontamentoEntity.getData().getTime()),arquivoApontamento.getIdEmpresa());
 			arquivoApontamentoDao.excludeDate(arquivoApontamentoEntity);
 			arquivoApontamentoDao.save(arquivoApontamentoEntity);
 			idArquivo = arquivoApontamentoDao.findByDateAndEmpresa(arquivoApontamentoEntity);

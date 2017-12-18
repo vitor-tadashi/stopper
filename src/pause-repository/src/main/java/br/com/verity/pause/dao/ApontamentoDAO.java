@@ -134,14 +134,14 @@ public class ApontamentoDAO {
 		ps.close();
 	}
 
-	public void excludeAllDate(Date data) throws SQLException {
+	public void excludeAllDate(Date data, Integer idEmpresa) throws SQLException {
 		Connection conn = connectionFactory.createConnection();
-		String sql = "DELETE PAUSEApontamento WHERE data = ?";
+		String sql = "DELETE PAUSEApontamento WHERE data = ? AND tipoImportacao = 'TRUE' AND idEmpresa = ?";
 
 		PreparedStatement ps = conn.prepareStatement(sql);
 
 		ps.setDate(1, data);
-
+		ps.setInt(2, idEmpresa);
 		ps.execute();
 		ps.close();
 	}
