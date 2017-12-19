@@ -87,7 +87,7 @@ public class ImportacaoController {
 
 			if (!funcionariosImportacao.isEmpty()) {
 				arquivoApontamento = new ArquivoApontamentoBean(caminho, new Date(), usuarioLogado.getId(),
-						usuarioLogado.getFuncionario().getEmpresa().getId());
+						usuarioLogado.getIdEmpresaSessao());
 				
 
 				arquivoApontamento.setData(DataUtil.converterData(dataImportacao, "yyyy-MM-dd"));
