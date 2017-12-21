@@ -1,21 +1,24 @@
 package br.com.verity.pause.util;
 
+import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
@@ -24,16 +27,12 @@ import br.com.verity.pause.bean.ConsultaCompletaBean;
 import br.com.verity.pause.bean.ControleMensalBean;
 import br.com.verity.pause.bean.FuncionarioBean;
 import br.com.verity.pause.bean.SobreAvisoBean;
-import br.com.verity.pause.business.AfastamentoBusiness;
 import br.com.verity.pause.enumeration.DiaSemanaEnum;
 import br.com.verity.pause.enumeration.MesEnum;
 
 @Component
 public class GerarRelatorioXlsx {
 	
-	@Autowired
-	private AfastamentoBusiness afastamentoBusiness;
-
 	/**
 	 * @author guilherme.oliveira XSSF gera um arquivo .xlsx e HSSF gera um
 	 *         arquivo .xls WorkBook é um arquivo Excel, Sheet é para gerar um
@@ -73,10 +72,8 @@ public class GerarRelatorioXlsx {
 			row = sheet.createRow(linha);
 			int cont = 0;
 			for (ConsultaCompletaBean consulta : consultaCompleta) {
-				row.setHeight((short) 500);
+				row.setHeight((short) 450);
 				Integer idFuncionario = consulta.getIdFuncionario();
-				Boolean afastado = false;
-				
 				if (consulta.getData().getDate() == dia) {
 					mesmoDia += 1;
 				} else {
@@ -87,7 +84,6 @@ public class GerarRelatorioXlsx {
 					aux = 0;
 				}
 				if(idFuncionario != null){
-					afastado = afastamentoBusiness.existeAfastamentoPara(consulta.getIdFuncionario(), new java.sql.Date(consulta.getData().getTime()));
 				}
 				String dtApontamento = formatDt.format(consulta.getData());
 				row.createCell(0).setCellValue(dtApontamento);
@@ -130,6 +126,7 @@ public class GerarRelatorioXlsx {
 				}
 				cont++;
 			}
+			pintar(linha, sheet, workbook);
 			linha++;
 			row = sheet.createRow(linha);
 			row.createCell(13).setCellFormula("SUM(N6:N" + (linha) + ")");
@@ -267,5 +264,37 @@ public class GerarRelatorioXlsx {
 	    value = value * factor;
 	    long tmp = Math.round(value);
 	    return (double) tmp / factor;
+	}
+	public void pintar(int numLinha, XSSFSheet sheet,XSSFWorkbook workbook){
+		XSSFColor colorGrey = new XSSFColor(new Color(208, 206, 206));
+		XSSFCellStyle  styleColor = workbook.createCellStyle();
+		styleColor.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		styleColor.setFillForegroundColor(colorGrey);
+		styleColor.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+		
+		XSSFCellStyle  style = workbook.createCellStyle();
+		style.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+		
+		int numLinhaCabecalho = 5;
+		int numColuna = 22;
+		int ultimaLinha = numLinha;
+		boolean isPinted = numLinha%2 == 0;
+		
+		while(ultimaLinha > numLinhaCabecalho){
+			XSSFRow row = sheet.getRow(ultimaLinha);
+			for(int coluna = 0; coluna < numColuna; coluna++){
+				XSSFCell cell = row.getCell(coluna);
+				if(cell == null){
+					cell = row.createCell(coluna);
+				}
+				if(isPinted == false){
+					cell.setCellStyle(styleColor);
+				}else{
+					cell.setCellStyle(style);
+				}
+			}
+			isPinted = !isPinted;
+			ultimaLinha--;
+		}
 	}
 }

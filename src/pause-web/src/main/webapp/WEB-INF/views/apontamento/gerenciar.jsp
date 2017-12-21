@@ -438,7 +438,7 @@
 											<fmt:formatDate value="${at.controleDiario.data }" pattern="dd/MM/yyyy" var="data"/>
 											<tr>
 												<td>${data }</td>
-												<td>${at.quantidadeHora }</td>
+												<td class="formatNumber">${at.quantidadeHora }</td>
 												<td>${at.tipoAtestado.descricao }</td>
 												
 												<c:if test="${sa.mesFechado }">

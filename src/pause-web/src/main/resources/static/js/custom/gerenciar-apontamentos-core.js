@@ -12,6 +12,10 @@ $(document).ready(function() {
 		$('#apontamento-jus').selectpicker('refresh');
 
 	});
+	$('.formatNumber').each(function (){
+		$(this).text(formatarNumero($(this).text()));
+	});
+	
 });
 
 function dialogApontamentoHora(td, idApontamento) {
@@ -261,4 +265,8 @@ function removerApontamento(id){
 			}
 		}
 	});
+}
+function formatarNumero(val){
+	return parseFloat(Math.round(parseFloat(val)*100)/100).
+		toFixed(2).toString().replace('.', ',');
 }
