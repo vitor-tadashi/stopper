@@ -21,6 +21,7 @@ public class FuncionarioIntegrationConverter implements Converter<FuncionarioInt
 		entity.setPis(bean.getPis());
 		entity.setMatricula(bean.getMatricula());
 		entity.setEmpresa(bean.getEmpresa());
+		entity.setAtivo(bean.getAtivo());
 		
 		return entity;
 	}
@@ -38,6 +39,7 @@ public class FuncionarioIntegrationConverter implements Converter<FuncionarioInt
 		bean.setPis(entity.getPis());
 		bean.setMatricula(entity.getMatricula());
 		bean.setEmpresa(entity.getEmpresa());
+		bean.setAtivo(entity.getAtivo());
 		
 		return bean;
 	}

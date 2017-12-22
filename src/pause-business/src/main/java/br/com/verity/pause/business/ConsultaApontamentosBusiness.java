@@ -16,7 +16,6 @@ public class ConsultaApontamentosBusiness {
 			List<ControleDiarioBean> controleDiario) {
 		List<ConsultaApontamentosBean> consultaApontamentos = new ArrayList<ConsultaApontamentosBean>();
 		ConsultaApontamentosBean consultaApontamento = null;
-		ControleDiarioBean controleDiarioBean = new ControleDiarioBean(0d, 0d, 0d, 0d, 0d);
 		
 		for (FuncionarioBean funcionario : funcionarios) {
 			consultaApontamento = new ConsultaApontamentosBean();
@@ -27,10 +26,9 @@ public class ConsultaApontamentosBusiness {
 					consultaApontamento.setControleDiario(controle);
 				}
 			}
-			if(consultaApontamento.getControleDiario() == null){
-				consultaApontamento.setControleDiario(controleDiarioBean);
+			if(consultaApontamento.getControleDiario() != null){
+				consultaApontamentos.add(consultaApontamento);
 			}
-			consultaApontamentos.add(consultaApontamento);
 		}
 		
 		return consultaApontamentos;

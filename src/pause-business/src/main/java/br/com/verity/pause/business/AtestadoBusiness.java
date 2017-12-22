@@ -81,7 +81,7 @@ public class AtestadoBusiness {
 
 	public void remover(Integer id) throws BusinessException {
 		if (id == null || id.equals(0)) {
-			throw new BusinessException("Sobre aviso não encontrado em nossa base.");
+			throw new BusinessException("Atestado não encontrado em nossa base.");
 		}
 		AtestadoEntity atestado = atestadoDAO.findById(id);
 		if(atestado != null){
