@@ -239,9 +239,9 @@ public class GerarRelatorioXlsx {
 				row.createCell(0).setCellValue(bean.getNmFuncionario());
 				row.createCell(1).setCellValue(bean.getControleDiario().getHoraTotal());
 				row.createCell(2).setCellValue(bean.getControleDiario().getBancoHora());
-				row.createCell(3).setCellValue(bean.getControleDiario().getAdicNoturno());
+				row.createCell(3).setCellValue(bean.getControleDiario().getSobreAvisoTrabalhado());
 				row.createCell(4).setCellValue(bean.getControleDiario().getSobreAviso());
-				row.createCell(5).setCellValue(bean.getControleDiario().getSobreAvisoTrabalhado());
+				row.createCell(5).setCellValue(bean.getControleDiario().getAdicNoturno());
 				linha++;
 			}
 			
