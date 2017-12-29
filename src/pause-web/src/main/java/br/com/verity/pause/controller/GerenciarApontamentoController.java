@@ -194,10 +194,11 @@ public class GerenciarApontamentoController {
 		List<AtestadoBean> atestados = atestadoBusiness.listarPorIdFuncionarioEPeriodo(idFuncionario, periodo);
 		model.addAttribute("atestados", atestados);
 	}
+	
 	private void bancosTrimestre(Model model){
 		try {
-			List<Double>bancosTrimestre = controleMensalBusiness.obterTrimestreAtualEAnterior();
-			Double saldoMensal = controleMensalBusiness.obterBancoMesAtual();
+			List<Double>bancosTrimestre = controleMensalBusiness.obterSaldoTrimestreAtualEAnterior();
+			Double saldoMensal = controleMensalBusiness.obterSaldoMensal();
 			model.addAttribute("bancos", bancosTrimestre);
 			model.addAttribute("saldoMensal", saldoMensal);
 		} catch (SQLException e) {

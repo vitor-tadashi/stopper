@@ -162,7 +162,7 @@ public class GerarRelatorioXlsx {
 				if(cm != null){
 					row = sheet.createRow(linha);
 					row.createCell(0)
-							.setCellValue(MesEnum.valueOf((cm.getMes())).getSemestre());
+							.setCellValue(MesEnum.valueOf((cm.getMes())).getTrimestre());
 					row.createCell(1).setCellValue(cm.getAno());
 					row.createCell(2).setCellValue(cm.getMes());
 					row.createCell(3).setCellValue(round(cm.getBancoHora(),2));
