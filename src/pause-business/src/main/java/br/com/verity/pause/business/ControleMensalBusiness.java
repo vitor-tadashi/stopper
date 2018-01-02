@@ -118,6 +118,7 @@ public class ControleMensalBusiness {
 		// Trimestre anterior
 		if(trimestre == 1){
 			trimestre = 4;
+			anoAtual -= 1;
 		}else{
 			trimestre -= 1;
 		}
