@@ -66,6 +66,7 @@ public class ControleMensalDAO {
 			e.printStackTrace();
 		}
 	}
+	
 	/**
 	 * Atualiza o controle mensal do funcionário
 	 * @param idFuncionario Id do funcionário
@@ -163,35 +164,6 @@ public class ControleMensalDAO {
 		return entity;
 	}
 
-	public Double findSumBancoTrimestre(int primeiroMesTrimestre, int ultimoMesTrimestre, int year,
-			Integer idFuncionario) throws SQLException {
-		Double banco = null;
-		Connection conn = null;
-		
-		String sql = "SELECT SUM(bancoHora) FROM PAUSEControleMensal WHERE ano = ? AND idFuncionario = ? AND mes BETWEEN ? AND ?";
-		try {
-			conn = connectionFactory.createConnection();
-
-			PreparedStatement ps = conn.prepareStatement(sql);
-			ps.setInt(1, year);
-			ps.setInt(2, idFuncionario);
-			ps.setInt(3, primeiroMesTrimestre);
-			ps.setInt(4, ultimoMesTrimestre);
-			
-			ResultSet rs = ps.executeQuery();
-			
-			if(rs.next()) {
-				banco = rs.getDouble(1);
-			}
-			ps.execute();
-			ps.close();
-			conn.close();
-			}catch(SQLException e){
-				throw new SQLException();
-			}
-		return banco;
-	}
-
 	public List<ControleMensalEntity> findHoraAndBancoByIdFuncionario(Integer id, int primeiroMesTrimestre,
 			int mesSolicitado, int ano) throws SQLException {
 		Connection conn = null;
@@ -232,18 +204,25 @@ public class ControleMensalDAO {
 		return response;
 	}
 	
-	public Double findBancoMesAtual(int mesAtual, int ano, Integer idFuncionario) throws SQLException {
+	
+	public Double findSumBancoByIdFuncAndData(String dataInicio, String dataFim, Integer idFuncionario) throws SQLException {
 		Double banco = null;
 		Connection conn = null;
+		StringBuilder sql = new StringBuilder();
 		
-		String sql = "SELECT bancoHora FROM PAUSEControleMensal WHERE mes = ? AND ano = ? AND idFuncionario = ?";
-		try { 
+		sql.append("   SELECT SUM(bancoHora)");
+		sql.append("   FROM PAUSEControleDiario");
+		sql.append("   WHERE idControleMensal in (SELECT idControleMensal");
+		sql.append("							   from PAUSEControleMensal");
+		sql.append("							   where idFuncionario = ?) and data >= ? and data <= ?");
+
+		try {
 			conn = connectionFactory.createConnection();
 
-			PreparedStatement ps = conn.prepareStatement(sql);
-			ps.setInt(1, mesAtual);
-			ps.setInt(2, ano);
-			ps.setInt(3, idFuncionario);
+			PreparedStatement ps = conn.prepareStatement(sql.toString());
+			ps.setInt(1, idFuncionario);
+			ps.setString(2, dataInicio);
+			ps.setString(3, dataFim);
 			
 			ResultSet rs = ps.executeQuery();
 			

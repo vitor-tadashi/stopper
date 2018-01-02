@@ -1,9 +1,7 @@
 package br.com.verity.pause.business;
 
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,13 +10,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.verity.pause.bean.ConsultaCompletaBean;
 import br.com.verity.pause.bean.ControleMensalBean;
 import br.com.verity.pause.bean.UsuarioBean;
 import br.com.verity.pause.converter.ControleMensalConverter;
 import br.com.verity.pause.dao.ControleMensalDAO;
-import br.com.verity.pause.entity.ConsultaCompletaEntity;
 import br.com.verity.pause.entity.ControleMensalEntity;
+import br.com.verity.pause.enumeration.TrimestreEnum;
 import br.com.verity.pause.enumeration.MesEnum;
 import br.com.verity.pause.util.DataUtil;
 
@@ -62,6 +59,7 @@ public class ControleMensalBusiness {
 		controleMensalDAO.save(entity);
 		
 	}
+	
 	/**
      * Verifica se a data esta liberada para apontamentos 
      *
@@ -90,30 +88,46 @@ public class ControleMensalBusiness {
 		return controleMensalConverter.convertEntityToBean(controleMensalDAO.findByDataAndIdFunc(dtHoje, id));
 	}
 
-	public List<Double> obterTrimestreAtualEAnterior() throws SQLException {
+	/**
+	 * Método responsável por buscar o banco de horas do trimestre atual (desconsiderando o 
+	 * dia atual) e do trimestre anterior.
+	 * @return Lista com banco de horas do trimestre atual
+	 * @throws SQLException
+	 */
+	public List<Double> obterSaldoTrimestreAtualEAnterior() throws SQLException {
 		List<Double>bancosTrimestre = new ArrayList<>();
 		UsuarioBean usuarioLogado = userBusiness.usuarioLogado();
 		Integer idFuncionario = usuarioLogado.getFuncionario().getId();
+		String dataOntem = LocalDate.now().minusDays(1).toString();
 		int mesAtual = LocalDate.now().getMonthValue();
+		int anoAtual = LocalDate.now().getYear();
+		int trimestre = 0;
+		String diaInicioTrimestre = null;
+		String diaFimTrimestre = null;
+		String dataInicioTrimestre = null;
+		String dataFimTrimestre = null;
+		Double bancoTrimestre = null;
 		
-		int trimestre = Integer.parseInt(MesEnum.valueOf(mesAtual).getSemestre());
-		int ultimoMesTrimestre = trimestre * 3;
-		int primeiroMesTrimestre = ultimoMesTrimestre - 2;
-		
-		Double bancoTrimestre = controleMensalDAO.findSumBancoTrimestre(primeiroMesTrimestre, ultimoMesTrimestre
-				, LocalDate.now().getYear(), idFuncionario);
+		//Trimestre atual
+		trimestre = Integer.parseInt(MesEnum.valueOf(mesAtual).getTrimestre());
+		diaInicioTrimestre = TrimestreEnum.valueOf(trimestre).getDiaInicioTrimestre();
+		dataInicioTrimestre = anoAtual + "-" + diaInicioTrimestre;
+		bancoTrimestre = controleMensalDAO.findSumBancoByIdFuncAndData(dataInicioTrimestre, dataOntem, idFuncionario);
 		bancosTrimestre.add(Math.round(bancoTrimestre*100.0)/100.0);
 		
-		if(primeiroMesTrimestre == 1){
-			primeiroMesTrimestre = 10;
-			ultimoMesTrimestre = 12;
+		// Trimestre anterior
+		if(trimestre == 1){
+			trimestre = 4;
 		}else{
-			primeiroMesTrimestre -= 3;
-			ultimoMesTrimestre -= 3;
+			trimestre -= 1;
 		}
-		Double bancoTrimestreAnterior = controleMensalDAO.findSumBancoTrimestre(primeiroMesTrimestre, ultimoMesTrimestre
-				, LocalDate.now().getYear(), idFuncionario);
-		bancosTrimestre.add(Math.round(bancoTrimestreAnterior*100.0)/100.0);
+		
+		diaInicioTrimestre = TrimestreEnum.valueOf(trimestre).getDiaInicioTrimestre();
+		diaFimTrimestre = TrimestreEnum.valueOf(trimestre).getDiaFimTrimestre();
+		dataInicioTrimestre = anoAtual + "-" + diaInicioTrimestre;
+		dataFimTrimestre = anoAtual + "-" + diaFimTrimestre;
+		bancoTrimestre = controleMensalDAO.findSumBancoByIdFuncAndData(dataInicioTrimestre, dataFimTrimestre, idFuncionario);
+		bancosTrimestre.add(Math.round(bancoTrimestre*100.0)/100.0);
 		
 		return bancosTrimestre;
 	}
@@ -121,7 +135,7 @@ public class ControleMensalBusiness {
 	public List<ControleMensalBean> obterBancoESaldoPorIdFuncionario(Integer id, String de) throws SQLException {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 		LocalDate date = LocalDate.parse(de, dtf);
-		int trimestre = Integer.parseInt(MesEnum.valueOf(date.getMonthValue()).getSemestre());
+		int trimestre = Integer.parseInt(MesEnum.valueOf(date.getMonthValue()).getTrimestre());
 		int ultimoMesTrimestre = trimestre * 3;
 		int primeiroMesTrimestre = ultimoMesTrimestre - 2;
 		
@@ -132,14 +146,22 @@ public class ControleMensalBusiness {
 		return controleMensalConverter.convertEntityToBean(bancoEHoras);
 	}
 	
-	public Double obterBancoMesAtual() throws SQLException {
+	/**
+	 * Método responsável por buscar o banco de horas do mês atual (desconsiderando o 
+	 * dia atual).
+	 * @return Banco de horas do mês atual
+	 * @throws SQLException
+	 */
+	public Double obterSaldoMensal() throws SQLException {
 		Double bancoMesAtual = 0.0;
 		UsuarioBean usuarioLogado = userBusiness.usuarioLogado();
 		Integer idFuncionario = usuarioLogado.getFuncionario().getId();
-		int mesAtual = LocalDate.now().getMonthValue();
+		String dataInicioMes = LocalDate.now().withDayOfMonth(1).toString();
+		String dataOntem = LocalDate.now().minusDays(1).toString();
 		
-		bancoMesAtual = controleMensalDAO.findBancoMesAtual(mesAtual, LocalDate.now().getYear(), idFuncionario);
+		bancoMesAtual = controleMensalDAO.findSumBancoByIdFuncAndData(dataInicioMes, dataOntem, idFuncionario);
 		
 		return bancoMesAtual;
 	}
+	
 }

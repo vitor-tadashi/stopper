@@ -10,13 +10,13 @@ public enum MesEnum {
 
 	private final Integer value;
 	private final String mes;
-	private final String semestre;
+	private final String trimestre;
 	private static HashMap<Integer, MesEnum> map = new HashMap<Integer, MesEnum>();
 
-	MesEnum(Integer value, String mes, String semestre) {
+	MesEnum(Integer value, String mes, String trimestre) {
 		this.value = value;
 		this.mes = mes;
-		this.semestre = semestre;
+		this.trimestre = trimestre;
 	}
 
 	static {
@@ -25,8 +25,8 @@ public enum MesEnum {
 		}
 	}
 
-	public static MesEnum valueOf(Integer SemestreEnum) {
-		return map.get(SemestreEnum);
+	public static MesEnum valueOf(Integer trimestreEnum) {
+		return map.get(trimestreEnum);
 	}
 
 	public Integer getValue() {
@@ -37,8 +37,8 @@ public enum MesEnum {
 		return mes;
 	}
 
-	public String getSemestre() {
-		return semestre;
+	public String getTrimestre() {
+		return trimestre;
 	}
 
 }
