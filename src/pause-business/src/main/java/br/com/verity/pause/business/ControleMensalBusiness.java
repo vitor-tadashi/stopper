@@ -71,9 +71,8 @@ public class ControleMensalBusiness {
 	public Boolean verificarMesFechado(Date data) {
 		LocalDate dataApontamento = new java.sql.Date(data.getTime()).toLocalDate();
 		LocalDate hoje = LocalDate.now();
-		final int mesPassadoValue = hoje.getMonthValue()-1;
+		LocalDate mesPassado = hoje.minusMonths(1).withDayOfMonth(1);
 		LocalDate dataDeBloqueio = dataUtil.segundoDiaUtil(hoje);
-		LocalDate mesPassado = LocalDate.of(hoje.getYear(), mesPassadoValue, 1);
 		
 		if(hoje.isAfter(dataDeBloqueio)){
 			if(dataApontamento.isBefore(dataDeBloqueio) 
