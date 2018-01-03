@@ -72,10 +72,10 @@
                         <!--End user-->
                         <sec:authorize access="!hasRole('ROLE_MULTI-EMPRESA')">
                         <li data-container="body" data-placement="bottom">
-                            <a class="">Saldo mensal: <fmt:formatNumber value="${saldoMensal}" type="number"/></a>
+                            <a class="">Saldo mensal: <span id="saldoMensal"><fmt:formatNumber value="${saldoMensal}" type="number" /></span></a>
                         </li>
-						<li class="add-tooltip" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="Trimestre anterior: <fmt:formatNumber value="${bancos[1] }" type="number"/>">
-							<a class="">Saldo trimestral: <fmt:formatNumber value="${bancos[0] }" type="number"/></a>
+						<li class="add-tooltip" id="trimestreAnterior" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="Trimestre anterior: <fmt:formatNumber value="${bancos[1] }" type="number"/>">
+							<a class="">Saldo trimestral: <span id="trimestreAtual"><fmt:formatNumber value="${bancos[0] }" type="number"/></span></a>
 						</li>
                         </sec:authorize>
                         <li class="add-tooltip" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="Sair">

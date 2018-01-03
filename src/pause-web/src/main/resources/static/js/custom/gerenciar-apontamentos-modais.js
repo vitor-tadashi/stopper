@@ -153,6 +153,7 @@ function removerSA(click, id){
 		}
 	});
 }
+
 function inserirSA_ajax(dataSA, horaSAe, horaSAs){
 	var sobreAviso = {	
 			'data' : dataSA,
@@ -214,6 +215,7 @@ function inserirSA_ajax(dataSA, horaSAe, horaSAs){
 		}
 	});
 }
+
 function inserirAfastamento (){
 	var de = formatardataHtml($('#afastamentoDe').val());
 	var ate = formatardataHtml($('#afastamentoAte').val());
@@ -299,6 +301,7 @@ function inserirAfastamento_ajax (de, ate, tpId, tpDesc) {
 		}
 	});
 }
+
 function removerAfastamento(click, id){
 	$.ajax({
 		url: 'afastamento/remover/'+id,
@@ -398,6 +401,7 @@ function inserirAtestado(){
 		
 	}
 }
+
 function inserirAtestado_ajax(dt, qtdHora, tpId, tpDesc){
 	var atestado={
 			'controleDiario' : {
@@ -439,6 +443,7 @@ function inserirAtestado_ajax(dt, qtdHora, tpId, tpDesc){
 		}
 	});
 }
+
 function removerAtestado(click, id){
 	$.ajax({
 		url: 'atestado/remover/'+id,
@@ -458,6 +463,7 @@ function removerAtestado(click, id){
 		}
 	});
 }
+
 function clearForm(i){
 	$('.clear-form')[i].reset();
 	$('.clear-select').prop('selectedIndex',0);

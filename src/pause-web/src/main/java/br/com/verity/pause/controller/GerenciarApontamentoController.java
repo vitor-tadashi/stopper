@@ -148,6 +148,24 @@ public class GerenciarApontamentoController {
 
 		return new ResponseEntity<Boolean>(indicadorMesFechado, HttpStatus.OK);
 	}
+	
+	@PreAuthorize("hasRole('ROLE_INSERIR_APONTAMENTO')")
+	@GetMapping(value = "/atualizar-saldos-consolidados")
+	@ResponseBody
+	public ResponseEntity<?> atualizarSaldosConsolidados() {
+		List<Double>bancosTrimestre = null;
+		Double saldoMensal = null;
+		try {
+			bancosTrimestre = controleMensalBusiness.obterSaldoTrimestreAtualEAnterior();
+			saldoMensal = controleMensalBusiness.obterSaldoMensal();
+			bancosTrimestre.add(saldoMensal);
+		} catch (Exception e) {
+			return new ResponseEntity<String>("Erro ao atualizar saldos consolidados.",
+					HttpStatus.BAD_REQUEST);
+		}
+		
+		return ResponseEntity.ok(bancosTrimestre);
+	}
 
 	private void funcionarios(Model model) {
 		List<FuncionarioBean> funcionarios = funcionarioBusiness.listarFuncionariosPorEmpresaComPis();

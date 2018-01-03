@@ -78,6 +78,7 @@ function informarHorario() {
 		apontar(horario,dtApontamento[0],id);
 	}
 }
+
 function ordenarHorarios(id,horario){
 	var tr = $("#"+id).parent();
 	var horarios = new Array(8);
@@ -121,6 +122,7 @@ function ordenarHorarios(id,horario){
 		}
 	});
 }
+
 function apontar (horario, data, idTd) {
 	var apontamentoNaTela = $("#"+idTd).html();
 	var apontamento = {
@@ -163,6 +165,7 @@ function apontar (horario, data, idTd) {
 			
 			ordenarHorarios(idTd, horario);
 			calcularTotal();
+			atualizarSaldosConsolidados();
 			submeteu = false;
 			$('#demo-default-modal').modal("hide");
 		},
@@ -179,6 +182,7 @@ function apontar (horario, data, idTd) {
 		}
 	});
 }
+
 function calcularTotal() {
 	
 	$("#dt-apontamentos").find('tr').each (function() {
@@ -211,6 +215,7 @@ function calcularTotal() {
 		horaTotal = 0;
 	});	
 }
+
 function modalEditarApontamento(id){
 	$.ajax({
 		url: 'gerenciar-apontamento/obter',
@@ -234,10 +239,12 @@ function modalEditarApontamento(id){
 		}
 	});
 }
+
 function confirmarRemover(){
 	$('#demo-default-modal').modal('hide');
 	$('#remover-sm-modal').modal('show');
 }
+
 function removerApontamento(id){
 	$('#remover-sm-modal').modal('hide');
 	$.ajax({
@@ -266,7 +273,26 @@ function removerApontamento(id){
 		}
 	});
 }
+
 function formatarNumero(val){
 	return parseFloat(Math.round(parseFloat(val)*100)/100).
 		toFixed(2).toString().replace('.', ',');
+}
+
+function atualizarSaldosConsolidados(){
+	$.ajax({
+		url: 'gerenciar-apontamento/atualizar-saldos-consolidados',
+		type : 'GET',
+		contentType : 'application/json',
+		success: function(data){
+			$("#saldoMensal").text(data[0]);
+			$("#trimestreAnterior").attr('data-original-title', "Saldo trimestre anterior: " + data[1]);
+			$("#trimestreAtual").text(data[2]);
+		},
+		error: function(erro){
+			if(erro.status === 403){
+				location.reload();
+			}
+		}
+	});
 }
