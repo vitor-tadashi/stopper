@@ -162,7 +162,7 @@ public class ControleMensalBusiness {
 		
 		bancoMesAtual = controleMensalDAO.findSumBancoByIdFuncAndData(dataInicioMes, dataOntem, idFuncionario);
 		
-		return bancoMesAtual;
+		return Math.round(bancoMesAtual*100.0)/100.0;
 	}
 	
 }
