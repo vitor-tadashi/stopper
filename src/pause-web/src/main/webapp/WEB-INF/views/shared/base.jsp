@@ -186,6 +186,15 @@
 	                                        </a>
 							            </li>
 						            </sec:authorize>
+						            
+						            <li>
+                                		<a href='<c:url value="/despesa"/>'>
+                                            <i class="pli-coin"></i>
+                                            <span class="menu-title">
+                                            	Despesas
+                                            </span>
+                                        </a>
+						            </li>
 								
 								</ul>
                             </div>
