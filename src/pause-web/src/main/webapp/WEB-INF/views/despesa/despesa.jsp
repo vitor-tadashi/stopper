@@ -27,11 +27,13 @@
 			<li><a href="#">Home</a></li>
 			<li class="active">Despesas</li>
 		</ol>
+		<input type="hidden" id="funcionario" value="" />
 		<div id="page-content">
 			<div class="panel">
 				<!--Data Table-->
 				<!--===================================================-->
 				<div class="panel-body">
+					<span id="span-msg"></span>
 					<button id="addDespesa" class="btn btn-info" type="button" style="float: right" onclick="abrirModal();">Adicionar</button>					
 				</div>
 			</div>
@@ -59,7 +61,7 @@
 									<!--Data Table-->
 									<!--===================================================-->
 									<div class="panel-body">
-										<label class="control-label">Data</label>
+										<label class="control-label" style="margin: 4px 0 0 0">Data</label>
 										<div class="input-daterange input-group" id="datepicker"
 											style="width: 100% !important">
 											<input type="date" id="dataDespesa"
@@ -67,7 +69,7 @@
 												placeholder="dd/mm/aaaa" value="${periodo[0] }"
 												min="2010-03-01" max="" />
 										</div>
-										<br /> <label class="control-label">Valor</label>
+										<br /> <label class="control-label" style="margin: 4px 0 0 0">Valor</label>
 										<div class="input-group" id="valorDespesaDiv"
 											style="width: 100% !important">
 											<input type="number" id="valorDespesa" min="1" step="0.01"
@@ -75,17 +77,17 @@
 												placeholder="R$115,00" value="${periodo[0] }"
 												pattern="([0-9]{1,3}\.)?[0-9]{1,3},[0-9]{2}$" />
 										</div>
-										<br /> <label class="control-label">Tipo de despesa</label>
+										<br /> <label class="control-label" style="margin: 4px 0 0 0">Tipo de despesa</label>
 										<div class="input-group">
 											<select class="selectpicker" data-live-search="true"
 												id="select-tipo-despesa" name="tipoDespesa">
 												<option value="">Selecione</option>
-												<%-- 							<c:forEach items="${funcionarios }" var="funcionario"> --%>
-												<%-- 								<option value="${funcionario.id }" ${funcionario.id eq idFuncionario? 'selected="true"' : ''}>${funcionario.nome }</option> --%>
-												<%-- 							</c:forEach> --%>
+												<c:forEach items="${tipoDespesas }" var="tipoDespesa">
+													<option value="${tipoDespesa.id }">${tipoDespesa.nome }</option>
+												</c:forEach>
 											</select>
 										</div>
-										<br /> <label class="control-label">Centro de custo</label>
+										<br /> <label class="control-label" style="margin: 4px 0 0 0">Centro de custo</label>
 										<div class="input-group">
 											<select class="selectpicker" data-live-search="true"
 												id="select-centro-custo" name="centroCusto">
@@ -95,7 +97,7 @@
 												<%-- 							</c:forEach> --%>
 											</select>
 										</div>
-										<br /> <label class="control-label">Justificativa</label>
+										<br /> <label class="control-label" style="margin: 4px 0 0 0">Justificativa</label>
 										<div class="input-group" id="justificativaDespesaDiv"
 											style="width: 100% !important">
 											<textarea id="justificativaDespesa"
@@ -103,7 +105,7 @@
 												name="justificativaDespesa"
 												placeholder="Justificativa da despesa" value="${periodo[0] }"></textarea>
 										</div>
-										<br /> <label class="control-label">Comprovante</label>
+										<br /> <label class="control-label" style="margin: 4px 0 0 0">Comprovante</label>
 										<div class="input-group" id="comprovanteDespesaDiv"
 											style="width: 100% !important">
 											<input id="comprovanteDespesa" type="file"
@@ -114,7 +116,7 @@
 										<br />
 										<div class="input-group" id="buttonSubmitDiv"
 											style="width: 100% !important">
-											<button id="submit-js" class="btn btn-info" type="submit">Salvar</button>
+											<button id="submit-js" class="btn btn-info" type="button" onclick="submiterDespesa();">Salvar</button>
 										</div>
 									</div>
 								</div>
@@ -124,12 +126,7 @@
 				</div>
 			</div>
 		</div>
-		<script>
-			
-			
-			function abrirModal(){
-				$('#add-despesa-modal').modal();
-			}
-		</script>
+		<script src='<c:url value="/js/custom/send-ajax.js"/>'></script>
+		<script src='<c:url value="js/custom/despesa.js"/>'></script>
 	</layout:put>
 </layout:extends>
