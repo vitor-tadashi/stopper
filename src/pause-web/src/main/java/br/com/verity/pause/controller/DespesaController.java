@@ -30,7 +30,7 @@ public class DespesaController {
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<?> salvar(@RequestBody DespesaBean despesa) {
-		
+		System.out.println(despesa.getJustificativa());
 		return ResponseEntity.ok("Salvo com sucesso!");
 	}
 }

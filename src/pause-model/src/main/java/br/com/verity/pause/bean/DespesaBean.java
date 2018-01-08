@@ -13,6 +13,7 @@ public class DespesaBean implements Serializable {
 	private Long centroCusto;
 	private String justificativa;
 	private MultipartFile comprovante;
+	private Long idFuncionario;
 	
 	public Date getData() {
 		return data;
@@ -50,4 +51,11 @@ public class DespesaBean implements Serializable {
 	public void setComprovante(MultipartFile comprovante) {
 		this.comprovante = comprovante;
 	}
+	public Long getIdFuncionario() {
+		return idFuncionario;
+	}
+	public void setIdFuncionario(Long idFuncionario) {
+		this.idFuncionario = idFuncionario;
+	}
+	
 }

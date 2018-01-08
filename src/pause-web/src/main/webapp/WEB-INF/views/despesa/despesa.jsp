@@ -55,7 +55,7 @@
 	
 					<!--Modal body-->
 					<div class="modal-body">
-						<form action="" id="form-sa" class="clear-form">
+						<form action="" id="form-despesa" name="form-despesa" class="clear-form">
 							<div class="row">
 								<div class="panel">
 									<!--Data Table-->
@@ -65,16 +65,16 @@
 										<div class="input-daterange input-group" id="datepicker"
 											style="width: 100% !important">
 											<input type="date" id="dataDespesa"
-												class="form-control dataDespesa" name="dataDespesa"
-												placeholder="dd/mm/aaaa" value="${periodo[0] }"
+												class="form-control dataDespesa" name="data"
+												placeholder="dd/mm/aaaa" value=""
 												min="2010-03-01" max="" />
 										</div>
 										<br /> <label class="control-label" style="margin: 4px 0 0 0">Valor</label>
 										<div class="input-group" id="valorDespesaDiv"
 											style="width: 100% !important">
 											<input type="number" id="valorDespesa" min="1" step="0.01"
-												class="form-control valorDespesa" name="valorDespesa"
-												placeholder="R$115,00" value="${periodo[0] }"
+												class="form-control valorDespesa" name="valor"
+												placeholder="R$115,00" value=""
 												pattern="([0-9]{1,3}\.)?[0-9]{1,3},[0-9]{2}$" />
 										</div>
 										<br /> <label class="control-label" style="margin: 4px 0 0 0">Tipo de despesa</label>
@@ -102,16 +102,16 @@
 											style="width: 100% !important">
 											<textarea id="justificativaDespesa"
 												class="form-control justificativaDespesa"
-												name="justificativaDespesa"
-												placeholder="Justificativa da despesa" value="${periodo[0] }"></textarea>
+												name="justificativa"
+												placeholder="Justificativa da despesa" value=""></textarea>
 										</div>
 										<br /> <label class="control-label" style="margin: 4px 0 0 0">Comprovante</label>
 										<div class="input-group" id="comprovanteDespesaDiv"
 											style="width: 100% !important">
 											<input id="comprovanteDespesa" type="file"
 												class="form-control comprovanteDespesa"
-												name="comprovanteDespesa"
-												placeholder="Comprovante da despesa" value="${periodo[0] }" />
+												name="comprovante"
+												placeholder="Comprovante da despesa" value="" />
 										</div>
 										<br />
 										<div class="input-group" id="buttonSubmitDiv"

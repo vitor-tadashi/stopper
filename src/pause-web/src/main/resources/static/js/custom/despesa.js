@@ -4,21 +4,22 @@ function abrirModal(){
 }
 
 function submiterDespesa() {
-	var despesa = {
-			data : $('#dataDespesa').val(),
-			valor : $('#valorDespesa').val(),
-			tipoDespesa : $('select-tipo-despesa').val(),
-			centroCusto : $('select-centro-custo').val(),
-			idFuncionario : $('#funcionario').val(),
-			justificativa : $('#justificativaDespesa').val(),
-			comprovanteDespesa: $("#comprovanteDespesa")
-		};
+	var oMyForm = new FormData();
+	oMyForm.append("comprovante", $('input[type=file]')[0].files[0]);
+	oMyForm.append("data", $('#dataDespesa').val()         );
+	oMyForm.append("valor", $('#valorDespesa').val()        );
+	oMyForm.append("tipoDespesa", $('select-tipo-despesa').val()  );
+	oMyForm.append("centroCusto", $('select-centro-custo').val()  );
+	oMyForm.append("funcionario", $('#funcionario').val()         );
+	oMyForm.append("justificativa", $('#justificativaDespesa').val());
+	
 	$.ajax({
-		url: 'despesa',
-		type : 'POST',
-		contentType : 'application/json',
-		data: JSON.stringify(despesa),
-		cache: false,
+		 url : 'despesa',
+	    type: "POST",
+	    data : oMyForm,
+	    processData: false,
+	    contentType: false,
+	    enctype: 'multipart/form-data',
 		success: function(data){
 			$("#span-msg").html(data);
 			$('#add-despesa-modal').modal("hide");
