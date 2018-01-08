@@ -92,6 +92,7 @@
 											<select class="selectpicker" data-live-search="true"
 												id="select-centro-custo" name="centroCusto">
 												<option value="">Selecione</option>
+												<option value="12">Teste</option>
 												<%-- 							<c:forEach items="${funcionarios }" var="funcionario"> --%>
 												<%-- 								<option value="${funcionario.id }" ${funcionario.id eq idFuncionario? 'selected="true"' : ''}>${funcionario.nome }</option> --%>
 												<%-- 							</c:forEach> --%>

@@ -8,8 +8,8 @@ function submiterDespesa() {
 	oMyForm.append("comprovante", $('input[type=file]')[0].files[0]);
 	oMyForm.append("data", $('#dataDespesa').val()         );
 	oMyForm.append("valor", $('#valorDespesa').val()        );
-	oMyForm.append("tipoDespesa", $('select-tipo-despesa').val()  );
-	oMyForm.append("centroCusto", $('select-centro-custo').val()  );
+	oMyForm.append("tipoDespesa", $('#select-tipo-despesa').val()  );
+	oMyForm.append("centroCusto", $('#select-centro-custo').val()  );
 	oMyForm.append("funcionario", $('#funcionario').val()         );
 	oMyForm.append("justificativa", $('#justificativaDespesa').val());
 	

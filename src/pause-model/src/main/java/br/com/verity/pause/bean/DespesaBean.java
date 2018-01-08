@@ -7,18 +7,17 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class DespesaBean implements Serializable {
 	
-	private Date data;
+	private String data;
 	private Double valor;
 	private Long tipoDespesa;
 	private Long centroCusto;
 	private String justificativa;
-	private MultipartFile comprovante;
 	private Long idFuncionario;
 	
-	public Date getData() {
+	public String getData() {
 		return data;
 	}
-	public void setData(Date data) {
+	public void setData(String data) {
 		this.data = data;
 	}
 	public Double getValor() {
@@ -45,12 +44,7 @@ public class DespesaBean implements Serializable {
 	public void setJustificativa(String justificativa) {
 		this.justificativa = justificativa;
 	}
-	public MultipartFile getComprovante() {
-		return comprovante;
-	}
-	public void setComprovante(MultipartFile comprovante) {
-		this.comprovante = comprovante;
-	}
+	
 	public Long getIdFuncionario() {
 		return idFuncionario;
 	}

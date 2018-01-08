@@ -7,7 +7,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import br.com.verity.pause.bean.DespesaBean;
@@ -29,7 +31,7 @@ public class DespesaController {
 	
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<?> salvar(@RequestBody DespesaBean despesa) {
+	public ResponseEntity<?> salvar(DespesaBean despesa, @RequestParam(value = "comprovante") MultipartFile comprovante) {
 		System.out.println(despesa.getJustificativa());
 		return ResponseEntity.ok("Salvo com sucesso!");
 	}
