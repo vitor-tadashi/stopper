@@ -27,7 +27,8 @@
 			<li><a href="#">Home</a></li>
 			<li class="active">Despesas</li>
 		</ol>
-		<input type="hidden" id="funcionario" value="" />
+		<sec:authentication property="principal" var="user"/>
+		<input type="hidden" id="funcionario" value="${user.funcionario.id }" />
 		<div id="page-content">
 			<div class="panel">
 				<!--Data Table-->
@@ -78,7 +79,7 @@
 												pattern="([0-9]{1,3}\.)?[0-9]{1,3},[0-9]{2}$" />
 										</div>
 										<br /> <label class="control-label" style="margin: 4px 0 0 0">Tipo de despesa</label>
-										<div class="input-group">
+										<div class="input-group" id="tipoDespesaDiv">
 											<select class="selectpicker" data-live-search="true"
 												id="select-tipo-despesa" name="tipoDespesa">
 												<option value="">Selecione</option>
@@ -88,13 +89,13 @@
 											</select>
 										</div>
 										<br /> <label class="control-label" style="margin: 4px 0 0 0">Centro de custo</label>
-										<div class="input-group">
+										<div class="input-group" id="centroCustoDiv">
 											<select class="selectpicker" data-live-search="true"
 												id="select-centro-custo" name="centroCusto">
 												<option value="">Selecione</option>
 												<option value="12">Teste</option>
-												<%-- 							<c:forEach items="${funcionarios }" var="funcionario"> --%>
-												<%-- 								<option value="${funcionario.id }" ${funcionario.id eq idFuncionario? 'selected="true"' : ''}>${funcionario.nome }</option> --%>
+												<%-- 							<c:forEach items="${centrosCusto }" var="centroCusto"> --%>
+												<%-- 								<option value="${centrosCusto.id }">${centrosCusto.nome }</option>
 												<%-- 							</c:forEach> --%>
 											</select>
 										</div>
@@ -104,7 +105,7 @@
 											<textarea id="justificativaDespesa"
 												class="form-control justificativaDespesa"
 												name="justificativa"
-												placeholder="Justificativa da despesa" value=""></textarea>
+												placeholder="Justificativa da despesa"></textarea>
 										</div>
 										<br /> <label class="control-label" style="margin: 4px 0 0 0">Comprovante</label>
 										<div class="input-group" id="comprovanteDespesaDiv"

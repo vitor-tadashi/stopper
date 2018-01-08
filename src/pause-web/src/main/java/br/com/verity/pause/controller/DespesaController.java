@@ -31,7 +31,7 @@ public class DespesaController {
 	
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<?> salvar(DespesaBean despesa, @RequestParam(value = "comprovante") MultipartFile comprovante) {
+	public ResponseEntity<?> salvar(DespesaBean despesa, @RequestParam(value = "comprovante", required=false) MultipartFile comprovante) {
 		System.out.println(despesa.getJustificativa());
 		return ResponseEntity.ok("Salvo com sucesso!");
 	}
