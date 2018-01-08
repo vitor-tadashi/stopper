@@ -1,0 +1,213 @@
+package br.com.verity.pause.security;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URLEncoder;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+import javax.naming.ServiceUnavailableException;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import com.microsoft.aad.adal4j.AuthenticationContext;
+import com.microsoft.aad.adal4j.AuthenticationResult;
+import com.microsoft.aad.adal4j.ClientCredential;
+import com.microsoft.aad.adal4j.UserInfo;
+import com.nimbusds.oauth2.sdk.AuthorizationCode;
+import com.nimbusds.openid.connect.sdk.AuthenticationErrorResponse;
+import com.nimbusds.openid.connect.sdk.AuthenticationResponse;
+import com.nimbusds.openid.connect.sdk.AuthenticationResponseParser;
+import com.nimbusds.openid.connect.sdk.AuthenticationSuccessResponse;
+
+import br.com.verity.pause.bean.CustomUserDetails;
+import br.com.verity.pause.bean.UsuarioBean;
+import br.com.verity.pause.integration.SavIntegration;
+
+@Component
+public class ADFilter extends OncePerRequestFilter {
+
+	@Autowired
+	private SavIntegration sav;
+
+	@Value("${clientId}")
+	private String clientId;
+
+	@Value("${clientSecret}")
+	private String clientSecret;
+
+	@Value("${tenant}")
+	private String tenant;
+
+	@Value("${authority}")
+	private String authority;
+
+	private static final String PRINCIPAL_SESSION_NAME = "principal";
+	private static final String CURRENT_USER_PRINCIPAL = "CURRENT_USER_PRINCIPAL";
+	private List<SimpleGrantedAuthority> roles = Arrays.asList(new SimpleGrantedAuthority("ROLE_group1"));
+
+	@Override
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+			throws ServletException, IOException {
+
+		String requestUri = request.getRequestURI();
+		try {
+			String currentUri = request.getScheme() + "://" + request.getServerName()
+					+ ("http".equals(request.getScheme()) && request.getServerPort() == 80
+							|| "https".equals(request.getScheme()) && request.getServerPort() == 443 ? ""
+									: ":" + request.getServerPort())
+					+ requestUri;
+
+			String fullUrl = currentUri + (request.getQueryString() != null ? "?" + request.getQueryString() : "");
+
+			if (!isAuthenticated(request)) {
+				if (containsAuthenticationData(request)) {
+					Map<String, String> params = new HashMap<String, String>();
+					for (String key : request.getParameterMap().keySet()) {
+						params.put(key, request.getParameterMap().get(key)[0]);
+					}
+					AuthenticationResponse authResponse = AuthenticationResponseParser.parse(new URI(fullUrl), params);
+					if (isAuthenticationSuccessful(authResponse)) {
+
+						AuthenticationSuccessResponse oidcResponse = (AuthenticationSuccessResponse) authResponse;
+						AuthenticationResult result = getAccessToken(oidcResponse.getAuthorizationCode(), currentUri);
+						createSessionPrincipal(request, result);
+					} else {
+						AuthenticationErrorResponse oidcResponse = (AuthenticationErrorResponse) authResponse;
+						throw new Exception(String.format("Request for auth code failed: %s - %s",
+								oidcResponse.getErrorObject().getCode(),
+								oidcResponse.getErrorObject().getDescription()));
+					}
+				} else {
+					// not authenticated
+					response.setStatus(302);
+					response.sendRedirect(getRedirectUrl(currentUri));
+					return;
+				}
+			} else {
+				// if authenticated, how to check for valid session?
+				AuthenticationResult result = getAuthSessionObject(request);
+
+				if (result.getExpiresOnDate().before(new Date())) {
+					result = getAccessTokenFromRefreshToken(result.getRefreshToken(), currentUri);
+				}
+				createSessionPrincipal(request, result);
+			}
+		} catch (Throwable exc) {
+			response.setStatus(500);
+			request.setAttribute("error", exc.getMessage());
+			response.sendRedirect(((HttpServletRequest) request).getContextPath() + "/error.jsp");
+		}
+		filterChain.doFilter(request, response);
+	}
+
+	private boolean isAuthenticated(HttpServletRequest request) {
+		return request.getSession().getAttribute(PRINCIPAL_SESSION_NAME) != null;
+	}
+
+	private String getRedirectUrl(String currentUri) throws UnsupportedEncodingException {
+		String redirectUrl = authority + this.tenant
+				+ "/oauth2/authorize?response_type=code%20id_token&scope=openid&response_mode=form_post&redirect_uri="
+				+ URLEncoder.encode(currentUri, "UTF-8") + "&client_id=" + clientId
+				+ "&resource=https%3a%2f%2fgraph.windows.net" + "&nonce=" + UUID.randomUUID() + "&site_id=500879";
+		logger.info("redirect url: " + redirectUrl);
+		return redirectUrl;
+	}
+
+	private static boolean containsAuthenticationData(HttpServletRequest httpRequest) {
+		return httpRequest.getMethod().equalsIgnoreCase("POST") && (httpRequest.getParameterMap().containsKey("error")
+				|| httpRequest.getParameterMap().containsKey("id_token")
+				|| httpRequest.getParameterMap().containsKey("code"));
+	}
+
+	private static boolean isAuthenticationSuccessful(AuthenticationResponse authResponse) {
+		return authResponse instanceof AuthenticationSuccessResponse;
+	}
+
+	private AuthenticationResult getAccessToken(AuthorizationCode authorizationCode, String currentUri)
+			throws Throwable {
+		String authCode = authorizationCode.getValue();
+		ClientCredential credential = new ClientCredential(clientId, clientSecret);
+		AuthenticationContext context = null;
+		AuthenticationResult result = null;
+		ExecutorService service = null;
+		try {
+			service = Executors.newFixedThreadPool(1);
+			context = new AuthenticationContext(authority + tenant + "/", true, service);
+			Future<AuthenticationResult> future = context.acquireTokenByAuthorizationCode(authCode, new URI(currentUri),
+					credential, null);
+			result = future.get();
+		} catch (ExecutionException e) {
+			throw e.getCause();
+		} finally {
+			service.shutdown();
+		}
+
+		if (result == null) {
+			throw new ServiceUnavailableException("authentication result was null");
+		}
+		return result;
+	}
+
+	private void createSessionPrincipal(HttpServletRequest httpRequest, AuthenticationResult result) throws Exception {
+		httpRequest.getSession().setAttribute(PRINCIPAL_SESSION_NAME, result);
+		if (result != null) {
+			UserInfo userAD = result.getUserInfo();
+			// https://login.microsoftonline.com/verityteste.onmicrosoft.com/oauth2/logout
+			UsuarioBean usuario = sav.getUsuarioAD(userAD.getUniqueId());
+			CustomUserDetails userDetails = new CustomUserDetails(usuario);
+
+			Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
+					userDetails.getAuthorities());
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+		}
+	}
+
+	private static AuthenticationResult getAuthSessionObject(HttpServletRequest request) {
+		return (AuthenticationResult) request.getSession().getAttribute(PRINCIPAL_SESSION_NAME);
+	}
+
+	private AuthenticationResult getAccessTokenFromRefreshToken(String refreshToken, String currentUri)
+			throws Throwable {
+		AuthenticationContext context = null;
+		AuthenticationResult result = null;
+		ExecutorService service = null;
+		try {
+			service = Executors.newFixedThreadPool(1);
+			context = new AuthenticationContext(authority + tenant + "/", true, service);
+			Future<AuthenticationResult> future = context.acquireTokenByRefreshToken(refreshToken,
+					new ClientCredential(clientId, clientSecret), null, null);
+			result = future.get();
+		} catch (ExecutionException e) {
+			throw e.getCause();
+		} finally {
+			service.shutdown();
+		}
+
+		if (result == null) {
+			throw new ServiceUnavailableException("authentication result was null");
+		}
+		return result;
+
+	}
+}

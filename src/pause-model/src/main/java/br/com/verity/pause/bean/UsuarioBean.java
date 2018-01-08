@@ -10,6 +10,7 @@ public class UsuarioBean {
 	private String usuario;
 	private String senha;
 	private Boolean ativo;
+	private String uniqueIdAD;
 	private FuncionarioIntegrationBean funcionario;
 	private List<PerfilBean> perfis;
 
@@ -58,6 +59,14 @@ public class UsuarioBean {
 
 	public void setAtivo(Boolean ativo) {
 		this.ativo = ativo;
+	}
+
+	public String getUniqueIdAD() {
+		return uniqueIdAD;
+	}
+
+	public void setUniqueIdAD(String uniqueIdAD) {
+		this.uniqueIdAD = uniqueIdAD;
 	}
 
 	public FuncionarioIntegrationBean getFuncionario() {

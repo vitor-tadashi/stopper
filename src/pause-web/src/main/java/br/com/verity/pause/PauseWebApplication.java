@@ -15,7 +15,6 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.web.multipart.support.MultipartFilter;
 
 @SpringBootApplication
-@ImportResource(value = { "classpath:security-config.xml" })
 public class PauseWebApplication extends SpringBootServletInitializer {
 	
 	@Override

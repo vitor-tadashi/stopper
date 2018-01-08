@@ -10,6 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import javax.print.attribute.standard.Media;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.core.MediaType;
+
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,51 +31,53 @@ import br.com.verity.pause.converter.FuncionarioIntegrationConverter;
 
 @Component
 public class SavIntegration {
-	
+
 	@Autowired
 	private FuncionarioIntegrationConverter funcionarioConverter;
-	
+
 	@Autowired
 	private Environment ambiente;
 
-	public List<FuncionarioBean> getFuncionarios(int idEmpresa){
+	public List<FuncionarioBean> getFuncionarios(int idEmpresa) {
 		List<FuncionarioIntegrationBean> funcionarios = new ArrayList<FuncionarioIntegrationBean>();
 		ObjectMapper mapper = new ObjectMapper();
 		// Properties props = this.getProp();
-		String endereco = ambiente.getProperty("integration.sav.ip") + "/listFuncionariosDaEmpresa/"+idEmpresa;
+		String endereco = ambiente.getProperty("integration.sav.ip") + "/listFuncionariosDaEmpresa/" + idEmpresa;
 		try {
 			URL url = new URL(endereco);
-			funcionarios = mapper.readValue(url,  new TypeReference<List<FuncionarioIntegrationBean>>(){});
-		} catch (IOException e ) {
+			funcionarios = mapper.readValue(url, new TypeReference<List<FuncionarioIntegrationBean>>() {
+			});
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		return funcionarioConverter.convertEntityToBean(funcionarios);
 	}
-	
-	public List<FuncionarioBean> getListFuncionarios(){
+
+	public List<FuncionarioBean> getListFuncionarios() {
 		List<FuncionarioIntegrationBean> funcionarios = new ArrayList<FuncionarioIntegrationBean>();
 		ObjectMapper mapper = new ObjectMapper();
 		// Properties props = this.getProp();
 		String endereco = ambiente.getProperty("integration.sav.ip") + "/listFuncionariosComPis";
 		try {
 			URL url = new URL(endereco);
-			funcionarios = mapper.readValue(url,  new TypeReference<List<FuncionarioIntegrationBean>>(){});
-		} catch (IOException e ) {
+			funcionarios = mapper.readValue(url, new TypeReference<List<FuncionarioIntegrationBean>>() {
+			});
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		return funcionarioConverter.convertEntityToBean(funcionarios);
 	}
-	
-	public UsuarioBean getUsuario(String user){
+
+	public UsuarioBean getUsuario(String user) {
 		UsuarioBean usuario = new UsuarioBean();
 		ObjectMapper mapper = new ObjectMapper();
 		String endereco = ambiente.getProperty("integration.sav.ip") + "/getUsuarioSistema/";
 		try {
 			URL url = new URL(endereco + user + "/PAUSE");
 			usuario = mapper.readValue(url, UsuarioBean.class);
-		} catch (IOException e ) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
@@ -125,48 +132,51 @@ public class SavIntegration {
 		FuncionarioIntegrationBean funcionario = new FuncionarioIntegrationBean();
 		ObjectMapper mapper = new ObjectMapper();
 		// Properties props = this.getProp();
-		String endereco = ambiente.getProperty("integration.sav.ip") + "/getFuncionario/"+idFuncionario;
+		String endereco = ambiente.getProperty("integration.sav.ip") + "/getFuncionario/" + idFuncionario;
 		try {
 			URL url = new URL(endereco);
-			funcionario = mapper.readValue(url,  new TypeReference<FuncionarioIntegrationBean>(){});
-		} catch (IOException e ) {
+			funcionario = mapper.readValue(url, new TypeReference<FuncionarioIntegrationBean>() {
+			});
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		FuncionarioBean funcionarioBean = funcionarioConverter.convertEntityToBean(funcionario);
 		funcionarioBean.setEmpresa(funcionario.getEmpresa());
-		
+
 		return funcionarioBean;
 	}
-	
+
 	public EmpresaBean getEmpresa(Integer idEmpresa) {
 		EmpresaBean empresa = new EmpresaBean();
 		ObjectMapper mapper = new ObjectMapper();
 		// Properties props = this.getProp();
-		String endereco = ambiente.getProperty("integration.sav.ip") + "/getEmpresa/"+idEmpresa;
+		String endereco = ambiente.getProperty("integration.sav.ip") + "/getEmpresa/" + idEmpresa;
 		try {
 			URL url = new URL(endereco);
-			empresa = mapper.readValue(url,  new TypeReference<EmpresaBean>(){});
-		} catch (IOException e ) {
+			empresa = mapper.readValue(url, new TypeReference<EmpresaBean>() {
+			});
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		return empresa;
 	}
-	
+
 	public FuncionarioBean getFuncionarioPorPis(String pis) {
 		FuncionarioIntegrationBean funcionario = new FuncionarioIntegrationBean();
 		ObjectMapper mapper = new ObjectMapper();
-		
-		String endereco = ambiente.getProperty("integration.sav.ip") + "/getFuncionarioPorPis/"+pis;
+
+		String endereco = ambiente.getProperty("integration.sav.ip") + "/getFuncionarioPorPis/" + pis;
 		try {
 			URL url = new URL(endereco);
-			funcionario = mapper.readValue(url,  new TypeReference<FuncionarioIntegrationBean>(){});
-		} catch (IOException e ) {
+			funcionario = mapper.readValue(url, new TypeReference<FuncionarioIntegrationBean>() {
+			});
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		FuncionarioBean funcionarioBean = funcionarioConverter.convertEntityToBean(funcionario);
 		funcionarioBean.setEmpresa(funcionario.getEmpresa());
-		
+
 		return funcionarioBean;
 	}
 
@@ -177,13 +187,14 @@ public class SavIntegration {
 		String endereco = ambiente.getProperty("integration.sav.ip") + "/listEmpresasGrupoVerity";
 		try {
 			URL url = new URL(endereco);
-			empresas = mapper.readValue(url,  new TypeReference<ArrayList<EmpresaBean>>(){});
-		} catch (IOException e ) {
+			empresas = mapper.readValue(url, new TypeReference<ArrayList<EmpresaBean>>() {
+			});
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return empresas;
 	}
-	
+
 	public List<FeriadoBean> listFeriados() {
 		List<FeriadoBean> feriados = new ArrayList<FeriadoBean>();
 		ObjectMapper mapper = new ObjectMapper();
@@ -191,10 +202,30 @@ public class SavIntegration {
 		String endereco = ambiente.getProperty("integration.sav.ip") + "/listFeriados";
 		try {
 			URL url = new URL(endereco);
-			feriados = mapper.readValue(url,  new TypeReference<ArrayList<FeriadoBean>>(){});
-		} catch (IOException e ) {
+			feriados = mapper.readValue(url, new TypeReference<ArrayList<FeriadoBean>>() {
+			});
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return feriados;
+	}
+
+	public UsuarioBean getUsuarioAD(String uniqueId) {
+		UsuarioBean usuario = null;
+		ObjectMapper mapper = new ObjectMapper();
+		StringBuilder path = new StringBuilder(ambiente.getProperty("integration.sav.ip"));
+		path.append("/usuario-ad/");
+		path.append(uniqueId);
+		path.append("/PAUSE");
+		
+		String endereco = path.toString();
+		try {
+			URL url = new URL(endereco);
+			usuario = mapper.readValue(url, UsuarioBean.class);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return usuario;
 	}
 }
