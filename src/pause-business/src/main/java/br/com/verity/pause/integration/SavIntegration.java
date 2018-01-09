@@ -21,6 +21,7 @@ import br.com.verity.pause.bean.EmpresaBean;
 import br.com.verity.pause.bean.FeriadoBean;
 import br.com.verity.pause.bean.FuncionarioBean;
 import br.com.verity.pause.bean.FuncionarioIntegrationBean;
+import br.com.verity.pause.bean.ProjetoBean;
 import br.com.verity.pause.bean.UsuarioBean;
 import br.com.verity.pause.converter.FuncionarioIntegrationConverter;
 
@@ -196,5 +197,19 @@ public class SavIntegration {
 			e.printStackTrace();
 		}
 		return feriados;
+	}
+	
+	public List<ProjetoBean> listProjetosPorFuncionarios(Integer idFuncionario) {
+		List<ProjetoBean> projetos = new ArrayList<ProjetoBean>();
+		ObjectMapper mapper = new ObjectMapper();
+		// Properties props = this.getProp();
+		String endereco = ambiente.getProperty("integration.sav.ip") + "/getProjetoPorFuncionario/" + idFuncionario;
+		try {
+			URL url = new URL(endereco);
+			projetos = mapper.readValue(url,  new TypeReference<ArrayList<ProjetoBean>>(){});
+		} catch (IOException e ) {
+			e.printStackTrace();
+		}
+		return projetos;
 	}
 }

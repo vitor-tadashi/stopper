@@ -88,15 +88,14 @@
 												</c:forEach>
 											</select>
 										</div>
-										<br /> <label class="control-label" style="margin: 4px 0 0 0">Centro de custo</label>
+										<br /> <label class="control-label" style="margin: 4px 0 0 0">Projeto</label>
 										<div class="input-group" id="centroCustoDiv">
 											<select class="selectpicker" data-live-search="true"
 												id="select-centro-custo" name="centroCusto">
 												<option value="">Selecione</option>
-												<option value="12">Teste</option>
-												<%-- 							<c:forEach items="${centrosCusto }" var="centroCusto"> --%>
-												<%-- 								<option value="${centrosCusto.id }">${centrosCusto.nome }</option>
-												<%-- 							</c:forEach> --%>
+												<c:forEach items="${projetos }" var="projeto">
+													<option value="${projeto.id }">${projeto.nome }</option>
+												</c:forEach>
 											</select>
 										</div>
 										<br /> <label class="control-label" style="margin: 4px 0 0 0">Justificativa</label>
