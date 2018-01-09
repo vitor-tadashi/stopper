@@ -40,6 +40,7 @@ import com.nimbusds.openid.connect.sdk.AuthenticationResponse;
 import com.nimbusds.openid.connect.sdk.AuthenticationResponseParser;
 import com.nimbusds.openid.connect.sdk.AuthenticationSuccessResponse;
 
+import br.com.verity.pause.MySimpleUrlAuthenticationSuccessHandler;
 import br.com.verity.pause.bean.CustomUserDetails;
 import br.com.verity.pause.bean.UsuarioBean;
 import br.com.verity.pause.integration.SavIntegration;
@@ -49,6 +50,9 @@ public class ADFilter extends OncePerRequestFilter {
 
 	@Autowired
 	private SavIntegration sav;
+
+	@Autowired
+	private MySimpleUrlAuthenticationSuccessHandler urlAuthenticationSuccessHandler;
 
 	@Value("${clientId}")
 	private String clientId;
@@ -69,7 +73,7 @@ public class ADFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-
+		Authentication authentication = null;
 		String requestUri = request.getRequestURI();
 		try {
 			String currentUri = request.getScheme() + "://" + request.getServerName()
@@ -91,7 +95,10 @@ public class ADFilter extends OncePerRequestFilter {
 
 						AuthenticationSuccessResponse oidcResponse = (AuthenticationSuccessResponse) authResponse;
 						AuthenticationResult result = getAccessToken(oidcResponse.getAuthorizationCode(), currentUri);
-						createSessionPrincipal(request, result);
+						authentication = createSessionPrincipal(request, result);
+
+						urlAuthenticationSuccessHandler.onAuthenticationSuccess(request, response, authentication);
+						return;
 					} else {
 						AuthenticationErrorResponse oidcResponse = (AuthenticationErrorResponse) authResponse;
 						throw new Exception(String.format("Request for auth code failed: %s - %s",
@@ -114,10 +121,13 @@ public class ADFilter extends OncePerRequestFilter {
 				createSessionPrincipal(request, result);
 			}
 		} catch (Throwable exc) {
+			exc.printStackTrace();
 			response.setStatus(500);
 			request.setAttribute("error", exc.getMessage());
 			response.sendRedirect(((HttpServletRequest) request).getContextPath() + "/error.jsp");
 		}
+		// urlAuthenticationSuccessHandler.onAuthenticationSuccess(request,
+		// response, authentication);
 		filterChain.doFilter(request, response);
 	}
 
@@ -169,18 +179,24 @@ public class ADFilter extends OncePerRequestFilter {
 		return result;
 	}
 
-	private void createSessionPrincipal(HttpServletRequest httpRequest, AuthenticationResult result) throws Exception {
+	private Authentication createSessionPrincipal(HttpServletRequest httpRequest, AuthenticationResult result)
+			throws Exception {
 		httpRequest.getSession().setAttribute(PRINCIPAL_SESSION_NAME, result);
 		if (result != null) {
-			UserInfo userAD = result.getUserInfo();
-			// https://login.microsoftonline.com/verityteste.onmicrosoft.com/oauth2/logout
-			UsuarioBean usuario = sav.getUsuarioAD(userAD.getUniqueId());
-			CustomUserDetails userDetails = new CustomUserDetails(usuario);
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			if (auth == null) {
+				UserInfo userAD = result.getUserInfo();
+				// https://login.microsoftonline.com/verityteste.onmicrosoft.com/oauth2/logout
+				UsuarioBean usuario = sav.getUsuarioAD(userAD.getUniqueId());
+				CustomUserDetails userDetails = new CustomUserDetails(usuario);
 
-			Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
-					userDetails.getAuthorities());
-			SecurityContextHolder.getContext().setAuthentication(authentication);
+				auth = new UsernamePasswordAuthenticationToken(userDetails, null,
+						userDetails.getAuthorities());
+				SecurityContextHolder.getContext().setAuthentication(auth);
+			}
+			return auth;
 		}
+		return null;
 	}
 
 	private static AuthenticationResult getAuthSessionObject(HttpServletRequest request) {

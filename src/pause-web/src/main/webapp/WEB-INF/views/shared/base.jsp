@@ -228,7 +228,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="text-center">
-						<a href='<c:url value="/logout"/>' class="btn btn-primary">Sim</a>
+						<a href='<c:url value="/exit"/>' class="btn btn-primary">Sim</a>
 						<button data-dismiss="modal" class="btn btn-default" type="button">Não</button>
 					</div>
                 </div>

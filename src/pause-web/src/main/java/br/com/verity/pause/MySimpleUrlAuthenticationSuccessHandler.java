@@ -13,10 +13,10 @@ import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.stereotype.Component;
 
+@Component
 public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
-
-	private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -30,8 +30,12 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
 			throws IOException {
 
 		String targetUrl = determineTargetUrl(authentication);
+		String currentUri = request.getScheme() + "://" + request.getServerName()
+		+ ("http".equals(request.getScheme()) && request.getServerPort() == 80
+				|| "https".equals(request.getScheme()) && request.getServerPort() == 443 ? ""
+						: ":" + request.getServerPort()) + request.getContextPath() +targetUrl;
 
-		redirectStrategy.sendRedirect(request, response, targetUrl);
+		response.sendRedirect(currentUri);
 	}
 
 	protected String determineTargetUrl(Authentication authentication) {
@@ -65,13 +69,5 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
 			return;
 		}
 		session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
-	}
-
-	public void setRedirectStrategy(RedirectStrategy redirectStrategy) {
-		this.redirectStrategy = redirectStrategy;
-	}
-
-	protected RedirectStrategy getRedirectStrategy() {
-		return redirectStrategy;
 	}
 }
