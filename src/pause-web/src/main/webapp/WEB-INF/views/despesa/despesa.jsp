@@ -34,7 +34,7 @@
 				<!--Data Table-->
 				<!--===================================================-->
 				<div class="panel-body">
-					<span id="span-msg"></span>
+					<span id="span-msg" ></span>
 					<button id="addDespesa" class="btn btn-info" type="button" style="float: right" onclick="abrirModal();">Adicionar</button>					
 				</div>
 			</div>
@@ -51,7 +51,7 @@
 						<button type="button" class="close" data-dismiss="modal">
 							<i class="pci-cross pci-circle"></i>
 						</button>
-						<h4 class="modal-title">Gerenciar horas sobre aviso</h4>
+						<h4 class="modal-title">Adicionar Despesa</h4>
 					</div>
 	
 					<!--Modal body-->
@@ -62,23 +62,21 @@
 									<!--Data Table-->
 									<!--===================================================-->
 									<div class="panel-body">
-										<label class="control-label" style="margin: 4px 0 0 0">Data</label>
+										<label class="control-label" style="margin: 4px 0 0 0">*Data</label>
 										<div class="input-daterange input-group" id="datepicker"
 											style="width: 100% !important">
 											<input type="date" id="dataDespesa"
 												class="form-control dataDespesa" name="data"
-												placeholder="dd/mm/aaaa" value=""
-												min="2010-03-01" max="" />
+												placeholder="dd/mm/aaaa" />
 										</div>
-										<br /> <label class="control-label" style="margin: 4px 0 0 0">Valor</label>
+										<br /> <label class="control-label" style="margin: 4px 0 0 0">*Valor</label>
 										<div class="input-group" id="valorDespesaDiv"
 											style="width: 100% !important">
-											<input type="number" id="valorDespesa" min="1" step="0.01"
+											<input type="text" id="valorDespesa" 
 												class="form-control valorDespesa" name="valor"
-												placeholder="R$115,00" value=""
-												pattern="([0-9]{1,3}\.)?[0-9]{1,3},[0-9]{2}$" />
+												placeholder="XXXXX.XX" />
 										</div>
-										<br /> <label class="control-label" style="margin: 4px 0 0 0">Tipo de despesa</label>
+										<br /> <label class="control-label" style="margin: 4px 0 0 0">*Tipo de despesa</label>
 										<div class="input-group" id="tipoDespesaDiv">
 											<select class="selectpicker" data-live-search="true"
 												id="select-tipo-despesa" name="tipoDespesa">
@@ -88,7 +86,11 @@
 												</c:forEach>
 											</select>
 										</div>
+<<<<<<< HEAD
 										<br /> <label class="control-label" style="margin: 4px 0 0 0">Projeto</label>
+=======
+										<br /> <label class="control-label" style="margin: 4px 0 0 0">*Centro de custo</label>
+>>>>>>> branch 'Funcionalidde_despesa' of https://pedrofavari@verity.git.cloudforge.com/regpontov2.git
 										<div class="input-group" id="centroCustoDiv">
 											<select class="selectpicker" data-live-search="true"
 												id="select-centro-custo" name="centroCusto">
@@ -98,7 +100,7 @@
 												</c:forEach>
 											</select>
 										</div>
-										<br /> <label class="control-label" style="margin: 4px 0 0 0">Justificativa</label>
+										<br /> <label class="control-label" style="margin: 4px 0 0 0">*Justificativa</label>
 										<div class="input-group" id="justificativaDespesaDiv"
 											style="width: 100% !important">
 											<textarea id="justificativaDespesa"
