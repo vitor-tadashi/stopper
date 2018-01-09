@@ -86,11 +86,7 @@
 												</c:forEach>
 											</select>
 										</div>
-<<<<<<< HEAD
 										<br /> <label class="control-label" style="margin: 4px 0 0 0">Projeto</label>
-=======
-										<br /> <label class="control-label" style="margin: 4px 0 0 0">*Centro de custo</label>
->>>>>>> branch 'Funcionalidde_despesa' of https://pedrofavari@verity.git.cloudforge.com/regpontov2.git
 										<div class="input-group" id="centroCustoDiv">
 											<select class="selectpicker" data-live-search="true"
 												id="select-centro-custo" name="centroCusto">
