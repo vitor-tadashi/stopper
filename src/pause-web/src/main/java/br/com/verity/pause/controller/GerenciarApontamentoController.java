@@ -75,7 +75,7 @@ public class GerenciarApontamentoController {
 		apontamentos(model, idFuncionario, periodo);
 		justificativas(model);
 		sobreAvisos(model, idFuncionario, periodo);
-		bancosTrimestre(model);
+		//bancosTrimestre(model);
 		
 		if (request.isUserInRole("ROLE_MULTI-EMPRESA")) {
 			funcionarios(model);
