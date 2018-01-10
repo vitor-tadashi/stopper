@@ -1,5 +1,6 @@
 package br.com.verity.pause.converter;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.verity.pause.bean.ConsultaCompletaBean;
@@ -8,6 +9,9 @@ import br.com.verity.pause.entity.ConsultaCompletaEntity;
 @Component
 public class ConsultaCompletaConverter implements Converter<ConsultaCompletaEntity, ConsultaCompletaBean> {
 
+	@Autowired
+	private TipoAfastamentoConverter tipoAfastamentoConverter;
+	
 	@Override
 	public ConsultaCompletaEntity convertBeanToEntity(ConsultaCompletaBean bean) {
 		if(bean == null){
@@ -39,6 +43,7 @@ public class ConsultaCompletaConverter implements Converter<ConsultaCompletaEnti
 		entity.setApIdTpJustificativa(bean.getApontamentoIdTipoJustificativa());
 		entity.setAtQtdHora(bean.getAtestadoQuantidadeHora());
 		entity.setSbId(bean.getSobreAvisoId());
+		entity.setTipoAfastamento(tipoAfastamentoConverter.convertBeanToEntity(bean.getTipoAfastamento()));
 		
 		return entity;
 	}
@@ -74,6 +79,7 @@ public class ConsultaCompletaConverter implements Converter<ConsultaCompletaEnti
 		bean.setApontamentoIdTipoJustificativa(entity.getApIdTpJustificativa());
 		bean.setAtestadoQuantidadeHora(entity.getAtQtdHora());
 		bean.setSobreAvisoId(entity.getSbId());
+		bean.setTipoAfastamento(tipoAfastamentoConverter.convertEntityToBean(entity.getTipoAfastamento()));
 		
 		return bean;
 	}

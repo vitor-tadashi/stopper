@@ -35,3 +35,28 @@ input[type=date].form-control {
     background: #00CAB2;
     color: #F5FFFB;
 }
+
+.color-tag {
+	width: 5%;
+	height: 100%;
+	z-index: 0;
+	top: 0;
+	left: 0;
+	position: absolute;
+}
+
+.tag-ferias {
+	background-color: #9EE367;
+}
+
+.tag-licenca {
+	background-color: #509DFC;
+}
+
+.tag-feriado {
+	background-color: #FD593F;
+}
+
+.tag-data-bloqueada {
+	background-color: #7E7D7D;
+}

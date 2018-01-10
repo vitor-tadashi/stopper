@@ -257,6 +257,7 @@ public class GerarRelatorioXlsx {
 		}
 		return null;
 	}
+	
 	public static double round(double value, int places) {
 	    if (places < 0) throw new IllegalArgumentException();
 
@@ -265,6 +266,7 @@ public class GerarRelatorioXlsx {
 	    long tmp = Math.round(value);
 	    return (double) tmp / factor;
 	}
+	
 	public void pintar(int numLinha, XSSFSheet sheet,XSSFWorkbook workbook){
 		XSSFColor colorGrey = new XSSFColor(new Color(208, 206, 206));
 		XSSFCellStyle  styleColor = workbook.createCellStyle();

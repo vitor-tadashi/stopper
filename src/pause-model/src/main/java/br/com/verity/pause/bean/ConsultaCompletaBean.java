@@ -30,6 +30,7 @@ public class ConsultaCompletaBean {
 	private Integer apontamentoIdTipoJustificativa;
 	private Double atestadoQuantidadeHora;
 	private Integer SobreAvisoId;
+	private TipoAfastamentoBean tipoAfastamento;
 
 	public Date getData() {
 		return data;
@@ -215,4 +216,11 @@ public class ConsultaCompletaBean {
 		SobreAvisoId = sobreAvisoId;
 	}
 
+	public TipoAfastamentoBean getTipoAfastamento() {
+		return tipoAfastamento;
+	}
+
+	public void setTipoAfastamento(TipoAfastamentoBean tipoAfastamento) {
+		this.tipoAfastamento = tipoAfastamento;
+	}
 }
