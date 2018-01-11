@@ -67,8 +67,8 @@ function enviarFormDespesa() {
 	oMyForm.append("data", $('#dataDespesa').val());
 	oMyForm.append("valor", $('#valorDespesa').val().replace(/,/g, '.'));
 	oMyForm.append("tipoDespesa", $('#select-tipo-despesa').val()  );
-	oMyForm.append("centroCusto", $('#select-centro-custo').val()  );
-	oMyForm.append("funcionario", $('#funcionario').val()         );
+	oMyForm.append("idProjeto", $('#select-centro-custo').val()  );
+	oMyForm.append("idFuncionario", $('#funcionario').val()         );
 	oMyForm.append("justificativa", $('#justificativaDespesa').val());
 	
 	$.ajax({
