@@ -50,15 +50,25 @@ public class DespesaController {
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<?> salvar(DespesaBean despesa,
-			@RequestParam(value = "comprovante", required = false) MultipartFile comprovante) throws Exception {
+			@RequestParam(value = "comprovante", required = false) MultipartFile comprovante) {
 		try {
-			
+
 			despesaBizz.salvaDespesa(despesa, comprovante);
 			return ResponseEntity.ok("Salvo com sucesso!");
-			
-		} catch (IOException e) {
+
+		} catch (Exception e) {
+			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Despesa não pode ser salva, tente novamente!");
-		} catch (SQLException e) {
+		}
+	}
+
+	@RequestMapping(value = "/analisar", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseEntity<?> aprovar(Long idDespesa, Long idAprovador, String fgFinanceiroGP, boolean despesaAprovada) {
+		try {
+			despesaBizz.salvarAnaliseDespesa(idDespesa, idAprovador, fgFinanceiroGP, despesaAprovada);
+			return ResponseEntity.ok("Salvo com sucesso!");
+		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Despesa não pode ser salva, tente novamente!");
 		}
 	}

@@ -18,9 +18,12 @@ public class TipoDespesaDAO {
 
 	@Autowired
 	private ConnectionFactory connectionFactory;
+	
+	Connection conn;
+	PreparedStatement ps;
+	ResultSet rs;
 
 	public List<TipoDespesaEntity> findAll() {
-		Connection conn;
 		List<TipoDespesaEntity> entities = new ArrayList<>();
 
 		String sql = "SELECT * FROM tipo_despesa";
@@ -28,7 +31,7 @@ public class TipoDespesaDAO {
 		try {
 			conn = connectionFactory.createConnection();
 
-			PreparedStatement ps = conn.prepareStatement(sql);
+			ps = conn.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {
@@ -41,13 +44,59 @@ public class TipoDespesaDAO {
 				entities.add(entity);
 			}
 
-			ps.close();
-			conn.close();
+
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				fecharConexoes();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 
 		return entities;
+	}
+
+	public TipoDespesaEntity findById(Long id) {
+		String sql = "SELECT id, nome, descricao FROM tipo_despesa where id = ?";
+
+		TipoDespesaEntity tipoDespesa = new TipoDespesaEntity();
+		try {
+			conn = connectionFactory.createConnection();
+			ps = conn.prepareStatement(sql);
+			ps.setLong(1, id);
+			rs = ps.executeQuery();
+
+			if (rs.next()) {
+				tipoDespesa.setId(rs.getLong("id"));
+				tipoDespesa.setNome(rs.getString("nome"));
+				tipoDespesa.setDescricao(rs.getString("descricao"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				fecharConexoes();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return tipoDespesa;
+	}
+	
+	private void fecharConexoes() throws SQLException {
+		if (rs != null && !rs.isClosed()) {
+			rs.close();
+		}
+		if (ps != null && !ps.isClosed()) {
+			ps.close();
+		}
+
+		if (conn != null && conn.isClosed()) {
+			conn.close();
+		}
 	}
 
 }

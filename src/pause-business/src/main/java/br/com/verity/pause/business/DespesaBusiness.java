@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +15,19 @@ import org.springframework.web.multipart.MultipartFile;
 import br.com.verity.pause.bean.DespesaBean;
 import br.com.verity.pause.converter.DespesaConverter;
 import br.com.verity.pause.dao.DespesaDAO;
+import br.com.verity.pause.dao.StatusDAO;
 import br.com.verity.pause.entity.DespesaEntity;
+import br.com.verity.pause.entity.StatusEntity;
+import br.com.verity.pause.entity.enumerator.StatusEnum;
 
 @Service
 public class DespesaBusiness {
 
 	@Autowired
 	DespesaDAO dao;
+	
+	@Autowired
+	StatusDAO statusDao;
 
 	@Autowired
 	DespesaConverter converter;
@@ -35,19 +40,21 @@ public class DespesaBusiness {
 
 		DespesaEntity entity = converter.convertBeanToEntity(despesa);
 		
-		String fileName = entity.getIdSolicitante() + "_" + System.currentTimeMillis() + "_" + multipartFile.getOriginalFilename();
 		
 		// Seta despesa como em análise, que é o estado inicial
-		entity.setStatus(1L);
-		entity.setCaminhoJustificativa(ambiente.getProperty("despesa.comprovante.path") + fileName);
+		entity.setStatus(statusDao.findByName(StatusEnum.EM_ANALISE));
 		
-		try{
-			saveMultipartFile(multipartFile, entity, fileName);
- 			
-			return converter.convertEntityToBean(dao.salvaDespesa(entity));
-		} catch (Exception e) {
-			throw e;
+		if (multipartFile != null) {
+			String fileName = entity.getIdSolicitante() + "_" + System.currentTimeMillis() + "_" + multipartFile.getOriginalFilename();
+			entity.setCaminhoJustificativa(ambiente.getProperty("despesa.comprovante.path") + fileName);
+			try{
+				saveMultipartFile(multipartFile, entity, fileName);
+	 			
+			} catch (Exception e) {
+				throw e;
+			}
 		}
+		return converter.convertEntityToBean(dao.salvaDespesa(entity));
 	}
 
 	public void saveMultipartFile(MultipartFile multipart, DespesaEntity despesa, String fileName) throws IOException {
@@ -71,5 +78,21 @@ public class DespesaBusiness {
 	
 	public List<DespesaBean> listarDespesasPorFuncionario(Integer idFuncionario) {
 		return converter.convertEntityToBean(dao.listarDespesaPorFuncionario(idFuncionario));
+	}
+
+	public void salvarAnaliseDespesa(Long idDespesa, Long idAprovador, String fgAprovador, boolean despesaAprovada) throws Exception {
+		StatusEntity status = null;
+		if (despesaAprovada) {
+			status = statusDao.findByName(StatusEnum.APROVADO);
+		} else {
+			status = statusDao.findByName(StatusEnum.REPROVADO);
+		}
+		if ("G".equals(fgAprovador)) {
+			dao.salvarAnaliseDespesaGP(idDespesa, idAprovador, status.getId());
+		} else if ("F".equals(fgAprovador)) {
+			dao.salvarAnaliseDespesaFinanceiro(idDespesa, idAprovador, status.getId());
+		} else {
+			throw new IllegalArgumentException("Flag aprovador não identificada!");
+		}
 	}
 }

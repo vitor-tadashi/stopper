@@ -3,8 +3,9 @@ package br.com.verity.pause.bean;
 public class DespesaBean{
 	
 	private Long id;
-	private Long status;
-	private Long tipoDespesa;
+	private Integer idStatus;
+	private Long idTipoDespesa;
+	private String nomeTipoDespesa;
 	private String justificativa;
 	private Double valor;
 	private String data;
@@ -14,6 +15,8 @@ public class DespesaBean{
 	private String dataAcaoFinanceiro;
 	private Long idGpAprovador;
 	private Long idFinanceiroAprovador;
+	private String descricaoProjeto;
+	private String nomeStatus;
 	
 	public Long getId() {
 		return id;
@@ -21,18 +24,13 @@ public class DespesaBean{
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Long getStatus() {
-		return status;
+	public Integer getIdStatus() {
+		return idStatus;
 	}
-	public void setStatus(Long status) {
-		this.status = status;
+	public void setIdStatus(Integer idStatus) {
+		this.idStatus = idStatus;
 	}
-	public Long getTipoDespesa() {
-		return tipoDespesa;
-	}
-	public void setTipoDespesa(Long tipoDespesa) {
-		this.tipoDespesa = tipoDespesa;
-	}
+	
 	public String getJustificativa() {
 		return justificativa;
 	}
@@ -87,4 +85,29 @@ public class DespesaBean{
 	public void setIdFinanceiroAprovador(Long idFinanceiroAprovador) {
 		this.idFinanceiroAprovador = idFinanceiroAprovador;
 	}
+	public String getDescricaoProjeto() {
+		return descricaoProjeto;
+	}
+	public void setDescricaoProjeto(String descricaoProjeto) {
+		this.descricaoProjeto = descricaoProjeto;
+	}
+	public String getNomeStatus() {
+		return nomeStatus;
+	}
+	public void setNomeStatus(String nomeStatus) {
+		this.nomeStatus = nomeStatus;
+	}
+	public Long getIdTipoDespesa() {
+		return idTipoDespesa;
+	}
+	public void setIdTipoDespesa(Long idTipoDespesa) {
+		this.idTipoDespesa = idTipoDespesa;
+	}
+	public String getNomeTipoDespesa() {
+		return nomeTipoDespesa;
+	}
+	public void setNomeTipoDespesa(String nomeTipoDespesa) {
+		this.nomeTipoDespesa = nomeTipoDespesa;
+	}
+	
 }

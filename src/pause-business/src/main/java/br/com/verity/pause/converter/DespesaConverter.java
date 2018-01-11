@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 
 import br.com.verity.pause.bean.DespesaBean;
 import br.com.verity.pause.entity.DespesaEntity;
+import br.com.verity.pause.entity.StatusEntity;
+import br.com.verity.pause.entity.TipoDespesaEntity;
 
 @Component
 public class DespesaConverter  implements Converter<DespesaEntity, DespesaBean> {
@@ -24,8 +26,12 @@ public class DespesaConverter  implements Converter<DespesaEntity, DespesaBean> 
 		DespesaEntity entity = new DespesaEntity();
 		
 		entity.setId(bean.getId());
-		entity.setStatus(bean.getStatus());
-		entity.setTipoDespesa(bean.getTipoDespesa());
+		entity.setStatus(new StatusEntity());
+		entity.getStatus().setId(bean.getIdStatus());
+		entity.getStatus().setNome(bean.getNomeStatus());
+		entity.setTipoDespesa(new TipoDespesaEntity());
+		entity.getTipoDespesa().setId(bean.getIdTipoDespesa());
+		entity.getTipoDespesa().setNome(bean.getNomeTipoDespesa());
 		entity.setJustificativa(bean.getJustificativa());
 		entity.setValor(bean.getValor());
 		entity.setIdProjeto(bean.getIdProjeto());
@@ -62,8 +68,10 @@ public class DespesaConverter  implements Converter<DespesaEntity, DespesaBean> 
 		DespesaBean bean = new DespesaBean();
 		
 		bean.setId(entity.getId());		
-		bean.setStatus(entity.getStatus());
-		bean.setTipoDespesa(entity.getTipoDespesa());
+		bean.setIdStatus(entity.getStatus().getId());
+		bean.setNomeStatus(entity.getStatus().getNome());
+		bean.setIdTipoDespesa(entity.getTipoDespesa().getId());
+		bean.setNomeTipoDespesa(entity.getTipoDespesa().getNome());
 		bean.setJustificativa(entity.getJustificativa());
 		bean.setValor(entity.getValor());
 		

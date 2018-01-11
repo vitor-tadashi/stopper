@@ -1,12 +1,16 @@
 package br.com.verity.pause.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class DespesaEntity{
+import org.springframework.stereotype.Component;
+
+@Component
+public class DespesaEntity implements Serializable {
 	
 	private Long id;
-	private Long status;
-	private Long tipoDespesa;
+	private StatusEntity status;
+	private TipoDespesaEntity tipoDespesa;
 	private String justificativa;
 	private Double valor;
 	private Date dataSolicitacao;
@@ -18,7 +22,6 @@ public class DespesaEntity{
 	private Long idFinanceiroAprovador;
 	private String caminhoJustificativa;
 	
-	
 	public Long getId() {
 		return id;
 	}
@@ -26,19 +29,11 @@ public class DespesaEntity{
 		this.id = id;
 	}
 	
-	public Long getStatus() {
-		return status;
-	}
-	
-	public void setStatus(Long status) {
-		this.status = status;
-	}
-	
-	public Long getTipoDespesa() {
+	public TipoDespesaEntity getTipoDespesa() {
 		return tipoDespesa;
 	}
 	
-	public void setTipoDespesa(Long tipoDespesa) {
+	public void setTipoDespesa(TipoDespesaEntity tipoDespesa) {
 		this.tipoDespesa = tipoDespesa;
 	}
 	
@@ -120,5 +115,11 @@ public class DespesaEntity{
 	
 	public void setCaminhoJustificativa(String caminhoJustificativa) {
 		this.caminhoJustificativa = caminhoJustificativa;
+	}
+	public StatusEntity getStatus() {
+		return status;
+	}
+	public void setStatus(StatusEntity status) {
+		this.status = status;
 	}
 }
