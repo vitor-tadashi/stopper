@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +14,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import br.com.verity.pause.bean.DespesaBean;
+import br.com.verity.pause.bean.ProjetoBean;
 import br.com.verity.pause.converter.DespesaConverter;
 import br.com.verity.pause.dao.DespesaDAO;
 import br.com.verity.pause.dao.StatusDAO;
 import br.com.verity.pause.entity.DespesaEntity;
 import br.com.verity.pause.entity.StatusEntity;
 import br.com.verity.pause.entity.enumerator.StatusEnum;
+import br.com.verity.pause.integration.SavIntegration;
 
 @Service
 public class DespesaBusiness {
@@ -34,6 +37,9 @@ public class DespesaBusiness {
 	
 	@Autowired
 	private Environment ambiente;
+	
+	@Autowired
+	SavIntegration integration;
 
 	public DespesaBean salvaDespesa(DespesaBean despesa, MultipartFile multipartFile)
 			throws Exception {
@@ -77,7 +83,15 @@ public class DespesaBusiness {
 	}
 	
 	public List<DespesaBean> listarDespesasPorFuncionario(Integer idFuncionario) {
-		return converter.convertEntityToBean(dao.listarDespesaPorFuncionario(idFuncionario));
+		List<DespesaEntity> despesas = dao.listarDespesaPorFuncionario(idFuncionario);
+		List<DespesaBean> despesasBean = new ArrayList<>();
+		for (DespesaEntity despesa : despesas) {
+			DespesaBean despesaBean = converter.convertEntityToBean(despesa);
+			ProjetoBean projeto = integration.getProjetoById(despesa.getIdProjeto());
+			despesaBean.setDescricaoProjeto(projeto.getNome());
+			despesasBean.add(despesaBean);
+		}
+		return despesasBean;
 	}
 
 	public void salvarAnaliseDespesa(Long idDespesa, Long idAprovador, String fgAprovador, boolean despesaAprovada) throws Exception {

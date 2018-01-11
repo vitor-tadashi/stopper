@@ -125,7 +125,6 @@ public class SavIntegration {
 	public FuncionarioBean getFuncionario(Integer idFuncionario) {
 		FuncionarioIntegrationBean funcionario = new FuncionarioIntegrationBean();
 		ObjectMapper mapper = new ObjectMapper();
-		// Properties props = this.getProp();
 		String endereco = ambiente.getProperty("integration.sav.ip") + "/getFuncionario/"+idFuncionario;
 		try {
 			URL url = new URL(endereco);
@@ -142,7 +141,6 @@ public class SavIntegration {
 	public EmpresaBean getEmpresa(Integer idEmpresa) {
 		EmpresaBean empresa = new EmpresaBean();
 		ObjectMapper mapper = new ObjectMapper();
-		// Properties props = this.getProp();
 		String endereco = ambiente.getProperty("integration.sav.ip") + "/getEmpresa/"+idEmpresa;
 		try {
 			URL url = new URL(endereco);
@@ -174,7 +172,6 @@ public class SavIntegration {
 	public List<EmpresaBean> getEmpresas() {
 		List<EmpresaBean> empresas = new ArrayList<EmpresaBean>();
 		ObjectMapper mapper = new ObjectMapper();
-		// Properties props = this.getProp();
 		String endereco = ambiente.getProperty("integration.sav.ip") + "/listEmpresasGrupoVerity";
 		try {
 			URL url = new URL(endereco);
@@ -188,7 +185,6 @@ public class SavIntegration {
 	public List<FeriadoBean> listFeriados() {
 		List<FeriadoBean> feriados = new ArrayList<FeriadoBean>();
 		ObjectMapper mapper = new ObjectMapper();
-		// Properties props = this.getProp();
 		String endereco = ambiente.getProperty("integration.sav.ip") + "/listFeriados";
 		try {
 			URL url = new URL(endereco);
@@ -202,7 +198,6 @@ public class SavIntegration {
 	public List<ProjetoBean> listProjetosPorFuncionarios(Integer idFuncionario) {
 		List<ProjetoBean> projetos = new ArrayList<ProjetoBean>();
 		ObjectMapper mapper = new ObjectMapper();
-		// Properties props = this.getProp();
 		String endereco = ambiente.getProperty("integration.sav.ip") + "/getProjetoPorFuncionario/" + idFuncionario;
 		try {
 			URL url = new URL(endereco);
@@ -211,5 +206,18 @@ public class SavIntegration {
 			e.printStackTrace();
 		}
 		return projetos;
+	}
+	
+	public ProjetoBean getProjetoById(Long idProjeto) {
+		ProjetoBean projeto = new ProjetoBean();
+		ObjectMapper mapper = new ObjectMapper();
+		String endereco = ambiente.getProperty("integration.sav.ip") + "/getProjeto/" + idProjeto;
+		try {
+			URL url = new URL(endereco);
+			projeto = mapper.readValue(url,  new TypeReference<ProjetoBean>(){});
+		} catch (IOException e ) {
+			e.printStackTrace();
+		}
+		return projeto;
 	}
 }
