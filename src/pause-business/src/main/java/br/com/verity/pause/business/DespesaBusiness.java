@@ -70,12 +70,6 @@ public class DespesaBusiness {
 	}
 	
 	public List<DespesaBean> listarDespesasPorFuncionario(Integer idFuncionario) {
-		List<DespesaEntity> despesasEntity  = dao.listarDespesaPorFuncionario(idFuncionario);
-		List<DespesaBean> despesasBean = new ArrayList<DespesaBean>();
-		for (DespesaEntity despesaEntity : despesasEntity) {
-			DespesaBean despesa = converter.convertEntityToBean(despesaEntity);
-			despesasBean.add(despesa);
-		}
-		return despesasBean;
+		return converter.convertEntityToBean(dao.listarDespesaPorFuncionario(idFuncionario));
 	}
 }
