@@ -14,38 +14,68 @@
 			href='<c:url value="/plugins/bootstrap-select/bootstrap-select.min.css"/>'
 			rel="stylesheet">
 		<style>
-			input[type=date].form-control {
-				line-height: 10px !important;;
-			}
-		</style>
+input[type=date].form-control {
+	line-height: 10px !important;;
+}
+</style>
 	</layout:put>
 	<layout:put block="contents">
 		<div id="page-title">
-			<h1 class="page-header text-overflow">Despesa</h1>
+			<h1 class="page-header text-overflow">Despesas</h1>
 		</div>
 		<ol class="breadcrumb">
 			<li><a href="#">Home</a></li>
 			<li class="active">Despesas</li>
 		</ol>
-		<sec:authentication property="principal" var="user"/>
+		<sec:authentication property="principal" var="user" />
 		<input type="hidden" id="funcionario" value="${user.funcionario.id }" />
 		<div id="page-content">
 			<div class="panel">
 				<!--Data Table-->
 				<!--===================================================-->
 				<div class="panel-body">
-					<span id="span-msg" ></span>
-					<button id="addDespesa" class="btn btn-info" type="button" style="float: right" onclick="abrirModal();">Adicionar</button>					
+					<span id="span-msg"></span>
+					<button id="addDespesa" class="btn btn-info" type="button"
+						style="float: right" onclick="abrirModal();">Adicionar</button>
+					<div class="table-responsive" style="margin-top: 50px">
+						<table class="table table-striped table-bordered" id="id-despesas">
+							<thead>
+								<tr>
+									<th class="text-center">Data</th>
+									<th class="text-center">Despesa</th>
+									<th class="text-center">Projeto</th>
+									<th class="text-center">Valor</th>
+									<th class="text-center">Status</th>
+									<th class="text-center">Editar</th>
+								</tr>
+							</thead>
+							<tbody class="text-center">
+								<c:forEach items="${despesasFuncionario }" var="despesa">
+									<tr>
+										<td>${despesa.data }</td>
+										<td>${despesa.nomeTipoDespesa }</a></td>
+										<td>${despesa.idProjeto }</td>
+										<td><fmt:formatNumber value="${despesa.valor }"
+												type="currency" currencyCode="BRL"></fmt:formatNumber></td>
+										<td><span class="label label-success">
+												${despesa.nomeStatus }</span></td>
+										<td><a href="#" onclick="linkGerenciar(${despesa.id })">Editar</td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>
+
 	</layout:put>
 	<layout:put block="scripts">
 		<div class="modal fade" id="add-despesa-modal" role="dialog"
 			tabindex="-1" aria-labelledby="add-despesa-modal" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
-	
+
 					<!--Modal header-->
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal">
@@ -53,10 +83,11 @@
 						</button>
 						<h4 class="modal-title">Adicionar Despesa</h4>
 					</div>
-	
+
 					<!--Modal body-->
 					<div class="modal-body">
-						<form action="" id="form-despesa" name="form-despesa" class="clear-form">
+						<form action="" id="form-despesa" name="form-despesa"
+							class="clear-form">
 							<div class="row">
 								<div class="panel">
 									<!--Data Table-->
@@ -72,11 +103,12 @@
 										<br /> <label class="control-label" style="margin: 4px 0 0 0">*Valor</label>
 										<div class="input-group" id="valorDespesaDiv"
 											style="width: 100% !important">
-											<input type="text" id="valorDespesa" 
+											<input type="text" id="valorDespesa"
 												class="form-control valorDespesa" name="valor"
 												placeholder="XXXXX.XX" />
 										</div>
-										<br /> <label class="control-label" style="margin: 4px 0 0 0">*Tipo de despesa</label>
+										<br /> <label class="control-label" style="margin: 4px 0 0 0">*Tipo
+											de despesa</label>
 										<div class="input-group" id="tipoDespesaDiv">
 											<select class="selectpicker" data-live-search="true"
 												id="select-tipo-despesa" name="tipoDespesa">
@@ -101,21 +133,20 @@
 											style="width: 100% !important">
 											<textarea id="justificativaDespesa"
 												class="form-control justificativaDespesa"
-												name="justificativa"
-												placeholder="Justificativa da despesa"></textarea>
+												name="justificativa" placeholder="Justificativa da despesa"></textarea>
 										</div>
 										<br /> <label class="control-label" style="margin: 4px 0 0 0">Comprovante</label>
 										<div class="input-group" id="comprovanteDespesaDiv"
 											style="width: 100% !important">
 											<input id="comprovanteDespesa" type="file"
-												class="form-control comprovanteDespesa"
-												name="comprovante"
+												class="form-control comprovanteDespesa" name="comprovante"
 												placeholder="Comprovante da despesa" value="" />
 										</div>
 										<br />
 										<div class="input-group" id="buttonSubmitDiv"
 											style="width: 100% !important">
-											<button id="submit-js" class="btn btn-info" type="button" onclick="submiterDespesa();">Salvar</button>
+											<button id="submit-js" class="btn btn-info" type="button"
+												onclick="submiterDespesa();">Salvar</button>
 										</div>
 									</div>
 								</div>
