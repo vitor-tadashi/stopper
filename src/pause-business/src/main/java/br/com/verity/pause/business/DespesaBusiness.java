@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -65,5 +67,15 @@ public class DespesaBusiness {
 				}
 			}
 		}
+	}
+	
+	public List<DespesaBean> listarDespesasPorFuncionario(Integer idFuncionario) {
+		List<DespesaEntity> despesasEntity  = dao.listarDespesaPorFuncionario(idFuncionario);
+		List<DespesaBean> despesasBean = new ArrayList<DespesaBean>();
+		for (DespesaEntity despesaEntity : despesasEntity) {
+			DespesaBean despesa = converter.convertEntityToBean(despesaEntity);
+			despesasBean.add(despesa);
+		}
+		return despesasBean;
 	}
 }

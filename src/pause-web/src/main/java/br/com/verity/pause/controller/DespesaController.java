@@ -43,7 +43,7 @@ public class DespesaController {
 		model.addAttribute("tipoDespesas", tipoDespesaBizz.findAll());
 		model.addAttribute("projetos",
 				projetoBizz.listProjetosPorFuncionarios(funcionarioBizz.obterPorId(null).getId()));
-
+		model.addAttribute("despesasFuncionario", despesaBizz.listarDespesasPorFuncionario(funcionarioBizz.obterPorId(null).getId()));
 		return new ModelAndView("despesa/despesa");
 	}
 
