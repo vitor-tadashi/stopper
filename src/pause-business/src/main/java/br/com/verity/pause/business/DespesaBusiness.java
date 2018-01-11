@@ -84,14 +84,23 @@ public class DespesaBusiness {
 	
 	public List<DespesaBean> listarDespesasPorFuncionario(Integer idFuncionario) {
 		List<DespesaEntity> despesas = dao.listarDespesaPorFuncionario(idFuncionario);
+		List<DespesaBean> despesasBean = despesaEntityToDespesaBeanComProjeto(despesas);
+		return despesasBean;
+	}
+
+	private List<DespesaBean> despesaEntityToDespesaBeanComProjeto(List<DespesaEntity> despesas) {
 		List<DespesaBean> despesasBean = new ArrayList<>();
 		for (DespesaEntity despesa : despesas) {
 			DespesaBean despesaBean = converter.convertEntityToBean(despesa);
-			ProjetoBean projeto = integration.getProjetoById(despesa.getIdProjeto());
-			despesaBean.setDescricaoProjeto(projeto.getNome());
+			preencherProjetoDespesa(despesa, despesaBean);
 			despesasBean.add(despesaBean);
 		}
 		return despesasBean;
+	}
+
+	private void preencherProjetoDespesa(DespesaEntity despesa, DespesaBean despesaBean) {
+		ProjetoBean projeto = integration.getProjetoById(despesa.getIdProjeto());
+		despesaBean.setDescricaoProjeto(projeto.getNome());
 	}
 
 	public void salvarAnaliseDespesa(Long idDespesa, Long idAprovador, String fgAprovador, boolean despesaAprovada) throws Exception {
@@ -101,12 +110,27 @@ public class DespesaBusiness {
 		} else {
 			status = statusDao.findByName(StatusEnum.REPROVADO);
 		}
-		if ("G".equals(fgAprovador)) {
+		if ("G".equalsIgnoreCase(fgAprovador)) {
 			dao.salvarAnaliseDespesaGP(idDespesa, idAprovador, status.getId());
-		} else if ("F".equals(fgAprovador)) {
+		} else if ("F".equalsIgnoreCase(fgAprovador)) {
 			dao.salvarAnaliseDespesaFinanceiro(idDespesa, idAprovador, status.getId());
 		} else {
 			throw new IllegalArgumentException("Flag aprovador não identificada!");
 		}
+	}
+
+	public List<DespesaBean> buscarDespesasParaAnalise(Long idGestor, String fgFinanceiroGP) {
+		List<DespesaBean> despesasBean = new ArrayList<>();
+		if ("G".equalsIgnoreCase(fgFinanceiroGP)) {
+			List<ProjetoBean> projetosGestor = integration.listProjetosPorGestor(idGestor);
+			//TODO
+		} else if ("F".equalsIgnoreCase(fgFinanceiroGP)) {
+			StatusEntity statusEmAnalise = statusDao.findByName(StatusEnum.EM_ANALISE);
+			List<DespesaEntity> despesas = dao.listarDespesaPorStatus(statusEmAnalise);
+			despesasBean = despesaEntityToDespesaBeanComProjeto(despesas);
+		} else {
+			throw new IllegalArgumentException("Flag aprovador não identificada!");
+		}
+		return despesasBean;
 	}
 }

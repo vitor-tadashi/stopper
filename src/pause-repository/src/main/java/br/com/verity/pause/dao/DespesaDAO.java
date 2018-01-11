@@ -227,4 +227,40 @@ public class DespesaDAO {
 		}
 		return entity;
 	}
+	
+	public List<DespesaEntity> listarDespesaPorStatus(StatusEntity status) {
+		List<DespesaEntity> despesas = new ArrayList<DespesaEntity>();
+		String sql = null;
+
+		sql = "select d.*, s.nome, t.nome from despesa d "
+			   + " inner join status s " 
+			   + " on d.id_status = s.id "
+			   + " inner join tipo_despesa t "
+			   + " on d.id_tipo_despesa = t.id where d.id_status = ? order by d.data_solicitacao desc";
+
+		try {
+			conn = connectionFactory.createConnection();
+			ps = conn.prepareStatement(sql);
+
+			ps.setLong(1, status.getId()); 
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+				DespesaEntity despesa = new DespesaEntity();
+				createDespesa(despesa);
+				despesas.add(despesa);
+			}
+			fecharConexoes();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				fecharConexoes();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return despesas;
+	}
 }

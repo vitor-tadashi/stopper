@@ -58,15 +58,26 @@ public class DespesaController {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Despesa não pode ser salva, tente novamente!");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Despesa não pôde ser salva, tente novamente!");
 		}
 	}
 
 	@RequestMapping(value = "/analisar", method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<?> aprovar(Long idDespesa, Long idAprovador, String fgFinanceiroGP, boolean despesaAprovada) {
+	public ResponseEntity<?> analisarDespesaFuncionario(Long idDespesa, Long idAprovador, String fgFinanceiroGP, boolean despesaAprovada) {
 		try {
 			despesaBizz.salvarAnaliseDespesa(idDespesa, idAprovador, fgFinanceiroGP, despesaAprovada);
+			return ResponseEntity.ok("Despesa alterada com sucesso");
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Despesa não pôde ser alterada, tente novamente!");
+		}
+	}
+	
+	@RequestMapping(value = "/analisar", method = RequestMethod.GET)
+	@ResponseBody
+	public ResponseEntity<?> analisarDespesas(Long idFuncionarioAprovador, String fgFinanceiroGP) {
+		try {
+			despesaBizz.buscarDespesasParaAnalise(idFuncionarioAprovador, fgFinanceiroGP);
 			return ResponseEntity.ok("Salvo com sucesso!");
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Despesa não pode ser salva, tente novamente!");

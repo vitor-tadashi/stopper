@@ -220,4 +220,17 @@ public class SavIntegration {
 		}
 		return projeto;
 	}
+	
+	public List<ProjetoBean> listProjetosPorGestor(Long idGestor) {
+		List<ProjetoBean> projetos = new ArrayList<>();
+		ObjectMapper mapper = new ObjectMapper();
+		String endereco = ambiente.getProperty("integration.sav.ip") + "/getProjetosPorGestor/" + idGestor;
+		try {
+			URL url = new URL(endereco);
+			projetos = mapper.readValue(url,  new TypeReference<ArrayList<ProjetoBean>>(){});
+		} catch (IOException e ) {
+			e.printStackTrace();
+		}
+		return projetos;
+	}
 }
