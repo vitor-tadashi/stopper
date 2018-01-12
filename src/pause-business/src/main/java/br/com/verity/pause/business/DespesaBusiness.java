@@ -50,11 +50,11 @@ public class DespesaBusiness {
 		
 		// Seta despesa como em análise, que é o estado inicial
 		entity.setStatus(statusDao.findByName(StatusEnum.EM_ANALISE));
+		entity.setDataSolicitacao(new Date());
 		
 		if (multipartFile != null) {
 			String fileName = entity.getIdSolicitante() + "_" + System.currentTimeMillis() + "_" + multipartFile.getOriginalFilename();
 			entity.setCaminhoJustificativa(ambiente.getProperty("despesa.comprovante.path") + fileName);
-			entity.setDataSolicitacao(new Date());
 			try{
 				saveMultipartFile(multipartFile, entity, fileName);
 	 			

@@ -140,8 +140,9 @@ public class DespesaDAO {
 		despesa.setIdGpAprovador(rs.getLong(11));
 		despesa.setIdFinanceiroAprovador(rs.getLong(12));
 		despesa.setCaminhoJustificativa(rs.getString(13));
-		despesa.getStatus().setNome(rs.getString(14));
-		despesa.getTipoDespesa().setNome(rs.getString(15));
+		despesa.setDataOcorrencia(rs.getDate(14));
+		despesa.getStatus().setNome(rs.getString(15));
+		despesa.getTipoDespesa().setNome(rs.getString(16));
 	}
 
 	private void fecharConexoes() throws SQLException {

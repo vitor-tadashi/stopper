@@ -41,7 +41,7 @@ input[type=date].form-control {
 						<table class="table table-striped table-bordered" id="id-despesas">
 							<thead>
 								<tr>
-									<th class="text-center">Data</th>
+									<th class="text-center">Data Ocorrência</th>
 									<th class="text-center">Despesa</th>
 									<th class="text-center">Projeto</th>
 									<th class="text-center">Valor</th>
@@ -52,19 +52,38 @@ input[type=date].form-control {
 							<tbody class="text-center">
 								<c:forEach items="${despesasFuncionario }" var="despesa">
 									<tr>
-										<td>${despesa.data }</td>
-										<td>${despesa.nomeTipoDespesa }</a></td>
+										<td>${despesa.dataOcorrencia }</td>
+										<td>${despesa.nomeTipoDespesa }</td>
 										<td>${despesa.idProjeto }</td>
 										<td><fmt:formatNumber value="${despesa.valor }"
 												type="currency" currencyCode="BRL"></fmt:formatNumber></td>
-										<td><span class="label label-success">
-												${despesa.nomeStatus }</span></td>
-										<td><a href="#" onclick="linkGerenciar(${despesa.id })">Editar</td>
-									</tr>
+												
+										<c:choose>
+  											<c:when test="${despesa.idStatus eq 1}">
+  												<td><span class="label-status label-status-analise"> ${despesa.nomeStatus }</span></td>
+  											</c:when>
+  											<c:when test="${despesa.idStatus eq 2}">
+												<td><span class="label-status label-status-aprovado"> ${despesa.nomeStatus }</span></td>
+											</c:when>
+  											<c:otherwise>
+  												<td><span class="label-status label-status-reprovado"> ${despesa.nomeStatus }</span></td>
+  											</c:otherwise>
+										</c:choose>		
+										
+										<c:choose>
+  											<c:when test="${despesa.idGpAprovador eq 0 || despesa.idGpAprovador eq null}">
+  												<td><a href="#" onclick="linkGerenciar(${despesa.id })">
+													<i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></td>
+  											</c:when>
+  											<c:otherwise>
+  												<td><a href="#" onclick="linkGerenciar(${despesa.id })">
+													<i class="fa fa-search" aria-hidden="true"></i></a></td>
+  											</c:otherwise>
+										</c:choose>
 								</c:forEach>
 							</tbody>
 						</table>
-					</div>
+					</div> 
 				</div>
 			</div>
 		</div>
@@ -93,7 +112,7 @@ input[type=date].form-control {
 									<!--Data Table-->
 									<!--===================================================-->
 									<div class="panel-body">
-										<label class="control-label" style="margin: 4px 0 0 0">*Data</label>
+										<label class="control-label" style="margin: 4px 0 0 0">*Data Ocorrência</label>
 										<div class="input-daterange input-group" id="datepicker"
 											style="width: 100% !important">
 											<input type="date" id="dataDespesa"

@@ -35,3 +35,35 @@ input[type=date].form-control {
     background: #00CAB2;
     color: #F5FFFB;
 }
+
+.label-status {
+    display: inline-block;
+    padding: .3em .6em .3em;
+    /*font-weight: 700;*/
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;
+    width: 100px;
+}
+
+.label-status-aprovado{
+	background-color: #8bc34a;
+	border-radius: 0;
+}
+
+.label-status-analise{
+	background-color: #EEDC82;
+	border-radius: 0;
+}
+
+.label-status-reprovado{
+	background-color: #FF4500;
+	border-radius: 0;
+}
+
+#FFEC8B
+
+

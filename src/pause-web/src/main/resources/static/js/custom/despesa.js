@@ -64,7 +64,7 @@ function validarFormDespesa() {
 function enviarFormDespesa() {
 	var oMyForm = new FormData();
 	oMyForm.append("comprovante", $('input[type=file]')[0].files[0]);
-	oMyForm.append("data", $('#dataDespesa').val());
+	oMyForm.append("dataOcorrencia", $('#dataDespesa').val());
 	oMyForm.append("valor", $('#valorDespesa').val().replace(/,/g, '.'));
 	oMyForm.append("idTipoDespesa", $('#select-tipo-despesa').val()  );
 	oMyForm.append("idProjeto", $('#select-centro-custo').val()  );
