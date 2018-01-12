@@ -39,12 +39,12 @@
 						<table class="table table-striped table-bordered" id="id-despesas">
 							<thead>
 								<tr>
-									<th class="text-center">Data</th>
-									<th class="text-center">Despesa</th>
+									<th class="text-center">Solicitante</th>
+									<th class="text-center">Data Ocorrência</th>
+									<th class="text-center">Tipo Despesa</th>
 									<th class="text-center">Projeto</th>
 									<th class="text-center">Valor</th>
-									<th class="text-center">Status</th>
-									<th class="text-center">Editar</th>
+									<th class="text-center">Detalhes</th>
 								</tr>
 							</thead>
 							<tbody class="text-center">
@@ -52,14 +52,14 @@
 									<c:when test="${not empty despesas }">
 										<c:forEach items="${despesas}" var="despesa">
 											<tr>
-												<td>${despesa.data }</td>
+												<td>${despesa.nomeFuncionario }</td>
+												<td>${despesa.dataOcorrencia }</td>
 												<td>${despesa.nomeTipoDespesa }</td>
-												<td>${despesa.idProjeto }</td>
+												<td>${despesa.idProjeto}</td>
 												<td><fmt:formatNumber value="${despesa.valor }"
 														type="currency" currencyCode="BRL"></fmt:formatNumber></td>
-												<td><span class="label label-success">
-														${despesa.nomeStatus }</span></td>
-												<td><a href="#" onclick="linkGerenciar(${despesa.id })">Editar</a></td>
+												<td><a href="#" onclick="linkGerenciar(${despesa.id })">
+													<i class="fa fa-search" aria-hidden="true"></i></a></td>
 											</tr>
 										</c:forEach>
 									</c:when>

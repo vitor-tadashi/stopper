@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import br.com.verity.pause.bean.DespesaBean;
+import br.com.verity.pause.bean.FuncionarioBean;
 import br.com.verity.pause.bean.ProjetoBean;
 import br.com.verity.pause.converter.DespesaConverter;
 import br.com.verity.pause.dao.DespesaDAO;
@@ -86,18 +87,24 @@ public class DespesaBusiness {
 	
 	public List<DespesaBean> listarDespesasPorFuncionario(Integer idFuncionario) {
 		List<DespesaEntity> despesas = dao.listarDespesaPorFuncionario(idFuncionario);
-		List<DespesaBean> despesasBean = despesaEntityToDespesaBeanComProjeto(despesas);
+		List<DespesaBean> despesasBean = despesaEntityToDespesaBeanComProjetoEFuncionario(despesas);
 		return despesasBean;
 	}
 
-	private List<DespesaBean> despesaEntityToDespesaBeanComProjeto(List<DespesaEntity> despesas) {
+	private List<DespesaBean> despesaEntityToDespesaBeanComProjetoEFuncionario(List<DespesaEntity> despesas) {
 		List<DespesaBean> despesasBean = new ArrayList<>();
 		for (DespesaEntity despesa : despesas) {
 			DespesaBean despesaBean = converter.convertEntityToBean(despesa);
 			preencherProjetoDespesa(despesa, despesaBean);
+			preencherFuncionarioDespesa(despesa, despesaBean);
 			despesasBean.add(despesaBean);
 		}
 		return despesasBean;
+	}
+
+	private void preencherFuncionarioDespesa(DespesaEntity despesa, DespesaBean despesaBean) {
+		FuncionarioBean b = integration.getFuncionario(despesa.getIdSolicitante().intValue());
+		despesaBean.setNomeFuncionario(b.getNome());
 	}
 
 	private void preencherProjetoDespesa(DespesaEntity despesa, DespesaBean despesaBean) {
@@ -128,14 +135,22 @@ public class DespesaBusiness {
 			List<ProjetoBean> projetosGestor = integration.listProjetosPorGestor(idFuncionarioAnalisador);
 			for (ProjetoBean projetoBean : projetosGestor) {
 				List<DespesaEntity> despesas = dao.listarDespesaPorStatusPorProjeto(statusEmAnalise, projetoBean.getId());
-				despesasBean.addAll(despesaEntityToDespesaBeanComProjeto(despesas));
+				despesasBean.addAll(despesaEntityToDespesaBeanComProjetoEFuncionario(despesas));
 			}
 		} else if ("F".equalsIgnoreCase(fgFinanceiroGP)) {
 			List<DespesaEntity> despesas = dao.listarDespesaPorStatusPendenteAnaliseFinaceiro(statusEmAnalise);
-			despesasBean = despesaEntityToDespesaBeanComProjeto(despesas);
+			despesasBean = despesaEntityToDespesaBeanComProjetoEFuncionario(despesas);
 		} else {
 			throw new IllegalArgumentException("Flag aprovador não identificada!");
 		}
 		return despesasBean;
+	}
+	
+	public DespesaBean buscarDespesa(Long id) {
+		DespesaEntity despesaEntity = dao.findById(id);
+		DespesaBean despesaBean = converter.convertEntityToBean(despesaEntity);
+		preencherProjetoDespesa(despesaEntity, despesaBean);
+		preencherFuncionarioDespesa(despesaEntity, despesaBean);
+		return despesaBean;
 	}
 }

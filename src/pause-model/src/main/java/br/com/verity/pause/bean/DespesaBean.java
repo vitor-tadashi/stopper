@@ -18,6 +18,7 @@ public class DespesaBean{
 	private String descricaoProjeto;
 	private String nomeStatus;
 	private String dataSolicitacao;
+	private String nomeFuncionario;
 	
 	public Long getId() {
 		return id;
@@ -115,5 +116,11 @@ public class DespesaBean{
 	}
 	public void setDataSolicitacao(String dataSolicitacao) {
 		this.dataSolicitacao = dataSolicitacao;
+	}
+	public String getNomeFuncionario() {
+		return nomeFuncionario;
+	}
+	public void setNomeFuncionario(String nomeFuncionario) {
+		this.nomeFuncionario = nomeFuncionario;
 	}
 }
