@@ -175,6 +175,17 @@
 	                                        </a>	
 							            </li>
 						            </sec:authorize>
+						            
+						            <sec:authorize access="hasAnyRole('ROLE_CONSULTAR_BANCO', 'ROLE_MULTI_EMPRESA')">
+							            <li>
+	                                		<a href='<c:url value="/apontamentos-pendentes"/>'>
+	                                            <i class="pli-magnifi-glass"></i>
+	                                            <span class="menu-title">
+	                                            	Consultar pendentes
+	                                            </span>
+	                                        </a>	
+							            </li>
+						            </sec:authorize>
     
 						            <sec:authorize access="hasAnyRole('ROLE_GERAR_RELATORIOS', 'ROLE_MULTI_EMPRESA')">
 										<li>

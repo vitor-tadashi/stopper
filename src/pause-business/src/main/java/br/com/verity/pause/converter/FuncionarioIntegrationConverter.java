@@ -38,6 +38,7 @@ public class FuncionarioIntegrationConverter implements Converter<FuncionarioInt
 		bean.setNome(entity.getNome());
 		bean.setPis(entity.getPis());
 		bean.setMatricula(entity.getMatricula());
+		bean.setEmailCorporativo(entity.getEmailCorporativo());
 		bean.setEmpresa(entity.getEmpresa());
 		bean.setAtivo(entity.getAtivo());
 		
