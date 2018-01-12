@@ -1,9 +1,14 @@
 package br.com.verity.pause.controller;
 
-import javax.ws.rs.QueryParam;
+import java.io.File;
+import java.io.FileInputStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -97,6 +102,28 @@ public class DespesaController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocorreu um erro, tente novamente!");
+		}
+	}
+	
+	@RequestMapping(value = "/arquivo/{idDespesa}", method = RequestMethod.GET)
+	@ResponseBody
+	public ResponseEntity<?>  downloadArquivo(@PathVariable Long idDespesa) {
+		try {
+			DespesaBean despesa = despesaBizz.buscarDespesa(idDespesa);
+		    File file = new File(despesa.getCaminhoComprovante());
+
+		    HttpHeaders respHeaders = new HttpHeaders();
+		    //TODO validar tipo de arquivo
+		    respHeaders.setContentType(MediaType.IMAGE_GIF);
+		    respHeaders.setContentLength(file.length());
+		  //TODO validar extensão do arquivo
+		    respHeaders.setContentDispositionFormData("attachment", "fileNameIwant.gif");
+		    
+		    InputStreamResource isr = new InputStreamResource(new FileInputStream(file));
+		    return new ResponseEntity<InputStreamResource>(isr, respHeaders, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 }
