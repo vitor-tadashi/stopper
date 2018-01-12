@@ -14,6 +14,7 @@ public class DespesaEntity implements Serializable {
 	private String justificativa;
 	private Double valor;
 	private Date dataSolicitacao;
+	private Date dataOcorrencia;
 	private Long idProjeto;
 	private Long idSolicitante;
 	private Date dataAcaoGp;
@@ -121,5 +122,11 @@ public class DespesaEntity implements Serializable {
 	}
 	public void setStatus(StatusEntity status) {
 		this.status = status;
+	}
+	public Date getDataOcorrencia() {
+		return dataOcorrencia;
+	}
+	public void setDataOcorrencia(Date dataOcorrencia) {
+		this.dataOcorrencia = dataOcorrencia;
 	}
 }

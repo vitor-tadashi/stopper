@@ -221,7 +221,7 @@ public class SavIntegration {
 		return projeto;
 	}
 	
-	public List<ProjetoBean> listProjetosPorGestor(Long idGestor) {
+	public List<ProjetoBean> listProjetosPorGestor(Integer idGestor) {
 		List<ProjetoBean> projetos = new ArrayList<>();
 		ObjectMapper mapper = new ObjectMapper();
 		String endereco = ambiente.getProperty("integration.sav.ip") + "/getProjetosPorGestor/" + idGestor;

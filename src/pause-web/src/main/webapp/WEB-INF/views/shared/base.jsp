@@ -195,6 +195,28 @@
                                             </span>
                                         </a>
 						            </li>
+						            
+						            <sec:authorize access="hasRole('FINANCEIRO_APROVAR_DESPESAS')">
+										<li>
+	                                		<a href='<c:url value="/despesa/analisar?fgFinaceiroGP=F"/>'>
+	                                            <i class="pli-bar-chart"></i>
+	                                            <span class="menu-title">
+	                                            	Analisar Despesas
+	                                            </span>
+	                                        </a>
+							            </li>
+						            </sec:authorize>
+						            
+						             <sec:authorize access="hasRole('GP_APROVAR_DESPESAS')">
+										<li>
+	                                		<a href='<c:url value="/despesa/analisar?fgFinaceiroGP=G"/>'>
+	                                            <i class="fa fa-check-square-o"></i>
+	                                            <span class="menu-title">
+	                                            	Analisar Despesas
+	                                            </span>
+	                                        </a>
+							            </li>
+						            </sec:authorize>
 								
 								</ul>
                             </div>

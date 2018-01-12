@@ -8,7 +8,7 @@ public class DespesaBean{
 	private String nomeTipoDespesa;
 	private String justificativa;
 	private Double valor;
-	private String data;
+	private String dataOcorrencia;
 	private Long idProjeto;
 	private Long idFuncionario;
 	private String dataAcaoGp;
@@ -17,6 +17,7 @@ public class DespesaBean{
 	private Long idFinanceiroAprovador;
 	private String descricaoProjeto;
 	private String nomeStatus;
+	private String dataSolicitacao;
 	
 	public Long getId() {
 		return id;
@@ -43,11 +44,11 @@ public class DespesaBean{
 	public void setValor(Double valor) {
 		this.valor = valor;
 	}
-	public String getData() {
-		return data;
+	public String getDataOcorrencia() {
+		return dataOcorrencia;
 	}
-	public void setData(String data) {
-		this.data = data;
+	public void setDataOcorrencia(String dataOcorrencia) {
+		this.dataOcorrencia = dataOcorrencia;
 	}
 	public Long getIdProjeto() {
 		return idProjeto;
@@ -109,5 +110,10 @@ public class DespesaBean{
 	public void setNomeTipoDespesa(String nomeTipoDespesa) {
 		this.nomeTipoDespesa = nomeTipoDespesa;
 	}
-	
+	public String getDataSolicitacao() {
+		return dataSolicitacao;
+	}
+	public void setDataSolicitacao(String dataSolicitacao) {
+		this.dataSolicitacao = dataSolicitacao;
+	}
 }

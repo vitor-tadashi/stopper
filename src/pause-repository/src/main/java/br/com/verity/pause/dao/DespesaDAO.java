@@ -30,7 +30,7 @@ public class DespesaDAO {
 			conn = connectionFactory.createConnection();
 
 			String sql = "INSERT INTO despesa (id_status, id_tipo_despesa, justificativa, valor, data_solicitacao, "
-					+ "id_projeto, id_solicitante, caminho_comprovante) values (?,?,?,?,?,?,?,?)";
+					+ "id_projeto, id_solicitante, caminho_comprovante, data_ocorrencia) values (?,?,?,?,?,?,?,?,?)";
 
 			ps = conn.prepareStatement(sql);
 
@@ -42,6 +42,7 @@ public class DespesaDAO {
 			ps.setLong(6, despesa.getIdProjeto());
 			ps.setLong(7, despesa.getIdSolicitante());
 			ps.setString(8, despesa.getCaminhoJustificativa());
+			ps.setDate(9,  new java.sql.Date(despesa.getDataOcorrencia().getTime()));
 
 			ps.execute();
 
@@ -264,8 +265,44 @@ public class DespesaDAO {
 		return despesas;
 	}
 	
+	public List<DespesaEntity> listarDespesaPorStatusPendenteAnaliseFinaceiro(StatusEntity status) {
+		List<DespesaEntity> despesas = new ArrayList<>();
+		String sql = null;
+
+		sql = "select d.*, s.nome, t.nome from despesa d "
+			   + " inner join status s " 
+			   + " on d.id_status = s.id "
+			   + " inner join tipo_despesa t "
+			   + " on d.id_tipo_despesa = t.id where d.id_status = ? and data_acao_financeiro is null order by d.data_solicitacao desc";
+
+		try {
+			conn = connectionFactory.createConnection();
+			ps = conn.prepareStatement(sql);
+
+			ps.setLong(1, status.getId()); 
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+				DespesaEntity despesa = new DespesaEntity();
+				createDespesa(despesa);
+				despesas.add(despesa);
+			}
+			fecharConexoes();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				fecharConexoes();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return despesas;
+	}
+	
 	public List<DespesaEntity> listarDespesaPorStatusPorProjeto(StatusEntity status, Integer idProjeto) {
-		List<DespesaEntity> despesas = new ArrayList<DespesaEntity>();
+		List<DespesaEntity> despesas = new ArrayList<>();
 		String sql = null;
 
 		sql = "select d.*, s.nome, t.nome from despesa d "

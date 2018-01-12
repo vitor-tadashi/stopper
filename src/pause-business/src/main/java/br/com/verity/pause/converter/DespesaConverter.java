@@ -40,14 +40,17 @@ public class DespesaConverter  implements Converter<DespesaEntity, DespesaBean> 
 		entity.setIdFinanceiroAprovador(bean.getIdFinanceiroAprovador());
 		
 		try {
-			if(bean.getData() != null)
-				entity.setDataSolicitacao(format.parse(bean.getData()));
+			if(bean.getDataOcorrencia() != null)
+				entity.setDataOcorrencia(format.parse(bean.getDataOcorrencia()));
 			
 			if(bean.getDataAcaoGp() != null)
 				entity.setDataAcaoGp(format.parse(bean.getDataAcaoGp()));
 			
 			if(bean.getDataAcaoFinanceiro() != null)
 				entity.setDataAcaoFinanceiro(format.parse(bean.getDataAcaoFinanceiro()));
+			
+			if(bean.getDataSolicitacao() != null)
+				entity.setDataSolicitacao(format.parse(bean.getDataSolicitacao()));
 			
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -76,7 +79,10 @@ public class DespesaConverter  implements Converter<DespesaEntity, DespesaBean> 
 		bean.setValor(entity.getValor());
 		
 		if(entity.getDataSolicitacao() != null)
-			bean.setData(df.format(entity.getDataSolicitacao()));
+			bean.setDataSolicitacao(df.format(entity.getDataSolicitacao()));
+		
+		if(entity.getDataOcorrencia() != null)
+			bean.setDataOcorrencia(df.format(entity.getDataOcorrencia()));
 		
 		bean.setIdProjeto(entity.getIdProjeto());
 		bean.setIdFuncionario(entity.getIdSolicitante());

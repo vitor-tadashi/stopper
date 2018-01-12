@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,7 @@ public class DespesaBusiness {
 		if (multipartFile != null) {
 			String fileName = entity.getIdSolicitante() + "_" + System.currentTimeMillis() + "_" + multipartFile.getOriginalFilename();
 			entity.setCaminhoJustificativa(ambiente.getProperty("despesa.comprovante.path") + fileName);
+			entity.setDataSolicitacao(new Date());
 			try{
 				saveMultipartFile(multipartFile, entity, fileName);
 	 			
@@ -119,7 +121,7 @@ public class DespesaBusiness {
 		}
 	}
 
-	public List<DespesaBean> buscarDespesasParaAnalise(Long idFuncionarioAnalisador, String fgFinanceiroGP) {
+	public List<DespesaBean> buscarDespesasParaAnalise(Integer idFuncionarioAnalisador, String fgFinanceiroGP) {
 		List<DespesaBean> despesasBean = new ArrayList<>();
 		StatusEntity statusEmAnalise = statusDao.findByName(StatusEnum.EM_ANALISE);
 		if ("G".equalsIgnoreCase(fgFinanceiroGP)) {
@@ -129,7 +131,7 @@ public class DespesaBusiness {
 				despesasBean.addAll(despesaEntityToDespesaBeanComProjeto(despesas));
 			}
 		} else if ("F".equalsIgnoreCase(fgFinanceiroGP)) {
-			List<DespesaEntity> despesas = dao.listarDespesaPorStatus(statusEmAnalise);
+			List<DespesaEntity> despesas = dao.listarDespesaPorStatusPendenteAnaliseFinaceiro(statusEmAnalise);
 			despesasBean = despesaEntityToDespesaBeanComProjeto(despesas);
 		} else {
 			throw new IllegalArgumentException("Flag aprovador não identificada!");
