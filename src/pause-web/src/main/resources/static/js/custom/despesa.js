@@ -10,13 +10,13 @@ function submiterDespesa() {
 
 function validarFormDespesa() {
 	var erro = false;
-	
+
 	var dataDespesa = $('#dataDespesa').val();
 	var valorDespesa = $('#valorDespesa').val();
 	var tipoDespesa = $('#select-tipo-despesa').val()  ;
 	var centroCusto = $('#select-centro-custo').val()  ;
 	var justificativa = $('#justificativaDespesa').val();
-	
+
 	var regexNotEmpty = /\S/;
 
 	if(!regexNotEmpty.test(dataDespesa)) {
@@ -25,37 +25,37 @@ function validarFormDespesa() {
 	} else {
 		$('#dataDespesa').css('border-color', '');
 	}
-	
+
 	var regexCurrency = /^\d+([.,]\d{1,2})?$/;
-	
+
 	if(!regexCurrency.test(valorDespesa)) {
 		$('#valorDespesa').css('border-color', 'red');
 		erro = true;
 	} else {
 		$('#valorDespesa').css('border-color', '');
 	}
-	
+
 	if(!regexNotEmpty.test(tipoDespesa)) {
 		$('#tipoDespesaDiv').css({'border': '1px solid red', 'padding-left': '1px'});
 		erro = true;
 	} else {
 		$('#tipoDespesaDiv').css({'border': '', 'padding-left': ''});
 	}
-	
+
 	if(!regexNotEmpty.test(centroCusto)) {
 		$('#centroCustoDiv').css({'border': '1px solid red', 'padding-left': '1px'});
 		erro = true;
 	} else {
 		$('#centroCustoDiv').css({'border': '', 'padding-left': ''});
 	}
-	
+
 	if(!regexNotEmpty.test(justificativa)) {
 		$('#justificativaDespesa').css('border-color', 'red');
 		erro = true;
 	} else {
 		$('#justificativaDespesa').css('border-color', '');
 	}
-	
+
 	if (!erro) {
 		enviarFormDespesa();
 	}
@@ -70,18 +70,18 @@ function enviarFormDespesa() {
 	oMyForm.append("idProjeto", $('#select-centro-custo').val()  );
 	oMyForm.append("idFuncionario", $('#funcionario').val()         );
 	oMyForm.append("justificativa", $('#justificativaDespesa').val());
-	
+
 	$.ajax({
 		url : 'despesa',
-	    type: "POST",
-	    data : oMyForm,
-	    processData: false,
-	    contentType: false,
-	    enctype: 'multipart/form-data',
+		type: "POST",
+		data : oMyForm,
+		processData: false,
+		contentType: false,
+		enctype: 'multipart/form-data',
 		success: function(data){
 			$("#span-msg").html(data);
 			$('#add-despesa-modal').modal("hide");
-			
+
 			resetForm();
 		},
 		error: function(erro){
@@ -97,9 +97,34 @@ function enviarFormDespesa() {
 
 function resetForm() {
 	$('#form-despesa')[0].reset();
-	
+
 	$("#select-tipo-despesa").val('default');
 	$("#select-tipo-despesa").selectpicker("refresh");
 	$("#select-centro-custo").val('default');
 	$("#select-centro-custo").selectpicker("refresh");
+}
+
+function abrirModalVisualizacaoGestor(idDespesa) {
+	$.ajax({
+		url: idDespesa,
+		type: "get", 
+		success: function(data) {
+			alert(data.nomeFuncionario);
+		},
+		error: function(erro) {
+			if (erro.status === 403) {                        
+				location.reload();                            
+			} else {                                          
+				$("#span-msg").html("Erro!" + erro.status);   
+			}                                                 
+		}
+	});
+}
+
+function abrirModalEdicaoSolicitante(idDespesa) {
+	
+}
+
+function abrirModalVisualizacaoSolicitante(idDespesa) {
+	
 }

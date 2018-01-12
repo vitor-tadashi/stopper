@@ -58,7 +58,7 @@
 												<td>${despesa.idProjeto}</td>
 												<td><fmt:formatNumber value="${despesa.valor }"
 														type="currency" currencyCode="BRL"></fmt:formatNumber></td>
-												<td><a href="#" onclick="linkGerenciar(${despesa.id })">
+												<td><a href="#" onclick="abrirModalVisualizacaoGestor(${despesa.id })">
 													<i class="fa fa-search" aria-hidden="true"></i></a></td>
 											</tr>
 										</c:forEach>
@@ -164,6 +164,6 @@
 			</div>
 		</div>
 		<script src='<c:url value="/js/custom/send-ajax.js"/>'></script>
-		<script src='<c:url value="js/custom/analisarDespesa.js"/>'></script>
+		<script src='<c:url value="/js/custom/despesa.js"/>'></script>
 	</layout:put>
 </layout:extends>
