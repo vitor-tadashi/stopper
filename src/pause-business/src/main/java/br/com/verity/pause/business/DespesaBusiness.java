@@ -55,7 +55,7 @@ public class DespesaBusiness {
 		
 		if (multipartFile != null) {
 			String fileName = entity.getIdSolicitante() + "_" + System.currentTimeMillis() + "_" + multipartFile.getOriginalFilename();
-			entity.setCaminhoJustificativa(ambiente.getProperty("despesa.comprovante.path") + fileName);
+			entity.setCaminhoComprovante(ambiente.getProperty("despesa.comprovante.path") + fileName);
 			try{
 				saveMultipartFile(multipartFile, entity, fileName);
 	 			

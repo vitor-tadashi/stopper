@@ -109,7 +109,37 @@ function abrirModalVisualizacaoGestor(idDespesa) {
 		url: idDespesa,
 		type: "get", 
 		success: function(data) {
-			alert(data.nomeFuncionario);
+			$("#dataOcorrencia").val(data.dataOcorrencia);
+			$("#solicitante").val(data.nomeFuncionario);
+			$("#valorDespesa").val(data.valor);
+			$("#tipoDespesa").val(data.nomeTipoDespesa);
+			$("#projeto").val(data.descricaoProjeto);
+			$("#justificativaDespesa").val(data.justificativa);
+			if (data.caminhoComprovante != null) {
+				$("#labelComprovante").show();
+				$("#comprovanteDespesa").show();
+				$("#comprovanteDespesa").off("click");
+				$("#comprovanteDespesa").click(function(){
+					alert(data.caminhoComprovante);
+				});
+				$("#comprovanteDespesa").on("click");
+			} else {
+				$("#labelComprovante").hide();
+				$("#comprovanteDespesa").hide();
+			}
+			$("#aprovarDespesa").off("click");
+			$("#aprovarDespesa").click(function(){
+				alert("despesa " + data.id + " aprovada");
+				$('#detalhe-despesa-modal').modal("hide");
+			});
+			$("#aprovarDespesa").on("click");
+			$("#rejeitarDespesa").off("click");
+			$("#rejeitarDespesa").click(function(){
+				alert("despesa " + data.id + " rejeitada");
+				$('#detalhe-despesa-modal').modal("hide");
+			});
+			$("#rejeitarDespesa").on("click");
+			$('#detalhe-despesa-modal').modal();
 		},
 		error: function(erro) {
 			if (erro.status === 403) {                        

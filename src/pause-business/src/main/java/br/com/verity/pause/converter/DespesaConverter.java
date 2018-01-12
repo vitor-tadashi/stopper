@@ -77,6 +77,7 @@ public class DespesaConverter  implements Converter<DespesaEntity, DespesaBean> 
 		bean.setNomeTipoDespesa(entity.getTipoDespesa().getNome());
 		bean.setJustificativa(entity.getJustificativa());
 		bean.setValor(entity.getValor());
+		bean.setCaminhoComprovante(entity.getCaminhoComprovante());
 		
 		if(entity.getDataSolicitacao() != null)
 			bean.setDataSolicitacao(df.format(entity.getDataSolicitacao()));

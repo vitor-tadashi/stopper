@@ -78,8 +78,8 @@
 
 	</layout:put>
 	<layout:put block="scripts">
-		<div class="modal fade" id="add-despesa-modal" role="dialog"
-			tabindex="-1" aria-labelledby="add-despesa-modal" aria-hidden="true">
+		<div class="modal fade" id="detalhe-despesa-modal" role="dialog"
+			tabindex="-1" aria-labelledby="detalhe-despesa-modal" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
 
@@ -88,7 +88,7 @@
 						<button type="button" class="close" data-dismiss="modal">
 							<i class="pci-cross pci-circle"></i>
 						</button>
-						<h4 class="modal-title">Adicionar Despesa</h4>
+						<h4 class="modal-title">Detalhes</h4>
 					</div>
 
 					<!--Modal body-->
@@ -100,60 +100,59 @@
 									<!--Data Table-->
 									<!--===================================================-->
 									<div class="panel-body">
-										<label class="control-label" style="margin: 4px 0 0 0">*Data</label>
-										<div class="input-daterange input-group" id="datepicker"
+										<label class="control-label" >Solicitante</label>
+										<div class="input-group" id="solicitanteDiv"
 											style="width: 100% !important">
-											<input type="date" id="dataDespesa"
-												class="form-control dataDespesa" name="data"
-												placeholder="dd/mm/aaaa" />
+											<input type="text" id="solicitante"
+												class="form-control solicitante" name="solicitante"
+												disabled="disabled"/>
 										</div>
-										<br /> <label class="control-label" style="margin: 4px 0 0 0">*Valor</label>
+										<label class="control-label" >Data Ocorrência</label>
+										<div class="input-group" id="dataOcorrenciaDiv"
+											style="width: 100% !important">
+											<input type="text" id="dataOcorrencia"
+												class="form-control dataOcorrencia" name="dataOcorrencia"
+												disabled="disabled"/>
+										</div>
+										<label class="control-label" >Valor</label>
 										<div class="input-group" id="valorDespesaDiv"
 											style="width: 100% !important">
 											<input type="text" id="valorDespesa"
 												class="form-control valorDespesa" name="valor"
-												placeholder="XXXXX.XX" />
+												disabled="disabled"/>
 										</div>
-										<br /> <label class="control-label" style="margin: 4px 0 0 0">*Tipo
+										<label class="control-label" >Tipo
 											de despesa</label>
-										<div class="input-group" id="tipoDespesaDiv">
-											<select class="selectpicker" data-live-search="true"
-												id="select-tipo-despesa" name="tipoDespesa">
-												<option value="">Selecione</option>
-												<c:forEach items="${tipoDespesas }" var="tipoDespesa">
-													<option value="${tipoDespesa.id }">${tipoDespesa.nome }</option>
-												</c:forEach>
-											</select>
+										<div class="input-group" id="tipoDespesaDiv" style="width: 100% !important">
+											<input type="text" id="tipoDespesa"
+												class="form-control tipoDespesa" name="tipoDespesa" disabled="disabled"
+												/>
 										</div>
-										<br /> <label class="control-label" style="margin: 4px 0 0 0">Projeto</label>
-										<div class="input-group" id="centroCustoDiv">
-											<select class="selectpicker" data-live-search="true"
-												id="select-centro-custo" name="centroCusto">
-												<option value="">Selecione</option>
-												<c:forEach items="${projetos }" var="projeto">
-													<option value="${projeto.id }">${projeto.nome }</option>
-												</c:forEach>
-											</select>
+										<label class="control-label" >Projeto</label>
+										<div class="input-group" id="centroCustoDiv" style="width: 100% !important">
+											<input type="text" id="projeto"
+												class="form-control projeto" name="projeto" disabled="disabled"
+												/>
 										</div>
-										<br /> <label class="control-label" style="margin: 4px 0 0 0">*Justificativa</label>
+										<label class="control-label" >Justificativa</label>
 										<div class="input-group" id="justificativaDespesaDiv"
 											style="width: 100% !important">
-											<textarea id="justificativaDespesa"
+											<textarea id="justificativaDespesa" disabled="disabled"
 												class="form-control justificativaDespesa"
-												name="justificativa" placeholder="Justificativa da despesa"></textarea>
+												name="justificativa" ></textarea>
 										</div>
-										<br /> <label class="control-label" style="margin: 4px 0 0 0">Comprovante</label>
+										<br/>
 										<div class="input-group" id="comprovanteDespesaDiv"
 											style="width: 100% !important">
-											<input id="comprovanteDespesa" type="file"
-												class="form-control comprovanteDespesa" name="comprovante"
-												placeholder="Comprovante da despesa" value="" />
+											<button id="comprovanteDespesa"  style="width: 100% !important"
+												class="btn btn-info" name="comprovanteDespesa" type="button"
+												>Download Comprovante</button>
 										</div>
-										<br />
+										<br/>
 										<div class="input-group" id="buttonSubmitDiv"
 											style="width: 100% !important">
-											<button id="submit-js" class="btn btn-info" type="button"
-												onclick="submiterDespesa();">Salvar</button>
+											<button class="btn btn-success" id="aprovarDespesa" type="button">Aprovar</button>
+											<button class="btn btn-danger" id="rejeitarDespesa"  type="button">Rejeitar</button>
 										</div>
 									</div>
 								</div>

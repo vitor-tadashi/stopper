@@ -21,7 +21,7 @@ public class DespesaEntity implements Serializable {
 	private Date dataAcaoFinanceiro;
 	private Long idGpAprovador;
 	private Long idFinanceiroAprovador;
-	private String caminhoJustificativa;
+	private String caminhoComprovante;
 	
 	public Long getId() {
 		return id;
@@ -109,13 +109,11 @@ public class DespesaEntity implements Serializable {
 	public void setIdFinanceiroAprovador(Long idFinanceiroAprovador) {
 		this.idFinanceiroAprovador = idFinanceiroAprovador;
 	}
-	
-	public String getCaminhoJustificativa() {
-		return caminhoJustificativa;
+	public String getCaminhoComprovante() {
+		return caminhoComprovante;
 	}
-	
-	public void setCaminhoJustificativa(String caminhoJustificativa) {
-		this.caminhoJustificativa = caminhoJustificativa;
+	public void setCaminhoComprovante(String caminhoComprovante) {
+		this.caminhoComprovante = caminhoComprovante;
 	}
 	public StatusEntity getStatus() {
 		return status;

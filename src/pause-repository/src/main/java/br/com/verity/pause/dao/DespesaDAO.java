@@ -41,7 +41,7 @@ public class DespesaDAO {
 			ps.setDate(5, new java.sql.Date(despesa.getDataSolicitacao().getTime()));
 			ps.setLong(6, despesa.getIdProjeto());
 			ps.setLong(7, despesa.getIdSolicitante());
-			ps.setString(8, despesa.getCaminhoJustificativa());
+			ps.setString(8, despesa.getCaminhoComprovante());
 			ps.setDate(9,  new java.sql.Date(despesa.getDataOcorrencia().getTime()));
 
 			ps.execute();
@@ -139,7 +139,7 @@ public class DespesaDAO {
 		despesa.setDataAcaoFinanceiro(rs.getDate(10));
 		despesa.setIdGpAprovador(rs.getLong(11));
 		despesa.setIdFinanceiroAprovador(rs.getLong(12));
-		despesa.setCaminhoJustificativa(rs.getString(13));
+		despesa.setCaminhoComprovante(rs.getString(13));
 		despesa.setDataOcorrencia(rs.getDate(14));
 		despesa.getStatus().setNome(rs.getString(15));
 		despesa.getTipoDespesa().setNome(rs.getString(16));
