@@ -119,13 +119,16 @@ public class DespesaBusiness {
 		}
 	}
 
-	public List<DespesaBean> buscarDespesasParaAnalise(Long idGestor, String fgFinanceiroGP) {
+	public List<DespesaBean> buscarDespesasParaAnalise(Long idFuncionarioAnalisador, String fgFinanceiroGP) {
 		List<DespesaBean> despesasBean = new ArrayList<>();
+		StatusEntity statusEmAnalise = statusDao.findByName(StatusEnum.EM_ANALISE);
 		if ("G".equalsIgnoreCase(fgFinanceiroGP)) {
-			List<ProjetoBean> projetosGestor = integration.listProjetosPorGestor(idGestor);
-			//TODO
+			List<ProjetoBean> projetosGestor = integration.listProjetosPorGestor(idFuncionarioAnalisador);
+			for (ProjetoBean projetoBean : projetosGestor) {
+				List<DespesaEntity> despesas = dao.listarDespesaPorStatusPorProjeto(statusEmAnalise, projetoBean.getId());
+				despesasBean.addAll(despesaEntityToDespesaBeanComProjeto(despesas));
+			}
 		} else if ("F".equalsIgnoreCase(fgFinanceiroGP)) {
-			StatusEntity statusEmAnalise = statusDao.findByName(StatusEnum.EM_ANALISE);
 			List<DespesaEntity> despesas = dao.listarDespesaPorStatus(statusEmAnalise);
 			despesasBean = despesaEntityToDespesaBeanComProjeto(despesas);
 		} else {
