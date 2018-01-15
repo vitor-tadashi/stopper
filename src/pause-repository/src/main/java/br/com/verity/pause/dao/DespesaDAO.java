@@ -53,6 +53,34 @@ public class DespesaDAO {
 			fecharConexoes();
 		}
 	}
+	
+	public synchronized DespesaEntity updateDespesa(DespesaEntity despesa) throws SQLException {
+		try {
+			conn = connectionFactory.createConnection();
+
+			
+			String sql = "UPDATE despesa set id_status = ?, id_tipo_despesa = ?, justificativa = ?, valor = ?"
+					+ "id_projeto = ?, caminho_comprovante = ?, data_ocorrencia = ? where id = ?";
+
+			ps = conn.prepareStatement(sql);
+
+			ps.setInt(1, despesa.getStatus().getId());
+			ps.setLong(2, despesa.getTipoDespesa().getId());
+			ps.setString(3, despesa.getJustificativa());
+			ps.setDouble(4, despesa.getValor());
+			ps.setLong(5, despesa.getIdProjeto());
+			ps.setString(6, despesa.getCaminhoComprovante());
+			ps.setDate(7,  new java.sql.Date(despesa.getDataOcorrencia().getTime()));
+
+			ps.execute();
+
+			return findDespesaMaxId(despesa.getIdSolicitante());
+		} catch (SQLException e) {
+			throw e;
+		} finally {
+			fecharConexoes();
+		}
+	}
 
 	public DespesaEntity findDespesaMaxId(Long id) {
 
@@ -161,7 +189,7 @@ public class DespesaDAO {
 	public void salvarAnaliseDespesaGP(Long idDespesa, Long idAprovador, Integer integer) throws Exception {
 		try {
 
-			String sql = "UPDATE despesa set data_acao_gp = ?, id_gp = ?, id_status = ? where id_despesa = ?";
+			String sql = "UPDATE despesa set data_acao_gp = ?, id_gp = ?, id_status = ? where id = ?";
 			salvarAnaliseDespesa(idDespesa, idAprovador, integer, sql);
 
 		} catch (SQLException e) {
@@ -174,7 +202,7 @@ public class DespesaDAO {
 	public void salvarAnaliseDespesaFinanceiro(Long idDespesa, Long idAprovador, Integer idStatus) throws Exception {
 		try {
 
-			String sql = "UPDATE despesa set data_acao_financeiro = ?, id_financeiro = ?, id_status = ? where id_despesa = ?";
+			String sql = "UPDATE despesa set data_acao_financeiro = ?, id_financeiro = ?, id_status = ? where id = ?";
 			salvarAnaliseDespesa(idDespesa, idAprovador, idStatus, sql);
 
 		} catch (SQLException e) {

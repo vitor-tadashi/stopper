@@ -47,23 +47,26 @@ public class DespesaBusiness {
 			throws Exception {
 
 		DespesaEntity entity = converter.convertBeanToEntity(despesa);
+
+		if(entity.getId() == null){
 		
+			entity.setStatus(statusDao.findByName(StatusEnum.EM_ANALISE));
+			entity.setDataSolicitacao(new Date());
 		
-		// Seta despesa como em análise, que é o estado inicial
-		entity.setStatus(statusDao.findByName(StatusEnum.EM_ANALISE));
-		entity.setDataSolicitacao(new Date());
-		
-		if (multipartFile != null) {
-			String fileName = entity.getIdSolicitante() + "_" + System.currentTimeMillis() + "_" + multipartFile.getOriginalFilename();
-			entity.setCaminhoComprovante(ambiente.getProperty("despesa.comprovante.path") + fileName);
-			try{
-				saveMultipartFile(multipartFile, entity, fileName);
+			if (multipartFile != null) {
+				String fileName = entity.getIdSolicitante() + "_" + System.currentTimeMillis() + "_" + multipartFile.getOriginalFilename();
+				entity.setCaminhoComprovante(ambiente.getProperty("despesa.comprovante.path") + fileName);
+				try{
+					saveMultipartFile(multipartFile, entity, fileName);
 	 			
-			} catch (Exception e) {
-				throw e;
+				} catch (Exception e) {
+					throw e;
+				}
 			}
+			return converter.convertEntityToBean(dao.salvaDespesa(entity));
+		} else {
+			return converter.convertEntityToBean(dao.salvaDespesa(entity));
 		}
-		return converter.convertEntityToBean(dao.salvaDespesa(entity));
 	}
 
 	public void saveMultipartFile(MultipartFile multipart, DespesaEntity despesa, String fileName) throws IOException {
