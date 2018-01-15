@@ -387,5 +387,22 @@ public class ControleDiarioBusiness {
 		
 	}
 	
+	public List<ControleDiarioBean> obterApontamentosDiariosTodosFuncionarios(Date de, Date ate) {
+		java.sql.Date dtDe = new java.sql.Date(de.getTime());
+		java.sql.Date dtAte = new java.sql.Date(ate.getTime());
+		List<ControleDiarioEntity> controlesDiarioEntity = controleDiarioDAO.findControleDiarioByDate(dtDe, dtAte);
+		List<ControleDiarioBean> controlesDiario = new ArrayList<ControleDiarioBean>();
+		ControleDiarioBean controleDiario = null;
 
+		for (ControleDiarioEntity entity : controlesDiarioEntity) {
+			controleDiario = new ControleDiarioBean();
+
+			controleDiario = controleDiarioConverter.convertEntityToBean(entity);
+
+			controlesDiario.add(controleDiario);
+		}
+		
+		return controlesDiario;
+	}
+	
 }

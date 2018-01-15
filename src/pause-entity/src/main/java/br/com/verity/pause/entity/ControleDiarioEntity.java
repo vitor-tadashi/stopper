@@ -15,6 +15,7 @@ public class ControleDiarioEntity {
 	private Date data;
 	private ControleMensalEntity controleMensal;
 	private Integer idFuncionario;
+	private Double atestado;
 
 	public Integer getId() {
 		return id;
@@ -86,6 +87,14 @@ public class ControleDiarioEntity {
 
 	public void setSobreAvisoTrabalhado(Double sobreAvisoTrabalhado) {
 		this.sobreAvisoTrabalhado = sobreAvisoTrabalhado;
+	}
+	
+	public Double getAtestado() {
+		return atestado;
+	}
+
+	public void setAtestado(Double atestado) {
+		this.atestado = atestado;
 	}
 
 }

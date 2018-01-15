@@ -22,14 +22,14 @@
 		
 		<ol class="breadcrumb">
 			<li><a href="#">Home</a></li>
-			<li class="active">Relatório</li>
+			<li class="active">Relatórios</li>
 		</ol>
 		
-		<!--Page content-->
+		<!--Div [EdH] Extrato de Horas-->
 		<div class="col-md-12">
 			<div class="panel">
 				<form>
-				<div id="textDiv" class=""></div>
+				<div id="EdH_textDiv" class=""></div>
 					<div class="panel-body">
 						<div class="row">
 							<div style="margin-top: -10px"> 
@@ -37,7 +37,7 @@
 							</div>
 							<div class="col-sm-3">
 								<label class="control-label">Nome do funcionário:</label> 
-								<select class="selectpicker" data-live-search="true" data-width="100%" id="idFunc">
+								<select class="selectpicker" data-live-search="true" data-width="100%" id="EdH_idFunc">
 									<option value="">Selecione</option>
 									<c:forEach items="${funcionarios}" var="funcionario">
 										<option value="${funcionario.id}">${funcionario.nome}</option>
@@ -46,16 +46,46 @@
 							</div>
 							<div class="col-sm-4">
 								<label class="control-label">Período</label>
-								<div class="input-daterange input-group" id="datepicker">
-									<input type="date" class="form-control" id="dtDe" onBlur="permitirData()" placeholder="dd/mm/yyyy" />
+								<div class="input-daterange input-group" id="EdH_datepicker">
+									<input type="date" class="form-control" id="EdH_dtDe" onBlur="permitirDataExtratoDeHoras()" placeholder="dd/mm/yyyy" />
 									<span class="input-group-addon">até</span>
-									<input type="date" class="form-control" id="dtAte" onBlur="permitirData()" placeholder="dd/mm/yyyy"/>
+									<input type="date" class="form-control" id="EdH_dtAte" onBlur="permitirDataExtratoDeHoras()" placeholder="dd/mm/yyyy"/>
 								</div>
 							</div>
 							<div class="form-group col-md-2">
 								<label class="control-label">&nbsp;</label>
-								<button type="button" onclick="gerarRelatorio()" class="btn-primary form-control">Gerar extrato</button>
-		                        <a href="${url }" target="_blank" id="download" class="hide"></a>
+								<button type="button" onclick="gerarRelatorioExtratoDeHoras()" class="btn-primary form-control">Gerar extrato</button>
+		                        <a href="${url }" target="_blank" id="EdH_download" class="hide"></a>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		
+		<!--Div [AD] Apontamento Diário-->
+		<div class="col-md-12">
+			<div class="panel">
+				<form>
+				<div id="AD_textDiv" class=""></div>
+					<div class="panel-body">
+						<div class="row">
+							<div style="margin-top: -10px"> 
+								<h4 style="margin-left: 8px">Apontamento Diário</h4>
+							</div>
+							
+							<div class="col-sm-4">
+								<label class="control-label">Período</label>
+								<div class="input-daterange input-group" id="AD_datepicker">
+									<input type="date" class="form-control" id="AD_dtDe" onBlur="permitirDataApontamentoDiario()" placeholder="dd/mm/yyyy" />
+									<span class="input-group-addon">até</span>
+									<input type="date" class="form-control" id="AD_dtAte" onBlur="permitirDataApontamentoDiario()" placeholder="dd/mm/yyyy"/>
+								</div>
+							</div>
+							<div class="form-group col-md-2">
+								<label class="control-label">&nbsp;</label>
+								<button type="button" onclick="gerarRelatorioApontamentoDiario()" class="btn-primary form-control">Gerar relatório</button>
+		                        <a href="${url }" target="_blank" id="AD_download" class="hide"></a>
 							</div>
 						</div>
 					</div>

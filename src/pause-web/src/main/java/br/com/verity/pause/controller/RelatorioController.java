@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import br.com.verity.pause.bean.FuncionarioBean;
+import br.com.verity.pause.bean.UsuarioBean;
+import br.com.verity.pause.business.CustomUserDetailsBusiness;
 import br.com.verity.pause.business.FuncionarioBusiness;
 import br.com.verity.pause.business.RelatorioBusiness;
 
@@ -30,6 +32,9 @@ public class RelatorioController {
 
 	@Autowired
 	private FuncionarioBusiness funcionarioBusiness;
+	
+	@Autowired
+	private CustomUserDetailsBusiness userBusiness;
 
 	@Autowired
 	private RelatorioBusiness relatorioBusiness;
@@ -85,5 +90,38 @@ public class RelatorioController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	
+	@PreAuthorize("hasRole('ROLE_CONSULTAR_BANCO')")
+	@RequestMapping(value = "gerar-relatorio-ad", method = RequestMethod.GET)
+	public ResponseEntity<?> gerarRelatorioApontamentoDiario(String de, String ate, HttpServletResponse response) {
+		byte[] outArray = relatorioBusiness.relatorioApontamentoDiario(de, ate);
+		if(outArray != null){
+			return downloadFile(outArray, de, ate, response);
+		}
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	}
+
+	private ResponseEntity<?> downloadFile(byte[] outArray, String de, String ate, HttpServletResponse response) {
+		UsuarioBean usuarioLogado = userBusiness.usuarioLogado();
+		String empresa = (usuarioLogado.getIdEmpresaSessao() == 2)?"Verity":"QA360";
+		String nomeArquivo =  "ApontamentosDiarios" + empresa + "_" + de + "_" + ate + ".xlsx";
+		
+		response.setContentType("application/ms-excel");
+		response.setContentLength(outArray.length);
+		response.setHeader("Expires:", "0"); // eliminates browser caching
+		response.setHeader("Content-Disposition", "attachment; filename=" + nomeArquivo + ".xlsx");
+		OutputStream outStream;
+		try {
+			outStream = response.getOutputStream();
+			outStream.write(outArray);
+			outStream.flush();
+
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	}
 }

@@ -23,6 +23,7 @@ public class ControleDiarioConverter implements Converter<ControleDiarioEntity, 
 		entity.setHrTotal(bean.getHoraTotal());
 		entity.setSobreAviso(bean.getSobreAviso());
 		entity.setSobreAvisoTrabalhado(bean.getSobreAvisoTrabalhado());
+		entity.setAtestado(bean.getQtdAtestadoHoras());
 		
 		return entity;
 	}
@@ -43,6 +44,7 @@ public class ControleDiarioConverter implements Converter<ControleDiarioEntity, 
 		bean.setHoraTotal(entity.getHrTotal());
 		bean.setSobreAviso(entity.getSobreAviso());
 		bean.setSobreAvisoTrabalhado(entity.getSobreAvisoTrabalhado());
+		bean.setQtdAtestadoHoras(entity.getAtestado());
 		
 		return bean;
 	}
