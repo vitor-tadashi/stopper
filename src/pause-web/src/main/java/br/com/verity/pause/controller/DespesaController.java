@@ -59,8 +59,8 @@ public class DespesaController {
 			@RequestParam(value = "comprovante", required = false) MultipartFile comprovante) {
 		try {
 
-			despesaBizz.salvaDespesa(despesa, comprovante);
-			return ResponseEntity.ok("Salvo com sucesso!");
+			despesa = despesaBizz.salvaDespesa(despesa, comprovante);
+			return ResponseEntity.ok(despesa);
 
 		} catch (Exception e) {
 			e.printStackTrace();

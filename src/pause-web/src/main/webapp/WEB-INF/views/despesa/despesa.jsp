@@ -38,7 +38,7 @@ input[type=date].form-control {
 					<button id="addDespesa" class="btn btn-info" type="button"
 						style="float: right" onclick="abrirModal();">Adicionar</button>
 					<div class="table-responsive" style="margin-top: 50px">
-						<table class="table table-striped table-bordered" id="id-despesas">
+						<table class="table table-striped table-bordered" id="table-despesas">
 							<thead>
 								<tr>
 									<th class="text-center">Data Ocorrência</th>

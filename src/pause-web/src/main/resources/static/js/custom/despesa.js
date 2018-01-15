@@ -80,9 +80,9 @@ function enviarFormDespesa() {
 		contentType: false,
 		enctype: 'multipart/form-data',
 		success: function(data){
-			$("#span-msg").html(data);
+			$("#span-msg").html("Despesa salva com sucesso!");
 			$('#add-despesa-modal').modal("hide");
-
+			//$('#table-despesas tbody').append('<tr><td >Não há despesas para análise</td></tr>');
 			resetForm();
 		},
 		error: function(erro){
