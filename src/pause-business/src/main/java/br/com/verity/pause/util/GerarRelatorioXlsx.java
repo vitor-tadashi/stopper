@@ -320,7 +320,11 @@ public class GerarRelatorioXlsx {
 			for (ConsultaApontamentosBean bean : consultaApontamentosBean) {
 				data = formatDt.format(bean.getControleDiario().getData());
 				row = sheet.createRow(linha);
-				row.createCell(0).setCellValue(bean.getNmFuncionario());
+				if(bean.getNmFuncionario() != null) {
+					row.createCell(0).setCellValue(bean.getNmFuncionario());
+				} else {
+					row.createCell(0).setCellValue(bean.getControleDiario().getIdFuncionario());
+				}
 				row.createCell(1).setCellValue(data);
 				row.createCell(2).setCellValue(bean.getControleDiario().getHoraTotal());
 				row.createCell(3).setCellValue(bean.getControleDiario().getQtdAtestadoHoras());
