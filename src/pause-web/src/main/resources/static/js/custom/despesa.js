@@ -63,6 +63,7 @@ function validarFormDespesa() {
 
 function enviarFormDespesa() {
 	var oMyForm = new FormData();
+	oMyForm.append("id", $('#id').val());
 	oMyForm.append("comprovante", $('input[type=file]')[0].files[0]);
 	oMyForm.append("dataOcorrencia", $('#dataDespesa').val());
 	oMyForm.append("valor", $('#valorDespesa').val().replace(/,/g, '.'));
@@ -143,9 +144,68 @@ function abrirModalVisualizacaoGestor(idDespesa) {
 }
 
 function abrirModalEdicaoSolicitante(idDespesa) {
+	$.ajax({
+		url: "despesa/"+idDespesa,
+		type: "get", 
+		success: function(data) {
+			$("#id").val(data.id);
+			$("#dataDespesa").val(data.dataOcorrencia.split("/").reverse().join("-"));
+			$("#valorDespesa").val(Number(data.valor).toFixed(2).replace(".",","));
+			$('#select-tipo-despesa').selectpicker('val', data.idTipoDespesa);
+			$('#select-centro-custo').selectpicker('val', data.idProjeto);
+			$("#projeto").val(data.descricaoProjeto);
+			$("#justificativaDespesa").val(data.justificativa);
+			$('#add-despesa-modal').modal();
+		},
+		error: function(erro) {
+			if (erro.status === 403) {                        
+				location.reload();                            
+			} else {                                          
+				$("#span-msg").html("Erro!" + erro.status);   
+			}                                                 
+		}
+	});
 	
 }
 
 function abrirModalVisualizacaoSolicitante(idDespesa) {
-	
+	$.ajax({
+		url: "despesa/"+idDespesa,
+		type: "get", 
+		success: function(data) {
+			
+			if(data.idStatus == 1) {
+				$("#statusExib").attr("class","label-status label-status-analise");
+			} else if (data.idStatus == 2) {
+				$("#statusExib").attr("class","label-status label-status-aprovado");
+			} else {
+				$("#statusExib").attr("class","label-status label-status-reprovado");
+			}
+			
+			$("#statusExib").html(data.nomeStatus);   
+			$("#dataOcorrenciaExib").val(data.dataOcorrencia);
+			$("#valorDespesaExib").val("R$ " + Number(data.valor).toFixed(2).replace(".",","));
+			$("#TipoDespesaExib").val(data.nomeTipoDespesa);
+			$("#projetoExib").val(data.descricaoProjeto);
+			$("#justificativaDespesaExib").val(data.justificativa);
+			if (data.caminhoComprovante != null) {
+				$("#btnDownloadArquivo").show();
+				$("#btnDownloadArquivo").attr("href", "http://" + window.location.host + "/pause/despesa/arquivo/" + data.id);
+			} else {
+				$("#btnDownloadArquivo").hide();
+				$("#btnDownloadArquivo").hide();
+			}
+
+			$('#exibe-despesa-modal').modal();
+		},
+		error: function(erro) {
+			if (erro.status === 403) {                        
+				location.reload();                            
+			} else {                                          
+				$("#span-msg").html("Erro!" + erro.status);   
+			}                                                 
+		}
+	});
 }
+
+

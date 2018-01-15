@@ -72,11 +72,11 @@ input[type=date].form-control {
 										
 										<c:choose>
   											<c:when test="${despesa.idGpAprovador eq 0 || despesa.idGpAprovador eq null}">
-  												<td><a href="#" onclick="linkGerenciar(${despesa.id })">
+  												<td><a href="#" onclick="abrirModalEdicaoSolicitante(${despesa.id })">
 													<i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></td>
   											</c:when>
   											<c:otherwise>
-  												<td><a href="#" onclick="linkGerenciar(${despesa.id })">
+  												<td><a href="#" onclick="abrirModalVisualizacaoSolicitante(${despesa.id })">
 													<i class="fa fa-search" aria-hidden="true"></i></a></td>
   											</c:otherwise>
 										</c:choose>
@@ -112,6 +112,9 @@ input[type=date].form-control {
 									<!--Data Table-->
 									<!--===================================================-->
 									<div class="panel-body">
+										
+										<input type="text" id="id" name="id" hidden="true"/>
+									
 										<label class="control-label" style="margin: 4px 0 0 0">*Data Ocorrência</label>
 										<div class="input-daterange input-group" id="datepicker"
 											style="width: 100% !important">
@@ -137,7 +140,7 @@ input[type=date].form-control {
 												</c:forEach>
 											</select>
 										</div>
-										<br /> <label class="control-label" style="margin: 4px 0 0 0">Projeto</label>
+										<br /> <label class="control-label" style="margin: 4px 0 0 0">*Projeto</label>
 										<div class="input-group" id="centroCustoDiv">
 											<select class="selectpicker" data-live-search="true"
 												id="select-centro-custo" name="centroCusto">
@@ -175,7 +178,72 @@ input[type=date].form-control {
 				</div>
 			</div>
 		</div>
+		<div class="modal fade" id="exibe-despesa-modal" role="dialog"
+			tabindex="-1" aria-labelledby="exibe-despesa-modal" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+
+					<!--Modal header-->
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">
+							<i class="pci-cross pci-circle"></i>
+						</button>
+						<h4 class="modal-title">Exibe despesa</h4>
+					</div>
+
+					<!--Modal body-->
+					<div class="modal-body">
+						<form action="" id="form-despesa" name="form-despesa"
+							class="clear-form">
+							<div class="row">
+								<div class="panel">
+									<!--Data Table-->
+									<!--===================================================-->
+									<div class="panel-body">
+										<label class="control-label" style="margin: 4px 0 0 0">Status</label>
+										<div class="input-group" id="dataOcorrenciaExibDiv"
+											style="width: 100% !important">
+											<span id="statusExib"></span>
+										</div>
+										<br /> <label class="control-label" style="margin: 4px 0 0 0">Data Ocorrência</label>
+										<div class="input-group" id="dataOcorrenciaExibDiv"
+											style="width: 100% !important">
+											<input type="text" id="dataOcorrenciaExib" class="form-control" name="dataOcorrenciaExib" readonly/>
+										</div>
+										<br /> <label class="control-label" style="margin: 4px 0 0 0">Valor</label>
+										<div class="input-group" id="valorDespesaExibDiv"
+											style="width: 100% !important">
+											<input type="text" id="valorDespesaExib" class="form-control" name="valorDespesaExib" readonly/>
+										</div>
+										<br /> <label class="control-label" style="margin: 4px 0 0 0">Tipo de despesa</label>
+										<div class="input-group" id="TipoDeDespesaExibDiv"
+											style="width: 100% !important">
+											<input type="text" id="TipoDespesaExib" class="form-control" name="TipoDespesaExib" readonly/>
+										</div>
+										<br /> <label class="control-label" style="margin: 4px 0 0 0">Projeto</label>
+										<div class="input-group" id="projetoExibDiv"
+											style="width: 100% !important">
+											<input type="text" id="projetoExib" class="form-control" name="projetoExib" readonly/>
+										</div>
+										<br /> <label class="control-label" style="margin: 4px 0 0 0">Justificativa</label>
+										<div class="input-group" id="justificativaDespesaExibDiv"
+											style="width: 100% !important">
+											<textarea id="justificativaDespesaExib" class="form-control" name="justificativaDespesaExib" readonly></textarea>
+										</div>
+										<br/>
+										<div class="input-group" id="comprovanteDespesaDiv"
+											style="width: 100% !important">
+											<a class="btn btn-info" href="#" id="btnDownloadArquivo" style="text-align: center; width: 100%;"  target="_blank">Download arquivo</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
 		<script src='<c:url value="/js/custom/send-ajax.js"/>'></script>
-		<script src='<c:url value="js/custom/despesa.js"/>'></script>
+		<script src='<c:url value="/js/custom/despesa.js"/>'></script>
 	</layout:put>
 </layout:extends>
