@@ -75,7 +75,7 @@ public class DespesaDAO {
 
 			ps.execute();
 
-			return findDespesaMaxId(despesa.getIdSolicitante());
+			return findById(despesa.getId());
 		} catch (SQLException e) {
 			throw e;
 		} finally {
