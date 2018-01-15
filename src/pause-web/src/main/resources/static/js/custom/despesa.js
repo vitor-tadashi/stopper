@@ -82,7 +82,15 @@ function enviarFormDespesa() {
 		success: function(data){
 			$("#span-msg").html("Despesa salva com sucesso!");
 			$('#add-despesa-modal').modal("hide");
-			//$('#table-despesas tbody').append('<tr><td >Não há despesas para análise</td></tr>');
+			$('#table-despesas tbody').append('<tr>'
+					+ '<td>' +  data.dataOcorrencia+ '</td>'
+					+ '<td>' + data.nomeTipoDespesa + '</td>'
+					+ '<td>' + data.idProjeto + '</td>'
+					+ '<td>R$ ' + Number(data.valor).toFixed(2).replace(".",",") + '</td>'
+					+ '<td><span class="label-status label-status-analise">' + data.nomeStatus + '</span></td>'
+					+ '<td>' + '<a href="#" onclick="abrirModalEdicaoSolicitante(' + data.id + ')">'
+													+ '<i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+					+ '</tr>');
 			resetForm();
 		},
 		error: function(erro){
