@@ -111,19 +111,30 @@ public class DespesaController {
 		try {
 			DespesaBean despesa = despesaBizz.buscarDespesa(idDespesa);
 		    File file = new File(despesa.getCaminhoComprovante());
-
+		    String fileName = file.getName().toUpperCase();
+		    
 		    HttpHeaders respHeaders = new HttpHeaders();
-		    //TODO validar tipo de arquivo
-		    respHeaders.setContentType(MediaType.IMAGE_GIF);
+		    
+		    setHeaderContentType(fileName, respHeaders);
+		    
 		    respHeaders.setContentLength(file.length());
-		  //TODO validar extensão do arquivo
-		    respHeaders.setContentDispositionFormData("attachment", "fileNameIwant.gif");
+		    respHeaders.setContentDispositionFormData("attachment", fileName);
 		    
 		    InputStreamResource isr = new InputStreamResource(new FileInputStream(file));
-		    return new ResponseEntity<InputStreamResource>(isr, respHeaders, HttpStatus.OK);
+		    return new ResponseEntity<>(isr, respHeaders, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return null;
+			return new ResponseEntity<>("Erro ao recuperar o arquivo solicitado.", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	private void setHeaderContentType(String fileName, HttpHeaders respHeaders) {
+		if (fileName.toUpperCase().endsWith(".JPG") || fileName.toUpperCase().endsWith(".JPEG")) {
+			respHeaders.setContentType(MediaType.IMAGE_JPEG);
+		} else if (fileName.toUpperCase().endsWith("GIF")) {
+			respHeaders.setContentType(MediaType.IMAGE_GIF);
+		} else if (fileName.toUpperCase().endsWith("PDF")) {
+			respHeaders.setContentType(MediaType.APPLICATION_PDF);
 		}
 	}
 }
