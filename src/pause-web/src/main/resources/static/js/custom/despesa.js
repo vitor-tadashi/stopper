@@ -120,6 +120,9 @@ function enviarFormAnalise(idDespesa, fgFinanceiroGP, despesaAprovada) {
 		success: function(data){
 			$("#span-msg").html(data);
 			$('#despesa' + idDespesa).remove();
+			if($("#table-despesas tr td").length <= 0) {
+				 $('#table-despesas tbody').append('<tr><td colspan="6">Não há despesas para análise</td></tr>');
+			}
 			$('#detalhe-despesa-modal').modal("hide");
 		},
 		error: function(erro){

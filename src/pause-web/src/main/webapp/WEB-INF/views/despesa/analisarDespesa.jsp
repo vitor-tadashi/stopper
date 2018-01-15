@@ -36,7 +36,7 @@
 				<div class="panel-body">
 					<span id="span-msg">${erroMsg}</span>
 					<div class="table-responsive" style="margin-top: 50px">
-						<table class="table table-striped table-bordered" id="id-despesas">
+						<table class="table table-striped table-bordered" id="table-despesas">
 							<thead>
 								<tr>
 									<th class="text-center">Solicitante</th>
@@ -64,9 +64,11 @@
 										</c:forEach>
 									</c:when>
 									<c:otherwise>
-										<td colspan="6">
-											Não há despesas para análise!
-										<td>
+										<tr>
+											<td colspan="6">
+												Não há despesas para análise!
+											<td>
+										</tr>
 									</c:otherwise>
 								</c:choose>
 							</tbody>

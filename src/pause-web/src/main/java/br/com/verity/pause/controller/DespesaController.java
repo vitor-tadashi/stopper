@@ -74,7 +74,7 @@ public class DespesaController {
 		try {
 			FuncionarioBean func = funcionarioBizz.obterPorId(null);
 			despesaBizz.salvarAnaliseDespesa(idDespesa, func.getId().longValue(), fgFinanceiroGP, despesaAprovada);
-			return ResponseEntity.ok("Despesa " + (despesaAprovada ? " aprovada " : " rejeitada ") + " com sucesso");
+			return ResponseEntity.ok("Despesa " + (despesaAprovada ? " aprovada " : " rejeitada ") + " com sucesso!");
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocorreu um erro, tente novamente!");
