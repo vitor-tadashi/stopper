@@ -117,7 +117,9 @@ public class DespesaBusiness {
 
 	public void salvarAnaliseDespesa(Long idDespesa, Long idAprovador, String fgAprovador, boolean despesaAprovada) throws Exception {
 		StatusEntity status = null;
-		if (despesaAprovada) {
+		if (despesaAprovada && "G".equalsIgnoreCase(fgAprovador)) {
+			status = statusDao.findByName(StatusEnum.EM_ANALISE);
+		} else if (despesaAprovada) {
 			status = statusDao.findByName(StatusEnum.APROVADO);
 		} else {
 			status = statusDao.findByName(StatusEnum.REPROVADO);

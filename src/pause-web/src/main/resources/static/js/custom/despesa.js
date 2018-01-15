@@ -105,6 +105,34 @@ function resetForm() {
 	$("#select-centro-custo").selectpicker("refresh");
 }
 
+function enviarFormAnaliseGestor(idDespesa, fgFinanceiroGP, despesaAprovada) {
+	var oMyForm = new FormData();
+	oMyForm.append("idDespesa", idDespesa);
+	oMyForm.append("fgFinanceiroGP", fgFinanceiroGP);
+	oMyForm.append("despesaAprovada", despesaAprovada);
+
+	$.ajax({
+		url : 'analisar',
+		type: "POST",
+		data : oMyForm,
+		processData: false,
+		contentType: false,
+		success: function(data){
+			$("#span-msg").html(data);
+			$('#despesa' + idDespesa).remove();
+			$('#detalhe-despesa-modal').modal("hide");
+		},
+		error: function(erro){
+			if (erro.status === 403) {
+				location.reload();
+			} else {
+				$("#span-msg").html("Erro!" + erro.status);
+				$('#detalhe-despesa-modal').modal("hide");
+			}
+		}
+	});
+}
+
 function abrirModalVisualizacaoGestor(idDespesa) {
 	$.ajax({
 		url: idDespesa,
@@ -126,17 +154,13 @@ function abrirModalVisualizacaoGestor(idDespesa) {
 			
 			$("#aprovarDespesa").off("click");
 			$("#aprovarDespesa").click(function(){
-				//TODO enviar o form com o id da despesa aprovada e as informações necessárias para o serviço
-				$('#despesa' + data.id).remove();
-				$('#detalhe-despesa-modal').modal("hide");
+				enviarFormAnaliseGestor(data.id, 'G', true);
 			});
 			$("#aprovarDespesa").on("click");
 			
 			$("#rejeitarDespesa").off("click");
 			$("#rejeitarDespesa").click(function(){
-				//TODO enviar o form com o id da despesa rejeitada e as informações necessárias para o serviço
-				$('#despesa' + data.id).remove();
-				$('#detalhe-despesa-modal').modal("hide");
+				enviarFormAnaliseGestor(data.id, 'G', false);
 			});
 			$("#rejeitarDespesa").on("click");
 			$('#detalhe-despesa-modal').modal();
