@@ -105,7 +105,7 @@ function resetForm() {
 	$("#select-centro-custo").selectpicker("refresh");
 }
 
-function enviarFormAnaliseGestor(idDespesa, fgFinanceiroGP, despesaAprovada) {
+function enviarFormAnalise(idDespesa, fgFinanceiroGP, despesaAprovada) {
 	var oMyForm = new FormData();
 	oMyForm.append("idDespesa", idDespesa);
 	oMyForm.append("fgFinanceiroGP", fgFinanceiroGP);
@@ -133,7 +133,7 @@ function enviarFormAnaliseGestor(idDespesa, fgFinanceiroGP, despesaAprovada) {
 	});
 }
 
-function abrirModalVisualizacaoGestor(idDespesa) {
+function abrirModalVisualizacaoDespesa(idDespesa) {
 	$.ajax({
 		url: idDespesa,
 		type: "get", 
@@ -154,13 +154,21 @@ function abrirModalVisualizacaoGestor(idDespesa) {
 			
 			$("#aprovarDespesa").off("click");
 			$("#aprovarDespesa").click(function(){
-				enviarFormAnaliseGestor(data.id, 'G', true);
+				if ($("#buttonSubmitGestorDiv").length) {
+					enviarFormAnalise(data.id, 'G', true);
+				} else if ($("#buttonSubmitFinanceiroDiv").length) {
+					enviarFormAnalise(data.id, 'F', true);
+				}
 			});
 			$("#aprovarDespesa").on("click");
 			
 			$("#rejeitarDespesa").off("click");
 			$("#rejeitarDespesa").click(function(){
-				enviarFormAnaliseGestor(data.id, 'G', false);
+				if ($("#buttonSubmitGestorDiv").length) {
+					enviarFormAnalise(data.id, 'G', false);
+				} else if ($("#buttonSubmitFinanceiroDiv").length) {
+					enviarFormAnalise(data.id, 'F', false);
+				}
 			});
 			$("#rejeitarDespesa").on("click");
 			$('#detalhe-despesa-modal').modal();

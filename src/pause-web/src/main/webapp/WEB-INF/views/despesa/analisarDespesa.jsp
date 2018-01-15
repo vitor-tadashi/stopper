@@ -58,7 +58,7 @@
 												<td>${despesa.idProjeto}</td>
 												<td><fmt:formatNumber value="${despesa.valor }"
 														type="currency" currencyCode="BRL"></fmt:formatNumber></td>
-												<td><a href="#" onclick="abrirModalVisualizacaoGestor(${despesa.id })">
+												<td><a href="#" onclick="abrirModalVisualizacaoDespesa(${despesa.id })">
 													<i class="fa fa-search" aria-hidden="true"></i></a></td>
 											</tr>
 										</c:forEach>
@@ -147,11 +147,20 @@
 											<a class="btn btn-info" href="#" id="btnDownloadArquivo" style="text-align: center; width: 100%;"  target="_blank">Download arquivo</a>
 										</div>
 										<br/>
-										<div class="input-group" id="buttonSubmitDiv"
-											style="width: 100% !important">
-											<button class="btn btn-success" id="aprovarDespesa" type="button">Aprovar</button>
-											<button class="btn btn-danger" id="rejeitarDespesa"  type="button">Rejeitar</button>
-										</div>
+										<sec:authorize access="hasRole('GP_APROVAR_DESPESAS')">
+											<div class="input-group" id="buttonSubmitGestorDiv"
+												style="width: 100% !important">
+												<button class="btn btn-success" id="aprovarDespesa" type="button">Aprovar</button>
+												<button class="btn btn-danger" id="rejeitarDespesa"  type="button">Rejeitar</button>
+											</div>
+										</sec:authorize>
+										<sec:authorize access="hasRole('FINANCEIRO_APROVAR_DESPESAS')">
+											<div class="input-group" id="buttonSubmitFinanceiroDiv"
+												style="width: 100% !important">
+												<button class="btn btn-success" id="aprovarDespesa" type="button">Aprovar</button>
+												<button class="btn btn-danger" id="rejeitarDespesa"  type="button">Rejeitar</button>
+											</div>
+										</sec:authorize>
 									</div>
 								</div>
 							</div>
