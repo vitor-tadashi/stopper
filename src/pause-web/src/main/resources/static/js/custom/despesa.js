@@ -116,22 +116,13 @@ function abrirModalVisualizacaoGestor(idDespesa) {
 			$("#projeto").val(data.descricaoProjeto);
 			$("#justificativaDespesa").val(data.justificativa);
 			if (data.caminhoComprovante != null) {
-				$("#labelComprovante").show();
-				$("#comprovanteDespesa").show();
-				$("#comprovanteDespesa").off("click");
-				$("#comprovanteDespesa").click(function(){
-					alert(data.caminhoComprovante);
-				});
-				$("#comprovanteDespesa").on("click");
+				$("#btnDownloadArquivo").show();
+				$("#btnDownloadArquivo").attr("href", "http://" + window.location.host + "/pause/despesa/arquivo/" + data.id);
 			} else {
-				$("#labelComprovante").hide();
-				$("#comprovanteDespesa").hide();
+				$("#btnDownloadArquivo").hide();
+				$("#btnDownloadArquivo").hide();
 			}
-			$("#aprovarDespesa").off("click");
-			$("#aprovarDespesa").click(function(){
-				alert("despesa " + data.id + " aprovada");
-				$('#detalhe-despesa-modal').modal("hide");
-			});
+			
 			$("#aprovarDespesa").on("click");
 			$("#rejeitarDespesa").off("click");
 			$("#rejeitarDespesa").click(function(){

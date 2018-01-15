@@ -144,9 +144,7 @@
 										<br/>
 										<div class="input-group" id="comprovanteDespesaDiv"
 											style="width: 100% !important">
-											<button id="comprovanteDespesa"  style="width: 100% !important"
-												class="btn btn-info" name="comprovanteDespesa" type="button"
-												>Download Comprovante</button>
+											<a class="btn btn-info" href="#" id="btnDownloadArquivo" style="text-align: center; width: 100%;"  target="_blank">Download arquivo</a>
 										</div>
 										<br/>
 										<div class="input-group" id="buttonSubmitDiv"
