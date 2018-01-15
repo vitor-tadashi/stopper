@@ -51,7 +51,7 @@
 								<c:choose>
 									<c:when test="${not empty despesas }">
 										<c:forEach items="${despesas}" var="despesa">
-											<tr>
+											<tr id="despesa${despesa.id}">
 												<td>${despesa.nomeFuncionario }</td>
 												<td>${despesa.dataOcorrencia }</td>
 												<td>${despesa.nomeTipoDespesa }</td>

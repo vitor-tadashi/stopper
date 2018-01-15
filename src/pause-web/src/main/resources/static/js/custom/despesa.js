@@ -124,10 +124,18 @@ function abrirModalVisualizacaoGestor(idDespesa) {
 				$("#btnDownloadArquivo").hide();
 			}
 			
+			$("#aprovarDespesa").off("click");
+			$("#aprovarDespesa").click(function(){
+				//TODO enviar o form com o id da despesa aprovada e as informações necessárias para o serviço
+				$('#despesa' + data.id).remove();
+				$('#detalhe-despesa-modal').modal("hide");
+			});
 			$("#aprovarDespesa").on("click");
+			
 			$("#rejeitarDespesa").off("click");
 			$("#rejeitarDespesa").click(function(){
-				alert("despesa " + data.id + " rejeitada");
+				//TODO enviar o form com o id da despesa rejeitada e as informações necessárias para o serviço
+				$('#despesa' + data.id).remove();
 				$('#detalhe-despesa-modal').modal("hide");
 			});
 			$("#rejeitarDespesa").on("click");

@@ -70,9 +70,10 @@ public class DespesaController {
 
 	@RequestMapping(value = "/analisar", method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<?> analisarDespesaFuncionario(Long idDespesa, Long idAprovador, String fgFinanceiroGP, boolean despesaAprovada) {
+	public ResponseEntity<?> analisarDespesaFuncionario(Long idDespesa, String fgFinanceiroGP, boolean despesaAprovada) {
 		try {
-			despesaBizz.salvarAnaliseDespesa(idDespesa, idAprovador, fgFinanceiroGP, despesaAprovada);
+			FuncionarioBean func = funcionarioBizz.obterPorId(null);
+			despesaBizz.salvarAnaliseDespesa(idDespesa, func.getId().longValue(), fgFinanceiroGP, despesaAprovada);
 			return ResponseEntity.ok("Despesa alterada com sucesso");
 		} catch (Exception e) {
 			e.printStackTrace();
