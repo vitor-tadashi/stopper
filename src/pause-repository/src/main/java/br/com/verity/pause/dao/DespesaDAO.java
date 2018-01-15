@@ -59,18 +59,19 @@ public class DespesaDAO {
 			conn = connectionFactory.createConnection();
 
 			
-			String sql = "UPDATE despesa set id_status = ?, id_tipo_despesa = ?, justificativa = ?, valor = ?"
-					+ "id_projeto = ?, caminho_comprovante = ?, data_ocorrencia = ? where id = ?";
+			String sql = "UPDATE despesa set id_tipo_despesa = ?, justificativa = ?, valor = ?,"
+					+ " id_projeto = ?, caminho_comprovante = ?, data_ocorrencia = ? where id = ?";
 
 			ps = conn.prepareStatement(sql);
 
-			ps.setInt(1, despesa.getStatus().getId());
-			ps.setLong(2, despesa.getTipoDespesa().getId());
-			ps.setString(3, despesa.getJustificativa());
-			ps.setDouble(4, despesa.getValor());
-			ps.setLong(5, despesa.getIdProjeto());
-			ps.setString(6, despesa.getCaminhoComprovante());
-			ps.setDate(7,  new java.sql.Date(despesa.getDataOcorrencia().getTime()));
+			ps.setLong(1, despesa.getTipoDespesa().getId());
+			ps.setString(2, despesa.getJustificativa());
+			ps.setDouble(3, despesa.getValor());
+			ps.setLong(4, despesa.getIdProjeto());
+			ps.setString(5, despesa.getCaminhoComprovante());
+			ps.setDate(6,  new java.sql.Date(despesa.getDataOcorrencia().getTime()));
+			ps.setLong(7, despesa.getId());
+
 
 			ps.execute();
 
@@ -302,7 +303,7 @@ public class DespesaDAO {
 			   + " inner join status s " 
 			   + " on d.id_status = s.id "
 			   + " inner join tipo_despesa t "
-			   + " on d.id_tipo_despesa = t.id where d.id_status = ? and data_acao_financeiro is null order by d.data_solicitacao desc";
+			   + " on d.id_tipo_despesa = t.id where d.id_status = ? and data_acao_financeiro is null and data_acao_gp is not null order by d.data_solicitacao desc";
 
 		try {
 			conn = connectionFactory.createConnection();

@@ -65,7 +65,7 @@ public class DespesaBusiness {
 			}
 			return converter.convertEntityToBean(dao.salvaDespesa(entity));
 		} else {
-			return converter.convertEntityToBean(dao.salvaDespesa(entity));
+			return converter.convertEntityToBean(dao.updateDespesa(entity));
 		}
 	}
 
