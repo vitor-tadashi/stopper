@@ -37,7 +37,6 @@ public class SavIntegration {
 	public List<FuncionarioBean> getFuncionarios(int idEmpresa){
 		List<FuncionarioIntegrationBean> funcionarios = new ArrayList<FuncionarioIntegrationBean>();
 		ObjectMapper mapper = new ObjectMapper();
-		// Properties props = this.getProp();
 		String endereco = ambiente.getProperty("integration.sav.ip") + "/listFuncionariosDaEmpresa/"+idEmpresa;
 		try {
 			URL url = new URL(endereco);

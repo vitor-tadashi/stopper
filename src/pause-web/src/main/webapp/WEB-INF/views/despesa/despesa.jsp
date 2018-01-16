@@ -54,7 +54,7 @@ input[type=date].form-control {
 									<tr>
 										<td>${despesa.dataOcorrencia }</td>
 										<td>${despesa.nomeTipoDespesa }</td>
-										<td>${despesa.idProjeto }</td>
+										<td>${despesa.descricaoProjeto }</td>
 										<td><fmt:formatNumber value="${despesa.valor }"
 												type="currency" currencyCode="BRL"></fmt:formatNumber></td>
 												
