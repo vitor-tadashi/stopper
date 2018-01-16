@@ -51,22 +51,22 @@ input[type=date].form-control {
 							</thead>
 							<tbody class="text-center">
 								<c:forEach items="${despesasFuncionario }" var="despesa">
-									<tr>
-										<td>${despesa.dataOcorrencia }</td>
-										<td>${despesa.nomeTipoDespesa }</td>
-										<td>${despesa.descricaoProjeto }</td>
-										<td><fmt:formatNumber value="${despesa.valor }"
+									<tr id="trDespesa${despesa.id }">
+										<td id="tdDataOcorrencia${despesa.id }">${despesa.dataOcorrencia }</td>
+										<td id="tdNomeTipoDespesa${despesa.id }">${despesa.nomeTipoDespesa }</td>
+										<td id="tdDescProjeto${despesa.id }">${despesa.descricaoProjeto }</td>
+										<td id="tdValor${despesa.id }"><fmt:formatNumber value="${despesa.valor }"
 												type="currency" currencyCode="BRL"></fmt:formatNumber></td>
 												
 										<c:choose>
   											<c:when test="${despesa.idStatus eq 1}">
-  												<td><span class="label-status label-status-analise"> ${despesa.nomeStatus }</span></td>
+  												<td id="tdNomeStatus${despesa.id }"><span class="label-status label-status-analise"> ${despesa.nomeStatus }</span></td>
   											</c:when>
   											<c:when test="${despesa.idStatus eq 2}">
-												<td><span class="label-status label-status-aprovado"> ${despesa.nomeStatus }</span></td>
+												<td id="tdNomeStatus${despesa.id }"><span class="label-status label-status-aprovado"> ${despesa.nomeStatus }</span></td>
 											</c:when>
   											<c:otherwise>
-  												<td><span class="label-status label-status-reprovado"> ${despesa.nomeStatus }</span></td>
+  												<td id="tdNomeStatus${despesa.id }"><span class="label-status label-status-reprovado"> ${despesa.nomeStatus }</span></td>
   											</c:otherwise>
 										</c:choose>		
 										
@@ -127,6 +127,7 @@ input[type=date].form-control {
 											style="width: 100% !important">
 											<input type="text" id="valorDespesa"
 												class="form-control valorDespesa" name="valor"
+												data-thousands="" data-decimal=","
 												placeholder="XXXXX.XX" />
 										</div>
 										<br /> <label class="control-label" style="margin: 4px 0 0 0">*Tipo
@@ -245,5 +246,6 @@ input[type=date].form-control {
 		</div>
 		<script src='<c:url value="/js/custom/send-ajax.js"/>'></script>
 		<script src='<c:url value="/js/custom/despesa.js"/>'></script>
+		<script src='<c:url value="/js/jquery.maskMoney.js"/>'></script>
 	</layout:put>
 </layout:extends>

@@ -30,64 +30,73 @@ public class DespesaBusiness {
 
 	@Autowired
 	DespesaDAO dao;
-	
+
 	@Autowired
 	StatusDAO statusDao;
 
 	@Autowired
 	DespesaConverter converter;
-	
+
 	@Autowired
 	private Environment ambiente;
-	
+
 	@Autowired
 	SavIntegration integration;
 
-	public DespesaBean salvaDespesa(DespesaBean despesa, MultipartFile multipartFile)
-			throws Exception {
+	public DespesaBean salvaDespesa(DespesaBean despesa, MultipartFile multipartFile) throws Exception {
 
 		DespesaEntity entity = converter.convertBeanToEntity(despesa);
 
-		if(entity.getId() == null){
-		
+		if (entity.getId() == null) {
+
 			entity.setStatus(statusDao.findByName(StatusEnum.EM_ANALISE));
 			entity.setDataSolicitacao(new Date());
-		
+
 			if (multipartFile != null) {
-				String fileName = entity.getIdSolicitante() + "_" + System.currentTimeMillis() + "_" + multipartFile.getOriginalFilename();
-				entity.setCaminhoComprovante(ambiente.getProperty("despesa.comprovante.path") + fileName);
-				try{
-					saveMultipartFile(multipartFile, entity, fileName);
-	 			
-				} catch (Exception e) {
-					throw e;
-				}
+				entity = saveMultipartFile(multipartFile, entity, multipartFile.getOriginalFilename());
 			}
-			return converter.convertEntityToBean(dao.salvaDespesa(entity));
+			entity =  dao.salvaDespesa(entity);
+			
 		} else {
-			return converter.convertEntityToBean(dao.updateDespesa(entity));
+			entity =  dao.updateDespesa(entity);
 		}
+		
+		despesa = converter.convertEntityToBean(entity);
+		preencherProjetoDespesa(entity, despesa);
+		return despesa;
 	}
 
-	public void saveMultipartFile(MultipartFile multipart, DespesaEntity despesa, String fileName) throws IOException {
-		if (!multipart.getOriginalFilename().isEmpty()) {
+	public DespesaEntity saveMultipartFile(MultipartFile multipartFile, DespesaEntity entity, String realFileName)
+			throws IOException {
+		
+		File file = new File(ambiente.getProperty("despesa.comprovante.path") + entity.getIdSolicitante());
+
+		if (!file.exists() && !file.isDirectory()) {
+			file.mkdir();
+		}
+
+		String fileName = entity.getIdSolicitante() + "/" + System.currentTimeMillis() + "_" + multipartFile.getOriginalFilename();
+		entity.setCaminhoComprovante(ambiente.getProperty("despesa.comprovante.path") + fileName);
+
+		if (!multipartFile.getOriginalFilename().isEmpty()) {
 			BufferedOutputStream outputStream = null;
 			try {
 				outputStream = new BufferedOutputStream(
 						new FileOutputStream(new File(ambiente.getProperty("despesa.comprovante.path"), fileName)));
-				outputStream.write(multipart.getBytes());
+				outputStream.write(multipartFile.getBytes());
 				outputStream.flush();
-
+				
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} finally {
-				if (outputStream != null){
+				if (outputStream != null) {
 					outputStream.close();
 				}
 			}
 		}
+		return entity;
 	}
-	
+
 	public List<DespesaBean> listarDespesasPorFuncionario(Integer idFuncionario) {
 		List<DespesaEntity> despesas = dao.listarDespesaPorFuncionario(idFuncionario);
 		List<DespesaBean> despesasBean = despesaEntityToDespesaBeanComProjetoEFuncionario(despesas);
@@ -115,7 +124,8 @@ public class DespesaBusiness {
 		despesaBean.setDescricaoProjeto(projeto.getNome());
 	}
 
-	public void salvarAnaliseDespesa(Long idDespesa, Long idAprovador, String fgAprovador, boolean despesaAprovada) throws Exception {
+	public void salvarAnaliseDespesa(Long idDespesa, Long idAprovador, String fgAprovador, boolean despesaAprovada)
+			throws Exception {
 		StatusEntity status = null;
 		if (despesaAprovada && "G".equalsIgnoreCase(fgAprovador)) {
 			status = statusDao.findByName(StatusEnum.EM_ANALISE);
@@ -139,7 +149,8 @@ public class DespesaBusiness {
 		if ("G".equalsIgnoreCase(fgFinanceiroGP)) {
 			List<ProjetoBean> projetosGestor = integration.listProjetosPorGestor(idFuncionarioAnalisador);
 			for (ProjetoBean projetoBean : projetosGestor) {
-				List<DespesaEntity> despesas = dao.listarDespesaPorStatusPorProjeto(statusEmAnalise, projetoBean.getId());
+				List<DespesaEntity> despesas = dao.listarDespesaPorStatusPorProjeto(statusEmAnalise,
+						projetoBean.getId());
 				despesasBean.addAll(despesaEntityToDespesaBeanComProjetoEFuncionario(despesas));
 			}
 		} else if ("F".equalsIgnoreCase(fgFinanceiroGP)) {
@@ -150,7 +161,7 @@ public class DespesaBusiness {
 		}
 		return despesasBean;
 	}
-	
+
 	public DespesaBean buscarDespesa(Long id) {
 		DespesaEntity despesaEntity = dao.findById(id);
 		DespesaBean despesaBean = converter.convertEntityToBean(despesaEntity);

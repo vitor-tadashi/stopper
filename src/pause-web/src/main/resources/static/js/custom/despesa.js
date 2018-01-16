@@ -82,16 +82,24 @@ function enviarFormDespesa() {
 		success: function(data){
 			$("#span-msg").html("Despesa salva com sucesso!");
 			$('#add-despesa-modal').modal("hide");
-			$('#table-despesas tbody').append('<tr>'
-					+ '<td>' +  data.dataOcorrencia+ '</td>'
-					+ '<td>' + data.nomeTipoDespesa + '</td>'
-					+ '<td>' + data.idProjeto + '</td>'
-					+ '<td>R$ ' + Number(data.valor).toFixed(2).replace(".",",") + '</td>'
-					+ '<td><span class="label-status label-status-analise">' + data.nomeStatus + '</span></td>'
-					+ '<td>' + '<a href="#" onclick="abrirModalEdicaoSolicitante(' + data.id + ')">'
-													+ '<i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
-					+ '</tr>');
-			resetForm();
+			if ($("#trDespesa" + data.id).length > 0) {
+				$("#tdDataOcorrencia" + data.id).html(data.dataOcorrencia);
+				$("#tdNomeTipoDespesa" + data.id).html(data.nomeTipoDespesa);
+				$("#tdDescProjeto" + data.id).html(data.descricaoProjeto);
+				$("#tdValor" + data.id).html(data.valor);
+				$("#tdNomeStatus" + data.id).html('<span class="label-status label-status-analise">'+ data.nomeStatus +'</span>');
+			} else {
+				$('#table-despesas tbody').append('<tr id="trDespesa'+ data.id +'">'
+						+ '<td id="tdDataOcorrencia'+ data.id +'">' +  data.dataOcorrencia+ '</td>'
+						+ '<td id="tdNomeTipoDespesa'+ data.id +'">' + data.nomeTipoDespesa + '</td>'
+						+ '<td id="tdDescProjeto'+ data.id +'">' + data.descricaoProjeto + '</td>'
+						+ '<td id="tdValor'+ data.id +'">R$ ' + Number(data.valor).toFixed(2).replace(".",",") + '</td>'
+						+ '<td id="tdNomeStatus'+ data.id +'"><span class="label-status label-status-analise">' + data.nomeStatus + '</span></td>'
+						+ '<td>' + '<a href="#" onclick="abrirModalEdicaoSolicitante(' + data.id + ')">'
+														+ '<i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
+						+ '</tr>');
+			}
+				resetForm();
 		},
 		error: function(erro){
 			if (erro.status === 403) {
@@ -259,4 +267,5 @@ function abrirModalVisualizacaoSolicitante(idDespesa) {
 	});
 }
 
+$("#valorDespesa").maskMoney();
 

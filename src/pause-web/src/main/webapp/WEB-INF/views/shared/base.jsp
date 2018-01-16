@@ -273,6 +273,8 @@
     <script src='<c:url value="/js/bootstrap.min.js"/>'></script>
     <script src='<c:url value="/plugins/bootstrap-select/bootstrap-select.min.js"/>'></script>
     <script src='<c:url value="/js/nifty.min.js"/>'></script>
+    <script src='<c:url value="/js/jquery.maskMoney.js"/>'></script>
+    
 
     <script type="text/javascript">
     	function formatardataHtml(s){
