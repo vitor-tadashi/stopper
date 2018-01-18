@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -25,9 +26,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.microsoft.aad.adal4j.AuthenticationContext;
@@ -67,9 +68,19 @@ public class ADFilter extends OncePerRequestFilter {
 	private String authority;
 
 	private static final String PRINCIPAL_SESSION_NAME = "principal";
-	private static final String CURRENT_USER_PRINCIPAL = "CURRENT_USER_PRINCIPAL";
-	private List<SimpleGrantedAuthority> roles = Arrays.asList(new SimpleGrantedAuthority("ROLE_group1"));
-
+	
+	private static final List<String> NON_AUTH_END_POINTS = Collections.unmodifiableList(Arrays.asList("/403", "/error"));
+	
+	private AntPathMatcher pathMatcher = new AntPathMatcher();
+	
+	@Override
+	protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+	    return NON_AUTH_END_POINTS.stream().anyMatch(p -> {
+	        return pathMatcher.match(p, request.getServletPath())
+	                && request.getMethod().equals("POST");
+	    });
+	}
+	
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
@@ -124,10 +135,8 @@ public class ADFilter extends OncePerRequestFilter {
 			exc.printStackTrace();
 			response.setStatus(500);
 			request.setAttribute("error", exc.getMessage());
-			response.sendRedirect(((HttpServletRequest) request).getContextPath() + "/error.jsp");
+			response.sendRedirect(((HttpServletRequest) request).getContextPath() + "/403");
 		}
-		// urlAuthenticationSuccessHandler.onAuthenticationSuccess(request,
-		// response, authentication);
 		filterChain.doFilter(request, response);
 	}
 
@@ -186,7 +195,6 @@ public class ADFilter extends OncePerRequestFilter {
 			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 			if (auth == null) {
 				UserInfo userAD = result.getUserInfo();
-				// https://login.microsoftonline.com/verityteste.onmicrosoft.com/oauth2/logout
 				UsuarioBean usuario = sav.getUsuarioAD(userAD.getUniqueId());
 				CustomUserDetails userDetails = new CustomUserDetails(usuario);
 

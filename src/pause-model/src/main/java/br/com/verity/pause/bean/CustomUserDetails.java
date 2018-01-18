@@ -19,6 +19,9 @@ public class CustomUserDetails extends UsuarioBean implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
+		if(getPerfis().isEmpty()){
+			return null;
+		}
 		return getPerfis().get(0).getFuncionalidades().stream().map(role -> new SimpleGrantedAuthority(
 				"ROLE_" + role.getNome().toUpperCase().replaceAll(" ", "_"))).collect(Collectors.toList());
 	}

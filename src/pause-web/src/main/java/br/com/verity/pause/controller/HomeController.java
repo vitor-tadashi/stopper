@@ -11,5 +11,9 @@ public class HomeController {
     public String home() {
         return "home/index";
     }
-	
+
+	@RequestMapping(value= {"/403"}, method = RequestMethod.GET)
+    public String erro403() {
+        return "error/403";
+    }
 }

@@ -1,22 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib uri="http://kwonnam.pe.kr/jsp/template-inheritance" prefix="layout"%>
 <layout:extends name="../shared/base.jsp">
-
-	<layout:put block="css">
-	
-	</layout:put>
 	<layout:put block="contents">
-		<!--Page Title-->
-		<div id="page-title">
-			<h1 class="page-header text-overflow">Erro 403</h1>
+		<div id="container" class="cls-container">
+			<div class="cls-content">
+			    <h1 class="error-code text-info">403</h1>
+			    <p class="text-main text-semibold text-lg">Acesso não permitido.</p>
+			    <div class="pad-btm text-muted">
+					Você não tem permissão para acessar essa página.
+			    </div>
+			    <hr class="new-section-sm bord-no">
+			    <div class="pad-top"><a class="btn-link" href='<c:url value="/"/>'>Voltar para a página inicial.</a></div>
+			</div>
 		</div>
-		<!--End page title-->
-	</layout:put>
-	<layout:put block="scripts">
-		
 	</layout:put>
 </layout:extends>

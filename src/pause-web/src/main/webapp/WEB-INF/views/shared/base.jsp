@@ -156,15 +156,16 @@
 	                                        </a>
 							            </li>
 						            </sec:authorize>
-									<li>
-                                		<a href='<c:url value="/gerenciar-apontamento"/>'>
-                                            <i class="pli-clock"></i>
-                                            <span class="menu-title">
-                                            	Gerenciar horas
-                                            </span>
-                                        </a>
-						            </li>
-						            
+						            <sec:authorize access="hasAnyRole('ROLE_INSERIR_APONTAMENTO', 'ROLE_MULTI_EMPRESA')">
+										<li>
+	                                		<a href='<c:url value="/gerenciar-apontamento"/>'>
+	                                            <i class="pli-clock"></i>
+	                                            <span class="menu-title">
+	                                            	Gerenciar horas
+	                                            </span>
+	                                        </a>
+							            </li>
+						            </sec:authorize>
 						            <sec:authorize access="hasAnyRole('ROLE_CONSULTAR_BANCO', 'ROLE_MULTI_EMPRESA')">
 							            <li>
 	                                		<a href='<c:url value="/consultar-apontamento"/>'>

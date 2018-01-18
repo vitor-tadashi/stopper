@@ -16,6 +16,11 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>com.microsoft.azure</groupId>
+			<artifactId>azure-active-directory-spring-boot-starter</artifactId>
+			<version> 0.2.0</version>
+		</dependency>
+		<dependency>
 			<groupId>br.com.verity</groupId>
 			<artifactId>pause-model</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
@@ -71,7 +76,7 @@
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>kr.pe.kwonnam.jsp</groupId>
 			<artifactId>jsp-template-inheritance</artifactId>
@@ -101,11 +106,11 @@
 			<artifactId>spring-boot-starter-jetty</artifactId>
 		</dependency>
 		<dependency>
-		    <groupId>org.eclipse.jetty</groupId>
-		    <artifactId>jetty-util</artifactId>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-util</artifactId>
 		</dependency>
 		<dependency>
-		
+
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
