@@ -22,6 +22,9 @@ public class ControleDiarioBean {
 	private Double qtdAtestadoHoras;
 	private Integer idFuncionario;
 	private Boolean mesFechado;
+	private Boolean isFerias;
+	private Boolean isLicenca;
+	private Boolean isFeriado;
 	private ControleMensalBean controleMensal;
 
 	private String qtdAtestadoHorasString;
@@ -30,6 +33,7 @@ public class ControleDiarioBean {
 	private String adicNoturnoString;
 	private String sobreAvisoString;
 	private String sobreAvisoTrabalhadoString;
+	private TipoAfastamentoBean tipoAfastamento;
 	
 	public String getQtdAtestadoHorasString() {
 		return qtdAtestadoHorasString;
@@ -203,4 +207,35 @@ public class ControleDiarioBean {
 		this.sobreAvisoTrabalhado = sobreAvisoTrabalhado;
 	}
 
+	public Boolean getIsFerias() {
+		return isFerias;
+	}
+
+	public void setIsFerias(Boolean isFerias) {
+		this.isFerias = isFerias;
+	}
+
+	public Boolean getIsLicenca() {
+		return isLicenca;
+	}
+
+	public void setIsLicenca(Boolean isLicenca) {
+		this.isLicenca = isLicenca;
+	}
+
+	public Boolean getIsFeriado() {
+		return isFeriado;
+	}
+
+	public void setIsFeriado(Boolean isFeriado) {
+		this.isFeriado = isFeriado;
+	}
+
+	public TipoAfastamentoBean getTipoAfastamento() {
+		return tipoAfastamento;
+	}
+
+	public void setTipoAfastamento(TipoAfastamentoBean tipoAfastamento) {
+		this.tipoAfastamento = tipoAfastamento;
+	}
 }

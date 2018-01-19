@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,9 +18,9 @@ import br.com.verity.pause.bean.FuncionarioBean;
 import br.com.verity.pause.converter.ControleDiarioConverter;
 import br.com.verity.pause.converter.ControleMensalConverter;
 import br.com.verity.pause.dao.ControleDiarioDAO;
-import br.com.verity.pause.entity.ApontamentoEntity;
 import br.com.verity.pause.entity.ControleDiarioEntity;
 import br.com.verity.pause.entity.ControleMensalEntity;
+import br.com.verity.pause.entity.enumerator.TipoAfastamento;
 import br.com.verity.pause.enumeration.DiaSemanaEnum;
 
 @Service
@@ -29,7 +28,7 @@ public class ControleDiarioBusiness {
 
 	@Autowired
 	private ControleDiarioDAO controleDiarioDAO;
-
+	
 	@Autowired
 	private ControleDiarioConverter controleDiarioConverter;
 
@@ -44,6 +43,9 @@ public class ControleDiarioBusiness {
 
 	@Autowired
 	private ControleMensalConverter controleMensalConverter;
+	
+	@Autowired
+	private FeriadoBusiness feriadoBusiness;
 
 	public ControleDiarioBean obterPorDataIdFuncionario(Date data, int idFuncionario) {
 		ControleDiarioBean bean = new ControleDiarioBean();
@@ -100,7 +102,7 @@ public class ControleDiarioBusiness {
 		List<ConsultaCompletaBean> dadosGerais = apontamentoBusiness
 				.obterApontamentosPeriodoPorIdFuncionario(funcionario.getId(), periodos[0], periodos[1]);
 
-		List<ControleDiarioBean> controleDiarios = separarDia(dadosGerais);
+		List<ControleDiarioBean> controleDiarios = separarDia(dadosGerais, funcionario.getId());
 
 		controleDiarios = tratarArredondamentos(controleDiarios);
 		
@@ -150,14 +152,14 @@ public class ControleDiarioBusiness {
 		return controleDiarios;
 	}
 
-	private List<ControleDiarioBean> separarDia(List<ConsultaCompletaBean> dadosGerais) {
+	private List<ControleDiarioBean> separarDia(List<ConsultaCompletaBean> dadosGerais, Integer idFuncionario) {
 		List<ControleDiarioBean> controleDiarios = new ArrayList<>();
 		List<ApontamentoBean> apontamentos = null;
 		Date dia = null;
 
 		for (ConsultaCompletaBean cc : dadosGerais) {
 			if (dia == null || dia.compareTo(cc.getData()) != 0) {
-				ControleDiarioBean cd = obterControleDiarioDeConsultaCompleta(cc);
+				ControleDiarioBean cd = obterControleDiarioDeConsultaCompleta(cc, idFuncionario);
 				apontamentos = cd.getApontamentos();
 				controleDiarios.add(cd);
 
@@ -185,7 +187,7 @@ public class ControleDiarioBusiness {
 	}
 
 	@SuppressWarnings("deprecation")
-	private ControleDiarioBean obterControleDiarioDeConsultaCompleta(ConsultaCompletaBean cc) {
+	private ControleDiarioBean obterControleDiarioDeConsultaCompleta(ConsultaCompletaBean cc, Integer idFuncionario) {
 		ControleDiarioBean cd = new ControleDiarioBean();
 		List<ApontamentoBean> apontamentos = new ArrayList<>();
 
@@ -197,7 +199,11 @@ public class ControleDiarioBusiness {
 		cd.setSobreAviso(cc.getControleDiarioSA());
 		cd.setSobreAvisoTrabalhado(cc.getControleDiarioST());
 		cd.setQtdAtestadoHoras(cc.getAtestadoQuantidadeHora());
+		cd.setTipoAfastamento(cc.getTipoAfastamento());
 		cd.setMesFechado(controleMensalBusiness.verificarMesFechado(cd.getData()));
+		cd.setIsFerias(cc.getTipoAfastamento() != null && cc.getTipoAfastamento().getId() == TipoAfastamento.Ferias.getIdTipoAfastamento());
+		cd.setIsLicenca(cc.getTipoAfastamento() != null && cc.getTipoAfastamento().getId() != TipoAfastamento.Ferias.getIdTipoAfastamento());
+		cd.setIsFeriado(feriadoBusiness.verificarFeriado(cd.getData()));
 		cd.setApontamentos(apontamentos);
 
 		return cd;
@@ -380,4 +386,23 @@ public class ControleDiarioBusiness {
 		return controleDiario;
 		
 	}
+	
+	public List<ControleDiarioBean> obterApontamentosDiariosTodosFuncionarios(Date de, Date ate) {
+		java.sql.Date dtDe = new java.sql.Date(de.getTime());
+		java.sql.Date dtAte = new java.sql.Date(ate.getTime());
+		List<ControleDiarioEntity> controlesDiarioEntity = controleDiarioDAO.findControleDiarioByDate(dtDe, dtAte);
+		List<ControleDiarioBean> controlesDiario = new ArrayList<ControleDiarioBean>();
+		ControleDiarioBean controleDiario = null;
+
+		for (ControleDiarioEntity entity : controlesDiarioEntity) {
+			controleDiario = new ControleDiarioBean();
+
+			controleDiario = controleDiarioConverter.convertEntityToBean(entity);
+
+			controlesDiario.add(controleDiario);
+		}
+		
+		return controlesDiario;
+	}
+	
 }

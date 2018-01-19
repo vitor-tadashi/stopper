@@ -6,6 +6,8 @@ import java.util.Date;
 
 import org.springframework.stereotype.Component;
 
+import br.com.verity.pause.entity.enumerator.TipoAfastamento;
+
 /**
  * @author guilherme.oliveira
  *
@@ -40,6 +42,7 @@ public class ConsultaCompletaEntity {
 	private Integer apIdTpJustificativa;
 	private Double atQtdHora;
 	private Integer sbId;
+	private TipoAfastamento tipoAfastamento;
 
 	public Date getData() {
 		return data;
@@ -229,4 +232,11 @@ public class ConsultaCompletaEntity {
 		this.sbId = sbId;
 	}
 
+	public TipoAfastamento getTipoAfastamento() {
+		return tipoAfastamento;
+	}
+
+	public void setTipoAfastamento(TipoAfastamento tipoAfastamento) {
+		this.tipoAfastamento = tipoAfastamento;
+	}
 }

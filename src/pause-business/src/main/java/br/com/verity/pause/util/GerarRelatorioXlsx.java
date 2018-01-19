@@ -24,6 +24,7 @@ import org.springframework.stereotype.Component;
 
 import br.com.verity.pause.bean.ConsultaApontamentosBean;
 import br.com.verity.pause.bean.ConsultaCompletaBean;
+import br.com.verity.pause.bean.ControleDiarioBean;
 import br.com.verity.pause.bean.ControleMensalBean;
 import br.com.verity.pause.bean.FuncionarioBean;
 import br.com.verity.pause.bean.SobreAvisoBean;
@@ -257,6 +258,7 @@ public class GerarRelatorioXlsx {
 		}
 		return null;
 	}
+	
 	public static double round(double value, int places) {
 	    if (places < 0) throw new IllegalArgumentException();
 
@@ -265,6 +267,7 @@ public class GerarRelatorioXlsx {
 	    long tmp = Math.round(value);
 	    return (double) tmp / factor;
 	}
+	
 	public void pintar(int numLinha, XSSFSheet sheet,XSSFWorkbook workbook){
 		XSSFColor colorGrey = new XSSFColor(new Color(208, 206, 206));
 		XSSFCellStyle  styleColor = workbook.createCellStyle();
@@ -297,4 +300,50 @@ public class GerarRelatorioXlsx {
 			ultimaLinha--;
 		}
 	}
+	
+	public byte[] relatorioApontamentoDiario(List<ConsultaApontamentosBean> consultaApontamentosBean, Date de, Date ate, Integer idEmpresa) {
+		String empresa = (idEmpresa == 2)?"Verity":"QA360";
+		ClassPathResource resourceModelo = new ClassPathResource(empresa+"ApontamentoDiario.xlsx");
+		DateFormat formatDt = new SimpleDateFormat("dd/MM/yyyy");
+		int linha = 5;
+		try {
+			InputStream fileModelo = resourceModelo.getInputStream();
+			XSSFWorkbook workbook = new XSSFWorkbook(fileModelo);
+			XSSFSheet sheet = workbook.getSheetAt(0);
+			XSSFRow row = sheet.createRow(linha);
+
+			String data = formatDt.format(de) + " até " + formatDt.format(ate);
+			
+			row = sheet.getRow(3);
+			row.getCell(3).setCellValue(data);
+			
+			for (ConsultaApontamentosBean bean : consultaApontamentosBean) {
+				data = formatDt.format(bean.getControleDiario().getData());
+				row = sheet.createRow(linha);
+				if(bean.getNmFuncionario() != null) {
+					row.createCell(0).setCellValue(bean.getNmFuncionario());
+				} else {
+					row.createCell(0).setCellValue(bean.getControleDiario().getIdFuncionario());
+				}
+				row.createCell(1).setCellValue(data);
+				row.createCell(2).setCellValue(bean.getControleDiario().getHoraTotal());
+				row.createCell(3).setCellValue(bean.getControleDiario().getQtdAtestadoHoras());
+				row.createCell(4).setCellValue(bean.getControleDiario().getSobreAviso());
+				row.createCell(5).setCellValue(bean.getControleDiario().getSobreAvisoTrabalhado());
+				row.createCell(6).setCellValue(bean.getControleDiario().getAdicNoturno());
+				linha++;
+			}
+			
+			ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
+			workbook.write(outByteStream);
+			
+			byte [] outArray = outByteStream.toByteArray();
+			outByteStream.close();
+			return outArray;
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+		return null;
+	}
+
 }

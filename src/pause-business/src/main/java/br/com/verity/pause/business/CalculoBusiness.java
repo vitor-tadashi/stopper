@@ -3,16 +3,11 @@ package br.com.verity.pause.business;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Time;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.verity.pause.bean.FeriadoBean;
 import br.com.verity.pause.dao.AfastamentoDAO;
 import br.com.verity.pause.dao.ApontamentoDAO;
 import br.com.verity.pause.dao.AtestadoDAO;
@@ -53,10 +48,10 @@ public class CalculoBusiness {
 	private ControleDiarioDAO controleDiarioDAO;
 	
 	@Autowired
-	private SavIntegration savIntegration;
+	private ControleMensalDAO controleMensalDAO;
 	
 	@Autowired
-	private ControleMensalDAO controleMensalDAO;
+	private FeriadoBusiness feriadoBusiness;
 	
 	private static final int SECOND = 1000;
 	private static final int MINUTE = 60 * SECOND;
@@ -372,7 +367,7 @@ public class CalculoBusiness {
 		Boolean finalSemanaOuFeriado = null;
 		Boolean temApontamento = apontamento != null && apontamento.getEntrada1() != null && apontamento.getSaida1() != null;
 		
-		finalSemanaOuFeriado = verificarDomingo(data) || verificarFeriado(data);
+		finalSemanaOuFeriado = verificarDomingo(data) || feriadoBusiness.verificarFeriado(data);
 		
 		horasExtras = horasRealizadas - horasARealizar;
 		
@@ -402,7 +397,7 @@ public class CalculoBusiness {
 		Time fimDoDia = new Time(23,59,00);
 		
 		dataAnterior = Date.valueOf(data.toLocalDate().minusDays(1));
-		dataAnteriorDomingoOuFeriado = verificarDomingo(dataAnterior) || verificarFeriado(dataAnterior);
+		dataAnteriorDomingoOuFeriado = verificarDomingo(dataAnterior) || feriadoBusiness.verificarFeriado(dataAnterior);
 		
 		if(dataAnteriorDomingoOuFeriado){
 			aptDiaAnterior = obterApontamentoFuncionario(idFuncionario, dataAnterior);
@@ -449,7 +444,7 @@ public class CalculoBusiness {
 		if (dataAtual.after(data)) {
 			finalSemana = verificarFinalSemana(data);
 			
-			if (!finalSemana) feriado = verificarFeriado(data);
+			if (!finalSemana) feriado = feriadoBusiness.verificarFeriado(data);
 			
 			if (!feriado) possuiAfastamento = possuiAfastamento(idFuncionario, data);
 		}
@@ -494,29 +489,6 @@ public class CalculoBusiness {
     	
     	response = cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY;
 
-        return response;
-    }
-    
-    /**
-     * Verifica se data á sábado ou domingo.
-     *
-     * @param   data Um objeto Calendar
-     * @return  Calendar
-     */
-	private Boolean verificarFeriado(Date data)
-    {
-    	Boolean response = false;
-    	
-    	try {
-    		Optional<FeriadoBean> optional = Arrays.stream(savIntegration.listFeriados().toArray(new FeriadoBean[0]))
-    		         .filter(x -> x.getDataFeriado().compareTo(data) == 0).findFirst();
-    		        
-    		response = optional.isPresent();
-    	} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	
         return response;
     }
     

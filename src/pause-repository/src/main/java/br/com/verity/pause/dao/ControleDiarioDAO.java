@@ -180,4 +180,96 @@ public class ControleDiarioDAO {
 		}
 		return entities;
 	}
+	
+	public List<ControleDiarioEntity> findControleDiarioByDate(Date de, Date ate) {
+		List<ControleDiarioEntity> entities = new ArrayList<ControleDiarioEntity>();
+		ControleDiarioEntity entity = new ControleDiarioEntity();
+		try {
+			Connection conn = connectionFactory.createConnection();
+			String sql = "CREATE TABLE ##Apontamento (idFuncionario int, ano int, mes int, cmHora float, cmBanco float, cmAdcNot float, "+
+							"cmSA float, cmST float, cdData date, cdHora float, cdBanco float, cdAdcNot float, "+
+							"cdSA float, cdST float, aData date, aHorario TIME, aTpImport bit, aObs varchar(100), aIdTpJustificativa int, aIdApontamento int, "+
+							"atQtdHora float, sbId int, idControleDiario int) "+
+		
+							"INSERT INTO ##Apontamento (idFuncionario, ano, mes, cmHora, cmBanco, cmAdcNot, "+
+													   "cmSA, cmST, cdData, cdHora, cdBanco, cdAdcNot, "+
+													   "cdSA, cdST, aData, aHorario, aTpImport, aObs, aIdTpJustificativa, aIdApontamento, "+
+													   "atQtdHora, sbId, idControleDiario) "+
+							"SELECT cm.idFuncionario, cm.ano, cm.mes, cm.horaTotal as cmHora, cm.bancoHora as cmBanco, cm.adcNoturno as cmAdcNot, "+
+								   "cm.sobreAviso as cmSA, cm.sobreAvisoTrabalhado as cmST, "+
+								   "cd.data as cdData, cd.horaTotal as cdHora, cd.bancoHora as cdBanco, cd.adcNoturno as cdAdcNot, "+
+								   "cd.sobreAviso as cdSA, cd.sobreAvisoTrabalhado as cdST, "+
+								   "a.data as aData, a.horario as aHorario, a.tipoImportacao as aTpImport, a.observacao as aObs, a.idTipoJustificativa as aIdTpJustificativa, "+
+								   "a.idApontamento as aIdApontamento, at.quantidadeHora as atQtdHora, sb.idSobreAviso as sbId, cd.idControleDiario "+
+							"FROM PAUSEControleMensal cm "+
+								   "LEFT JOIN PAUSEControleDiario cd ON cm.idControleMensal = cd.idControleMensal "+
+								   "LEFT JOIN PAUSEApontamento a ON cd.idControleDiario = a.idControleDiario "+
+								   "LEFT JOIN PAUSEAtestado at ON at.idControleDiario = cd.idControleDiario "+
+								   "LEFT JOIN PAUSESobreAviso sb ON sb.idControleDiario = cd.idControleDiario "+
+							"WHERE cd.data >= ? and cd.data <= ? order by cd.data ";
+
+			PreparedStatement ps = conn.prepareStatement(sql);
+
+			ps.setDate(1, de);
+			ps.setDate(2, ate);
+			
+			ps.execute();
+			
+			sql ="declare @start datetime = ? "+
+					"declare @end   datetime = ? "+
+					";with amonth(day) as "+
+					"( "+
+					"	select @start as day "+
+					"		union all "+
+					"	select day + 1 "+
+					"		from amonth "+
+					"		where day < @end "+
+					")"+
+					"SELECT distinct idFuncionario, "
+							+ "cdData as 'data', "
+							+ "cdHora - isnull(atest.quantidadeHora, 0) as 'horasTrabalhadas', "
+							+ "isnull(atest.quantidadeHora, 0) as 'atestado', "
+							+ "cdSA as 'sobreAviso', "
+							+ "cdST as 'sobreAvisoTrabalhadas', "
+							+ "cdAdcNot as 'adicionalNoturno' "+
+					"FROM amonth am "+
+					"LEFT JOIN ##Apontamento ap ON am.day = ap.cdData "+
+					"LEFT JOIN PAUSEAtestado atest ON ap.idControleDiario = atest.idControleDiario "+
+					"order by idFuncionario ";
+			
+			ps = conn.prepareStatement(sql);
+			
+			ps.setDate(1, de);
+			ps.setDate(2, ate);
+			
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				entity = new ControleDiarioEntity();
+				Integer idFuncionario = rs.getInt("idFuncionario");
+				if(idFuncionario != null && idFuncionario != 0){
+					entity.setIdFuncionario(rs.getInt("idFuncionario"));
+					entity.setData(rs.getDate("data"));
+					entity.setHrTotal(rs.getDouble("horasTrabalhadas"));
+					entity.setAtestado(rs.getDouble("atestado"));
+					entity.setSobreAviso(rs.getDouble("sobreAviso"));
+					entity.setSobreAvisoTrabalhado(rs.getDouble("sobreAvisoTrabalhadas"));
+					entity.setAdcNoturno(rs.getDouble("adicionalNoturno"));
+					entities.add(entity);
+				}
+			}
+			sql = "DROP TABLE ##Apontamento";
+			ps = conn.prepareStatement(sql);
+			ps.execute();
+			
+			ps.close();
+			rs.close();
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return entities;
+	}
+
 }

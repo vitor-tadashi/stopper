@@ -182,7 +182,7 @@
 	                                		<a href='<c:url value="/relatorio"/>'>
 	                                            <i class="pli-bar-chart"></i>
 	                                            <span class="menu-title">
-	                                            	Relatório
+	                                            	Relatórios
 	                                            </span>
 	                                        </a>
 							            </li>

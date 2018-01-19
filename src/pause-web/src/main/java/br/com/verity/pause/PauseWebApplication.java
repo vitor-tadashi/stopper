@@ -32,7 +32,6 @@ public class PauseWebApplication extends SpringBootServletInitializer {
 	    MultipartConfigElement config = new MultipartConfigElement("");
 	    return config;
 	}
-	
 	@Bean
 	public FilterRegistrationBean multipartFilter() {
 	    FilterRegistrationBean filterRegBean = new FilterRegistrationBean();

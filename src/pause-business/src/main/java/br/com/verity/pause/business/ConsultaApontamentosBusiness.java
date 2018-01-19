@@ -33,4 +33,23 @@ public class ConsultaApontamentosBusiness {
 		
 		return consultaApontamentos;
 	}
+	
+	public List<ConsultaApontamentosBean> setConsultaApontamentos(List<FuncionarioBean> funcionarios,
+			List<ControleDiarioBean> controleDiario) {
+		List<ConsultaApontamentosBean> consultaApontamentos = new ArrayList<ConsultaApontamentosBean>();
+		ConsultaApontamentosBean consultaApontamento = null;
+		
+		for (ControleDiarioBean controle : controleDiario) {
+			consultaApontamento = new ConsultaApontamentosBean();
+			consultaApontamento.setControleDiario(controle);
+			for (FuncionarioBean funcionario : funcionarios) {
+				if(funcionario.getId().equals(controle.getIdFuncionario())){
+					consultaApontamento.setIdFuncionario(funcionario.getId());
+					consultaApontamento.setNmFuncionario(funcionario.getNome());
+				}
+			}
+			consultaApontamentos.add(consultaApontamento);
+		}
+		return consultaApontamentos;
+	}
 }

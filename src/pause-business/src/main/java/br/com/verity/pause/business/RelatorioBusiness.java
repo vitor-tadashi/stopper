@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.verity.pause.bean.ConsultaApontamentosBean;
 import br.com.verity.pause.bean.ConsultaCompletaBean;
+import br.com.verity.pause.bean.ControleDiarioBean;
 import br.com.verity.pause.bean.ControleMensalBean;
 import br.com.verity.pause.bean.FuncionarioBean;
 import br.com.verity.pause.bean.SobreAvisoBean;
@@ -42,6 +43,15 @@ public class RelatorioBusiness {
 	private SobreAvisoBusiness sobreAvisoBusiness;
 	
 	@Autowired
+	private FuncionarioBusiness funcionarioBusiness;
+	
+	@Autowired
+	private ControleDiarioBusiness controleDiarioBusiness;
+	
+	@Autowired
+	private ConsultaApontamentosBusiness consultaApontamentosBusiness;
+	
+	@Autowired
 	private DataUtil dataUtil;
 	
 	public byte[] gerarRelatorio(Integer idFuncionario, String de, String ate) throws SQLException, ParseException {
@@ -64,5 +74,30 @@ public class RelatorioBusiness {
 			Date ate) {
 		UsuarioBean usuarioLogado = userBusiness.usuarioLogado(); 
 		return gerarRelatorio.relatorioConsulta(consultaApontamentosBean, de, ate, usuarioLogado.getIdEmpresaSessao());
+	}
+	
+	public byte[] relatorioApontamentoDiario(String de, String ate) {
+		UsuarioBean usuarioLogado = userBusiness.usuarioLogado(); 
+		List<FuncionarioBean> funcionarios = new ArrayList<FuncionarioBean>();
+		SimpleDateFormat formataData = new SimpleDateFormat("yyyy-MM-dd");
+		java.sql.Date dtDe = null;
+		java.sql.Date dtAte = null;
+		
+		funcionarios = funcionarioBusiness.obterTodos();
+		de = dataUtil.inverterOrdem(de);
+		ate = dataUtil.inverterOrdem(ate);
+		
+		try {
+			dtDe = new java.sql.Date(formataData.parse(de).getTime());
+			dtAte = new java.sql.Date(formataData.parse(ate).getTime());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		List<ControleDiarioBean> controlesDiario = controleDiarioBusiness.obterApontamentosDiariosTodosFuncionarios(dtDe, dtAte);
+
+		List<ConsultaApontamentosBean> consultaApontamentosBean = consultaApontamentosBusiness.setConsultaApontamentos(funcionarios, controlesDiario);
+
+		return gerarRelatorio.relatorioApontamentoDiario(consultaApontamentosBean, dtDe, dtAte, usuarioLogado.getIdEmpresaSessao());
 	}
 }

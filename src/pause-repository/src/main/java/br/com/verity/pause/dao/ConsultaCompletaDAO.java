@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import br.com.verity.pause.connection.ConnectionFactory;
 import br.com.verity.pause.entity.ConsultaCompletaEntity;
+import br.com.verity.pause.entity.enumerator.TipoAfastamento;
 
 @Repository
 public class ConsultaCompletaDAO {
@@ -64,15 +65,17 @@ public class ConsultaCompletaDAO {
 					           "from amonth "+
 					           "where day < @end "+
 					   ")"+
-					   "SELECT * "+
+					   "SELECT *, af.idTipoAfastamento as idTipoAfastamento "+
 					     "FROM amonth am "+
 					   	"LEFT JOIN ##Apontamento ap ON am.day = ap.cdData "+
+					    "LEFT JOIN PAUSEAfastamento af on am.day >= af.dataInicio and am.day <= af.dataFim and af.idFuncionario = ? "+
 					     "ORDER BY am.day ASC, ap.aHorario ASC option (maxrecursion 0)";
 			
 			ps = conn.prepareStatement(sql);
 			
 			ps.setDate(1, de);
 			ps.setDate(2, ate);
+			ps.setInt(3, id);
 			
 			ResultSet rs = ps.executeQuery();
 
@@ -104,6 +107,7 @@ public class ConsultaCompletaDAO {
 					entity.setAtQtdHora(rs.getDouble("atQtdHora"));
 					entity.setSbId(rs.getInt("sbId"));
 				}
+				entity.setTipoAfastamento(TipoAfastamento.getById((rs.getInt("idTipoAfastamento"))));
 				entities.add(entity);
 			}
 			sql = "DROP TABLE ##Apontamento";

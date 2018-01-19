@@ -7,6 +7,7 @@
 	<layout:put block="css">
 		<link href='<c:url value="plugins/datatables/media/css/dataTables.bootstrap.css"/>' rel="stylesheet">
 		<link href='<c:url value="plugins/bootstrap-timepicker/bootstrap-timepicker.min.css"/>' rel="stylesheet">
+		<link href='<c:url value="css/custom/custom.css"/>' rel="stylesheet">
 	    <!--Bootstrap Validator [ OPTIONAL ]-->
 	    <link href="plugins/bootstrap-validator/bootstrapValidator.min.css" rel="stylesheet">
 	</layout:put>
@@ -116,16 +117,23 @@
 										<fmt:formatDate value="${dia.data }" pattern="dd/MM/yyyy" var="data"/>
 									
 										<input type="hidden" id="infoDia" value="${data }, ${dia.diaDaSemana}"/>
-										<td>${data }</td>
+										<c:choose>
+											<c:when test="${dia.isFerias}"><td style="position:relative;"><div title="Férias" class="color-tag tag-ferias"></div>${data }</td></c:when>
+											<c:when test="${dia.isLicenca}"><td style="position:relative;"><div title="Licença" class="color-tag tag-licenca"></div>${data }</td></c:when>
+											<c:when test="${dia.isFeriado}"><td style="position:relative;"><div title="Feriado" class="color-tag tag-feriado"></div>${data }</td></c:when>
+											<c:when test="${dia.mesFechado}"><td style="position:relative;"><div title="Data bloqueada para apontamentos" class="color-tag tag-data-bloqueada"></div>${data }</td></c:when>
+											<c:otherwise><td style="position:relative;"><div></div>${data }</td></c:otherwise>
+										</c:choose>
+										
 										<td class="text-left">${dia.diaDaSemana }</td>
 										<c:forEach begin="0" end="7" varStatus="cont">
 											<c:if test="${not empty dia.apontamentos[cont.index] && not empty dia.apontamentos[cont.index].horario}">
 												<c:choose>
 													<c:when test="${dia.apontamentos[cont.index].tipoImportacao || dia.mesFechado}">
-														<td id="apontamento${cont.count + 8 * (i.count - 1)}" class="">${dia.apontamentos[cont.index].horario }${dia.apontamentos[cont.index].tipoImportacao? 'E':''}</td>
+														<td id="apontamento${cont.count + 8 * (i.count - 1)}" class="" style="color:#BBBBBB">${dia.apontamentos[cont.index].horario }${dia.apontamentos[cont.index].tipoImportacao? 'E':''}</td>
 												</c:when>
 													<c:otherwise>
-														<td id="apontamento${cont.count + 8 * (i.count - 1)}" style="cursor:pointer;" onclick="dialogApontamentoHora(this, ${dia.apontamentos[cont.index].id });">${dia.apontamentos[cont.index].horario }</td>
+														<td id="apontamento${cont.count + 8 * (i.count - 1)}" style="cursor:pointer; color:#000000" onclick="dialogApontamentoHora(this, ${dia.apontamentos[cont.index].id });">${dia.apontamentos[cont.index].horario }</td>
 													</c:otherwise>
 												</c:choose>
 											</c:if>
