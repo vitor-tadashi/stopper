@@ -40,15 +40,16 @@ public class ConsultaApontamentosBusiness {
 		ConsultaApontamentosBean consultaApontamento = null;
 		
 		for (ControleDiarioBean controle : controleDiario) {
-			consultaApontamento = new ConsultaApontamentosBean();
-			consultaApontamento.setControleDiario(controle);
 			for (FuncionarioBean funcionario : funcionarios) {
 				if(funcionario.getId().equals(controle.getIdFuncionario())){
+					consultaApontamento = new ConsultaApontamentosBean();
+					consultaApontamento.setControleDiario(controle);
 					consultaApontamento.setIdFuncionario(funcionario.getId());
 					consultaApontamento.setNmFuncionario(funcionario.getNome());
+					
+					consultaApontamentos.add(consultaApontamento);
 				}
 			}
-			consultaApontamentos.add(consultaApontamento);
 		}
 		return consultaApontamentos;
 	}

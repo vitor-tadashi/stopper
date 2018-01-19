@@ -26,42 +26,44 @@
 		</ol>
 		
 		<!--Div [EdH] Extrato de Horas-->
-		<div class="col-md-12">
-			<div class="panel">
-				<form>
-				<div id="EdH_textDiv" class=""></div>
-					<div class="panel-body">
-						<div class="row">
-							<div style="margin-top: -10px"> 
-								<h4 style="margin-left: 8px">Extrato de horas</h4>
-							</div>
-							<div class="col-sm-3">
-								<label class="control-label">Nome do funcionário:</label> 
-								<select class="selectpicker" data-live-search="true" data-width="100%" id="EdH_idFunc">
-									<option value="">Selecione</option>
-									<c:forEach items="${funcionarios}" var="funcionario">
-										<option value="${funcionario.id}">${funcionario.nome}</option>
-									</c:forEach>
-								</select>
-							</div>
-							<div class="col-sm-4">
-								<label class="control-label">Período</label>
-								<div class="input-daterange input-group" id="EdH_datepicker">
-									<input type="date" class="form-control" id="EdH_dtDe" onBlur="permitirDataExtratoDeHoras()" placeholder="dd/mm/yyyy" />
-									<span class="input-group-addon">até</span>
-									<input type="date" class="form-control" id="EdH_dtAte" onBlur="permitirDataExtratoDeHoras()" placeholder="dd/mm/yyyy"/>
+		<sec:authorize access="hasRole('ROLE_MULTI-EMPRESA')">
+			<div class="col-md-12">
+				<div class="panel">
+					<form>
+					<div id="EdH_textDiv" class=""></div>
+						<div class="panel-body">
+							<div class="row">
+								<div style="margin-top: -10px"> 
+									<h4 style="margin-left: 8px">Extrato de horas</h4>
+								</div>
+								<div class="col-sm-3">
+									<label class="control-label">Nome do funcionário:</label> 
+									<select class="selectpicker" data-live-search="true" data-width="100%" id="EdH_idFunc">
+										<option value="">Selecione</option>
+										<c:forEach items="${funcionarios}" var="funcionario">
+											<option value="${funcionario.id}">${funcionario.nome}</option>
+										</c:forEach>
+									</select>
+								</div>
+								<div class="col-sm-4">
+									<label class="control-label">Período</label>
+									<div class="input-daterange input-group" id="EdH_datepicker">
+										<input type="date" class="form-control" id="EdH_dtDe" onBlur="permitirDataExtratoDeHoras()" placeholder="dd/mm/yyyy" />
+										<span class="input-group-addon">até</span>
+										<input type="date" class="form-control" id="EdH_dtAte" onBlur="permitirDataExtratoDeHoras()" placeholder="dd/mm/yyyy"/>
+									</div>
+								</div>
+								<div class="form-group col-md-2">
+									<label class="control-label">&nbsp;</label>
+									<button type="button" onclick="gerarRelatorioExtratoDeHoras()" class="btn-primary form-control">Gerar extrato</button>
+			                        <a href="${url }" target="_blank" id="EdH_download" class="hide"></a>
 								</div>
 							</div>
-							<div class="form-group col-md-2">
-								<label class="control-label">&nbsp;</label>
-								<button type="button" onclick="gerarRelatorioExtratoDeHoras()" class="btn-primary form-control">Gerar extrato</button>
-		                        <a href="${url }" target="_blank" id="EdH_download" class="hide"></a>
-							</div>
 						</div>
-					</div>
-				</form>
+					</form>
+				</div>
 			</div>
-		</div>
+		</sec:authorize>
 		
 		<!--Div [AD] Apontamento Diário-->
 		<div class="col-md-12">

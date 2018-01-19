@@ -130,10 +130,10 @@
 											<c:if test="${not empty dia.apontamentos[cont.index] && not empty dia.apontamentos[cont.index].horario}">
 												<c:choose>
 													<c:when test="${dia.apontamentos[cont.index].tipoImportacao || dia.mesFechado}">
-														<td id="apontamento${cont.count + 8 * (i.count - 1)}" class="" style="color:#BBBBBB">${dia.apontamentos[cont.index].horario }${dia.apontamentos[cont.index].tipoImportacao? 'E':''}</td>
+														<td id="apontamento${cont.count + 8 * (i.count - 1)}" class="">${dia.apontamentos[cont.index].horario }${dia.apontamentos[cont.index].tipoImportacao? 'E':''}</td>
 												</c:when>
 													<c:otherwise>
-														<td id="apontamento${cont.count + 8 * (i.count - 1)}" style="cursor:pointer; color:#000000" onclick="dialogApontamentoHora(this, ${dia.apontamentos[cont.index].id });">${dia.apontamentos[cont.index].horario }</td>
+														<td id="apontamento${cont.count + 8 * (i.count - 1)}" style="cursor:pointer; onclick="dialogApontamentoHora(this, ${dia.apontamentos[cont.index].id });">${dia.apontamentos[cont.index].horario }</td>
 													</c:otherwise>
 												</c:choose>
 											</c:if>
@@ -538,6 +538,7 @@
 		<script src='<c:url value="/plugins/bootstrap-validator/bootstrapValidator.min.js"/>'></script>
 		<script src='<c:url value="/plugins/masked-input/jquery.mask.js"/>'></script>
 		<script src='<c:url value="/js/custom/send-ajax.js"/>'></script>
+		<script src='<c:url value="js/custom/saldo-header.js"/>'></script>
 		<script src='<c:url value="js/custom/gerenciar-apontamentos-modais.js"/>'></script>
 		<script src='<c:url value="js/custom/gerenciar-apontamentos-core.js"/>'></script>
 		<script>

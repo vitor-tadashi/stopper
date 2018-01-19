@@ -86,6 +86,9 @@ public class UsuarioBean {
 	}
 
 	public Integer getIdEmpresaSessao() {
+		if(idEmpresaSessao == null || idEmpresaSessao == 0){
+			idEmpresaSessao = funcionario.getEmpresa().getId();
+		}
 		return idEmpresaSessao;
 	}
 

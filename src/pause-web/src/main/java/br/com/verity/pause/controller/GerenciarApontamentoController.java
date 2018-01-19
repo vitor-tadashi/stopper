@@ -68,6 +68,7 @@ public class GerenciarApontamentoController {
 	@Autowired
 	private ControleMensalBusiness controleMensalBusiness;
 	
+	@PreAuthorize("hasAnyRole('ROLE_INSERIR_APONTAMENTO', 'ROLE_MULTI-EMPRESA')")
 	@RequestMapping(method = { RequestMethod.GET, RequestMethod.POST })
 	public String consultar(SecurityContextHolderAwareRequestWrapper request, Model model, Integer idFuncionario,
 			String... periodo) {

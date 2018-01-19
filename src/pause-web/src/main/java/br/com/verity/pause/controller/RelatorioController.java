@@ -47,7 +47,7 @@ public class RelatorioController {
 		return "relatorio/relatorio";
 	}
 
-	@PreAuthorize("hasRole('ROLE_GERAR_RELATORIOS')")
+	@PreAuthorize("hasRole('ROLE_GERAR_RELATORIOS') and hasRole('ROLE_MULTI-EMPRESA')")
 	@RequestMapping(value = "gerar-relatorio", method = RequestMethod.GET)
 	public ResponseEntity<?> gerarRelatorio(Integer idFuncionario, String de, String ate,
 			HttpServletResponse response) throws SQLException, ParseException {
@@ -92,8 +92,7 @@ public class RelatorioController {
 		}
 	}
 	
-	
-	@PreAuthorize("hasRole('ROLE_CONSULTAR_BANCO')")
+	@PreAuthorize("hasRole('ROLE_GERAR_RELATORIOS')")
 	@RequestMapping(value = "gerar-relatorio-ad", method = RequestMethod.GET)
 	public ResponseEntity<?> gerarRelatorioApontamentoDiario(String de, String ate, HttpServletResponse response) {
 		byte[] outArray = relatorioBusiness.relatorioApontamentoDiario(de, ate);

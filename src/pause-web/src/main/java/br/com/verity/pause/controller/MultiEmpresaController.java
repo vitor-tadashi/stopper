@@ -1,5 +1,6 @@
 package br.com.verity.pause.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,7 +16,8 @@ import br.com.verity.pause.bean.UsuarioBean;
 
 @Controller
 public class MultiEmpresaController {
-
+	
+	@PreAuthorize("hasAnyRole('ROLE_INSERIR_APONTAMENTO', 'ROLE_MULTI-EMPRESA')")
 	@RequestMapping(value = { "", "/", "/selecionaMultiEmpresa" }, method = RequestMethod.GET)
 	public String multiEmpresa(Model model, RedirectAttributes redirect) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
