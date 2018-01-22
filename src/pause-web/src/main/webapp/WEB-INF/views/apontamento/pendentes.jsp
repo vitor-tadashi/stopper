@@ -39,7 +39,8 @@
 				<!--===================================================-->
 				<div class="panel-body">
 					<div class="table-respon">
-						<table id="dt-basic-desc" class="table table-striped table-bordered">
+						<table id="dt-basic-desc"
+							class="table table-striped table-bordered">
 							<thead>
 								<tr>
 									<th class="text-center">Funcionário</th>
@@ -52,9 +53,16 @@
 									<tr>
 										<td>${p.nomeFuncionario}</td>
 										<td>${p.diasSemApontar}</td>
-										<td><a
-											href="mailto:${p.emailFuncionario}?Subject=Apontamentos%20pendentes"
-											target="_top"><i class="pli-mail"></i></a></td>
+										<td><div id="btn-sobreaviso" class="center">
+												<button id="botaoEmail"
+													onClick="abrirModalEmail('${p.idFuncionario}')"
+													class="btn btn-trans" style="padding: 0" type="button">
+													<ins>
+														<font onmouseover="this.color='#8c8c8c';"
+															onmouseout="this.color='#429bd1';" color=#429bd1>Notificar</font>
+													</ins>
+												</button>
+											</div></td>
 									</tr>
 								</c:forEach>
 							</tbody>
@@ -68,12 +76,94 @@
 		<!--===================================================-->
 		<!--End page content-->
 
+		<!-- Enviar Email Bootstrap Modal -->
+		<!--===================================================-->
+		<div class="modal fade" id="enviar-email-modal" role="dialog"
+			tabindex="-1" aria-labelledby="enviar-email-modal" aria-hidden="true">
+			<div class="modal-dialog modal-sm">
+				<div class="modal-content">
+					<!--Modal header-->
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">
+							<i id="closex" class="pci-cross pci-circle"></i>
+						</button>
+						<h4 class="modal-title">Enviar e-mail de notificação</h4>
+					</div>
+					<!--Modal body-->
+					<div class="modal-body">
+						<div class="row">
+							<div class="form-group sa-data">
+								<label id="msgConfirmacao" class="control-label"
+									style="padding-left: 8px;">Deseja enviar o e-mail de
+									notificação sobre apontamentos pendentes para este funcionário?</label>
+							</div>
+						</div>
+					</div>
+					<form action="" id="form-sa" class="clear-form" method="post">
+						<div class="modal-footer">
+							<button class="btn btn-default" data-dismiss="modal"
+								type="button" id="btn-cancelar-envio">Cancelar</button>
+							<button class="btn btn-success" id="btn-confirmar-envio"
+								onClick="confirmarEnvioEmail()" type="button">Enviar
+								e-mail</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!--===================================================-->
+		<!--End Enviar Email Bootstrap Modal-->
+
 	</layout:put>
 	<layout:put block="scripts">
+		<script>
+			var id;
+
+			function abrirModalEmail(idFuncionarioEscolhido) {
+				id = idFuncionarioEscolhido;
+				$('#enviar-email-modal').modal('show');
+			}
+
+			function confirmarEnvioEmail() {
+				document.getElementById("btn-confirmar-envio").disabled = true;
+				$('#btn-cancelar-envio').text("Fechar");
+				$('#msgConfirmacao').text("E-mail enviado com sucesso!");
+				$
+						.ajax({
+							url : 'apontamentos-pendentes/enviar-email',
+							type : 'POST',
+							contentType : 'application/json',
+							data : {
+								'idFuncionario' : id
+							},
+							cache : false,
+							success : function(data) {
+								$('#msgConfirmacao').text(data);
+							},
+							error : function(erro) {
+								$('#msgConfirmacao').text("ERRO " + erro);
+								document.getElementById("btn-confirmar-envio").disabled = false;
+								console.log(erro);
+							}
+						});
+			}
+
+			$('#enviar-email-modal')
+					.on(
+							'hidden.bs.modal',
+							function() {
+								document.getElementById("btn-confirmar-envio").disabled = false;
+								$('#btn-cancelar-envio').text("Cancelar");
+								$('#msgConfirmacao')
+										.text(
+												"Deseja enviar o e-mail de notificação sobre apontamentos pendentes para este funcionário?");
+							});
+		</script>
 		<script
 			src='<c:url value="/plugins/datatables/media/js/jquery.dataTables.js"/>'></script>
 		<script
 			src='<c:url value="/plugins/datatables/media/js/dataTables.bootstrap.js"/>'></script>
 		<script src='<c:url value='/js/custom/datatable-custom.js'/>'></script>
+		<script src='<c:url value="/js/custom/send-ajax.js"/>'></script>
 	</layout:put>
 </layout:extends>
