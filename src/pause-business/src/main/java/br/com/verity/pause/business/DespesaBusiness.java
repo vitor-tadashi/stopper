@@ -46,6 +46,7 @@ public class DespesaBusiness {
 	public DespesaBean salvaDespesa(DespesaBean despesa, MultipartFile multipartFile) throws Exception {
 
 		DespesaEntity entity = converter.convertBeanToEntity(despesa);
+		entity.setCaminhoComprovante(null);
 
 		if (entity.getId() == null) {
 
@@ -58,6 +59,9 @@ public class DespesaBusiness {
 			entity =  dao.salvaDespesa(entity);
 			
 		} else {
+			if (multipartFile != null) {
+				entity = saveMultipartFile(multipartFile, entity, multipartFile.getOriginalFilename());
+			}
 			entity =  dao.updateDespesa(entity);
 		}
 		

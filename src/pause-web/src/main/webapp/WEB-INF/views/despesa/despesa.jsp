@@ -30,11 +30,18 @@ input[type=date].form-control {
 		<sec:authentication property="principal" var="user" />
 		<input type="hidden" id="funcionario" value="${user.funcionario.id }" />
 		<div id="page-content">
+			<div id="div-alert" style="display: none;">
+<!--     			<a href="#" class="close" onclick="hideDiv()" data-dismiss="alert" aria-label="close">×</a> -->
+    			<a href="#" class="close" onclick="hideDiv()" >×</a>
+    			<span id="span-msg"></span>
+  			</div>
 			<div class="panel">
 				<!--Data Table-->
 				<!--===================================================-->
 				<div class="panel-body">
-					<span id="span-msg"></span>
+<!-- 					<div class="label-message" role="alert"> -->
+<!-- 						<span id="span-msg"></span> -->
+<!-- 					</div> -->
 					<button id="addDespesa" class="btn btn-info" type="button"
 						style="float: right" onclick="abrirModal();">Adicionar</button>
 					<div class="table-responsive" style="margin-top: 50px">
@@ -72,7 +79,7 @@ input[type=date].form-control {
 										
 										<c:choose>
   											<c:when test="${despesa.idGpAprovador eq 0 || despesa.idGpAprovador eq null}">
-  												<td><a href="#" onclick="abrirModalEdicaoSolicitante(${despesa.id })">
+  												<td><a href="#" onclick="abrirModalEdicaoSolicitante(${despesa.id }, 1)">
 													<i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></td>
   											</c:when>
   											<c:otherwise>
@@ -100,7 +107,7 @@ input[type=date].form-control {
 						<button type="button" class="close" data-dismiss="modal">
 							<i class="pci-cross pci-circle"></i>
 						</button>
-						<h4 class="modal-title">Adicionar Despesa</h4>
+						<h4 class="modal-title" id="modal-title"></h4>
 					</div>
 
 					<!--Modal body-->
@@ -114,6 +121,7 @@ input[type=date].form-control {
 									<div class="panel-body">
 										
 										<input type="text" id="id" name="id" hidden="true"/>
+										<input type="text" id="caminhoComprovante" name="caminhoComprovante" hidden="true"/>
 									
 										<label class="control-label" style="margin: 4px 0 0 0">*Data Ocorrência</label>
 										<div class="input-daterange input-group" id="datepicker"
@@ -158,6 +166,11 @@ input[type=date].form-control {
 												class="form-control justificativaDespesa"
 												name="justificativa" placeholder="Justificativa da despesa"></textarea>
 										</div>
+										<br />
+												<div class="input-group" id="comprovanteDespesaDiv"
+											style="width: 100% !important">
+											<a class="btn btn-info" href="#" id="btnDownloadArquivo" style="text-align: center; width: 100%;"  target="_blank">Download arquivo</a>
+										</div>
 										<br /> <label class="control-label" style="margin: 4px 0 0 0">Comprovante</label>
 										<div class="input-group" id="comprovanteDespesaDiv"
 											style="width: 100% !important">
@@ -169,7 +182,7 @@ input[type=date].form-control {
 										<div class="input-group" id="buttonSubmitDiv"
 											style="width: 100% !important">
 											<button id="submit-js" class="btn btn-info" type="button"
-												onclick="submiterDespesa();">Salvar</button>
+												onclick="submeterDespesa();">Salvar</button>
 										</div>
 									</div>
 								</div>
@@ -232,9 +245,9 @@ input[type=date].form-control {
 											<textarea id="justificativaDespesaExib" class="form-control" name="justificativaDespesaExib" readonly></textarea>
 										</div>
 										<br/>
-										<div class="input-group" id="comprovanteDespesaDiv"
+										<div class="input-group" id="comprovanteDespesaDivExib"
 											style="width: 100% !important">
-											<a class="btn btn-info" href="#" id="btnDownloadArquivo" style="text-align: center; width: 100%;"  target="_blank">Download arquivo</a>
+											<a class="btn btn-info" href="#" id="btnDownloadArquivoExib" style="text-align: center; width: 100%;"  target="_blank">Download arquivo</a>
 										</div>
 									</div>
 								</div>
@@ -247,5 +260,7 @@ input[type=date].form-control {
 		<script src='<c:url value="/js/custom/send-ajax.js"/>'></script>
 		<script src='<c:url value="/js/custom/despesa.js"/>'></script>
 		<script src='<c:url value="/js/jquery.maskMoney.js"/>'></script>
+		<script src='<c:url value="/js/attrchange.js"/>'></script>
+		<script src='<c:url value="/js/attrchange_ext.js"/>'></script>
 	</layout:put>
 </layout:extends>

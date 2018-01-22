@@ -38,6 +38,7 @@ public class DespesaConverter  implements Converter<DespesaEntity, DespesaBean> 
 		entity.setIdSolicitante(bean.getIdFuncionario());
 		entity.setIdGpAprovador(bean.getIdGpAprovador());
 		entity.setIdFinanceiroAprovador(bean.getIdFinanceiroAprovador());
+		entity.setCaminhoComprovante(bean.getCaminhoComprovante());
 		
 		try {
 			if(bean.getDataOcorrencia() != null)
