@@ -16,4 +16,8 @@ public class HomeController {
     public String erro403() {
         return "error/403";
     }
+	@RequestMapping(value= {"/403-azure"}, method = RequestMethod.GET)
+    public String erro403Azure() {
+        return "error/403-azure";
+    }
 }

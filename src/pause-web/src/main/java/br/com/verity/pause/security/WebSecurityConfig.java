@@ -16,7 +16,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/").permitAll();
+        http.authorizeRequests().antMatchers("/","/403-azure").permitAll();
         http.authorizeRequests().antMatchers("/**").authenticated();
 
         http.logout().logoutSuccessUrl("/").permitAll();

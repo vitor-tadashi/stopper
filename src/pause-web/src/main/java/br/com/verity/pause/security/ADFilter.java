@@ -69,15 +69,14 @@ public class ADFilter extends OncePerRequestFilter {
 
 	private static final String PRINCIPAL_SESSION_NAME = "principal";
 	
-	private static final List<String> NON_AUTH_END_POINTS = Collections.unmodifiableList(Arrays.asList("/403", "/error"));
+	private static final List<String> NON_AUTH_END_POINTS = Collections.unmodifiableList(Arrays.asList("/403", "/error", "/403-azure","/WEB-INF/views/error/*"));
 	
 	private AntPathMatcher pathMatcher = new AntPathMatcher();
 	
 	@Override
 	protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
 	    return NON_AUTH_END_POINTS.stream().anyMatch(p -> {
-	        return pathMatcher.match(p, request.getServletPath())
-	                && request.getMethod().equals("POST");
+	        return pathMatcher.match(p, request.getServletPath());
 	    });
 	}
 	
@@ -135,7 +134,7 @@ public class ADFilter extends OncePerRequestFilter {
 			exc.printStackTrace();
 			response.setStatus(500);
 			request.setAttribute("error", exc.getMessage());
-			response.sendRedirect(((HttpServletRequest) request).getContextPath() + "/403");
+			response.sendRedirect(((HttpServletRequest) request).getContextPath() + "/403-azure");
 		}
 		filterChain.doFilter(request, response);
 	}
