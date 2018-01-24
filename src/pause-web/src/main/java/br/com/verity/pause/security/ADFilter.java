@@ -189,7 +189,7 @@ public class ADFilter extends OncePerRequestFilter {
 
 	private Authentication createSessionPrincipal(HttpServletRequest httpRequest, AuthenticationResult result)
 			throws Exception {
-		httpRequest.getSession().setAttribute(PRINCIPAL_SESSION_NAME, result);
+		
 		if (result != null) {
 			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 			if (auth == null) {
@@ -201,6 +201,8 @@ public class ADFilter extends OncePerRequestFilter {
 						userDetails.getAuthorities());
 				SecurityContextHolder.getContext().setAuthentication(auth);
 			}
+			httpRequest.getSession().setAttribute(PRINCIPAL_SESSION_NAME, result);
+			
 			return auth;
 		}
 		return null;

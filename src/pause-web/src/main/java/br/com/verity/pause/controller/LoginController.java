@@ -20,7 +20,7 @@ public class LoginController {
 	@Value("${logoutAd}")
 	private String RESOURCE_LOGOUT_AD;
 
-	@RequestMapping(value = "/login", method = {RequestMethod.GET, RequestMethod.POST})
+	//@RequestMapping(value = "/login", method = {RequestMethod.GET, RequestMethod.POST})
 	public String loginPage() {
 		return "login/login";
 	}
