@@ -3,6 +3,7 @@ package br.com.verity.pause.util;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -166,4 +167,13 @@ public final class DataUtil {
 
         return response;
     }
+	public static LocalDate dateUtilToLocalDate (Date data){
+		if(data != null)
+			return new java.sql.Date( data.getTime() ).toLocalDate();
+		else
+			return null;
+	}
+	public static Date localDateToDateUtil (LocalDate data){
+		return Date.from(data.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+	}
 }

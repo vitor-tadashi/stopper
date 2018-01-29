@@ -149,6 +149,7 @@ public class AfastamentoDAO {
 				entity.setIdAfastamento(rs.getInt(1));
 				entity.setDataInicio(rs.getDate(2));
 				entity.setDataFim(rs.getDate(3));
+				entity.setIdFuncionario(rs.getInt(5));
 			}
 			
 		} catch (SQLException e) {

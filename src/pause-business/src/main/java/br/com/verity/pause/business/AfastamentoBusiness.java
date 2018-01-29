@@ -1,6 +1,5 @@
 package br.com.verity.pause.business;
 
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -21,6 +20,7 @@ import br.com.verity.pause.dao.AfastamentoDAO;
 import br.com.verity.pause.entity.AfastamentoEntity;
 import br.com.verity.pause.entity.enumerator.TipoAfastamento;
 import br.com.verity.pause.exception.BusinessException;
+import br.com.verity.pause.util.DataUtil;
 
 @Service
 @Component
@@ -43,6 +43,9 @@ public class AfastamentoBusiness {
 	
 	@Autowired
 	private FuncionarioBusiness funcionarioBusiness;
+	
+	@Autowired
+	private CalculoBusiness calculoBusiness;
 	
 	//@Autowired
 	//private CalculoBusiness calculoBusiness;
@@ -70,9 +73,22 @@ public class AfastamentoBusiness {
 
 		afastamento.setId(afastamentoDAO.save(entity).getIdAfastamento());
 		
+		calculoAfastamento(afastamento);
 		//calculoBusiness.calcularApontamento(idFuncionario, afastamento.getData());
 		
 		return afastamento;
+	}
+
+	private void calculoAfastamento(AfastamentoBean afastamento) {
+		if(!afastamento.getDataInicio().after(new Date())){
+			LocalDate dataCalcula = DataUtil.dateUtilToLocalDate(afastamento.getDataInicio());
+			LocalDate dataStopCalculo = DataUtil.dateUtilToLocalDate(afastamento.getDataFim());
+			if(dataCalcula != null){
+				for(;!dataCalcula.isAfter(LocalDate.now())&& !dataCalcula.isAfter(dataStopCalculo); dataCalcula = dataCalcula.plusDays(1)){
+					calculoBusiness.calcularApontamento(afastamento.getIdFuncionario(), DataUtil.localDateToDateUtil(dataCalcula));
+				}
+			}
+		}
 	}
 	
 	public Boolean existeAfastamentoPara (int idFuncionario, java.sql.Date hoje) {
@@ -94,6 +110,8 @@ public class AfastamentoBusiness {
 				throw new BusinessException("Não foi possível realizar a ação, pois o mês está fechado.");
 			
 			afastamentoDAO.deleteById(id);
+			
+			calculoAfastamento(afastamentoConverter.convertEntityToBean(afastamento));
 		}
 	}
 
