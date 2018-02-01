@@ -396,4 +396,56 @@ public class ApontamentoDAO {
 
 		return response;
 	}
+
+	public List<Integer> idsApontamentosPorDataFuncionario(int idFuncionario, Date data) throws SQLException {
+		Connection conn = connectionFactory.createConnection();
+		StringBuilder sql = new StringBuilder();
+		List<Integer> ids = new ArrayList<Integer>();
+		
+		sql.append(" SELECT A.idApontamento ");
+		sql.append(" 	FROM PAUSEApontamento A ");
+		sql.append(" 	INNER JOIN PAUSEControleDiario CD ON A.idControleDiario = CD.idControleDiario "); 
+		sql.append(" 	INNER JOIN PAUSEControleMensal CM ON CD.idControleMensal = CM.idControleMensal "); 
+		sql.append(" 	WHERE CM.idFuncionario = ?  and A.data = ? ");	
+		sql.append(" ORDER BY A.horario ASC ");
+
+		PreparedStatement ps = conn.prepareStatement(sql.toString());
+
+		ps.setInt(1, idFuncionario);
+		ps.setDate(2, data);
+
+		ResultSet rs = ps.executeQuery();
+
+		while (rs.next()) {
+			ids.add(rs.getInt("idApontamento"));
+		}
+		ps.execute();
+		ps.close();
+		return ids;
+	}
+	
+	public List<Integer> tipoApontamentosPorDataFuncionario(int idFuncionario, Date data) throws SQLException {
+		Connection conn = connectionFactory.createConnection();
+		StringBuilder sql = new StringBuilder();
+		List<Integer> tipos = new ArrayList<Integer>();
+		
+		sql.append(" SELECT A.tipoImportacao ");
+		sql.append(" 	FROM PAUSEApontamento A ");
+		sql.append(" 	INNER JOIN PAUSEControleDiario CD ON A.idControleDiario = CD.idControleDiario "); 
+		sql.append(" 	INNER JOIN PAUSEControleMensal CM ON CD.idControleMensal = CM.idControleMensal "); 
+		sql.append(" 	WHERE CM.idFuncionario = ?  and A.data = ? ");	
+		sql.append(" ORDER BY A.horario ASC ");
+
+		PreparedStatement ps = conn.prepareStatement(sql.toString());
+
+		ps.setInt(1, idFuncionario);
+		ps.setDate(2, data);
+
+		ResultSet rs = ps.executeQuery();
+
+		while (rs.next()) tipos.add(rs.getInt("tipoImportacao"));
+		ps.execute();
+		ps.close();
+		return tipos;
+	}
 }

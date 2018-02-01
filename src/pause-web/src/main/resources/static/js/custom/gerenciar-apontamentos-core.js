@@ -34,7 +34,7 @@ function dialogApontamentoHora(td, idApontamento) {
 	$('#btn-cancelar-apontamento').text('Cancelar');
 	$('#btn-cancelar-apontamento').attr('onclick', "cancelarApontamento()");
 	$('#title-modal-apontamento').text(infoDia.val());
-	$('#apontamento-id').val(id)
+	$('#apontamento-id').val(id);
 	$('#demo-default-modal').modal();
 
 	$('#apontamento-time').mask('00:00');
@@ -345,4 +345,115 @@ function decimalParaHorasMinutos(tempoDecimal) {
 		return hora + 'h0' + minutos + 'min';
 	else
 		return hora + 'h' + minutos + 'min';
+}
+
+function apontarModalDiaDaSemana(horario, data, idAp, idTd, horasParaSalvar) {
+	var apontamento = {
+		id : idAp,
+		horarioJson : horario,
+		dataJson : data,
+		observacao : "",
+		idFuncionario : $('#apontamento-funcionario').val(),
+		tpJustificativa : {
+			id : $('#apontamento-jus').val()
+		}
+	};
+	$.ajax({
+		url : 'gerenciar-apontamento/apontar',
+		type : 'POST',
+		contentType : 'application/json',
+		data : JSON.stringify(apontamento),
+		cache : false,
+		success : function(data) {
+			adicionalNoturno = data.cntrDiario.adicNoturno;
+			bancoHora = data.cntrDiario.bancoHora;
+			sa = data.cntrDiario.sobreAviso;
+			sat = data.cntrDiario.sobreAvisoTrabalhado;
+
+			bancoHora = Math.round(bancoHora * 100) / 100;
+			adicionalNoturno = Math.round(adicionalNoturno * 100) / 100;
+			sa = Math.round(sa * 100) / 100;
+			sat = Math.round(sat * 100) / 100;
+
+			bancoHora = bancoHora.toString().replace('.', ',');
+			adicionalNoturno = adicionalNoturno.toString().replace('.', ',');
+			sa = sa.toString().replace('.', ',');
+			sat = sat.toString().replace('.', ',');
+			
+			$("#" + idTd).parent().find('.banco-hora-js').text(bancoHora);
+			$("#" + idTd).parent().find('.adic-noturno-js').text(
+					adicionalNoturno);
+			$("#" + idTd).parent().find('.sa-js').text(sa);
+			$("#" + idTd).parent().find('.sat-js').text(sat);
+
+			ordenarHorariosModalDiaDaSemana(idTd, horasParaSalvar);
+			calcularTotal();
+			atualizarSaldosConsolidados();
+			submeteu = false;
+			$('#apontamentos-DiaSemana-modal').modal('hide');
+		},
+		error : function(erro) {
+			if (erro.status === 403) {
+				location.reload();
+			} else {
+				$('#erro-label').text(erro.responseText);
+				$('#erro-sm-modal').modal();
+				adicionalNoturno = bancoHora = sa = sat = 0.0;
+				$('#apontamentos-DiaSemana-modal').modal('hide');
+			}
+			submeteu = false;
+		}
+	});
+}
+
+function ordenarHorariosModalDiaDaSemana(id, horas) {
+	var tr = $("#" + id).parent();
+	var horarios = new Array(8);
+	var i = parseInt(id.substring(13, id.length));
+	i = i - 1;
+	var indice = 1 + 8*i;
+	for(var j = 0; j < 8; j++) { 
+		var idAp = indice + j;
+		if (horas[j] == "") $("#apontamento" + idAp).text("--:--");
+		else $("#apontamento" + idAp).text(horas[j]);
+	}
+
+	$(tr).find('td[id^="apontamento"], span[id^="apontamento"]').each(
+			function() {
+				if ($(this).html() != '--:--') {
+
+					var horarioSetado = $(this).html();
+					var pad = "00:00";
+					var ans = pad.substring(0, pad.length
+							- horarioSetado.length)
+							+ horarioSetado;
+					var onclick = $(this).attr("onclick");
+					var tdHorario = new Array(ans, onclick);
+					horarios.push(tdHorario);
+				}
+			});
+	horarios.sort();
+
+	$(tr).find('td[id^="apontamento"], span[id^="apontamento"]').each(
+			function(index) {
+				if (typeof horarios[index] == 'undefined') {
+					$(this).html('--:--');
+					$(this).attr("class", "");
+					$(this).attr("style", "cursor:pointer;");
+					$(this).attr("onclick", "dialogApontamentoHora(this);");
+				} else {
+					var horarioAlterado = horarios[index][0];
+
+					$(this).html(horarioAlterado);
+					if (horarioAlterado.indexOf('E') > -1) {
+						$(this).attr("class", "demo-pli-clock");
+						$(this).attr("style", "");
+						$(this).attr("onclick", "");
+					} else {
+						$(this).attr("class", "");
+						$(this).attr("style", "cursor:pointer;");
+						$(this).attr("onclick", horarios[index][1]);
+					}
+				}
+			});
 }

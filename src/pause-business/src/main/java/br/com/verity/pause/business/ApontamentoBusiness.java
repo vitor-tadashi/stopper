@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.verity.pause.bean.ApontamentoBean;
+import br.com.verity.pause.bean.ApontamentoPivotBean;
 import br.com.verity.pause.bean.ConsultaCompletaBean;
 import br.com.verity.pause.bean.ControleDiarioBean;
 import br.com.verity.pause.bean.FuncionarioBean;
@@ -242,5 +243,33 @@ public class ApontamentoBusiness {
 			int idFuncionario = apontamento.getControleDiario().getControleMensal().getIdFuncionario();
 			calculoBusiness.calcularApontamento(idFuncionario, apontamento.getData());
 		}
+	}
+	
+	public ApontamentoPivotBean obterApontamentosPorDiaFuncionario(Integer idFuncionario, String data)
+			throws SQLException, ParseException {
+		ApontamentoPivotBean aps;
+		List<Integer> ids, tipos;
+
+		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+		Date parsed = format.parse(data);
+		java.sql.Date dataSql = new java.sql.Date(parsed.getTime());
+
+		ApontamentoPivotEntity ent = apontamentoDAO.findByEmployeeAndDate(idFuncionario, dataSql);
+		ids = apontamentoDAO.idsApontamentosPorDataFuncionario(idFuncionario, dataSql);
+		//1 = Apont eletrônico e 0 = Apont no Pause
+		tipos = apontamentoDAO.tipoApontamentosPorDataFuncionario(idFuncionario, dataSql);
+		
+		//Se for nulo no array, deixa como -1 para a ID
+		for(int i = ids.size(); i < 8; i++) ids.add(-1);
+		//Se for nulo no array, deixa como -2 para i tipo de importação
+		for(int i = tipos.size(); i < 8; i++) tipos.add(-2);
+
+		aps = new ApontamentoPivotBean(ent.getIdFuncionario(), ent.getDataApontamento(), ent.getEntrada1(),
+				ent.getEntrada2(), ent.getEntrada3(), ent.getEntrada4(), ent.getSaida1(), ent.getSaida2(),
+				ent.getSaida3(), ent.getSaida4(), ids.get(0), ids.get(1), ids.get(2), ids.get(3), ids.get(4),
+				ids.get(5), ids.get(6), ids.get(7), tipos.get(0), tipos.get(1), tipos.get(2), tipos.get(3), tipos.get(4),
+				tipos.get(5), tipos.get(6), tipos.get(7));
+
+		return aps;
 	}
 }

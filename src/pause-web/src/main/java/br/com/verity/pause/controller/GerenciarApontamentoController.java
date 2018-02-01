@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.verity.pause.bean.AfastamentoBean;
 import br.com.verity.pause.bean.ApontamentoBean;
+import br.com.verity.pause.bean.ApontamentoPivotBean;
 import br.com.verity.pause.bean.AtestadoBean;
 import br.com.verity.pause.bean.ControleDiarioBean;
 import br.com.verity.pause.bean.FuncionarioBean;
@@ -30,11 +32,13 @@ import br.com.verity.pause.bean.SobreAvisoBean;
 import br.com.verity.pause.bean.TipoAfastamentoBean;
 import br.com.verity.pause.bean.TipoAtestadoBean;
 import br.com.verity.pause.bean.TipoJustificativaBean;
+import br.com.verity.pause.bean.UsuarioBean;
 import br.com.verity.pause.business.AfastamentoBusiness;
 import br.com.verity.pause.business.ApontamentoBusiness;
 import br.com.verity.pause.business.AtestadoBusiness;
 import br.com.verity.pause.business.ControleDiarioBusiness;
 import br.com.verity.pause.business.ControleMensalBusiness;
+import br.com.verity.pause.business.CustomUserDetailsBusiness;
 import br.com.verity.pause.business.FuncionarioBusiness;
 import br.com.verity.pause.business.JustificativaBusiness;
 import br.com.verity.pause.business.SobreAvisoBusiness;
@@ -55,6 +59,9 @@ public class GerenciarApontamentoController {
 
 	@Autowired
 	private AfastamentoBusiness afastamentoBusiness;
+	
+	@Autowired
+	private CustomUserDetailsBusiness userBusiness;
 
 	@Autowired
 	private ControleDiarioBusiness controleDiarioBusiness;
@@ -169,7 +176,7 @@ public class GerenciarApontamentoController {
 
 	private void funcionarios(Model model) {
 		List<FuncionarioBean> funcionarios = funcionarioBusiness.listarFuncionariosPorEmpresaComPis();
-		model.addAttribute("funcionarios", funcionarios);
+		model.addAttribute("funcionarios", funcionarios);		
 	}
 
 	private void justificativas(Model model) {
@@ -222,5 +229,26 @@ public class GerenciarApontamentoController {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@PostMapping(value = "/carregarApontamentosDia")
+	@ResponseBody
+	public ResponseEntity<?> carregarApontamentosDia(@RequestBody Map<String, String> json)
+			throws NumberFormatException, SQLException, ParseException {
+		String dataSemana;
+		String idFuncionario;
+		ApontamentoPivotBean aps = new ApontamentoPivotBean();
+
+		dataSemana = json.get("dataSemana");
+		
+		if (json.get("idFuncionario") == null) {
+			UsuarioBean usuarioLogado = userBusiness.usuarioLogado();
+			idFuncionario = usuarioLogado.getFuncionario().getId().toString();
+		}
+		else idFuncionario = json.get("idFuncionario");
+
+		aps = apontamentoBusiness.obterApontamentosPorDiaFuncionario(Integer.parseInt(idFuncionario), dataSemana);
+
+		return ResponseEntity.ok(aps);
 	}
 }

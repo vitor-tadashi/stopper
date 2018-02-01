@@ -2,7 +2,12 @@ var obrigatorio = 'Campo obrigatório.';
 var cor = '#a94442';
 var valorQueTava;
 var submit = false;
-var dataBloqueio = '01/04/2018'
+var dataBloqueio = '01/04/2018';
+var pivotApontamentoDiaSemana;
+var horaInit1, horaInit2, horaInit3, horaInit4, horaInit5, horaInit6, horaInit7, horaInit8, tdEscolhida;
+var erroAnteriorFoiHoraIgual = 0;
+var indiceErro1, indiceErro2;
+var horasParaSalvar;
 
 $(document).ready(function(){
 	exibirAviso();
@@ -496,5 +501,172 @@ function exibirAviso(){
 			$("#fechamento-apontamento-modal").modal("show");
 			localStorage.setItem('refresh', 1);
 		}
+	}
+}
+
+function abrirModalDiaSemana(dataSemana, diaSemana, td) {
+	var idFuncionario;	
+	var idTd = $(td).attr('id');
+	$('#apontamento-idDiaDaSemana').val(idTd);	
+	
+	if (document.getElementById("select-funcionario") == null) idFuncionario = null;
+	else idFuncionario = document.getElementById("select-funcionario").value;
+	
+	ajaxPreencherModalDiaDaSemana(idFuncionario, dataSemana);
+	$('#dataSemanaEscolhida').text(dataSemana + ", " + diaSemana);
+}
+
+function ajaxPreencherModalDiaDaSemana(idFuncionario, dataSemana) {	
+	$.ajax({
+		url : 'gerenciar-apontamento/carregarApontamentosDia',
+		type : 'POST',
+		contentType : 'application/json',
+		data : JSON.stringify({
+			'idFuncionario' : idFuncionario,
+			'dataSemana' : dataSemana
+		}),
+		cache : false,
+		success : function(data) {
+			pivotApontamentoDiaSemana = data;
+
+			if (data.entrada1)
+				$('#apDia1').val(data.entrada1.substring(0, 5));
+			if (data.saida1)
+				$('#apDia2').val(data.saida1.substring(0, 5));
+			if (data.entrada2)
+				$('#apDia3').val(data.entrada2.substring(0, 5));
+			if (data.saida2)
+				$('#apDia4').val(data.saida2.substring(0, 5));
+			if (data.entrada3)
+				$('#apDia5').val(data.entrada3.substring(0, 5));
+			if (data.saida3)
+				$('#apDia6').val(data.saida3.substring(0, 5));
+			if (data.entrada4)
+				$('#apDia7').val(data.entrada4.substring(0, 5));
+			if (data.saida4)
+				$('#apDia8').val(data.saida4.substring(0, 5));
+			
+			horaInit1 = document.getElementById('apDia1').value;
+			horaInit2 = document.getElementById('apDia2').value;
+			horaInit3 = document.getElementById('apDia3').value;
+			horaInit4 = document.getElementById('apDia4').value;
+			horaInit5 = document.getElementById('apDia5').value;
+			horaInit6 = document.getElementById('apDia6').value;
+			horaInit7 = document.getElementById('apDia7').value;
+			horaInit8 = document.getElementById('apDia8').value;	
+			
+			if (data.tipoEntrada1 == 1)
+				$('#apDia1').attr('disabled', true);
+			if (data.tipoSaida1 == 1)
+				$('#apDia2').attr('disabled', true);
+			if (data.tipoEntrada2 == 1)
+				$('#apDia3').attr('disabled', true);
+			if (data.tipoSaida2 == 1)
+				$('#apDia4').attr('disabled', true);
+			if (data.tipoEntrada3 == 1)
+				$('#apDia5').attr('disabled', true);
+			if (data.tipoSaida3 == 1)
+				$('#apDia6').attr('disabled', true);
+			if (data.tipoEntrada4 == 1)
+				$('#apDia7').attr('disabled', true);
+			if (data.tipoSaida4 == 1)
+				$('#apDia8').attr('disabled', true);
+			
+			$('#apontamentos-DiaSemana-modal').modal('show');
+		},
+		error : function(erro) {
+			alert("ERRO PREENCHER MODAL " + erro);
+			console.log(erro);
+		}
+	});
+}
+
+function confirmarAlteracaoApontDiaSemana() {
+	var dataApontamento = $('#dataSemanaEscolhida').text().split(',');
+	var hora1, hora2, hora3, hora4, hora5, hora6, hora7, hora8;
+	document.getElementById("btn-confirmar-DiaSemana").disabled = true;
+	
+	hora1 = document.getElementById('apDia1').value;
+	hora2 = document.getElementById('apDia2').value;
+	hora3 = document.getElementById('apDia3').value;
+	hora4 = document.getElementById('apDia4').value;
+	hora5 = document.getElementById('apDia5').value;
+	hora6 = document.getElementById('apDia6').value;
+	hora7 = document.getElementById('apDia7').value;
+	hora8 = document.getElementById('apDia8').value;	
+	horasParaSalvar = [hora1, hora2, hora3, hora4, hora5, hora6, hora7, hora8];
+	
+	if (document.getElementById('apDia1').disabled == false && hora1 != "" && hora1 != horaInit1)
+		apontarDiaSemana(pivotApontamentoDiaSemana.idEntrada1, hora1, dataApontamento[0]);
+	if (document.getElementById('apDia2').disabled == false && hora2 != "" && hora2 != horaInit2)
+		apontarDiaSemana(pivotApontamentoDiaSemana.idSaida1, hora2, dataApontamento[0]);
+	if (document.getElementById('apDia3').disabled == false && hora3 != "" && hora3 != horaInit3)
+		apontarDiaSemana(pivotApontamentoDiaSemana.idEntrada2, hora3, dataApontamento[0]);
+	if (document.getElementById('apDia4').disabled == false && hora4 != "" && hora4 != horaInit4)
+		apontarDiaSemana(pivotApontamentoDiaSemana.idSaida2, hora4, dataApontamento[0]);
+	if (document.getElementById('apDia5').disabled == false && hora5 != "" && hora5 != horaInit5)
+		apontarDiaSemana(pivotApontamentoDiaSemana.idEntrada3, hora5, dataApontamento[0]);
+	if (document.getElementById('apDia6').disabled == false && hora6 != "" && hora6 != horaInit6)
+		apontarDiaSemana(pivotApontamentoDiaSemana.idSaida3, hora6, dataApontamento[0]);
+	if (document.getElementById('apDia7').disabled == false && hora7 != "" && hora7 != horaInit7)
+		apontarDiaSemana(pivotApontamentoDiaSemana.idEntrada4, hora7, dataApontamento[0]);
+	if (document.getElementById('apDia8').disabled == false && hora8 != "" && hora8 != horaInit8)
+		apontarDiaSemana(pivotApontamentoDiaSemana.idSaida4, hora8, dataApontamento[0]); 
+	$('#apontamentos-DiaSemana-modal').modal('hide');
+}
+
+function apontarDiaSemana(id, horario, dataApontamento) {
+	var idTd = $('#apontamento-idDiaDaSemana').val();
+	if(id < 0) apontarModalDiaDaSemana(horario, dataApontamento, null, idTd, horasParaSalvar);
+	else apontarModalDiaDaSemana(horario, dataApontamento, id, idTd, horasParaSalvar);	
+}
+
+function validarMaskHora() {
+	var erro = 0;
+	
+	for (var i = 1; i < 9; i++) { if(erro == 1) break;
+		var string = $('#apDia' + i).val();
+		var tamanho = string.length;
+		for (var j = 1; j < 9; j++) {
+			var valorI = $('#apDia' + j).val();
+			if (j == i)
+				continue;
+			else if (tamanho != 5 && $('#apDia' + i).val() != "") {
+				document.getElementById("btn-confirmar-DiaSemana").disabled = true;
+				$('#apDia' + i).css('border-color', cor);
+				erro = 1;
+				break;
+			} else if (tamanho == 5) {
+				var horas = string.substring(0, 2);
+				var minutos = string.substring(3, 5);
+				if (parseInt(horas) > 23 || parseInt(minutos) > 59) {
+					document.getElementById("btn-confirmar-DiaSemana").disabled = true;
+					$('#apDia' + i).css('border-color', cor);
+					erro = 1;
+					break;
+				} else if (string == valorI) {
+					document.getElementById("btn-confirmar-DiaSemana").disabled = true;
+					$('#apDia' + i).css('border-color', cor);
+					$('#apDia' + j).css('border-color', cor);
+					indiceErro1 = i;
+					indiceErro2 = j;
+					erroAnteriorFoiHoraIgual = 1;
+					erro = 1;
+					break;
+				} else {
+					document.getElementById("btn-confirmar-DiaSemana").disabled = false;
+					$('#apDia' + i).css('border-color', "");
+					if (indiceErro1 != 0 && indiceErro2 != 0
+							&& erroAnteriorFoiHoraIgual == 1) {
+						$('#apDia' + indiceErro1).css('border-color', "");
+						$('#apDia' + indiceErro2).css('border-color', "");
+						erroAnteriorFoiHoraIgual = 0;
+						indiceErro1 = 0;
+						indiceErro2 = 0;
+					}
+				}
+			}
+		}
+		if (string == "") $('#apDia' + i).css('border-color', "");
 	}
 }
