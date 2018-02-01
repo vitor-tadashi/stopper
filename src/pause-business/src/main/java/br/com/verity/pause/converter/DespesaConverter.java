@@ -39,6 +39,7 @@ public class DespesaConverter  implements Converter<DespesaEntity, DespesaBean> 
 		entity.setIdGpAprovador(bean.getIdGpAprovador());
 		entity.setIdFinanceiroAprovador(bean.getIdFinanceiroAprovador());
 		entity.setCaminhoComprovante(bean.getCaminhoComprovante());
+		entity.setJustRejeicao(bean.getJustRejeicao());
 		
 		try {
 			if(bean.getDataOcorrencia() != null)
@@ -97,6 +98,7 @@ public class DespesaConverter  implements Converter<DespesaEntity, DespesaBean> 
 		
 		bean.setIdGpAprovador(entity.getIdGpAprovador());
 		bean.setIdFinanceiroAprovador(entity.getIdFinanceiroAprovador());
+		bean.setJustRejeicao(entity.getJustRejeicao());
 		
 		return bean;
 	}

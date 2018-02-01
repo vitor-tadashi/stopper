@@ -26,7 +26,7 @@ public class TipoDespesaDAO {
 	public List<TipoDespesaEntity> findAll() {
 		List<TipoDespesaEntity> entities = new ArrayList<>();
 
-		String sql = "SELECT * FROM tipo_despesa";
+		String sql = "SELECT * FROM PAUSETipoDespesa";
 
 		try {
 			conn = connectionFactory.createConnection();
@@ -59,7 +59,7 @@ public class TipoDespesaDAO {
 	}
 
 	public TipoDespesaEntity findById(Long id) {
-		String sql = "SELECT id, nome, descricao FROM tipo_despesa where id = ?";
+		String sql = "SELECT id, nome, descricao FROM PAUSETipoDespesa where id = ?";
 
 		TipoDespesaEntity tipoDespesa = new TipoDespesaEntity();
 		try {

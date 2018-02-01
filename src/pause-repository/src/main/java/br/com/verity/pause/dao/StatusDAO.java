@@ -26,7 +26,7 @@ public class StatusDAO {
 		StatusEntity status = new StatusEntity();
 		String sql = null;
 
-		sql = "SELECT id, nome, descricao FROM status where upper(nome) like ?";
+		sql = "SELECT id, nome, descricao FROM PAUSEStatus where upper(nome) like ?";
 
 		try {
 			conn = connectionFactory.createConnection();

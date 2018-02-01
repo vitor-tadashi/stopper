@@ -41,7 +41,7 @@ public class DespesaController {
 
 	@Autowired
 	DespesaBusiness despesaBizz;
-
+	
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public ModelAndView acessar(Model model) {
 
@@ -49,6 +49,7 @@ public class DespesaController {
 		model.addAttribute("projetos",
 				projetoBizz.listProjetosPorFuncionarios(funcionarioBizz.obterPorId(null).getId()));
 		model.addAttribute("despesasFuncionario", despesaBizz.listarDespesasPorFuncionario(funcionarioBizz.obterPorId(null).getId()));
+
 		return new ModelAndView("despesa/despesa");
 	}
 
@@ -69,10 +70,10 @@ public class DespesaController {
 
 	@RequestMapping(value = "/analisar", method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<?> analisarDespesaFuncionario(Long idDespesa, String fgFinanceiroGP, boolean despesaAprovada) {
+	public ResponseEntity<?> analisarDespesaFuncionario(Long idDespesa, String fgFinanceiroGP, boolean despesaAprovada, String justificativa) {
 		try {
 			FuncionarioBean func = funcionarioBizz.obterPorId(null);
-			despesaBizz.salvarAnaliseDespesa(idDespesa, func.getId().longValue(), fgFinanceiroGP, despesaAprovada);
+			despesaBizz.salvarAnaliseDespesa(idDespesa, func.getId().longValue(), fgFinanceiroGP, despesaAprovada, justificativa);
 			return ResponseEntity.ok("Despesa " + (despesaAprovada ? " aprovada " : " rejeitada ") + " com sucesso!");
 		} catch (Exception e) {
 			e.printStackTrace();

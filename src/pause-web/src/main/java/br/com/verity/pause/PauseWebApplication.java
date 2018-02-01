@@ -43,5 +43,4 @@ public class PauseWebApplication extends SpringBootServletInitializer {
 	    filterRegBean.setUrlPatterns(urlPatterns);
 	    return filterRegBean;
 	}
-
 }

@@ -232,4 +232,30 @@ public class SavIntegration {
 		}
 		return projetos;
 	}
+	
+	public String getEmailFuncionario (Long idFuncionario){
+		FuncionarioBean funcionario = new FuncionarioBean();
+		ObjectMapper mapper = new ObjectMapper();
+		String endereco = ambiente.getProperty("integration.sav.ip") + "/getFuncionario/" + idFuncionario;
+		try {
+			URL url = new URL(endereco);
+			funcionario = mapper.readValue(url, new TypeReference<FuncionarioBean>(){});
+		} catch (IOException e ) {
+			e.printStackTrace();
+		}
+		return funcionario.getEmailCorporativo();
+	}
+	
+	public String getEmailgestorProjeto (Long idProjeto){
+		FuncionarioBean funcionario = new FuncionarioBean();
+		ObjectMapper mapper = new ObjectMapper();
+		String endereco = ambiente.getProperty("integration.sav.ip") + "/getGestorPorProjeto/" + idProjeto;
+		try {
+			URL url = new URL(endereco);
+			funcionario = mapper.readValue(url, new TypeReference<FuncionarioBean>(){});
+		} catch (IOException e ) {
+			e.printStackTrace();
+		}
+		return funcionario.getEmailCorporativo();
+	}
 }

@@ -101,7 +101,7 @@ function enviarFormDespesa() {
 						+ '<td id="tdDescProjeto'+ data.id +'">' + data.descricaoProjeto + '</td>'
 						+ '<td id="tdValor'+ data.id +'">R$ ' + Number(data.valor).toFixed(2).replace(".",",") + '</td>'
 						+ '<td id="tdNomeStatus'+ data.id +'"><span class="label-status label-status-analise">' + data.nomeStatus + '</span></td>'
-						+ '<td>' + '<a href="#" onclick="abrirModalEdicaoSolicitante(' + data.id + ')">'
+						+ '<td>' + '<a href="#" onclick="abrirModalEdicaoSolicitante(' + data.id + ', 1)">'
 														+ '<i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>'
 						+ '</tr>');
 			}
@@ -129,11 +129,12 @@ function resetForm() {
 	$("#select-centro-custo").selectpicker("refresh");
 }
 
-function enviarFormAnalise(idDespesa, fgFinanceiroGP, despesaAprovada) {
+function enviarFormAnalise(idDespesa, fgFinanceiroGP, despesaAprovada, justificativa) {
 	var oMyForm = new FormData();
 	oMyForm.append("idDespesa", idDespesa);
 	oMyForm.append("fgFinanceiroGP", fgFinanceiroGP);
 	oMyForm.append("despesaAprovada", despesaAprovada);
+	oMyForm.append("justificativa", justificativa);
 
 	$.ajax({
 		url : 'analisar',
@@ -175,6 +176,7 @@ function abrirModalVisualizacaoDespesa(idDespesa) {
 			$("#tipoDespesa").val(data.nomeTipoDespesa);
 			$("#projeto").val(data.descricaoProjeto);
 			$("#justificativaDespesa").val(data.justificativa);
+			
 			if (data.caminhoComprovante != null) {
 				$("#btnDownloadArquivo").show();
 				$("#btnDownloadArquivo").attr("href", "http://" + window.location.host + "/pause/despesa/arquivo/" + data.id);
@@ -186,20 +188,55 @@ function abrirModalVisualizacaoDespesa(idDespesa) {
 			$("#aprovarDespesa").off("click");
 			$("#aprovarDespesa").click(function(){
 				if ($("#buttonSubmitGestorDiv").length) {
-					enviarFormAnalise(data.id, 'G', true);
+					enviarFormAnalise(data.id, 'G', true, "");
 				} else if ($("#buttonSubmitFinanceiroDiv").length) {
-					enviarFormAnalise(data.id, 'F', true);
+					enviarFormAnalise(data.id, 'F', true, "");
 				}
 			});
 			$("#aprovarDespesa").on("click");
 			
 			$("#rejeitarDespesa").off("click");
 			$("#rejeitarDespesa").click(function(){
-				if ($("#buttonSubmitGestorDiv").length) {
-					enviarFormAnalise(data.id, 'G', false);
-				} else if ($("#buttonSubmitFinanceiroDiv").length) {
-					enviarFormAnalise(data.id, 'F', false);
-				}
+				
+				$('#detalhe-despesa-modal').modal('hide');
+				setTimeout(function() {
+					$('#justificativa-modal').modal();
+				}, 175);
+				
+				$("#enviarJustificativaReject").off("click");
+				$("#enviarJustificativaReject").click(function(){
+					var justReject = $('#justificativaReject').val();
+					var regexNotEmpty = /\S/;
+					
+					if ($("#buttonJustRejectGestor").length) {
+						
+						if(regexNotEmpty.test(justReject)) {
+							enviarFormAnalise(data.id, 'G', false, $("#justificativaReject").val());
+							$('#justificativa-modal').modal('hide');
+							resetFormJustificativa();
+						} else {
+							$('#justificativaReject').css('border-color', 'red');
+							setTimeout(function() {
+								$('#justificativaReject').css('border-color', '');
+							}, 400);
+						} 
+						
+					} else if ($("#buttonJustRejectFin").length) {
+						
+						if(regexNotEmpty.test(justReject)) {
+							enviarFormAnalise(data.id, 'F', false, $("#justificativaReject").val());
+							$('#justificativa-modal').modal('hide');
+							resetFormJustificativa();
+							
+						} else {
+							
+							$('#justificativaReject').css('border-color', 'red');
+							setTimeout(function() {
+								$('#justificativaReject').css('border-color', '');
+							}, 400);
+						} 
+					}
+				});
 			});
 			$("#rejeitarDespesa").on("click");
 			$('#detalhe-despesa-modal').modal();
@@ -214,6 +251,10 @@ function abrirModalVisualizacaoDespesa(idDespesa) {
 			}                                                 
 		}
 	});
+}
+
+function resetFormJustificativa() {
+	$('#form-justificativa')[0].reset();
 }
 
 function abrirModalEdicaoSolicitante(idDespesa, abreDownload) {
@@ -272,6 +313,14 @@ function abrirModalVisualizacaoSolicitante(idDespesa) {
 			$("#TipoDespesaExib").val(data.nomeTipoDespesa);
 			$("#projetoExib").val(data.descricaoProjeto);
 			$("#justificativaDespesaExib").val(data.justificativa);
+			$("#justificativaRejecExib").val(data.justRejeicao);
+			
+			if(data.justRejeicao != null){
+				$("#div-just-reject").attr("style", "display: block;");
+			} else {
+				$("#div-just-reject").attr("style", "display: none;");
+			}
+			
 			if (data.caminhoComprovante != null) {
 				$("#btnDownloadArquivoExib").show();
 				$("#btnDownloadArquivoExib").attr("href", "http://" + window.location.host + "/pause/despesa/arquivo/" + data.id);

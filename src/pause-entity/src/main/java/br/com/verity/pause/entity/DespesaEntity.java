@@ -22,6 +22,7 @@ public class DespesaEntity implements Serializable {
 	private Long idGpAprovador;
 	private Long idFinanceiroAprovador;
 	private String caminhoComprovante;
+	private String justRejeicao;
 	
 	public Long getId() {
 		return id;
@@ -126,5 +127,11 @@ public class DespesaEntity implements Serializable {
 	}
 	public void setDataOcorrencia(Date dataOcorrencia) {
 		this.dataOcorrencia = dataOcorrencia;
+	}
+	public String getJustRejeicao() {
+		return justRejeicao;
+	}
+	public void setJustRejeicao(String justRejeicao) {
+		this.justRejeicao = justRejeicao;
 	}
 }

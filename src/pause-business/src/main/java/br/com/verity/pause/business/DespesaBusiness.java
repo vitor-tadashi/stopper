@@ -23,7 +23,9 @@ import br.com.verity.pause.dao.StatusDAO;
 import br.com.verity.pause.entity.DespesaEntity;
 import br.com.verity.pause.entity.StatusEntity;
 import br.com.verity.pause.entity.enumerator.StatusEnum;
+import br.com.verity.pause.enumeration.TipoEmail;
 import br.com.verity.pause.integration.SavIntegration;
+import br.com.verity.pause.util.SendEmail;
 
 @Service
 public class DespesaBusiness {
@@ -42,11 +44,14 @@ public class DespesaBusiness {
 
 	@Autowired
 	SavIntegration integration;
+	
+	@Autowired
+	SendEmail email;
 
 	public DespesaBean salvaDespesa(DespesaBean despesa, MultipartFile multipartFile) throws Exception {
 
 		DespesaEntity entity = converter.convertBeanToEntity(despesa);
-		entity.setCaminhoComprovante(null);
+		//entity.setCaminhoComprovante(null);
 
 		if (entity.getId() == null) {
 
@@ -57,6 +62,7 @@ public class DespesaBusiness {
 				entity = saveMultipartFile(multipartFile, entity, multipartFile.getOriginalFilename());
 			}
 			entity =  dao.salvaDespesa(entity);
+			enviaEmail(entity.getId(), TipoEmail.GESTOR, integration.getEmailgestorProjeto(despesa.getIdProjeto()));
 			
 		} else {
 			if (multipartFile != null) {
@@ -128,7 +134,7 @@ public class DespesaBusiness {
 		despesaBean.setDescricaoProjeto(projeto.getNome());
 	}
 
-	public void salvarAnaliseDespesa(Long idDespesa, Long idAprovador, String fgAprovador, boolean despesaAprovada)
+	public void salvarAnaliseDespesa(Long idDespesa, Long idAprovador, String fgAprovador, boolean despesaAprovada, String justificativa)
 			throws Exception {
 		StatusEntity status = null;
 		if (despesaAprovada && "G".equalsIgnoreCase(fgAprovador)) {
@@ -138,10 +144,27 @@ public class DespesaBusiness {
 		} else {
 			status = statusDao.findByName(StatusEnum.REPROVADO);
 		}
+		
 		if ("G".equalsIgnoreCase(fgAprovador)) {
-			dao.salvarAnaliseDespesaGP(idDespesa, idAprovador, status.getId());
+			if(despesaAprovada){
+				dao.salvarAnaliseDespesaGP(idDespesa, idAprovador, status.getId(), null);
+				enviaEmail(idDespesa, TipoEmail.FINANCEIRO, ambiente.getProperty("email.financeiro.from"));
+
+			} else {
+				dao.salvarAnaliseDespesaGP(idDespesa, idAprovador, status.getId(), justificativa);
+				enviaEmail(idDespesa, TipoEmail.REPROVADO, integration.getEmailFuncionario(dao.findById(idDespesa).getIdSolicitante()));
+
+			}
 		} else if ("F".equalsIgnoreCase(fgAprovador)) {
-			dao.salvarAnaliseDespesaFinanceiro(idDespesa, idAprovador, status.getId());
+			if(despesaAprovada){
+				dao.salvarAnaliseDespesaFinanceiro(idDespesa, idAprovador, status.getId(), null);
+				enviaEmail(idDespesa, TipoEmail.APROVADO, integration.getEmailFuncionario(dao.findById(idDespesa).getIdSolicitante()));
+
+			} else {
+				dao.salvarAnaliseDespesaFinanceiro(idDespesa, idAprovador, status.getId(), justificativa);
+				enviaEmail(idDespesa, TipoEmail.REPROVADO, integration.getEmailFuncionario(dao.findById(idDespesa).getIdSolicitante()));
+				
+			}
 		} else {
 			throw new IllegalArgumentException("Flag aprovador não identificada!");
 		}
@@ -172,5 +195,17 @@ public class DespesaBusiness {
 		preencherProjetoDespesa(despesaEntity, despesaBean);
 		preencherFuncionarioDespesa(despesaEntity, despesaBean);
 		return despesaBean;
+	}
+	
+	public void enviaEmail(Long idDespesa, TipoEmail tipoEmail, String destinatario){
+			DespesaEntity entity = dao.findById(idDespesa);
+			ProjetoBean projeto = integration.getProjetoById(entity.getIdProjeto());
+		
+			email.setDestinatario(destinatario);
+			email.setTipoEmail(tipoEmail);
+			email.setEntity(entity);
+			email.setProjeto(projeto);
+			email.setFuncionario(integration.getFuncionario(entity.getIdSolicitante().intValue()));
+			new Thread(email).start();
 	}
 }

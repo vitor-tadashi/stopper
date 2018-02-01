@@ -30,11 +30,14 @@
 		<sec:authentication property="principal" var="user" />
 		<input type="hidden" id="funcionario" value="${user.funcionario.id }" />
 		<div id="page-content">
+			<div id="div-alert" style="display: none;">
+    			<a href="#" class="close" onclick="hideDiv()" >×</a>
+    			<span id="span-msg"></span>
+  			</div>
 			<div class="panel">
 				<!--Data Table-->
 				<!--===================================================-->
 				<div class="panel-body">
-					<span id="span-msg">${erroMsg}</span>
 					<div class="table-responsive" style="margin-top: 50px">
 						<table class="table table-striped table-bordered" id="table-despesas">
 							<thead>
@@ -55,7 +58,7 @@
 												<td>${despesa.nomeFuncionario }</td>
 												<td>${despesa.dataOcorrencia }</td>
 												<td>${despesa.nomeTipoDespesa }</td>
-												<td>${despesa.idProjeto}</td>
+												<td>${despesa.descricaoProjeto }</td>
 												<td><fmt:formatNumber value="${despesa.valor }"
 														type="currency" currencyCode="BRL"></fmt:formatNumber></td>
 												<td><a href="#" onclick="abrirModalVisualizacaoDespesa(${despesa.id })">
@@ -77,7 +80,6 @@
 				</div>
 			</div>
 		</div>
-
 	</layout:put>
 	<layout:put block="scripts">
 		<div class="modal fade" id="detalhe-despesa-modal" role="dialog"
@@ -136,7 +138,7 @@
 												class="form-control projeto" name="projeto" disabled="disabled"
 												/>
 										</div>
-										<label class="control-label" >Justificativa</label>
+										<label class="control-label" >Descrição</label>
 										<div class="input-group" id="justificativaDespesaDiv"
 											style="width: 100% !important">
 											<textarea id="justificativaDespesa" disabled="disabled"
@@ -163,6 +165,66 @@
 												<button class="btn btn-danger" id="rejeitarDespesa"  type="button">Rejeitar</button>
 											</div>
 										</sec:authorize>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal" id="justificativa-modal" role="dialog"
+			tabindex="-1" aria-labelledby="justificativa-modal"
+			aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+
+					<!--Modal header-->
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">
+							<i class="pci-cross pci-circle"></i>
+						</button>
+						<h4 class="modal-title">Descrição</h4>
+					</div>
+
+					<!--Modal body-->
+					<div class="modal-body">
+						<form action="" id="form-justificativa" name="form-justificativa"
+							class="clear-form">
+							<div class="row">
+								<div class="panel">
+									<!--Data Table-->
+									<!--===================================================-->
+									<div class="panel-body">
+										<div id="div-alert-just">
+    										<span id="span-msg-just"></span>
+  										</div>
+
+										<!--Modal body-->
+										<div class="modal-body">
+											<div class="input-group" id="justificativaRejectDiv"
+												style="width: 100% !important">
+												<textarea rows="6" id="justificativaReject"
+													class="form-control justificativaDespesa"
+													name="justificativaReject"></textarea>
+											</div>
+											</br>
+											<sec:authorize access="hasRole('GP_APROVAR_DESPESAS')">
+												<div class="input-group" id="buttonJustRejectGestor"
+													style="width: 100% !important">
+													<button class="btn btn-info" id="enviarJustificativaReject"
+														type="button">Enviar</button>
+												</div>
+											</sec:authorize>
+											<sec:authorize
+												access="hasRole('FINANCEIRO_APROVAR_DESPESAS')">
+												<div class="input-group" id="buttonJustRejectFin"
+													style="width: 100% !important">
+													<button class="btn btn-info" id="enviarJustificativaReject"
+														type="button">Enviar</button>
+												</div>
+											</sec:authorize>
+										</div>
 									</div>
 								</div>
 							</div>

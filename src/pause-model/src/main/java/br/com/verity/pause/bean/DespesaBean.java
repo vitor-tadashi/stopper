@@ -20,6 +20,7 @@ public class DespesaBean{
 	private String dataSolicitacao;
 	private String nomeFuncionario;
 	private String caminhoComprovante;
+	private String justRejeicao;
 	
 	public Long getId() {
 		return id;
@@ -129,5 +130,11 @@ public class DespesaBean{
 	}
 	public void setCaminhoComprovante(String caminhoComprovante) {
 		this.caminhoComprovante = caminhoComprovante;
+	}
+	public String getJustRejeicao() {
+		return justRejeicao;
+	}
+	public void setJustRejeicao(String justRejeicao) {
+		this.justRejeicao = justRejeicao;
 	}
 }

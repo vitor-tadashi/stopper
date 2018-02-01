@@ -31,7 +31,6 @@ input[type=date].form-control {
 		<input type="hidden" id="funcionario" value="${user.funcionario.id }" />
 		<div id="page-content">
 			<div id="div-alert" style="display: none;">
-<!--     			<a href="#" class="close" onclick="hideDiv()" data-dismiss="alert" aria-label="close">×</a> -->
     			<a href="#" class="close" onclick="hideDiv()" >×</a>
     			<span id="span-msg"></span>
   			</div>
@@ -159,15 +158,15 @@ input[type=date].form-control {
 												</c:forEach>
 											</select>
 										</div>
-										<br /> <label class="control-label" style="margin: 4px 0 0 0">*Justificativa</label>
+										<br /> <label class="control-label" style="margin: 4px 0 0 0">*Descrição</label>
 										<div class="input-group" id="justificativaDespesaDiv"
 											style="width: 100% !important">
 											<textarea id="justificativaDespesa"
 												class="form-control justificativaDespesa"
-												name="justificativa" placeholder="Justificativa da despesa"></textarea>
+												name="justificativa" placeholder="Descrição da despesa"></textarea>
 										</div>
 										<br />
-												<div class="input-group" id="comprovanteDespesaDiv"
+										<div class="input-group" id="comprovanteDespesaDiv"
 											style="width: 100% !important">
 											<a class="btn btn-info" href="#" id="btnDownloadArquivo" style="text-align: center; width: 100%;"  target="_blank">Download arquivo</a>
 										</div>
@@ -208,41 +207,54 @@ input[type=date].form-control {
 					<!--Modal body-->
 					<div class="modal-body">
 						<form action="" id="form-despesa" name="form-despesa"
-							class="clear-form">
+							class="clear-form" >
 							<div class="row">
 								<div class="panel">
 									<!--Data Table-->
 									<!--===================================================-->
-									<div class="panel-body">
-										<label class="control-label" style="margin: 4px 0 0 0">Status</label>
+									<div class="panel-body" >
+										<label class="control-label" style="margin: 2px 0 0 0">Status</label>
 										<div class="input-group" id="dataOcorrenciaExibDiv"
-											style="width: 100% !important">
+											style="width: 100% !important" >
 											<span id="statusExib"></span>
 										</div>
-										<br /> <label class="control-label" style="margin: 4px 0 0 0">Data Ocorrência</label>
+										<br/> 
+										<label class="control-label" style="margin: 2px 0 0 0">Data Ocorrência</label>
 										<div class="input-group" id="dataOcorrenciaExibDiv"
 											style="width: 100% !important">
 											<input type="text" id="dataOcorrenciaExib" class="form-control" name="dataOcorrenciaExib" readonly/>
 										</div>
-										<br /> <label class="control-label" style="margin: 4px 0 0 0">Valor</label>
+										<br/> 
+										<label class="control-label" style="margin: 2px 0 0 0">Valor</label>
 										<div class="input-group" id="valorDespesaExibDiv"
 											style="width: 100% !important">
 											<input type="text" id="valorDespesaExib" class="form-control" name="valorDespesaExib" readonly/>
 										</div>
-										<br /> <label class="control-label" style="margin: 4px 0 0 0">Tipo de despesa</label>
+										<br/> 
+										<label class="control-label" style="margin: 2px 0 0 0">Tipo de despesa</label>
 										<div class="input-group" id="TipoDeDespesaExibDiv"
 											style="width: 100% !important">
 											<input type="text" id="TipoDespesaExib" class="form-control" name="TipoDespesaExib" readonly/>
 										</div>
-										<br /> <label class="control-label" style="margin: 4px 0 0 0">Projeto</label>
+										<br/> 
+										<label class="control-label" style="margin: 2px 0 0 0">Projeto</label>
 										<div class="input-group" id="projetoExibDiv"
 											style="width: 100% !important">
 											<input type="text" id="projetoExib" class="form-control" name="projetoExib" readonly/>
 										</div>
-										<br /> <label class="control-label" style="margin: 4px 0 0 0">Justificativa</label>
+										<br/> 
+										<label class="control-label" style="margin: 2px 0 0 0">Descrição</label>
 										<div class="input-group" id="justificativaDespesaExibDiv"
 											style="width: 100% !important">
 											<textarea id="justificativaDespesaExib" class="form-control" name="justificativaDespesaExib" readonly></textarea>
+										</div>
+										<br/> 
+										<div id="div-just-reject" style="display: none;">
+											<label class="control-label" style="margin: 2px 0 0 0">Justificativa rejeição</label>
+											<div class="input-group" id="justificativaRejecExibDiv"
+												style="width: 100% !important">
+												<textarea id="justificativaRejecExib" class="form-control" name="justificativaRejecExib" readonly></textarea>
+											</div>
 										</div>
 										<br/>
 										<div class="input-group" id="comprovanteDespesaDivExib"
@@ -260,7 +272,5 @@ input[type=date].form-control {
 		<script src='<c:url value="/js/custom/send-ajax.js"/>'></script>
 		<script src='<c:url value="/js/custom/despesa.js"/>'></script>
 		<script src='<c:url value="/js/jquery.maskMoney.js"/>'></script>
-		<script src='<c:url value="/js/attrchange.js"/>'></script>
-		<script src='<c:url value="/js/attrchange_ext.js"/>'></script>
 	</layout:put>
 </layout:extends>

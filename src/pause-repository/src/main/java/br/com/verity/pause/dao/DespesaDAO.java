@@ -29,7 +29,7 @@ public class DespesaDAO {
 		try {
 			conn = connectionFactory.createConnection();
 
-			String sql = "INSERT INTO despesa (id_status, id_tipo_despesa, justificativa, valor, data_solicitacao, "
+			String sql = "INSERT INTO PAUSEDespesa (id_status, id_tipo_despesa, justificativa, valor, data_solicitacao, "
 					+ "id_projeto, id_solicitante, caminho_comprovante, data_ocorrencia) values (?,?,?,?,?,?,?,?,?)";
 
 			ps = conn.prepareStatement(sql);
@@ -38,7 +38,7 @@ public class DespesaDAO {
 			ps.setLong(2, despesa.getTipoDespesa().getId());
 			ps.setString(3, despesa.getJustificativa());
 			ps.setDouble(4, despesa.getValor());
-			ps.setDate(5, new java.sql.Date(despesa.getDataSolicitacao().getTime()));
+			ps.setTimestamp(5, new java.sql.Timestamp(despesa.getDataSolicitacao().getTime()));
 			ps.setLong(6, despesa.getIdProjeto());
 			ps.setLong(7, despesa.getIdSolicitante());
 			ps.setString(8, despesa.getCaminhoComprovante());
@@ -59,7 +59,7 @@ public class DespesaDAO {
 			conn = connectionFactory.createConnection();
 
 			
-			String sql = "UPDATE despesa set id_tipo_despesa = ?, justificativa = ?, valor = ?,"
+			String sql = "UPDATE PAUSEDespesa set id_tipo_despesa = ?, justificativa = ?, valor = ?,"
 					+ " id_projeto = ?, caminho_comprovante = ?, data_ocorrencia = ? where id = ?";
 
 			ps = conn.prepareStatement(sql);
@@ -71,7 +71,6 @@ public class DespesaDAO {
 			ps.setString(5, despesa.getCaminhoComprovante());
 			ps.setDate(6,  new java.sql.Date(despesa.getDataOcorrencia().getTime()));
 			ps.setLong(7, despesa.getId());
-
 
 			ps.execute();
 
@@ -88,11 +87,11 @@ public class DespesaDAO {
 		DespesaEntity entity = new DespesaEntity();
 		String sql = null;
 
-		sql = "select d.*, s.nome, t.nome from despesa d "
-			   + " inner join status s " 
+		sql = "select d.*, s.nome, t.nome from PAUSEDespesa d "
+			   + " inner join PAUSEStatus s " 
 			   + " on d.id_status = s.id "
-			   + " inner join tipo_despesa t "
-			   + " on d.id_tipo_despesa = t.id where d.id = (SELECT MAX(id) FROM despesa) and id_solicitante = ? ";
+			   + " inner join PAUSETipoDespesa t "
+			   + " on d.id_tipo_despesa = t.id where d.id = (SELECT MAX(id) FROM PAUSEDespesa) and id_solicitante = ? ";
 
 		try {
 			conn = connectionFactory.createConnection();
@@ -121,10 +120,10 @@ public class DespesaDAO {
 		List<DespesaEntity> despesas = new ArrayList<DespesaEntity>();
 		String sql = null;
 
-		sql = "select d.*, s.nome, t.nome from despesa d "
-			   + " inner join status s " 
+		sql = "select d.*, s.nome, t.nome from PAUSEDespesa d "
+			   + " inner join PAUSEStatus s " 
 			   + " on d.id_status = s.id "
-			   + " inner join tipo_despesa t "
+			   + " inner join PAUSETipoDespesa t "
 			   + " on d.id_tipo_despesa = t.id where d.id_solicitante = ? order by d.data_solicitacao desc";
 
 		try {
@@ -170,8 +169,9 @@ public class DespesaDAO {
 		despesa.setIdFinanceiroAprovador(rs.getLong(12));
 		despesa.setCaminhoComprovante(rs.getString(13));
 		despesa.setDataOcorrencia(rs.getDate(14));
-		despesa.getStatus().setNome(rs.getString(15));
-		despesa.getTipoDespesa().setNome(rs.getString(16));
+		despesa.setJustRejeicao(rs.getString(15));
+		despesa.getStatus().setNome(rs.getString(16));
+		despesa.getTipoDespesa().setNome(rs.getString(17));
 	}
 
 	private void fecharConexoes() throws SQLException {
@@ -187,11 +187,11 @@ public class DespesaDAO {
 		}
 	}
 
-	public void salvarAnaliseDespesaGP(Long idDespesa, Long idAprovador, Integer integer) throws Exception {
+	public void salvarAnaliseDespesaGP(Long idDespesa, Long idAprovador, Integer idStatus, String justificativa) throws Exception {
 		try {
 
-			String sql = "UPDATE despesa set data_acao_gp = ?, id_gp = ?, id_status = ? where id = ?";
-			salvarAnaliseDespesa(idDespesa, idAprovador, integer, sql);
+			String sql = "UPDATE PAUSEDespesa set data_acao_gp = ?, id_gp = ?, id_status = ?, justificativa_rejeicao = ? where id = ?";
+			salvarAnaliseDespesa(idDespesa, idAprovador, idStatus, justificativa, sql);
 
 		} catch (SQLException e) {
 			throw e;
@@ -200,11 +200,11 @@ public class DespesaDAO {
 		}
 	}
 	
-	public void salvarAnaliseDespesaFinanceiro(Long idDespesa, Long idAprovador, Integer idStatus) throws Exception {
+	public void salvarAnaliseDespesaFinanceiro(Long idDespesa, Long idAprovador, Integer idStatus, String justificativa) throws Exception {
 		try {
 
-			String sql = "UPDATE despesa set data_acao_financeiro = ?, id_financeiro = ?, id_status = ? where id = ?";
-			salvarAnaliseDespesa(idDespesa, idAprovador, idStatus, sql);
+			String sql = "UPDATE PAUSEDespesa set data_acao_financeiro = ?, id_financeiro = ?, id_status = ?, justificativa_rejeicao = ? where id = ?";
+			salvarAnaliseDespesa(idDespesa, idAprovador, idStatus, justificativa, sql);
 
 		} catch (SQLException e) {
 			throw e;
@@ -213,14 +213,15 @@ public class DespesaDAO {
 		}
 	}
 
-	private void salvarAnaliseDespesa(Long idDespesa, Long idAprovador, Integer integer, String sql) throws SQLException {
+	private void salvarAnaliseDespesa(Long idDespesa, Long idAprovador, Integer integer, String justificativa, String sql) throws SQLException {
 		conn = connectionFactory.createConnection();
 		ps = conn.prepareStatement(sql);
 
 		ps.setDate(1, new java.sql.Date((new java.util.Date()).getTime()));
 		ps.setLong(2, idAprovador);
 		ps.setLong(3, integer);
-		ps.setLong(4, idDespesa);
+		ps.setString(4, justificativa);
+		ps.setLong(5, idDespesa);
 
 		ps.execute();
 	}
@@ -230,10 +231,10 @@ public class DespesaDAO {
 		DespesaEntity entity = new DespesaEntity();
 		String sql = null;
 
-		sql = "select d.*, s.nome, t.nome from despesa d "
-			   + " inner join status s " 
+		sql = "select d.*, s.nome, t.nome from PAUSEDespesa d "
+			   + " inner join PAUSEStatus s " 
 			   + " on d.id_status = s.id "
-			   + " inner join tipo_despesa t "
+			   + " inner join PAUSETipoDespesa t "
 			   + " on d.id_tipo_despesa = t.id where d.id = ? ";
 
 		try {
@@ -263,10 +264,10 @@ public class DespesaDAO {
 		List<DespesaEntity> despesas = new ArrayList<DespesaEntity>();
 		String sql = null;
 
-		sql = "select d.*, s.nome, t.nome from despesa d "
-			   + " inner join status s " 
+		sql = "select d.*, s.nome, t.nome from PAUSEDespesa d "
+			   + " inner join PAUSEStatus s " 
 			   + " on d.id_status = s.id "
-			   + " inner join tipo_despesa t "
+			   + " inner join PAUSETipoDespesa t "
 			   + " on d.id_tipo_despesa = t.id where d.id_status = ? order by d.data_solicitacao desc";
 
 		try {
@@ -299,10 +300,10 @@ public class DespesaDAO {
 		List<DespesaEntity> despesas = new ArrayList<>();
 		String sql = null;
 
-		sql = "select d.*, s.nome, t.nome from despesa d "
-			   + " inner join status s " 
+		sql = "select d.*, s.nome, t.nome from PAUSEDespesa d "
+			   + " inner join PAUSEStatus s " 
 			   + " on d.id_status = s.id "
-			   + " inner join tipo_despesa t "
+			   + " inner join PAUSETipoDespesa t "
 			   + " on d.id_tipo_despesa = t.id where d.id_status = ? and data_acao_financeiro is null and data_acao_gp is not null order by d.data_solicitacao desc";
 
 		try {
@@ -335,10 +336,10 @@ public class DespesaDAO {
 		List<DespesaEntity> despesas = new ArrayList<>();
 		String sql = null;
 
-		sql = "select d.*, s.nome, t.nome from despesa d "
-			   + " inner join status s " 
+		sql = "select d.*, s.nome, t.nome from PAUSEDespesa d "
+			   + " inner join PAUSEStatus s " 
 			   + " on d.id_status = s.id "
-			   + " inner join tipo_despesa t "
+			   + " inner join PAUSETipoDespesa t "
 			   + " on d.id_tipo_despesa = t.id where d.id_status = ? and id_Projeto = ? and data_acao_gp is null order by d.data_solicitacao desc";
 
 		try {
