@@ -44,16 +44,16 @@ public class DespesaBusiness {
 
 	@Autowired
 	SavIntegration integration;
-	
+
 	@Autowired
 	SendEmail email;
 
 	public DespesaBean salvaDespesa(DespesaBean despesa, MultipartFile multipartFile) throws Exception {
 
 		DespesaEntity entity = converter.convertBeanToEntity(despesa);
-		//entity.setCaminhoComprovante(null);
 
 		if (entity.getId() == null) {
+			entity.setCaminhoComprovante(null);
 
 			entity.setStatus(statusDao.findByName(StatusEnum.EM_ANALISE));
 			entity.setDataSolicitacao(new Date());
@@ -61,16 +61,19 @@ public class DespesaBusiness {
 			if (multipartFile != null) {
 				entity = saveMultipartFile(multipartFile, entity, multipartFile.getOriginalFilename());
 			}
-			entity =  dao.salvaDespesa(entity);
+			entity = dao.salvaDespesa(entity);
 			enviaEmail(entity.getId(), TipoEmail.GESTOR, integration.getEmailgestorProjeto(despesa.getIdProjeto()));
-			
+
 		} else {
+			if (entity.getCaminhoComprovante().equals("")) {
+				entity.setCaminhoComprovante(null);
+			}
 			if (multipartFile != null) {
 				entity = saveMultipartFile(multipartFile, entity, multipartFile.getOriginalFilename());
 			}
-			entity =  dao.updateDespesa(entity);
+			entity = dao.updateDespesa(entity);
 		}
-		
+
 		despesa = converter.convertEntityToBean(entity);
 		preencherProjetoDespesa(entity, despesa);
 		return despesa;
@@ -78,14 +81,15 @@ public class DespesaBusiness {
 
 	public DespesaEntity saveMultipartFile(MultipartFile multipartFile, DespesaEntity entity, String realFileName)
 			throws IOException {
-		
+
 		File file = new File(ambiente.getProperty("despesa.comprovante.path") + entity.getIdSolicitante());
 
 		if (!file.exists() && !file.isDirectory()) {
 			file.mkdir();
 		}
 
-		String fileName = entity.getIdSolicitante() + "/" + System.currentTimeMillis() + "_" + multipartFile.getOriginalFilename();
+		String fileName = entity.getIdSolicitante() + "/" + System.currentTimeMillis() + "_"
+				+ multipartFile.getOriginalFilename();
 		entity.setCaminhoComprovante(ambiente.getProperty("despesa.comprovante.path") + fileName);
 
 		if (!multipartFile.getOriginalFilename().isEmpty()) {
@@ -95,7 +99,7 @@ public class DespesaBusiness {
 						new FileOutputStream(new File(ambiente.getProperty("despesa.comprovante.path"), fileName)));
 				outputStream.write(multipartFile.getBytes());
 				outputStream.flush();
-				
+
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} finally {
@@ -134,8 +138,8 @@ public class DespesaBusiness {
 		despesaBean.setDescricaoProjeto(projeto.getNome());
 	}
 
-	public void salvarAnaliseDespesa(Long idDespesa, Long idAprovador, String fgAprovador, boolean despesaAprovada, String justificativa)
-			throws Exception {
+	public void salvarAnaliseDespesa(Long idDespesa, Long idAprovador, String fgAprovador, boolean despesaAprovada,
+			String justificativa) throws Exception {
 		StatusEntity status = null;
 		if (despesaAprovada && "G".equalsIgnoreCase(fgAprovador)) {
 			status = statusDao.findByName(StatusEnum.EM_ANALISE);
@@ -144,26 +148,29 @@ public class DespesaBusiness {
 		} else {
 			status = statusDao.findByName(StatusEnum.REPROVADO);
 		}
-		
+
 		if ("G".equalsIgnoreCase(fgAprovador)) {
-			if(despesaAprovada){
+			if (despesaAprovada) {
 				dao.salvarAnaliseDespesaGP(idDespesa, idAprovador, status.getId(), null);
 				enviaEmail(idDespesa, TipoEmail.FINANCEIRO, ambiente.getProperty("email.financeiro.from"));
 
 			} else {
 				dao.salvarAnaliseDespesaGP(idDespesa, idAprovador, status.getId(), justificativa);
-				enviaEmail(idDespesa, TipoEmail.REPROVADO, integration.getEmailFuncionario(dao.findById(idDespesa).getIdSolicitante()));
+				enviaEmail(idDespesa, TipoEmail.REPROVADO,
+						integration.getEmailFuncionario(dao.findById(idDespesa).getIdSolicitante()));
 
 			}
 		} else if ("F".equalsIgnoreCase(fgAprovador)) {
-			if(despesaAprovada){
+			if (despesaAprovada) {
 				dao.salvarAnaliseDespesaFinanceiro(idDespesa, idAprovador, status.getId(), null);
-				enviaEmail(idDespesa, TipoEmail.APROVADO, integration.getEmailFuncionario(dao.findById(idDespesa).getIdSolicitante()));
+				enviaEmail(idDespesa, TipoEmail.APROVADO,
+						integration.getEmailFuncionario(dao.findById(idDespesa).getIdSolicitante()));
 
 			} else {
 				dao.salvarAnaliseDespesaFinanceiro(idDespesa, idAprovador, status.getId(), justificativa);
-				enviaEmail(idDespesa, TipoEmail.REPROVADO, integration.getEmailFuncionario(dao.findById(idDespesa).getIdSolicitante()));
-				
+				enviaEmail(idDespesa, TipoEmail.REPROVADO,
+						integration.getEmailFuncionario(dao.findById(idDespesa).getIdSolicitante()));
+
 			}
 		} else {
 			throw new IllegalArgumentException("Flag aprovador não identificada!");
@@ -196,16 +203,16 @@ public class DespesaBusiness {
 		preencherFuncionarioDespesa(despesaEntity, despesaBean);
 		return despesaBean;
 	}
-	
-	public void enviaEmail(Long idDespesa, TipoEmail tipoEmail, String destinatario){
-			DespesaEntity entity = dao.findById(idDespesa);
-			ProjetoBean projeto = integration.getProjetoById(entity.getIdProjeto());
-		
-			email.setDestinatario(destinatario);
-			email.setTipoEmail(tipoEmail);
-			email.setEntity(entity);
-			email.setProjeto(projeto);
-			email.setFuncionario(integration.getFuncionario(entity.getIdSolicitante().intValue()));
-			new Thread(email).start();
+
+	public void enviaEmail(Long idDespesa, TipoEmail tipoEmail, String destinatario) {
+		DespesaEntity entity = dao.findById(idDespesa);
+		ProjetoBean projeto = integration.getProjetoById(entity.getIdProjeto());
+
+		email.setDestinatario(destinatario);
+		email.setTipoEmail(tipoEmail);
+		email.setEntity(entity);
+		email.setProjeto(projeto);
+		email.setFuncionario(integration.getFuncionario(entity.getIdSolicitante().intValue()));
+		new Thread(email).start();
 	}
 }

@@ -41,13 +41,12 @@ public class DespesaController {
 
 	@Autowired
 	DespesaBusiness despesaBizz;
-	
+
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public ModelAndView acessar(Model model) {
 
 		model.addAttribute("tipoDespesas", tipoDespesaBizz.findAll());
-		model.addAttribute("projetos",
-				projetoBizz.listProjetosPorFuncionarios(funcionarioBizz.obterPorId(null).getId()));
+		model.addAttribute("projetos", projetoBizz.listProjetosPorFuncionarios(funcionarioBizz.obterPorId(null).getId()));
 		model.addAttribute("despesasFuncionario", despesaBizz.listarDespesasPorFuncionario(funcionarioBizz.obterPorId(null).getId()));
 
 		return new ModelAndView("despesa/despesa");
@@ -61,7 +60,7 @@ public class DespesaController {
 
 			despesa = despesaBizz.salvaDespesa(despesa, comprovante);
 			return ResponseEntity.ok(despesa);
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Despesa não pôde ser salva, tente novamente!");
@@ -70,23 +69,25 @@ public class DespesaController {
 
 	@RequestMapping(value = "/analisar", method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<?> analisarDespesaFuncionario(Long idDespesa, String fgFinanceiroGP, boolean despesaAprovada, String justificativa) {
+	public ResponseEntity<?> analisarDespesaFuncionario(Long idDespesa, String fgFinanceiroGP, boolean despesaAprovada,
+			String justificativa) {
 		try {
 			FuncionarioBean func = funcionarioBizz.obterPorId(null);
 			despesaBizz.salvarAnaliseDespesa(idDespesa, func.getId().longValue(), fgFinanceiroGP, despesaAprovada, justificativa);
+			
 			return ResponseEntity.ok("Despesa " + (despesaAprovada ? " aprovada " : " rejeitada ") + " com sucesso!");
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocorreu um erro, tente novamente!");
 		}
 	}
-	
+
 	@RequestMapping(value = "/analisar", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView analisarDespesas(Model model, @RequestParam(value="fgFinaceiroGP") String fgFinanceiroGP) {
+	public ModelAndView analisarDespesas(Model model, @RequestParam(value = "fgFinaceiroGP") String fgFinanceiroGP) {
 		try {
 			FuncionarioBean funcionario = funcionarioBizz.obterPorId(null);
-			model.addAttribute("despesas", despesaBizz.buscarDespesasParaAnalise(funcionario.getId(), fgFinanceiroGP)); 
+			model.addAttribute("despesas", despesaBizz.buscarDespesasParaAnalise(funcionario.getId(), fgFinanceiroGP));
 			return new ModelAndView("despesa/analisarDespesa");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -94,7 +95,7 @@ public class DespesaController {
 			return new ModelAndView("despesa/analisarDespesa");
 		}
 	}
-	
+
 	@RequestMapping(value = "/{idDespesa}", method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<?> buscarDespesa(@PathVariable Long idDespesa) {
@@ -105,24 +106,24 @@ public class DespesaController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocorreu um erro, tente novamente!");
 		}
 	}
-	
+
 	@RequestMapping(value = "/arquivo/{idDespesa}", method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<?>  downloadArquivo(@PathVariable Long idDespesa) {
+	public ResponseEntity<?> downloadArquivo(@PathVariable Long idDespesa) {
 		try {
 			DespesaBean despesa = despesaBizz.buscarDespesa(idDespesa);
-		    File file = new File(despesa.getCaminhoComprovante());
-		    String fileName = file.getName().toUpperCase();
-		    
-		    HttpHeaders respHeaders = new HttpHeaders();
-		    
-		    setHeaderContentType(fileName, respHeaders);
-		    
-		    respHeaders.setContentLength(file.length());
-		    respHeaders.setContentDispositionFormData("attachment", fileName);
-		    
-		    InputStreamResource isr = new InputStreamResource(new FileInputStream(file));
-		    return new ResponseEntity<>(isr, respHeaders, HttpStatus.OK);
+			File file = new File(despesa.getCaminhoComprovante());
+			String fileName = file.getName().toUpperCase();
+
+			HttpHeaders respHeaders = new HttpHeaders();
+
+			setHeaderContentType(fileName, respHeaders);
+
+			respHeaders.setContentLength(file.length());
+			respHeaders.setContentDispositionFormData("attachment", fileName);
+
+			InputStreamResource isr = new InputStreamResource(new FileInputStream(file));
+			return new ResponseEntity<>(isr, respHeaders, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>("Erro ao recuperar o arquivo solicitado.", HttpStatus.INTERNAL_SERVER_ERROR);

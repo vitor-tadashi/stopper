@@ -19,7 +19,7 @@ input[type=date].form-control {
 }
 </style>
 	</layout:put>
-	<layout:put block="contents">
+	<layout:put block="contents">;
 		<div id="page-title">
 			<h1 class="page-header text-overflow">Despesas</h1>
 		</div>
@@ -122,14 +122,14 @@ input[type=date].form-control {
 										<input type="text" id="id" name="id" hidden="true"/>
 										<input type="text" id="caminhoComprovante" name="caminhoComprovante" hidden="true"/>
 									
-										<label class="control-label" style="margin: 4px 0 0 0">*Data Ocorrência</label>
+										<label class="control-label" style="margin: 12px 0 0 0">*Data Ocorrência</label>
 										<div class="input-daterange input-group" id="datepicker"
 											style="width: 100% !important">
 											<input type="date" id="dataDespesa"
 												class="form-control dataDespesa" name="data"
 												placeholder="dd/mm/aaaa" />
 										</div>
-										<br /> <label class="control-label" style="margin: 4px 0 0 0">*Valor</label>
+										<label class="control-label" style="margin: 12px 0 0 0">*Valor</label>
 										<div class="input-group" id="valorDespesaDiv"
 											style="width: 100% !important">
 											<input type="text" id="valorDespesa"
@@ -137,8 +137,7 @@ input[type=date].form-control {
 												data-thousands="" data-decimal=","
 												placeholder="XXXXX.XX" />
 										</div>
-										<br /> <label class="control-label" style="margin: 4px 0 0 0">*Tipo
-											de despesa</label>
+										<label class="control-label" style="margin: 12px 0 0 0">*Tipo de despesa</label>
 										<div class="input-group" id="tipoDespesaDiv">
 											<select class="selectpicker" data-live-search="true"
 												id="select-tipo-despesa" name="tipoDespesa">
@@ -148,7 +147,7 @@ input[type=date].form-control {
 												</c:forEach>
 											</select>
 										</div>
-										<br /> <label class="control-label" style="margin: 4px 0 0 0">*Projeto</label>
+										<label class="control-label" style="margin: 12px 0 0 0">*Projeto</label>
 										<div class="input-group" id="centroCustoDiv">
 											<select class="selectpicker" data-live-search="true"
 												id="select-centro-custo" name="centroCusto">
@@ -158,28 +157,26 @@ input[type=date].form-control {
 												</c:forEach>
 											</select>
 										</div>
-										<br /> <label class="control-label" style="margin: 4px 0 0 0">*Descrição</label>
+										<label class="control-label" style="margin: 12px 0 0 0">*Descrição</label>
 										<div class="input-group" id="justificativaDespesaDiv"
 											style="width: 100% !important">
 											<textarea id="justificativaDespesa"
 												class="form-control justificativaDespesa"
 												name="justificativa" placeholder="Descrição da despesa"></textarea>
 										</div>
-										<br />
 										<div class="input-group" id="comprovanteDespesaDiv"
-											style="width: 100% !important">
-											<a class="btn btn-info" href="#" id="btnDownloadArquivo" style="text-align: center; width: 100%;"  target="_blank">Download arquivo</a>
+											style="width: 100% !important; ">
+											<a class="btn btn-info" href="#" id="btnDownloadArquivo" style="text-align: center; width: 100%; margin: 14px 0 0 0"  target="_blank">Download arquivo</a>
 										</div>
-										<br /> <label class="control-label" style="margin: 4px 0 0 0">Comprovante</label>
+										<label class="control-label" style="margin: 12px 0 0 0">Comprovante</label>
 										<div class="input-group" id="comprovanteDespesaDiv"
 											style="width: 100% !important">
 											<input id="comprovanteDespesa" type="file"
 												class="form-control comprovanteDespesa" name="comprovante"
 												placeholder="Comprovante da despesa" value="" />
 										</div>
-										<br />
 										<div class="input-group" id="buttonSubmitDiv"
-											style="width: 100% !important">
+											style="width: 100% !important; margin: 12px 0 0 0">
 											<button id="submit-js" class="btn btn-info" type="button"
 												onclick="submeterDespesa();">Salvar</button>
 										</div>
@@ -218,48 +215,42 @@ input[type=date].form-control {
 											style="width: 100% !important" >
 											<span id="statusExib"></span>
 										</div>
-										<br/> 
-										<label class="control-label" style="margin: 2px 0 0 0">Data Ocorrência</label>
+										<label class="control-label" style="margin: 12px 0 0 0">Data Ocorrência</label>
 										<div class="input-group" id="dataOcorrenciaExibDiv"
 											style="width: 100% !important">
 											<input type="text" id="dataOcorrenciaExib" class="form-control" name="dataOcorrenciaExib" readonly/>
 										</div>
-										<br/> 
-										<label class="control-label" style="margin: 2px 0 0 0">Valor</label>
+										<label class="control-label" style="margin: 12px 0 0 0">Valor</label>
 										<div class="input-group" id="valorDespesaExibDiv"
 											style="width: 100% !important">
 											<input type="text" id="valorDespesaExib" class="form-control" name="valorDespesaExib" readonly/>
 										</div>
-										<br/> 
-										<label class="control-label" style="margin: 2px 0 0 0">Tipo de despesa</label>
+										<label class="control-label" style="margin: 12px 0 0 0">Tipo de despesa</label>
 										<div class="input-group" id="TipoDeDespesaExibDiv"
 											style="width: 100% !important">
 											<input type="text" id="TipoDespesaExib" class="form-control" name="TipoDespesaExib" readonly/>
 										</div>
-										<br/> 
-										<label class="control-label" style="margin: 2px 0 0 0">Projeto</label>
+										<label class="control-label" style="margin: 12px 0 0 0">Projeto</label>
 										<div class="input-group" id="projetoExibDiv"
 											style="width: 100% !important">
 											<input type="text" id="projetoExib" class="form-control" name="projetoExib" readonly/>
 										</div>
-										<br/> 
-										<label class="control-label" style="margin: 2px 0 0 0">Descrição</label>
+										<label class="control-label" style="margin: 12px 0 0 0">Descrição</label>
 										<div class="input-group" id="justificativaDespesaExibDiv"
 											style="width: 100% !important">
 											<textarea id="justificativaDespesaExib" class="form-control" name="justificativaDespesaExib" readonly></textarea>
 										</div>
-										<br/> 
 										<div id="div-just-reject" style="display: none;">
-											<label class="control-label" style="margin: 2px 0 0 0">Justificativa rejeição</label>
+											<label class="control-label" style="margin: 12px 0 0 0">Justificativa rejeição</label>
 											<div class="input-group" id="justificativaRejecExibDiv"
 												style="width: 100% !important">
 												<textarea id="justificativaRejecExib" class="form-control" name="justificativaRejecExib" readonly></textarea>
 											</div>
 										</div>
-										<br/>
 										<div class="input-group" id="comprovanteDespesaDivExib"
 											style="width: 100% !important">
-											<a class="btn btn-info" href="#" id="btnDownloadArquivoExib" style="text-align: center; width: 100%;"  target="_blank">Download arquivo</a>
+											<a class="btn btn-info" href="#" id="btnDownloadArquivoExib" style="text-align: center; 
+												width: 100%; margin: 12px 0 0 0"  target="_blank">Download arquivo</a>
 										</div>
 									</div>
 								</div>

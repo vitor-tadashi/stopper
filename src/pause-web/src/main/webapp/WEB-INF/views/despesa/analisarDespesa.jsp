@@ -104,41 +104,41 @@
 									<!--Data Table-->
 									<!--===================================================-->
 									<div class="panel-body">
-										<label class="control-label" >Solicitante</label>
+										<label class="control-label" style="margin: 12px 0 0 0">Solicitante</label>
 										<div class="input-group" id="solicitanteDiv"
 											style="width: 100% !important">
 											<input type="text" id="solicitante"
 												class="form-control solicitante" name="solicitante"
 												disabled="disabled"/>
 										</div>
-										<label class="control-label" >Data Ocorrência</label>
+										<label class="control-label" style="margin: 12px 0 0 0">Data Ocorrência</label>
 										<div class="input-group" id="dataOcorrenciaDiv"
 											style="width: 100% !important">
 											<input type="text" id="dataOcorrencia"
 												class="form-control dataOcorrencia" name="dataOcorrencia"
 												disabled="disabled"/>
 										</div>
-										<label class="control-label" >Valor</label>
+										<label class="control-label" style="margin: 12px 0 0 0">Valor</label>
 										<div class="input-group" id="valorDespesaDiv"
 											style="width: 100% !important">
 											<input type="text" id="valorDespesa"
 												class="form-control valorDespesa" name="valor"
 												disabled="disabled"/>
 										</div>
-										<label class="control-label" >Tipo
+										<label class="control-label" style="margin: 12px 0 0 0">Tipo
 											de despesa</label>
 										<div class="input-group" id="tipoDespesaDiv" style="width: 100% !important">
 											<input type="text" id="tipoDespesa"
 												class="form-control tipoDespesa" name="tipoDespesa" disabled="disabled"
 												/>
 										</div>
-										<label class="control-label" >Projeto</label>
+										<label class="control-label" style="margin: 12px 0 0 0">Projeto</label>
 										<div class="input-group" id="centroCustoDiv" style="width: 100% !important">
 											<input type="text" id="projeto"
 												class="form-control projeto" name="projeto" disabled="disabled"
 												/>
 										</div>
-										<label class="control-label" >Descrição</label>
+										<label class="control-label" style="margin: 12px 0 0 0">Descrição</label>
 										<div class="input-group" id="justificativaDespesaDiv"
 											style="width: 100% !important">
 											<textarea id="justificativaDespesa" disabled="disabled"
@@ -148,7 +148,7 @@
 										<br/>
 										<div class="input-group" id="comprovanteDespesaDiv"
 											style="width: 100% !important">
-											<a class="btn btn-info" href="#" id="btnDownloadArquivo" style="text-align: center; width: 100%;"  target="_blank">Download arquivo</a>
+											<a class="btn btn-info" href="#" id="btnDownloadArquivo" style="text-align: center; width: 100%; margin: 12px 0 0 0"  target="_blank">Download arquivo</a>
 										</div>
 										<br/>
 										<sec:authorize access="hasRole('GP_APROVAR_DESPESAS')">
