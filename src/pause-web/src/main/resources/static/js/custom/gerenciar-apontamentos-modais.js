@@ -4,10 +4,10 @@ var valorQueTava;
 var submit = false;
 var dataBloqueio = '01/04/2018';
 var pivotApontamentoDiaSemana;
-var horaInit1, horaInit2, horaInit3, horaInit4, horaInit5, horaInit6, horaInit7, horaInit8, tdEscolhida;
+var horaInit1, horaInit2, horaInit3, horaInit4, horaInit5, horaInit6, horaInit7, horaInit8;
 var erroAnteriorFoiHoraIgual = 0;
 var indiceErro1, indiceErro2;
-var horasParaSalvar;
+var horasParaSalvar, idSemanaEscolhida; 
 
 $(document).ready(function(){
 	exibirAviso();
@@ -555,22 +555,22 @@ function ajaxPreencherModalDiaDaSemana(idFuncionario, dataSemana) {
 			horaInit7 = document.getElementById('apDia7').value;
 			horaInit8 = document.getElementById('apDia8').value;	
 			
-			if (data.tipoEntrada1 == 1)
-				$('#apDia1').attr('disabled', true);
-			if (data.tipoSaida1 == 1)
-				$('#apDia2').attr('disabled', true);
-			if (data.tipoEntrada2 == 1)
-				$('#apDia3').attr('disabled', true);
-			if (data.tipoSaida2 == 1)
-				$('#apDia4').attr('disabled', true);
-			if (data.tipoEntrada3 == 1)
-				$('#apDia5').attr('disabled', true);
-			if (data.tipoSaida3 == 1)
-				$('#apDia6').attr('disabled', true);
-			if (data.tipoEntrada4 == 1)
-				$('#apDia7').attr('disabled', true);
-			if (data.tipoSaida4 == 1)
-				$('#apDia8').attr('disabled', true);
+			if (data.tipoEntrada1 == 1){
+				$('#apDia1').attr('disabled', true); $('#apDia1').val(data.entrada1.substring(0, 5).concat("E"));}
+			if (data.tipoSaida1 == 1) {
+				$('#apDia2').attr('disabled', true); $('#apDia2').val(data.saida1.substring(0, 5).concat("E"));}
+			if (data.tipoEntrada2 == 1) {
+				$('#apDia3').attr('disabled', true); $('#apDia3').val(data.entrada2.substring(0, 5).concat("E"));}
+			if (data.tipoSaida2 == 1) {
+				$('#apDia4').attr('disabled', true); $('#apDia4').val(data.saida2.substring(0, 5).concat("E"));}
+			if (data.tipoEntrada3 == 1) {
+				$('#apDia5').attr('disabled', true); $('#apDia5').val(data.entrada3.substring(0, 5).concat("E"));}
+			if (data.tipoSaida3 == 1) {
+				$('#apDia6').attr('disabled', true); $('#apDia6').val(data.saida3.substring(0, 5).concat("E"));}
+			if (data.tipoEntrada4 == 1) {
+				$('#apDia7').attr('disabled', true); $('#apDia7').val(data.entrada4.substring(0, 5).concat("E"));}
+			if (data.tipoSaida4 == 1) {
+				$('#apDia8').attr('disabled', true); $('#apDia8').val(data.saida4.substring(0, 5).concat("E"));}
 			
 			$('#apontamentos-DiaSemana-modal').modal('show');
 		},
@@ -585,7 +585,7 @@ function confirmarAlteracaoApontDiaSemana() {
 	var dataApontamento = $('#dataSemanaEscolhida').text().split(',');
 	var hora1, hora2, hora3, hora4, hora5, hora6, hora7, hora8;
 	document.getElementById("btn-confirmar-DiaSemana").disabled = true;
-	
+
 	hora1 = document.getElementById('apDia1').value;
 	hora2 = document.getElementById('apDia2').value;
 	hora3 = document.getElementById('apDia3').value;
@@ -593,25 +593,49 @@ function confirmarAlteracaoApontDiaSemana() {
 	hora5 = document.getElementById('apDia5').value;
 	hora6 = document.getElementById('apDia6').value;
 	hora7 = document.getElementById('apDia7').value;
-	hora8 = document.getElementById('apDia8').value;	
-	horasParaSalvar = [hora1, hora2, hora3, hora4, hora5, hora6, hora7, hora8];
+	hora8 = document.getElementById('apDia8').value;
+	horasParaSalvar = [ hora1, hora2, hora3, hora4, hora5, hora6, hora7, hora8 ];
 	
-	if (document.getElementById('apDia1').disabled == false && hora1 != "" && hora1 != horaInit1)
-		apontarDiaSemana(pivotApontamentoDiaSemana.idEntrada1, hora1, dataApontamento[0]);
-	if (document.getElementById('apDia2').disabled == false && hora2 != "" && hora2 != horaInit2)
-		apontarDiaSemana(pivotApontamentoDiaSemana.idSaida1, hora2, dataApontamento[0]);
-	if (document.getElementById('apDia3').disabled == false && hora3 != "" && hora3 != horaInit3)
-		apontarDiaSemana(pivotApontamentoDiaSemana.idEntrada2, hora3, dataApontamento[0]);
-	if (document.getElementById('apDia4').disabled == false && hora4 != "" && hora4 != horaInit4)
-		apontarDiaSemana(pivotApontamentoDiaSemana.idSaida2, hora4, dataApontamento[0]);
-	if (document.getElementById('apDia5').disabled == false && hora5 != "" && hora5 != horaInit5)
-		apontarDiaSemana(pivotApontamentoDiaSemana.idEntrada3, hora5, dataApontamento[0]);
-	if (document.getElementById('apDia6').disabled == false && hora6 != "" && hora6 != horaInit6)
-		apontarDiaSemana(pivotApontamentoDiaSemana.idSaida3, hora6, dataApontamento[0]);
-	if (document.getElementById('apDia7').disabled == false && hora7 != "" && hora7 != horaInit7)
-		apontarDiaSemana(pivotApontamentoDiaSemana.idEntrada4, hora7, dataApontamento[0]);
-	if (document.getElementById('apDia8').disabled == false && hora8 != "" && hora8 != horaInit8)
-		apontarDiaSemana(pivotApontamentoDiaSemana.idSaida4, hora8, dataApontamento[0]); 
+	if (document.getElementById('apDia1').disabled == false && hora1 != ""
+			&& hora1 != horaInit1
+			&& pivotApontamentoDiaSemana.tipoEntrada1 != 1)
+		apontarDiaSemana(pivotApontamentoDiaSemana.idEntrada1, hora1.substring(
+				0, 5), dataApontamento[0]);
+	if (document.getElementById('apDia2').disabled == false && hora2 != ""
+			&& hora2 != horaInit2 && pivotApontamentoDiaSemana.tipoSaida1 != 1)
+		apontarDiaSemana(pivotApontamentoDiaSemana.idSaida1, hora2.substring(0,
+				5), dataApontamento[0]);
+	if (document.getElementById('apDia3').disabled == false && hora3 != ""
+			&& hora3 != horaInit3
+			&& pivotApontamentoDiaSemana.tipoEntrada2 != 1)
+		apontarDiaSemana(pivotApontamentoDiaSemana.idEntrada2, hora3.substring(
+				0, 5), dataApontamento[0]);
+	if (document.getElementById('apDia4').disabled == false && hora4 != ""
+			&& hora4 != horaInit4 && pivotApontamentoDiaSemana.tipoSaida2 != 1)
+		apontarDiaSemana(pivotApontamentoDiaSemana.idSaida2, hora4.substring(0,
+				5), dataApontamento[0]);
+	if (document.getElementById('apDia5').disabled == false && hora5 != ""
+			&& hora5 != horaInit5
+			&& pivotApontamentoDiaSemana.tipoEntrada3 != 1)
+		apontarDiaSemana(pivotApontamentoDiaSemana.idEntrada3, hora5.substring(
+				0, 5), dataApontamento[0]);
+	if (document.getElementById('apDia6').disabled == false && hora6 != ""
+			&& hora6 != horaInit6 && pivotApontamentoDiaSemana.tipoSaida3 != 1)
+		apontarDiaSemana(pivotApontamentoDiaSemana.idSaida3, hora6.substring(0,
+				5), dataApontamento[0]);
+	if (document.getElementById('apDia7').disabled == false && hora7 != ""
+			&& hora7 != horaInit7
+			&& pivotApontamentoDiaSemana.tipoEntrada4 != 1)
+		apontarDiaSemana(pivotApontamentoDiaSemana.idEntrada4, hora7.substring(
+				0, 5), dataApontamento[0]);
+	if (document.getElementById('apDia8').disabled == false && hora8 != ""
+			&& hora8 != horaInit8 && pivotApontamentoDiaSemana.tipoSaida4 != 1)
+		apontarDiaSemana(pivotApontamentoDiaSemana.idSaida4, hora8.substring(0,
+				5), dataApontamento[0]);
+	
+	idSemanaEscolhida = $('#apontamento-idDiaDaSemana').val();
+	var tr = $("#" + idSemanaEscolhida).parent();
+	colocarIdsNosAps(tr, dataApontamento[0], pivotApontamentoDiaSemana.idFuncionario);	
 	$('#apontamentos-DiaSemana-modal').modal('hide');
 }
 
@@ -626,7 +650,11 @@ function validarMaskHora() {
 	
 	for (var i = 1; i < 9; i++) { if(erro == 1) break;
 		var string = $('#apDia' + i).val();
-		var tamanho = string.length;
+		var tamanho;
+		
+		if (string.length == 5) tamanho = string.length;
+		else tamanho = string.substring(0,5).length;
+		
 		for (var j = 1; j < 9; j++) {
 			var valorI = $('#apDia' + j).val();
 			if (j == i)
@@ -644,7 +672,7 @@ function validarMaskHora() {
 					$('#apDia' + i).css('border-color', cor);
 					erro = 1;
 					break;
-				} else if (string == valorI) {
+				} else if (string == valorI || string.concat("E") == valorI || string == valorI.concat("E")) {
 					document.getElementById("btn-confirmar-DiaSemana").disabled = true;
 					$('#apDia' + i).css('border-color', cor);
 					$('#apDia' + j).css('border-color', cor);
@@ -669,4 +697,34 @@ function validarMaskHora() {
 		}
 		if (string == "") $('#apDia' + i).css('border-color', "");
 	}
+}
+
+function colocarIdsNosAps(tr, dataSemana, idFuncionario) {
+	$.ajax({
+		url : 'gerenciar-apontamento/carregarApontamentosDia',
+		type : 'POST',
+		contentType : 'application/json',
+		data : JSON.stringify({
+			'idFuncionario' : idFuncionario,
+			'dataSemana' : dataSemana
+		}),
+		cache : false,
+		success : function(data) {
+			var idsAps = [ data.idEntrada1, data.idSaida1, data.idEntrada2,
+					data.idSaida2, data.idEntrada3, data.idSaida3,
+					data.idEntrada4, data.idSaida4 ];
+			var horarios = new Array(8);
+			var i = parseInt(idSemanaEscolhida.substring(13, idSemanaEscolhida.length));
+			i = i - 1;
+			var indice = 1 + 8*i;
+			debugger;
+			for(var j = 0; j < 8; j++) { 
+				var idAp = indice + j;
+				if (idsAps[j] != -1) $("#apontamento" + idAp).attr('onclick',
+						"dialogApontamentoHora(this," + idsAps[j] + ")");
+			}
+		},
+		error : function(erro) {
+		}
+	});
 }

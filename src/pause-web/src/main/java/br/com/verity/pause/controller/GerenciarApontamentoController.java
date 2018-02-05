@@ -107,8 +107,7 @@ public class GerenciarApontamentoController {
 		} catch (Exception e) {
 			return new ResponseEntity<String>("Houve um erro ao salvar apontamento. Tente novamente mais tarde.",
 					HttpStatus.BAD_REQUEST);
-		}
-		
+		}		
 		return ResponseEntity.ok(apontamentoCriado);
 	}
 

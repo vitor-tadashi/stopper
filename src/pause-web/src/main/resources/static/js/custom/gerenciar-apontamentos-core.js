@@ -415,7 +415,9 @@ function ordenarHorariosModalDiaDaSemana(id, horas) {
 	for(var j = 0; j < 8; j++) { 
 		var idAp = indice + j;
 		if (horas[j] == "") $("#apontamento" + idAp).text("--:--");
-		else $("#apontamento" + idAp).text(horas[j]);
+		else { 
+			$("#apontamento" + idAp).text(horas[j]);
+		}
 	}
 
 	$(tr).find('td[id^="apontamento"], span[id^="apontamento"]').each(

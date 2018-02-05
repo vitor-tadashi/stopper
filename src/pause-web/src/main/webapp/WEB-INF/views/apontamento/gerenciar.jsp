@@ -171,7 +171,7 @@
 			<div class="modal" id="apontamentos-DiaSemana-modal" role="dialog"
 				tabindex="-1" aria-labelledby="apontamentos-DiaSemana-modal"
 				aria-hidden="true">
-				<div class="modal-dialog modal-sm" style="width: 640px">
+				<div class="modal-dialog modal-sm" style="width: 696px">
 					<div class="modal-content">
 						<form id="form-timeSemana" class="clear-form">
 							<!--Modal header-->
@@ -203,45 +203,45 @@
 										<th align="center">4-Saída</th>
 									</tr>
 									<tr style="background-color:#f7f7f7">
-										<td><div style="width: 59px" class="input-group"
+										<td><div style="width: 66px" class="input-group"
 												id="apSemanaE1">
-												<input data-mask="00:00" style="width: 59px" id="apDia1"
+												<input data-mask="00:00" style="width: 66px" id="apDia1"
 													type="text" class="form-control time" placeholder="--:--">
 											</div></td>
-										<td><div style="width: 59px" class="input-group"
+										<td><div style="width: 66px" class="input-group"
 												id="apSemanaS1">
-												<input data-mask="00:00" style="width: 59px" id="apDia2"
+												<input data-mask="00:00" style="width: 66px" id="apDia2"
 													type="text" class="form-control time" placeholder="--:--">
 											</div></td>
-										<td><div style="width: 59px; class="input-group"
+										<td><div style="width: 66px; class="input-group"
 												id="apSemanaE2">
-												<input data-mask="00:00" style="width: 59px"
+												<input data-mask="00:00" style="width: 66px"
 													style="width:50px" id="apDia3" type="text"
 													class="form-control time" placeholder="--:--">
 											</div></td>
-										<td><div style="width: 59px; class="input-group"
+										<td><div style="width: 66px; class="input-group"
 												id="apSemanaS2">
-												<input data-mask="00:00" style="width: 59px" id="apDia4"
+												<input data-mask="00:00" style="width: 66px" id="apDia4"
 													type="text" class="form-control time" placeholder="--:--">
 											</div></td>
-										<td><div style="width: 59px" class="input-group"
+										<td><div style="width: 66px" class="input-group"
 												id="apSemanaE3">
-												<input data-mask="00:00" style="width: 59px" id="apDia5"
+												<input data-mask="00:00" style="width: 66px" id="apDia5"
 													type="text" class="form-control time" placeholder="--:--">
 											</div></td>
-										<td><div style="width: 59px" class="input-group"
+										<td><div style="width: 66px" class="input-group"
 												id="apSemanaS3">
-												<input data-mask="00:00" style="width: 59px" id="apDia6"
+												<input data-mask="00:00" style="width: 66px" id="apDia6"
 													type="text" class="form-control time" placeholder="--:--">
 											</div></td>
-										<td><div style="width: 59px; class="input-group"
+										<td><div style="width: 66px; class="input-group"
 												id="apSemanaE4">
-												<input data-mask="00:00" style="width: 59px" id="apDia7"
+												<input data-mask="00:00" style="width: 66px" id="apDia7"
 													type="text" class="form-control time" placeholder="--:--">
 											</div></td>
-										<td><div style="width: 59px; class="input-group"
+										<td><div style="width: 66px; class="input-group"
 												id="apSemanaS4">
-												<input data-mask="00:00" style="width: 59px" id="apDia8"
+												<input data-mask="00:00" style="width: 66px" id="apDia8"
 													type="text" class="form-control time" placeholder="--:--">
 											</div></td>
 									</tr>
