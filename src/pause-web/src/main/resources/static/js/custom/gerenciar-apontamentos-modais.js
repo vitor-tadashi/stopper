@@ -7,7 +7,8 @@ var pivotApontamentoDiaSemana;
 var horaInit1, horaInit2, horaInit3, horaInit4, horaInit5, horaInit6, horaInit7, horaInit8;
 var erroAnteriorFoiHoraIgual = 0;
 var indiceErro1, indiceErro2;
-var horasParaSalvar, idSemanaEscolhida; 
+var horasParaSalvar, idSemanaEscolhida, dataEscolhidaFim; 
+var colocouApontamentos = 0;
 
 $(document).ready(function(){
 	exibirAviso();
@@ -635,8 +636,9 @@ function confirmarAlteracaoApontDiaSemana() {
 	
 	idSemanaEscolhida = $('#apontamento-idDiaDaSemana').val();
 	var tr = $("#" + idSemanaEscolhida).parent();
-	colocarIdsNosAps(tr, dataApontamento[0], pivotApontamentoDiaSemana.idFuncionario);	
-	$('#apontamentos-DiaSemana-modal').modal('hide');
+	dataEscolhidaFim = dataApontamento[0];	
+	
+	setTimeout(function(){colocouApontamentos = 1; $('#apontamentos-DiaSemana-modal').modal('hide');}, 1200);		
 }
 
 function apontarDiaSemana(id, horario, dataApontamento) {
@@ -699,6 +701,18 @@ function validarMaskHora() {
 	}
 }
 
+$(document).ajaxStop(
+		function() {
+			setTimeout(function() {
+				if (colocouApontamentos == 1) {
+					colocarIdsNosAps($("#" + idSemanaEscolhida).parent(),
+							dataEscolhidaFim,
+							pivotApontamentoDiaSemana.idFuncionario);
+					colocouApontamentos = 0;
+				}
+			}, 300);
+		});
+
 function colocarIdsNosAps(tr, dataSemana, idFuncionario) {
 	$.ajax({
 		url : 'gerenciar-apontamento/carregarApontamentosDia',
@@ -717,7 +731,6 @@ function colocarIdsNosAps(tr, dataSemana, idFuncionario) {
 			var i = parseInt(idSemanaEscolhida.substring(13, idSemanaEscolhida.length));
 			i = i - 1;
 			var indice = 1 + 8*i;
-			debugger;
 			for(var j = 0; j < 8; j++) { 
 				var idAp = indice + j;
 				if (idsAps[j] != -1) $("#apontamento" + idAp).attr('onclick',

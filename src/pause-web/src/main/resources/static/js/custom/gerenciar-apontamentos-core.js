@@ -390,7 +390,7 @@ function apontarModalDiaDaSemana(horario, data, idAp, idTd, horasParaSalvar) {
 			calcularTotal();
 			atualizarSaldosConsolidados();
 			submeteu = false;
-			$('#apontamentos-DiaSemana-modal').modal('hide');
+			setTimeout(function(){ $('#apontamentos-DiaSemana-modal').modal('hide'); }, 1000);			
 		},
 		error : function(erro) {
 			if (erro.status === 403) {
@@ -399,6 +399,7 @@ function apontarModalDiaDaSemana(horario, data, idAp, idTd, horasParaSalvar) {
 				$('#erro-label').text(erro.responseText);
 				$('#erro-sm-modal').modal();
 				adicionalNoturno = bancoHora = sa = sat = 0.0;
+				setTimeout(function(){ location.reload(); }, 1000);
 				$('#apontamentos-DiaSemana-modal').modal('hide');
 			}
 			submeteu = false;
