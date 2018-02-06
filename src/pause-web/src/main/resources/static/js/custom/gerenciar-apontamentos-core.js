@@ -10,6 +10,7 @@ $(document).ready(function() {
 		$('#apontamento-obs').val("");
 		$('#apontamento-jus').val('default');
 		$('#apontamento-jus').selectpicker('refresh');
+		$('#apontamento-time').val("");
 	});
 	$('.formatNumber').each(function() {
 		$(this).text(formatarNumero($(this).text()));
