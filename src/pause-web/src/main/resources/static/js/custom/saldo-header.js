@@ -7,12 +7,12 @@ function atualizarSaldosConsolidados() {
 		type : 'GET',
 		contentType : 'application/json',
 		success : function(data) {
-			$("#saldoMensal").text(decimalParaHorasMinutos(data[0]));
+			$("#saldoMensal").text(decimalParaHorasMinutos(data[2]));
 			$("#trimestreAnterior").attr(
 					'data-original-title',
 					"Saldo trimestre anterior: "
 							+ decimalParaHorasMinutos(data[1]));
-			$("#trimestreAtual").text(decimalParaHorasMinutos(data[2]));
+			$("#trimestreAtual").text(decimalParaHorasMinutos(data[0]));
 		},
 		error : function(erro) {
 			if (erro.status === 403) {
