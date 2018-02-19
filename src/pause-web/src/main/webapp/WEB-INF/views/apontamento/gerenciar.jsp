@@ -133,7 +133,7 @@
 														<td id="apontamento${cont.count + 8 * (i.count - 1)}" class="">${dia.apontamentos[cont.index].horario }${dia.apontamentos[cont.index].tipoImportacao? 'E':''}</td>
 												</c:when>
 													<c:otherwise>
-														<td id="apontamento${cont.count + 8 * (i.count - 1)}" style="cursor:pointer;" onclick="dialogApontamentoHora(this, ${dia.apontamentos[cont.index].id });">${dia.apontamentos[cont.index].horario }</td>
+														<td id="apontamento${cont.count + 8 * (i.count - 1)}"  style="cursor:pointer;" onclick="dialogApontamentoHora(this, ${dia.apontamentos[cont.index].id });">${dia.apontamentos[cont.index].horario }</td>
 													</c:otherwise>
 												</c:choose>
 											</c:if>
